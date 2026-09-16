@@ -77,6 +77,15 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     cropped_count = sum(1 for orig, crop in zip(target_images, cropped_images) if crop.size != orig.size)
     print(f"   -> Cropped {cropped_count}/{len(cropped_images)} pages (rest were borderless — full page sent).")
     
+    # Save cropped images to a debug folder for inspection
+    pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
+    debug_dir = os.path.join(os.path.dirname(pdf_path), f"{pdf_stem}_vlm_inputs")
+    os.makedirs(debug_dir, exist_ok=True)
+    for idx, img in enumerate(cropped_images):
+        img_path = os.path.join(debug_dir, f"page_{idx + 1:02d}.png")
+        img.save(img_path)
+    print(f"   -> 🖼️  Saved {len(cropped_images)} VLM input images to: {debug_dir}")
+    
     # 3. Extract data using SGLang with schema enforcement
     print(f"⚙️  Step 3/3: Running VLM extraction on {len(cropped_images)} cropped images concurrently...")
     logger.debug("Step 3: Targeted Extraction across multiple pages")

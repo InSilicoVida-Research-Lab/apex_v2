@@ -43,7 +43,7 @@ class ColQwenRetriever:
             logger.error(f"Failed to load ColQwen2.5: {e}")
             self.is_loaded = False
     
-    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 5, threshold_ratio: float = 0.85) -> List[Image.Image]:
+    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 10, threshold_ratio: float = 0.85) -> List[Image.Image]:
         logger.debug(f"ColQwen: Finding top pages for query '{query}' among {len(images)} images.")
         
         if not images:
@@ -65,16 +65,27 @@ class ColQwenRetriever:
         # 3. Calculate MaxSim (dot product of visual patches and query tokens)
         scores = self.processor.score_multi_vector(query_embeddings, image_embeddings)
         
-        # 4. Dynamic thresholding to grab all tables but ignore raw text pages
-        max_score = scores[0].max().item()
-        cutoff = max_score * 0.75
+        all_scores = [(i, scores[0][i].item()) for i in range(len(images))]
+        max_score = max(s for _, s in all_scores)
         
-        top_indices = []
-        for i, score in enumerate(scores[0]):
-            if score.item() >= cutoff:
-                top_indices.append(i)
+        # Log every page score so we can see exactly what ColQwen thinks
+        for i, s in sorted(all_scores, key=lambda x: x[1], reverse=True):
+            logger.info(f"  Page {i+1:>2}: score={s:.4f}")
+        
+        # 4. Dual threshold: must pass BOTH a relative AND absolute floor
+        #    - relative: must be within 85% of the top-scoring page
+        #    - absolute: absolute minimum to reject clearly irrelevant pages (logos, refs)
+        #      Set empirically — ColQwen MaxSim scores for PK tables are typically > 15.0
+        relative_cutoff = max_score * threshold_ratio
+        absolute_floor = max_score * 0.60  # hard floor: never go below 60% of max
+        cutoff = max(relative_cutoff, absolute_floor)
+        
+        top_indices = [
+            i for i, s in all_scores
+            if s >= cutoff
+        ]
                 
-        # Sort by score descending and limit to top_k to prevent infinite VRAM usage
+        # Sort by score descending and limit to top_k
         top_indices.sort(key=lambda i: scores[0][i].item(), reverse=True)
         top_indices = top_indices[:top_k]
         
@@ -82,7 +93,12 @@ class ColQwenRetriever:
         if not top_indices:
             top_indices = [scores[0].argmax().item()]
             
-        logger.info(f"ColQwen: MaxSim search complete. Max Score: {max_score:.4f}. Selected pages {[i+1 for i in top_indices]} scoring >= {cutoff:.4f}")
+        logger.info(
+            f"ColQwen: Max={max_score:.4f}, cutoff={cutoff:.4f} "
+            f"(ratio={threshold_ratio}). Selected pages: {[i+1 for i in top_indices]}"
+        )
+        print(f"   -> 📊 ColQwen scores — Max: {max_score:.2f}, Cutoff: {cutoff:.2f}. "
+              f"Keeping pages: {[i+1 for i in top_indices]}")
         
         return [images[i] for i in top_indices]
 
