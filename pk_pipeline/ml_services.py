@@ -131,7 +131,7 @@ For each PK parameter explicitly reported on the page, capture:
 - **value**: the exact number as printed.
 - **value_qualifier**: any qualifier word or phrase printed with the value in addition to the number (e.g., "Fixed", "assumed", "range: X-Y", "estimated"). Capture it as its own field — never drop it, and never fold it silently into the numeric value.
 - **unit**: exactly as printed. If a unit is not printed directly next to the value but is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)" above several parameter rows), apply that inherited unit to each row in the group, and note in source_context that the unit was inherited rather than printed inline.
-- **compound**: the specific chemical entity this parameter applies to, exactly as named on the page. Isotopically labeled tracers, metabolites, and conjugates (e.g., a deuterium-labeled form, or a glucuronide) are distinct compounds from the parent compound and must never be collapsed into one.
+- **compound**: the specific chemical entity this parameter applies to, exactly as named on the page. Isotopically labeled tracers, metabolites, and conjugates (e.g., a deuterium-labeled form, or a glucuronide) are distinct compounds from the parent compound and must never be collapsed into one. **Ensure you extract parameters for ALL compounds present on the page; if a table reports data for multiple different compounds, you must meticulously capture all of them.**
 - **species**: only if explicitly stated for this parameter, table, or section. Do not default to "human," and do not infer a species from the general subject of the paper — if the page does not say, leave this field null.
 - **population**: only if explicitly stated (e.g., "hepatically impaired," "pediatric," a named patient group). Leave null otherwise.
 - **source_location**: the table, figure, or section this came from (e.g., "Table 3", "Results, paragraph 2").
@@ -189,21 +189,29 @@ class SGLangExtractor:
     def __init__(self, use_4bit=True):
         logger.info("Initializing SGLangExtractor...")
         self.use_4bit = use_4bit
-        self.model_path = "Qwen/Qwen2.5-VL-7B-Instruct"
+        self.model_path = "Qwen/Qwen3-VL-8B-Instruct"
         
         try:
             quant_mode = "awq" if use_4bit else None
             actual_model = self.model_path
+            dtype = "float16" if use_4bit else "auto"
+            
             if use_4bit and "AWQ" not in self.model_path:
-                logger.warning(f"For SGLang with 4-bit, switching to AWQ model.")
-                actual_model = f"{self.model_path}-AWQ"
+                if "Qwen3" in self.model_path:
+                    logger.warning("Qwen3-VL AWQ version doesn't exist on HF yet, falling back to unquantized bfloat16.")
+                    actual_model = self.model_path
+                    quant_mode = None
+                    dtype = "bfloat16"
+                else:
+                    logger.warning(f"For SGLang with 4-bit, switching to AWQ model.")
+                    actual_model = f"{self.model_path}-AWQ"
                 
             logger.info(f"Loading SGLang Engine for {actual_model}...")
             # SGLang Engine configuration with memory limits
             self.engine = sgl.Engine(
                 model_path=actual_model,
                 quantization=quant_mode,
-                dtype="float16" if use_4bit else "auto",
+                dtype=dtype,
                 mem_fraction_static=0.5 # Restrict KV cache to 50% to leave room for ColQwen
             )
             self.is_loaded = True
@@ -215,8 +223,8 @@ class SGLangExtractor:
         """Extract table data from image strictly enforcing Pydantic schema"""
         logger.debug("SGLang: Extracting data from image with schema enforcement...")
         
-        # Save temp image for SGLang
-        temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input.jpg"
+        import uuid
+        temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.jpg"
         image.save(temp_img_path, "JPEG")
         
         schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
