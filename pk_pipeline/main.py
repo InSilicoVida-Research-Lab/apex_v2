@@ -6,6 +6,7 @@ from pdf2image import convert_from_path
 
 from schemas import ExtractionRequest
 from ml_services import ColQwenRetriever, SGLangExtractor
+from ingestion.table_cropper import TableCropper
 from config import logger
 
 # Initialize models lazily
@@ -35,8 +36,8 @@ def convert_pdf_to_images(pdf_path: str):
         raise FileNotFoundError(f"File not found: {pdf_path}")
     
     try:
-        # 200 DPI as recommended in the document
-        images = convert_from_path(pdf_path, dpi=200)
+        # 300 DPI for sharper table crops — critical for tiny subscripts (e.g. kg^0.74)
+        images = convert_from_path(pdf_path, dpi=300)
         logger.info(f"Successfully converted PDF to {len(images)} images.")
         return images
     except Exception as e:
@@ -69,8 +70,15 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     )
     print(f"   -> Identified {len(target_images)} highly relevant pages.")
     
+    # 2.5 Crop table regions from each selected page before VLM extraction
+    print("✂️  Step 2.5: Cropping table regions from selected pages...")
+    cropper = TableCropper(padding=25)
+    cropped_images = cropper.crop_all(target_images)
+    cropped_count = sum(1 for orig, crop in zip(target_images, cropped_images) if crop.size != orig.size)
+    print(f"   -> Cropped {cropped_count}/{len(cropped_images)} pages (rest were borderless — full page sent).")
+    
     # 3. Extract data using SGLang with schema enforcement
-    print(f"⚙️  Step 3/3: Running VLM extraction on {len(target_images)} pages concurrently...")
+    print(f"⚙️  Step 3/3: Running VLM extraction on {len(cropped_images)} cropped images concurrently...")
     logger.debug("Step 3: Targeted Extraction across multiple pages")
     
     final_document = {
@@ -80,7 +88,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         "parameters": []
     }
     
-    tasks = [get_extractor().extract_data(img) for img in target_images]
+    tasks = [get_extractor().extract_data(img) for img in cropped_images]
     extracted_pages = await asyncio.gather(*tasks)
     
     for extracted_page in extracted_pages:
