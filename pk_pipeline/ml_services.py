@@ -4,7 +4,7 @@ from PIL import Image
 import json
 import os
 
-from schemas import ExtractedPage, Parameter
+from schemas import ExtractedPage, ExtractedParameter
 from config import logger, Config
 
 # Note: These imports will require a GPU environment with sglang and colpali_engine installed.
@@ -87,7 +87,7 @@ class ColQwenRetriever:
         return [images[i] for i in top_indices]
 
 
-from schemas import ExtractedPage
+from schemas import ExtractedPage, ExtractedParameter
 
 SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are shown an image of a single page from a scientific paper. Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
 
@@ -183,8 +183,9 @@ Return ONLY valid JSON matching the schema below. No markdown code fences, no co
 
 class SGLangExtractor:
     """
-    Implementation of Qwen2.5-VL-7B served via SGLang inference engine.
-    Enforces structured JSON generation via RadixAttention.
+    Implementation of Qwen3-VL-8B served via SGLang inference engine.
+    Enforces structured JSON generation via FSM-constrained decoding (json_schema).
+    Uses nested ExtractedParameter schema: BiologicalContext, QuantitativeData, Provenance.
     """
     def __init__(self, use_4bit=True):
         logger.info("Initializing SGLangExtractor...")
