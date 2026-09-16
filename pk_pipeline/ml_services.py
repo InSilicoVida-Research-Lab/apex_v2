@@ -243,7 +243,7 @@ class SGLangExtractor:
             prompt=prompt_text,
             image_data=temp_img_path,
             sampling_params={
-                "max_new_tokens": 4096,
+                "max_new_tokens": 10240,
                 "temperature": 0.0,
                 "repetition_penalty": 1.05,
                 "json_schema": json.dumps(ExtractedPage.model_json_schema())
