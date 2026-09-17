@@ -117,11 +117,13 @@ Concretely: if this page does not contain the words "cardiac output" (or an unam
 
 Before extracting any parameter, determine from the page text which of the following the paper is describing:
 
-- A true physiologically based PK (PBPK) model: compartments correspond to real organs or tissues (liver, kidney, fat, muscle...), and parameters include organ blood flows, tissue volumes, or partition coefficients.
-- A simple, empirical, or descriptive compartmental model: compartments may carry body-part names but the authors state, often explicitly, that the structure is not physiologically rigorous and exists only to fit the data. Parameters here are typically generic first-order rate constants, fractional transfer constants, or an "apparent" volume of distribution.
-- Neither — e.g., a page of discussion text, references, or a figure with no PK data at all.
+- **pbpk**: A true physiologically based PK (PBPK) model where compartments correspond to real organs or tissues (liver, kidney, fat, muscle, kidney filtrate/tubule). Parameters include organ blood flows, tissue volumes, or tissue:plasma partition coefficients. A renal filtration/resorption model (Tm, Kt, GFR) is a hallmark of PBPK.
+- **simple_empirical_compartmental**: The authors explicitly state the model is not physiologically rigorous. Compartments carry generic names ("central", "peripheral", "deep") and parameters are generic first-order rate constants (k10, k12, k21) or apparent volumes (Vd, CL/F) with no physiological meaning assigned. Keywords: "apparent", "not intended to be physiologically rigorous", "empirical".
+- **not_applicable**: No PK model on this page at all (discussion, references, abstract only).
 
-Watch for the authors' own disclaimers. Phrases like "not intended to be physiologically rigorous," "conveniently termed," "not necessarily physiological," or the word "apparent" attached to a parameter name mean the authors are telling you this is not a real anatomical model. If the page describes a simple or empirical model, do NOT search for or extract standard PBPK parameters (cardiac output, tissue blood flows, partition coefficients, fraction unbound) — they are not applicable here, and their absence is not something to fill in.
+IMPORTANT: A model that names compartments after organs AND uses saturable tubular resorption parameters (Tm, Kt, GFR, filtrate volume) IS a PBPK model, even if called a "compartmental" model by the authors for brevity. Do not classify as simple_empirical just because the paper uses the word "compartment".
+
+Watch for explicit author disclaimers. Only classify as simple_empirical if the authors themselves say the structure is not physiologically rigorous.
 
 ## STEP 1 — LOCATE PK-RELEVANT CONTENT; EXCLUDE EVERYTHING ELSE
 
@@ -142,16 +144,17 @@ If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is n
 
 For each PK parameter explicitly reported on the page, capture:
 
-- **symbol**: transcribed exactly as printed (e.g., "K1", "CL/F", "Vd_ss"). Do not expand, standardize, or "clean up" the symbol — that happens in a later pipeline stage, not here.
-- **full_name**: only if a separate descriptive label is printed alongside the symbol. Do not invent an expanded name for a bare symbol.
-- **value**: the exact number as printed.
-- **value_qualifier**: any qualifier word or phrase printed with the value in addition to the number (e.g., "Fixed", "assumed", "range: X-Y", "estimated"). Capture it as its own field — never drop it, and never fold it silently into the numeric value.
-- **unit**: exactly as printed. If a unit is not printed directly next to the value but is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)" above several parameter rows), apply that inherited unit to each row in the group, and note in source_context that the unit was inherited rather than printed inline.
-- **compound**: the specific chemical entity this parameter applies to, exactly as named on the page. Isotopically labeled tracers, metabolites, and conjugates (e.g., a deuterium-labeled form, or a glucuronide) are distinct compounds from the parent compound and must never be collapsed into one. **Ensure you extract parameters for ALL compounds present on the page; if a table reports data for multiple different compounds, you must meticulously capture all of them.**
-- **species**: only if explicitly stated for this parameter, table, or section. Do not default to "human," and do not infer a species from the general subject of the paper — if the page does not say, leave this field null.
-- **population**: only if explicitly stated (e.g., "hepatically impaired," "pediatric," a named patient group). Leave null otherwise.
-- **source_location**: the table, figure, or section this came from (e.g., "Table 3", "Results, paragraph 2").
-- **source_quote**: a short, exact transcription — not a paraphrase — of the specific cell(s) or sentence this value came from. If you cannot produce an honest, directly-traceable quote for a value, do not include that value at all.
+- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). If the table only prints the symbol with no accompanying descriptive label, leave this null. Do NOT invent a name.
+- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). Do not expand, standardize, or "clean up" the symbol.
+- **value / range_low / range_high**: The primary value and, if printed as "X (low, high)" format, the bracketed bounds go into range_low and range_high as separate fields.
+- **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
+- **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
+- **unit**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
+- **compound**: the specific chemical entity exactly as named on the page. **Extract parameters for ALL compounds present — if a table reports data for PFOS, PFOA, and PFHxS, you must capture entries for all three.**
+- **subject_species**: only if explicitly stated. Do not default to "human".
+- **population**: only if explicitly stated. Leave null otherwise.
+- **source_location**: the table, figure, or section (e.g., "Table 1", "Table 3").
+- **source_quote**: a short, exact transcription of the specific cell(s). If you cannot produce a directly-traceable quote, omit the parameter.
 
 ## STEP 3 — HANDLE TABLE STRUCTURE CAREFULLY
 
