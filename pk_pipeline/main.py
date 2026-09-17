@@ -229,6 +229,7 @@ def main():
                 base_name = os.path.splitext(os.path.basename(pdf_path))[0]
                 output_path = os.path.join(args.output_dir, f"{base_name}.json")
                 
+                os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 with open(output_path, "w") as f:
                     json.dump(result, f, indent=2)
                     
