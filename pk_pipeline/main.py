@@ -64,15 +64,20 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         table_query += f" for {', '.join(target_compounds)}"
         
     diagram_query = "Pharmacokinetic model structure diagram mass balance equations"
+    
+    text_query = "Pharmacokinetic parameters half-life clearance volume of distribution in text"
         
     print("   -> Searching for tables...")
     table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query)
     
     print("   -> Searching for structure diagrams...")
     diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query)
+
+    print("   -> Searching for narrative text parameters...")
+    text_pages = get_retriever().find_top_pages(images, top_k=2, query=text_query)
     
-    # 2.5 Crop table regions, but leave diagram pages uncropped
-    print("✂️  Step 2.5: Cropping table regions (leaving diagrams uncropped)...")
+    # 2.5 Crop table regions, but leave diagram and text pages uncropped
+    print("Step 2.5: Cropping table regions (leaving diagrams and text uncropped)...")
     cropper = TableCropper(padding=25)
     
     # Only crop table pages
@@ -90,6 +95,12 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
             
     # 2. Add diagram pages uncropped
     for orig in diagram_pages:
+        if id(orig) not in processed_orig_ids:
+            vlm_inputs.append(orig)
+            processed_orig_ids.add(id(orig))
+            
+    # 3. Add narrative text pages uncropped
+    for orig in text_pages:
         if id(orig) not in processed_orig_ids:
             vlm_inputs.append(orig)
             processed_orig_ids.add(id(orig))
