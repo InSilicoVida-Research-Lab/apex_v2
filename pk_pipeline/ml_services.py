@@ -164,7 +164,7 @@ If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is n
 For each PK parameter explicitly reported on the page, capture:
 
 - **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). If the table only prints the symbol with no accompanying descriptive label, leave this null. Do NOT invent a name.
-- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). Do not expand, standardize, or "clean up" the symbol.
+- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
 - **value / range_low / range_high**: The primary value and, if printed as "X (low, high)" format, the bracketed bounds go into range_low and range_high as separate fields.
 - **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
 - **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
