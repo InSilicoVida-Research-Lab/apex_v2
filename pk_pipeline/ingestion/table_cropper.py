@@ -113,10 +113,10 @@ class TableCropper:
                 best_area = area
                 best_bbox = (x, y, x + cw, y + ch)
 
-        # Only crop if the best bounding box is reasonably large (at least 3% of the page).
-        # This prevents the cropper from isolating a tiny noise artifact or a single cell
+        # Only crop if the best bounding box is reasonably large (at least 8% of the page).
+        # This prevents the cropper from isolating a margin artifact or a single column
         # when a borderless table is present elsewhere on the page.
-        if best_bbox and best_area > page_area * 0.03:
+        if best_bbox and best_area > page_area * 0.08:
             logger.info(f"TableCropper: OpenCV detected table at bbox {best_bbox} (area={best_area}px²)")
             return self.crop_from_bbox(pil_image, best_bbox)
         else:
