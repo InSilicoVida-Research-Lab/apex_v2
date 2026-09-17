@@ -68,13 +68,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     text_query = "Pharmacokinetic parameters half-life clearance volume of distribution in text"
         
     print("   -> Searching for tables...")
-    table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query)
+    table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query, threshold_ratio=0.75)
     
     print("   -> Searching for structure diagrams...")
-    diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query)
+    diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query, threshold_ratio=0.75)
 
     print("   -> Searching for narrative text parameters...")
-    text_pages = get_retriever().find_top_pages(images, top_k=2, query=text_query)
+    text_pages = get_retriever().find_top_pages(images, top_k=2, query=text_query, threshold_ratio=0.75)
     
     # 2.5 Crop table regions, but leave diagram and text pages uncropped
     print("Step 2.5: Cropping table regions (leaving diagrams and text uncropped)...")
@@ -87,22 +87,22 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     vlm_inputs = []
     processed_orig_ids = set()
     
-    # 1. Add cropped table pages
-    for orig, cropped in zip(table_pages, cropped_tables):
-        if id(orig) not in processed_orig_ids:
-            vlm_inputs.append(cropped)
-            processed_orig_ids.add(id(orig))
-            
-    # 2. Add diagram pages uncropped
+    # 1. Add diagram pages uncropped FIRST to guarantee they bypass the cropper
     for orig in diagram_pages:
         if id(orig) not in processed_orig_ids:
             vlm_inputs.append(orig)
             processed_orig_ids.add(id(orig))
             
-    # 3. Add narrative text pages uncropped
+    # 2. Add narrative text pages uncropped
     for orig in text_pages:
         if id(orig) not in processed_orig_ids:
             vlm_inputs.append(orig)
+            processed_orig_ids.add(id(orig))
+            
+    # 3. Add cropped table pages ONLY if they weren't already added uncropped
+    for orig, cropped in zip(table_pages, cropped_tables):
+        if id(orig) not in processed_orig_ids:
+            vlm_inputs.append(cropped)
             processed_orig_ids.add(id(orig))
             
     cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)
