@@ -167,28 +167,37 @@ import glob
 
 def main():
     parser = argparse.ArgumentParser(description="Run the PK Parameter Extraction Pipeline")
-    parser.add_argument("input_path", type=str, help="Path to a PDF file or a directory of PDFs to extract")
+    parser.add_argument("input_paths", type=str, nargs="+", help="Path to one or more PDF files or directories of PDFs to extract")
     parser.add_argument("--compounds", nargs="+", help="Optional: Target compounds to steer search (e.g., PFOS PFOA)")
     parser.add_argument("--output_dir", type=str, default="output", help="Optional: Directory to save the extracted JSONs. Defaults to 'output'.")
     
     args = parser.parse_args()
     
-    if not os.path.exists(args.input_path):
-        print(f"Error: The path '{args.input_path}' does not exist.")
-        return
-        
     # Gather all PDF files to process
     pdf_files = []
-    if os.path.isdir(args.input_path):
-        pdf_files = glob.glob(os.path.join(args.input_path, "*.pdf"))
-        if not pdf_files:
-            print(f"Error: No PDF files found in directory '{args.input_path}'.")
-            return
-        print(f"Found {len(pdf_files)} PDFs in directory. Starting batch processing...")
-    else:
-        if not args.input_path.lower().endswith(".pdf"):
-            print("Warning: Input file does not have a .pdf extension.")
-        pdf_files = [args.input_path]
+    for path in args.input_paths:
+        if not os.path.exists(path):
+            print(f"Warning: The path '{path}' does not exist. Skipping.")
+            continue
+            
+        if os.path.isdir(path):
+            found_pdfs = glob.glob(os.path.join(path, "*.pdf"))
+            if not found_pdfs:
+                print(f"Warning: No PDF files found in directory '{path}'.")
+            pdf_files.extend(found_pdfs)
+        else:
+            if not path.lower().endswith(".pdf"):
+                print(f"Warning: Input file '{path}' does not have a .pdf extension.")
+            pdf_files.append(path)
+            
+    # Deduplicate the list to avoid processing the same file twice
+    pdf_files = list(set(pdf_files))
+            
+    if not pdf_files:
+        print("Error: No valid PDF files found to process.")
+        return
+        
+    print(f"Found {len(pdf_files)} total PDFs to process...")
         
     os.makedirs(args.output_dir, exist_ok=True)
 
