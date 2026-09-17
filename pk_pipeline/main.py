@@ -16,17 +16,17 @@ extractor = None
 def get_retriever():
     global retriever
     if retriever is None:
-        print("\n⏳ Loading Retriever Model: vidore/colqwen2.5-v0.2 (this may take a moment)...")
+        print("Loading Retriever Model: vidore/colqwen2.5-v0.2 (this may take a moment)...")
         retriever = ColQwenRetriever()
-        print("✅ Retriever model loaded successfully.")
+        print("Retriever model loaded successfully.")
     return retriever
 
 def get_extractor():
     global extractor
     if extractor is None:
-        print("\n⏳ Loading Vision-Language Extractor: Qwen3-VL-8B-Instruct (via SGLang)...")
+        print("Loading Vision-Language Extractor: Qwen3-VL-8B-Instruct (via SGLang)...")
         extractor = SGLangExtractor()
-        print("✅ Extractor model loaded successfully.")
+        print("Extractor model loaded successfully.")
     return extractor
 
 def convert_pdf_to_images(pdf_path: str):
@@ -45,17 +45,17 @@ def convert_pdf_to_images(pdf_path: str):
         raise
 
 async def run_pipeline(pdf_path: str, target_compounds: list = None):
-    print(f"\n🚀 Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
+    print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
     
     # 1. Convert PDF to images
-    print("📄 Step 1/3: Converting PDF to images...")
+    print("Step 1/3: Converting PDF to images...")
     logger.debug("Step 1: Rasterization")
     images = convert_pdf_to_images(pdf_path)
-    print(f"   -> Converted PDF into {len(images)} pages.")
+    print(f"Converted PDF into {len(images)} pages.")
     
     # 2. Run ColQwen2.5 filter to find the exact pages
-    print("🔎 Step 2/3: Searching for Pharmacokinetic tables across all pages...")
+    print("Step 2/3: Searching for Pharmacokinetic tables across all pages...")
     logger.debug("Step 2: Intra-Document Search")
     
     # Build dynamic queries
@@ -67,13 +67,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     
     text_query = "Pharmacokinetic parameters half-life clearance volume of distribution in text"
         
-    print("   -> Searching for tables...")
+    print("Searching for tables...")
     table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query, threshold_ratio=0.75)
     
-    print("   -> Searching for structure diagrams...")
+    print("Searching for structure diagrams...")
     diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query, threshold_ratio=0.75)
 
-    print("   -> Searching for narrative text parameters...")
+    print("Searching for narrative text parameters...")
     text_pages = get_retriever().find_top_pages(images, top_k=2, query=text_query, threshold_ratio=0.75)
     
     # 2.5 Crop table regions, but leave diagram and text pages uncropped
@@ -106,7 +106,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
             processed_orig_ids.add(id(orig))
             
     cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)
-    print(f"   -> Cropped {cropped_count}/{len(cropped_tables)} table pages.")
+    print(f"Cropped {cropped_count}/{len(cropped_tables)} table pages.")
     
     # Save images to a debug folder for inspection
     pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
@@ -115,10 +115,10 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     for idx, img in enumerate(vlm_inputs):
         img_path = os.path.join(debug_dir, f"page_{idx + 1:02d}.png")
         img.save(img_path)
-    print(f"   -> 🖼️  Saved {len(vlm_inputs)} VLM input images to: {debug_dir}")
+    print(f"Saved {len(vlm_inputs)} VLM input images to: {debug_dir}")
     
     # 3. Extract data using SGLang with schema enforcement
-    print(f"⚙️  Step 3/3: Running VLM extraction on {len(vlm_inputs)} images concurrently...")
+    print(f"Step 3/3: Running VLM extraction on {len(vlm_inputs)} images concurrently...")
     logger.debug("Step 3: Targeted Extraction across multiple pages")
     
     final_document = {
@@ -163,49 +163,73 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
 
 import time
 
+import glob
+
 def main():
     parser = argparse.ArgumentParser(description="Run the PK Parameter Extraction Pipeline")
-    parser.add_argument("pdf_path", type=str, help="Path to the PDF file to extract")
+    parser.add_argument("input_path", type=str, help="Path to a PDF file or a directory of PDFs to extract")
     parser.add_argument("--compounds", nargs="+", help="Optional: Target compounds to steer search (e.g., PFOS PFOA)")
-    parser.add_argument("--output", type=str, help="Optional: Path to save the extracted JSON. Defaults to <pdf_name>.json")
+    parser.add_argument("--output_dir", type=str, default="output", help="Optional: Directory to save the extracted JSONs. Defaults to 'output'.")
     
     args = parser.parse_args()
     
-    # Fast fail if the file doesn't exist to avoid wasting time booting models
-    if not os.path.exists(args.pdf_path):
-        print(f"\n❌ Error: The file '{args.pdf_path}' does not exist.")
-        print("Please check the path and try again.")
+    if not os.path.exists(args.input_path):
+        print(f"Error: The path '{args.input_path}' does not exist.")
         return
+        
+    # Gather all PDF files to process
+    pdf_files = []
+    if os.path.isdir(args.input_path):
+        pdf_files = glob.glob(os.path.join(args.input_path, "*.pdf"))
+        if not pdf_files:
+            print(f"Error: No PDF files found in directory '{args.input_path}'.")
+            return
+        print(f"Found {len(pdf_files)} PDFs in directory. Starting batch processing...")
+    else:
+        if not args.input_path.lower().endswith(".pdf"):
+            print("Warning: Input file does not have a .pdf extension.")
+        pdf_files = [args.input_path]
+        
+    os.makedirs(args.output_dir, exist_ok=True)
 
     try:
-        # Pre-load models before starting the extraction timer so we can see the "Cold Start" penalty
-        print("\n[SYSTEM] Booting AI models into GPU memory. This is a one-time 'cold start' penalty...")
+        # Pre-load models once for the entire batch
+        print("Booting AI models into GPU memory. This is a one-time 'cold start' penalty...")
         load_start = time.time()
         get_retriever()
         get_extractor()
         load_time = time.time() - load_start
-        print(f"[SYSTEM] ✅ Models successfully loaded into VRAM in {load_time:.2f} seconds.\n")
+        print(f"Models successfully loaded into VRAM in {load_time:.2f} seconds.\n")
 
-        # Now start the actual pipeline timer
-        pipeline_start = time.time()
-        
-        # If output is not specified, name it after the PDF in the current directory
-        if not args.output:
-            base_name = os.path.splitext(os.path.basename(args.pdf_path))[0]
-            args.output = f"{base_name}.json"
+        # Process each PDF sequentially
+        batch_start = time.time()
+        for idx, pdf_path in enumerate(pdf_files, 1):
+            print(f"\n{'='*60}")
+            print(f"Processing Document {idx}/{len(pdf_files)}: {os.path.basename(pdf_path)}")
+            print(f"{'='*60}")
             
-        result = asyncio.run(run_pipeline(args.pdf_path, args.compounds))
+            doc_start = time.time()
+            try:
+                result = asyncio.run(run_pipeline(pdf_path, args.compounds))
+                
+                base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+                output_path = os.path.join(args.output_dir, f"{base_name}.json")
+                
+                with open(output_path, "w") as f:
+                    json.dump(result, f, indent=2)
+                    
+                doc_time = time.time() - doc_start
+                print(f"✅ Success! Saved to {output_path} (took {doc_time:.2f}s)")
+            except Exception as e:
+                print(f"❌ Failed to process {os.path.basename(pdf_path)}: {e}")
+                
+        batch_time = time.time() - batch_start
+        print(f"\n✅ Batch Processing Complete!")
+        print(f"   Processed {len(pdf_files)} documents in {batch_time:.2f} seconds.")
+        print(f"   Results saved to: {os.path.abspath(args.output_dir)}")
         
-        with open(args.output, "w") as f:
-            json.dump(result, f, indent=2)
-            
-        extraction_time = time.time() - pipeline_start
-        print(f"\n✅ Pipeline Complete!")
-        print(f"   -> 🐢 Model Loading (Cold Start): {load_time:.2f} seconds")
-        print(f"   -> ⚡ Actual Extraction Processing: {extraction_time:.2f} seconds")
-        print(f"   -> 💾 Results saved to {args.output}")
     except Exception as e:
-        print(f"\n❌ Pipeline failed: {e}")
+        print(f"Fatal Pipeline Error: {e}")
 
 if __name__ == "__main__":
     main()
