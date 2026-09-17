@@ -76,9 +76,10 @@ class ColQwenRetriever:
             p_score = pos_scores[i].item()
             n_score = neg_scores[i].item()
             
-            # If the page looks more like a Reference section than a PK Table, penalize it heavily
+            # If the page looks more like a Reference section than a PK Table, penalize it heavily.
+            # We ONLY rely on the relative difference between negative and positive scores.
             penalty = 0
-            if n_score > p_score or (n_score > 15.0 and p_score < 18.0):
+            if n_score > p_score:
                 penalty = 10.0  # massive penalty to push it out of the top-k
                 
             final_score = p_score - penalty
@@ -201,9 +202,9 @@ Assign confidence using these concrete criteria, not a general impression of cer
 Never assign HIGH to an entry that required any inference beyond direct transcription.
 
 ## STEP 7 — KNOWN FAILURE PATTERNS: DO NOT REPEAT THESE
-
 - Do not extract a fax number, phone number, or DOI as a parameter value.
-- Do not invent a cardiac output, fraction-unbound, or any other "typical" PBPK parameter because the page is pharmacokinetics-related — only extract what this page actually states.
+- Do not invent typical PBPK parameters if they are not explicitly printed on the page. However, you MUST extract ALL physiological parameters (e.g., cardiac output, tissue volumes, blood flows, fraction-unbound) that ARE explicitly printed in the table. 
+- If a parameter is a physiological constant (like liver volume) and does not specify a chemical compound, extract it and set the compound field to "Physiological".
 - Do not report multiple species (e.g., "Human, Rat") when only one appears on the page.
 - Do not rename the paper's own compartment names to generic equivalents.
 - Do not fill metadata gaps with a placeholder string — use null.
