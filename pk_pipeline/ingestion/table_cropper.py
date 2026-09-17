@@ -113,12 +113,15 @@ class TableCropper:
                 best_area = area
                 best_bbox = (x, y, x + cw, y + ch)
 
-        if best_bbox:
+        # Only crop if the best bounding box is reasonably large (at least 3% of the page).
+        # This prevents the cropper from isolating a tiny noise artifact or a single cell
+        # when a borderless table is present elsewhere on the page.
+        if best_bbox and best_area > page_area * 0.03:
             logger.info(f"TableCropper: OpenCV detected table at bbox {best_bbox} (area={best_area}px²)")
             return self.crop_from_bbox(pil_image, best_bbox)
         else:
             logger.warning(
-                "TableCropper: No clear grid found (likely a borderless table). "
+                "TableCropper: No clear grid found (or grid was too small). "
                 "Returning full page to VLM."
             )
             return pil_image
