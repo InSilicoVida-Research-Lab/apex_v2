@@ -58,36 +58,56 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     print("🔎 Step 2/3: Searching for Pharmacokinetic tables across all pages...")
     logger.debug("Step 2: Intra-Document Search")
     
-    # Build a dynamic query to allow steering without hardcoding
-    search_query = "Pharmacokinetic parameters table"
+    # Build dynamic queries
+    table_query = "Pharmacokinetic parameters table"
     if target_compounds:
-        search_query += f" for {', '.join(target_compounds)}"
+        table_query += f" for {', '.join(target_compounds)}"
         
-    target_images = get_retriever().find_top_pages(
-        images, 
-        top_k=10, 
-        query=search_query
-    )
-    print(f"   -> Identified {len(target_images)} highly relevant pages.")
+    diagram_query = "Pharmacokinetic model structure diagram mass balance equations"
+        
+    print("   -> Searching for tables...")
+    table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query)
     
-    # 2.5 Crop table regions from each selected page before VLM extraction
-    print("✂️  Step 2.5: Cropping table regions from selected pages...")
+    print("   -> Searching for structure diagrams...")
+    diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query)
+    
+    # 2.5 Crop table regions, but leave diagram pages uncropped
+    print("✂️  Step 2.5: Cropping table regions (leaving diagrams uncropped)...")
     cropper = TableCropper(padding=25)
-    cropped_images = cropper.crop_all(target_images)
-    cropped_count = sum(1 for orig, crop in zip(target_images, cropped_images) if crop.size != orig.size)
-    print(f"   -> Cropped {cropped_count}/{len(cropped_images)} pages (rest were borderless — full page sent).")
     
-    # Save cropped images to a debug folder for inspection
+    # Only crop table pages
+    cropped_tables = cropper.crop_all(table_pages)
+    
+    # Combine table and diagram images (deduplicate if the same page was found in both)
+    vlm_inputs = []
+    processed_orig_ids = set()
+    
+    # 1. Add cropped table pages
+    for orig, cropped in zip(table_pages, cropped_tables):
+        if id(orig) not in processed_orig_ids:
+            vlm_inputs.append(cropped)
+            processed_orig_ids.add(id(orig))
+            
+    # 2. Add diagram pages uncropped
+    for orig in diagram_pages:
+        if id(orig) not in processed_orig_ids:
+            vlm_inputs.append(orig)
+            processed_orig_ids.add(id(orig))
+            
+    cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)
+    print(f"   -> Cropped {cropped_count}/{len(cropped_tables)} table pages.")
+    
+    # Save images to a debug folder for inspection
     pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
     debug_dir = os.path.join(os.path.dirname(pdf_path), f"{pdf_stem}_vlm_inputs")
     os.makedirs(debug_dir, exist_ok=True)
-    for idx, img in enumerate(cropped_images):
+    for idx, img in enumerate(vlm_inputs):
         img_path = os.path.join(debug_dir, f"page_{idx + 1:02d}.png")
         img.save(img_path)
-    print(f"   -> 🖼️  Saved {len(cropped_images)} VLM input images to: {debug_dir}")
+    print(f"   -> 🖼️  Saved {len(vlm_inputs)} VLM input images to: {debug_dir}")
     
     # 3. Extract data using SGLang with schema enforcement
-    print(f"⚙️  Step 3/3: Running VLM extraction on {len(cropped_images)} cropped images concurrently...")
+    print(f"⚙️  Step 3/3: Running VLM extraction on {len(vlm_inputs)} images concurrently...")
     logger.debug("Step 3: Targeted Extraction across multiple pages")
     
     final_document = {
@@ -97,7 +117,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         "parameters": []
     }
     
-    tasks = [get_extractor().extract_data(img) for img in cropped_images]
+    tasks = [get_extractor().extract_data(img) for img in vlm_inputs]
     extracted_pages = await asyncio.gather(*tasks)
     
     for extracted_page in extracted_pages:
