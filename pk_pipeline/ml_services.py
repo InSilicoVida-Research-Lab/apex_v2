@@ -76,10 +76,11 @@ class ColQwenRetriever:
             p_score = pos_scores[i].item()
             n_score = neg_scores[i].item()
             
-            # If the page looks more like a Reference section than a PK Table, penalize it heavily.
-            # We ONLY rely on the relative difference between negative and positive scores.
+            # If the page is highly confident as a Reference section (n_score > p_score)
+            # BUT it also has a strong positive score for being a table (p_score > 10.0),
+            # do NOT penalize it. It's likely a table embedded inside the references.
             penalty = 0
-            if n_score > p_score:
+            if n_score > p_score and p_score < 10.0:
                 penalty = 10.0  # massive penalty to push it out of the top-k
                 
             final_score = p_score - penalty
