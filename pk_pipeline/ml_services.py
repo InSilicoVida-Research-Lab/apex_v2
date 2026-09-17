@@ -57,20 +57,38 @@ class ColQwenRetriever:
             batch_images = self.processor.process_images(images).to(self.model.device)
             image_embeddings = self.model(**batch_images)
 
-        # 2. Embed the text query
+        # 2. Embed the text queries (positive and negative)
+        negative_query = "References Bibliography"
         with torch.no_grad():
-            batch_queries = self.processor.process_queries([query]).to(self.model.device)
+            batch_queries = self.processor.process_queries([query, negative_query]).to(self.model.device)
             query_embeddings = self.model(**batch_queries)
 
-        # 3. Calculate MaxSim (dot product of visual patches and query tokens)
-        scores = self.processor.score_multi_vector(query_embeddings, image_embeddings)
+        # 3. Calculate MaxSim for both queries
+        # query_embeddings[0] is positive query, query_embeddings[1] is negative query
+        pos_query_emb = query_embeddings[0:1]
+        neg_query_emb = query_embeddings[1:2]
         
-        all_scores = [(i, scores[0][i].item()) for i in range(len(images))]
-        max_score = max(s for _, s in all_scores)
+        pos_scores = self.processor.score_multi_vector(pos_query_emb, image_embeddings)[0]
+        neg_scores = self.processor.score_multi_vector(neg_query_emb, image_embeddings)[0]
+        
+        all_scores = []
+        for i in range(len(images)):
+            p_score = pos_scores[i].item()
+            n_score = neg_scores[i].item()
+            
+            # If the page looks more like a Reference section than a PK Table, penalize it heavily
+            penalty = 0
+            if n_score > p_score or (n_score > 15.0 and p_score < 18.0):
+                penalty = 10.0  # massive penalty to push it out of the top-k
+                
+            final_score = p_score - penalty
+            all_scores.append((i, final_score, p_score, n_score))
+            
+        max_score = max(s for _, s, _, _ in all_scores)
         
         # Log every page score so we can see exactly what ColQwen thinks
-        for i, s in sorted(all_scores, key=lambda x: x[1], reverse=True):
-            logger.info(f"  Page {i+1:>2}: score={s:.4f}")
+        for i, s, p, n in sorted(all_scores, key=lambda x: x[1], reverse=True):
+            logger.info(f"  Page {i+1:>2}: final={s:.4f} (pos={p:.4f}, neg={n:.4f})")
         
         # 4. Dual threshold: must pass BOTH a relative AND absolute floor
         #    - relative: must be within 85% of the top-scoring page
@@ -81,17 +99,18 @@ class ColQwenRetriever:
         cutoff = max(relative_cutoff, absolute_floor)
         
         top_indices = [
-            i for i, s in all_scores
+            i for i, s, _, _ in all_scores
             if s >= cutoff
         ]
                 
         # Sort by score descending and limit to top_k
-        top_indices.sort(key=lambda i: scores[0][i].item(), reverse=True)
+        top_indices.sort(key=lambda i: all_scores[i][1], reverse=True)
         top_indices = top_indices[:top_k]
         
-        # Fallback if somehow empty
+        # Fallback if somehow empty (ignore penalty in this catastrophic case)
         if not top_indices:
-            top_indices = [scores[0].argmax().item()]
+            best_idx = max(range(len(all_scores)), key=lambda i: all_scores[i][2])
+            top_indices = [best_idx]
             
         logger.info(
             f"ColQwen: Max={max_score:.4f}, cutoff={cutoff:.4f} "
