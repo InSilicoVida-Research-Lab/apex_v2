@@ -87,22 +87,22 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     vlm_inputs = []
     processed_orig_ids = set()
     
-    # 1. Add diagram pages uncropped FIRST to guarantee they bypass the cropper
+    # 1. Add cropped table pages FIRST to guarantee optimal pixel density
+    for orig, cropped in zip(table_pages, cropped_tables):
+        if id(orig) not in processed_orig_ids:
+            vlm_inputs.append(cropped)
+            processed_orig_ids.add(id(orig))
+            
+    # 2. Add diagram pages uncropped
     for orig in diagram_pages:
         if id(orig) not in processed_orig_ids:
             vlm_inputs.append(orig)
             processed_orig_ids.add(id(orig))
             
-    # 2. Add narrative text pages uncropped
+    # 3. Add narrative text pages uncropped
     for orig in text_pages:
         if id(orig) not in processed_orig_ids:
             vlm_inputs.append(orig)
-            processed_orig_ids.add(id(orig))
-            
-    # 3. Add cropped table pages ONLY if they weren't already added uncropped
-    for orig, cropped in zip(table_pages, cropped_tables):
-        if id(orig) not in processed_orig_ids:
-            vlm_inputs.append(cropped)
             processed_orig_ids.add(id(orig))
             
     cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)

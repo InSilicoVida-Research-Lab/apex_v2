@@ -63,7 +63,7 @@ class BiologicalContext(BaseModel):
 class QuantitativeData(BaseModel):
     value: Optional[float] = Field(
         None,
-        description="The primary numerical value. If only a range is given with no central value, leave null."
+        description="The primary numerical value. If only a range is given, place the bounds in range_low and range_high."
     )
     range_low: Optional[float] = Field(
         None,
@@ -133,9 +133,9 @@ class ExtractedParameter(BaseModel):
         description="Mathematical symbol exactly as printed (e.g., VCC, Tmc, k12, CL/F). "
                     "Do not standardize or expand — transcribe verbatim."
     )
-    context: Optional[BiologicalContext] = Field(None, description="Biological and study context for this parameter.")
-    quantitative_data: Optional[QuantitativeData] = Field(None, description="Numerical values, ranges, units, and qualifiers.")
-    provenance: Optional[Provenance] = Field(None, description="Source location, supporting quote, and confidence.")
+    context: BiologicalContext = Field(..., description="Biological and study context for this parameter.")
+    quantitative_data: QuantitativeData = Field(..., description="Numerical values, ranges, units, and qualifiers.")
+    provenance: Provenance = Field(..., description="Source location, supporting quote, and confidence.")
 
 class ExtractedPage(BaseModel):
     page_metadata: PageMetadata
