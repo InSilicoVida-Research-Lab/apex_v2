@@ -127,8 +127,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         "structure": None,
         "parameters": []
     }
-    
-    tasks = [get_extractor().extract_data(img) for img in vlm_inputs]
+    # Use a Semaphore to limit concurrency to 2 pages at a time to prevent GPU OOM deadlocks
+    sem = asyncio.Semaphore(2)
+    async def bound_extract(img):
+        async with sem:
+            return await get_extractor().extract_data(img)
+            
+    tasks = [bound_extract(img) for img in vlm_inputs]
     extracted_pages = await asyncio.gather(*tasks)
     
     for extracted_page in extracted_pages:
