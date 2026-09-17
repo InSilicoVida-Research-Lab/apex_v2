@@ -140,6 +140,12 @@ def main():
     
     args = parser.parse_args()
     
+    # Fast fail if the file doesn't exist to avoid wasting time booting models
+    if not os.path.exists(args.pdf_path):
+        print(f"\n❌ Error: The file '{args.pdf_path}' does not exist.")
+        print("Please check the path and try again.")
+        return
+
     try:
         # Pre-load models before starting the extraction timer so we can see the "Cold Start" penalty
         print("\n[SYSTEM] Booting AI models into GPU memory. This is a one-time 'cold start' penalty...")
