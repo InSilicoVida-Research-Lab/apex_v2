@@ -68,7 +68,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     text_query = "Pharmacokinetic parameters half-life clearance volume of distribution in text"
         
     print("Searching for tables...")
-    table_pages = get_retriever().find_top_pages(images, top_k=8, query=table_query, threshold_ratio=0.75)
+    table_pages = get_retriever().find_top_pages(images, query=table_query, threshold_ratio=0.75)
     
     print("Searching for structure diagrams...")
     diagram_pages = get_retriever().find_top_pages(images, top_k=2, query=diagram_query, threshold_ratio=0.75)

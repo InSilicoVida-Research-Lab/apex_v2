@@ -133,9 +133,9 @@ class ExtractedParameter(BaseModel):
         description="Mathematical symbol exactly as printed (e.g., VCC, Tmc, k12, CL/F). "
                     "Do not standardize or expand — transcribe verbatim."
     )
-    context: BiologicalContext = Field(..., description="Biological and study context for this parameter.")
-    quantitative_data: QuantitativeData = Field(..., description="Numerical values, ranges, units, and qualifiers.")
-    provenance: Provenance = Field(..., description="Source location, supporting quote, and confidence.")
+    context: Optional[BiologicalContext] = Field(None, description="Biological and study context for this parameter.")
+    quantitative_data: Optional[QuantitativeData] = Field(None, description="Numerical values, ranges, units, and qualifiers.")
+    provenance: Optional[Provenance] = Field(None, description="Source location, supporting quote, and confidence.")
 
 class ExtractedPage(BaseModel):
     page_metadata: PageMetadata
