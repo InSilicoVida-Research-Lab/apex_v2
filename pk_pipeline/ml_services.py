@@ -229,6 +229,22 @@ Return ONLY valid JSON matching the schema below. No markdown code fences, no co
 {schema}
 """
 
+DIAGRAM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) model analyzer. You are shown an image of a model structure diagram (e.g., boxes and arrows representing a PBPK or compartmental model) from a scientific paper. 
+
+Your task is strictly to extract the model structure, compartments, and connections shown in this diagram, and return them in the exact JSON schema provided below. 
+
+## INSTRUCTIONS
+1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
+2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
+3. Fill out the `structure` object with `compartments` and `connections`:
+   - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
+   - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
+4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{schema}
+"""
+
 class SGLangExtractor:
     """
     Implementation of Qwen3-VL-8B served via SGLang inference engine.
@@ -268,16 +284,23 @@ class SGLangExtractor:
             logger.error(f"Failed to load SGLang engine: {e}")
             self.is_loaded = False
 
-    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "") -> ExtractedPage:
+    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "", chunk_title: str = "") -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
-        logger.debug(f"SGLang: Extracting data from {role} image with schema enforcement...")
+        import time
+        start_t = time.time()
+        title_log = f" ({chunk_title})" if chunk_title else ""
+        logger.info(f"SGLang: [START] Extracting data from {role} image{title_log}...")
         
         import uuid
         temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.jpg"
         image.save(temp_img_path, "JPEG")
         
         schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
-        system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        
+        if role == "figure_crop":
+            system_prompt = DIAGRAM_PROMPT_TEMPLATE.format(schema=schema_json)
+        else:
+            system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
         
         user_instruction = "Extract parameters from this image strictly into the JSON schema."
         if role == "table_crop":
@@ -298,13 +321,24 @@ class SGLangExtractor:
             f"<|im_start|>assistant\n"
         )
         
+        # Debug: Save the exact prompt to the test folder
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "image"
+            debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
+            with open(debug_file, "w", encoding="utf-8") as f:
+                f.write(prompt_text)
+        except Exception as e:
+            logger.warning(f"Failed to save debug prompt: {e}")
+        
         # Use SGLang's async_generate with pydantic schema enforcement via sampling_params
         # We must use async_generate because this is running inside an active asyncio event loop (FastAPI)
         response = await self.engine.async_generate(
             prompt=prompt_text,
             image_data=temp_img_path,
             sampling_params={
-                "max_new_tokens": 10240,
+                "max_new_tokens": 16000,
                 "temperature": 0.0,
                 "repetition_penalty": 1.0,
                 "json_schema": json.dumps(ExtractedPage.model_json_schema())
@@ -317,7 +351,69 @@ class SGLangExtractor:
         try:
             json_data = json.loads(extracted_text)
             extracted_page = ExtractedPage(**json_data)
-            logger.info(f"SGLang: Extraction complete. Found {len(extracted_page.parameters)} parameters.")
+            duration = time.time() - start_t
+            title_log = f" ({chunk_title})" if chunk_title else ""
+            logger.info(f"SGLang: [END] Image extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
+            return extracted_page
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
+            raise
+
+    async def extract_from_text(self, text_content: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
+        """Extract PK data from raw XML text strictly enforcing Pydantic schema"""
+        import time
+        start_t = time.time()
+        title_log = f" ({chunk_title})" if chunk_title else ""
+        logger.info(f"SGLang: [START] Extracting data from {role} text{title_log}...")
+        
+        schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
+        system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        
+        user_instruction = "Extract parameters from this document section strictly into the JSON schema."
+        if role == "table_xml":
+            user_instruction += " This is a raw HTML/XML table. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
+        elif role == "equation_xml":
+            user_instruction += " This is a mathematical equation (MathML or similar) from a PK model. Focus on extracting the model structure and compartments from the equation."
+        else:
+            user_instruction += " This is a section of narrative text. Extract any pharmacokinetic parameters you find in the text, using the surrounding text for biological context."
+
+        user_instruction += f"\n\nDocument Text:\n\n{text_content.strip()}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        
+        # Debug: Save the exact prompt to the test folder
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "text"
+            debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
+            with open(debug_file, "w", encoding="utf-8") as f:
+                f.write(prompt_text)
+        except Exception as e:
+            logger.warning(f"Failed to save debug prompt: {e}")
+        
+        response = await self.engine.async_generate(
+            prompt=prompt_text,
+            sampling_params={
+                "max_new_tokens": 16000,
+                "temperature": 0.0,
+                "repetition_penalty": 1.0,
+                "json_schema": json.dumps(ExtractedPage.model_json_schema())
+            }
+        )
+        
+        extracted_text = response["text"] if isinstance(response, dict) else response.text
+        
+        try:
+            json_data = json.loads(extracted_text)
+            extracted_page = ExtractedPage(**json_data)
+            duration = time.time() - start_t
+            title_log = f" ({chunk_title})" if chunk_title else ""
+            logger.info(f"SGLang: [END] Text extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
             return extracted_page
         except Exception as e:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")

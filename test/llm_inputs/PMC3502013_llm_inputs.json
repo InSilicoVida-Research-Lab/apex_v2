@@ -1,0 +1,191 @@
+[
+  {
+    "role": "table_xml",
+    "content": "Table 1:\n| Parameter | Mother | Fetus | source |\n|---|---|---|---|\n| Maternal body weight (BW; kg) and fetal weight (VFet; kg) | 56.9 \u2013 70 (initial); 65.3 \u2013 79.6 (increasing) | 0 \u2013 3.8 * | Clewell, et al 1999 ; Gentry, et al 2003 |\n| Tissue volumes (fraction of BW or VFet) |  |  |  |\n| Gut, VGutC | 0.0171 | - | Brown, et al 1997 |\n| Liver, VLivC | 0.026 | - | Brown, et al 1997 |\n| Kidney, VKidC | 0.004 | - | Brown, et al 1997 |\n| Filtrate, VFilC | 0.0004 | - | 10% of kidney volume |\n| Fat, VFatC (initial volume) | 0.214 | - | Brown, et al 1997 |\n| Mammary tissue, VMamC (initial volume) | 0.0062 | - | Gentry, et al 2002 |\n| Fetal plasma, VPIasFC | - | 0.0428 | Davies & Morris, 1993 |\n| Tissue volume (L, age-dependent) |  |  |  |\n| Fat, VFat | 14.0 \u2013 19.5 * | - | Gentry, et al 2002 |\n| Mammary tissue, VMam | 0.41 \u2013 0.79 * | - | Gentry, et al 2002 |\n| Placenta, VPIa | 0 \u2013 0.63 * | - | Gentry, et al 2002 |\n| Plasma, VPIas | 2.7 \u2013 3.2 * | - | Salas, et al 2006 |\n| Remaining tissues, VR | 34.5 \u2013 31.9 * |  | difference between BW and sum of other tissues |\n| Amniotic fluid (L, one fetus) | - | 0 \u2013 0.51 * | Beall, et al 2007 |\n| Blood flows (fraction of QC) |  |  |  |\n| Cardiac output (QCC, L/h/kg 0.75 ; initial) | 20.0 | - | Clewell, et al 1999 |\n| fetal cardiac output (L/h/kg blood) | - | 54.0 | Clewell, et al 1999 |\n| Gut, QGutC | 0.181 | - | Brown, et al 1997 |\n| Liver, QLivC | 0.25 | - | Brown, et al 1997 |\n| Skin, QSkC | 0.058 | - | Brown, et al 1997 |\n| hematocrit, Htc | 0.38 \u2013 0.367 * | 0.5 | Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn) |\n| Blood flows (L/h, age-dependent) |  |  |  |\n| Cardiac output, increasing, QC | 295 \u2013 355 * | 0 \u2013 4.8 * | Gentry, et al 2003 |\n| Fat, QFat | 14.8 \u2013 21.2 * | - | Gentry, et al 2002 |\n| Mammary tissue, QMam | 7.7 \u2013 15.4 * | - | Gentry, et al 2002 |\n| Placenta, QPIa | 0 \u2013 23.4 * | - | Clewell, et al, 2002 |\n| Kidney, QKid ; plasma flow | 24.4 \u2013 40.3 * | - | Sims & Krantz, 1958 |\n| Filtrate, QFilC\u2014glomular filtration rate (L/h) | 6.0 \u2013 9.1 * | - | Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995 |\n| Remaining tissue, QR | 108 \u2013 115 * | 0 \u2013 4.0 * | difference between total CO and flows to other tissues |",
+    "title": "Table 1",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "table_xml",
+    "content": "Table 2:\n| Parameters | Mother | Infant | source |\n|---|---|---|---|\n| BW (kg) (changing) | 72 \u2013 67.5 * | 3.5 \u2013 8 * | Wosje, et al, 2004 (maternal); CDC, 2002 (infant) |\n| Tissue volume (fraction of BW) |  |  |  |\n| Gut, VGutC | 0.0171 | - | Brown, et al 1997 |\n| Liver, VLivC | 0.026 |  | Brown, et al 1997 |\n| Fat, VFatC | 0.30 \u2013 0.285 * | - | Wosje, et al 2004 |\n| Kidney, VKidC | 0.004 | - | Brown, et al 1997 |\n| Filtrate, VFilC | 0.0004 | - | 10% of kidney volume |\n| Remaining tissues, VR (L) | 31.4 \u2013 30.2 * |  | difference between BW and sum of other tissues |\n| Residual milk volume, Vmilk (L) | 0.25 | - | Gentry, et al 2003 |\n| Plasma, VPIas (L) | 3.2 \u2013 2.4 * | - | Salas, et al 2006 (mother) |\n| Mammary tissue (L) | 0.82 \u2013 1.37 * | - | Gentry, et al 2003 |\n| Cardiac output |  |  |  |\n| Maternal (QCC; L/h/kg 0.75 ; nonpregnant) | 20.0 |  | Gentry, et al 2003 |\n| Maternal (changing; L/h) | 335\u2013330 * |  |  |\n| Blood flows (fraction of cardiac output) |  |  |  |\n| Gut, QGutC | 0.181 | - | Brown, et al 1997 |\n| Liver, QLivC | 0.25 |  | Brown, et al 1997 |\n| Skin, QSkC | 0.058 | - | Brown, et al 1997 |\n| Kidney, QKid (L/h) | 38.5 \u2013 30 * | - | GFR ~ 20% of renal plasma flow |\n| Filtrate, QFilC (glomerular filtration rate; L/h) | 7.7 \u2013 6.0 * | - | Sims & Krantz, 1958 |\n| Fat, QFat (L/h) | 21.4 \u2013 20.3 * | - | Gentry, et al 2003 |\n| Mammary, QMam (L/h) | 13.7 \u2013 21.0 * |  | Gentry, et al 2003 |\n| Remaining tissues, QR (L/h) | 96.7 \u2013 96.6 * | - | difference between total CO and flows to other tissues |\n| Hematocrit | 0.38 | - | Davies & Morris 1993 |\n| Milk production rate, kmilk (L/hr) | 0.0 \u2013 0.037 * | milk production rate = suckling rate | Dewey, et al 1983 |",
+    "title": "Table 2",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "table_xml",
+    "content": "Table 3:\n|  | PFOA | PFOS |  |  |  |  |\n|---|---|---|---|---|---|---|\n| Parameter | mother | fetus | infant | mother | fetus | infant |\n| Free fraction of chemical in plasma (Free) | 0.02 | 0.02 | 0.02 | 0.025 | 0.025 | 0.025 |\n| Volume of distribution (Vdc; infant only, scaled to BWKid) | - | - | 0.17 |  | - | 0.22 |\n| Renal resorption Parameters |  |  |  |  |  |  |\n| transporter maximum, Tmc (ug/h/kg 0.75 ) | 10 | - | - | 3.5 | - | - |\n| affinity constant, Kt (ug/L) | 0.055 | - | - | 0.023 | - | - |\n| Partition Coefficients |  |  |  |  |  |  |\n| Gut:plasma (Pgut) | 0.05 | - | - | 0.57 | - | - |\n| Liver:plasma (Pliv) | 2.2 | - | - | 3.72 | - | - |\n| Kidney: plasma (Pkid) | 1.05 | - | - | 0.8 | - | - |\n| Fat: plasma (Pfat) | 0.04 | - | - | 0.13 | - | - |\n| Mammary Tissue: plasma (Pmam; gestation only) | 0.13 | - | - | 0.16 | - | - |\n| Rest of body tissues: plasma (Ptis) | 0.12 | 0.12 | - | 0.20 | 0.20 | - |\n| Placenta:Plasma (Ppla) | 0.28 | - | - | 0.41 | - | - |\n| Skin: plasma (PSk) | 0.1 | - | - | 0.29 | - | - |\n| Mammary tissue:plasma (PMam; gestation only) | 0.13 | - |  | 0.16 | - | - |\n| Milk: plasma (PMilk; lactation only) | 0.038 | - | - | 0.0122 | - | - |\n| Uptake/Elimination Rate Constants |  |  |  |  |  |  |\n| urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001 |\n| Placental transfer (gestation only) |  |  |  |  |  |  |\n| mother to fetus, ktrans1C (L/h/kg 0.75 ) | 0.46 | - | - | 0.46 | - | - |\n| fetus to mother, ktrans2C (L/h/kg 0.75 ) | - | 0.46 | - | - | 1.01 | - |\n| Amniotic fluid transfer (gestation only) |  |  |  |  |  |  |\n| fetus to fluid, ktrans3C (L/h/kg 0.75 ) | - | 0.008 | - | - | 0.006 | - |\n| fluid to fetus, ktrans4C (L/h/kg 0.75 ) | - | 0.001 | - | - | 0.001 | - |",
+    "title": "Table 3",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "table_xml",
+    "content": "Table 4:\n| PFOA gestation | PFOS gestation |  |  |  |  |\n|---|---|---|---|---|---|\n| parameter | maternal SC | fetal SC | parameter | maternal SC | fetal SC |\n| initial BW (maternal) | \u22120.75 | \u22120.74 | initial BW (maternal) | \u22120.79 | \u22120.79 |\n| liver volume (fraction of BW) | \u22120.36 | \u22120.37 | liver volume (fraction of BW) | \u22120.34 | \u22120.33 |\n| liver: plasma PC | \u22120.38 | \u22120.39 | liver:plasma PC | \u22120.34 | \u22120.34 |\n| rest of body:plasma PC | \u22120.39 | \u22120.39 | fat:plasma PC | \u22120.12 | \u22120.13 |\n| resorption maximum (Tmc) | 0.35 | \u22120.35 | rest of body: plasma PC | \u22120.32 | \u22120.32 |\n| affinity constant (Kt) | \u22120.35 | \u22120.35 | resorption maximum (Tmc) | 0.07 | 0.07 |\n| free fraction in plasma | \u22120.11 | 0.88 | affinity constant (Kt) | \u22120.07 | \u22120.07 |\n| free fraction (fetus) | -- | \u22120.98 | free fraction in plasma | \u22120.08 | 0.92 |\n| placental transfer rate constant (m to f) | \u22120.01 | 0.98 | free fraction (fetus) | -- | \u22120.98 |\n| placental transfer rate constant (f to m) | 0.01 | \u22120.98 | placental transfer rate constant (m to f) | -- | 0.99 |\n| GFR | \u22120.19 | \u22120.19 | placental transfer rate constant (f to m) | -- | \u22120.98 |\n| fat volume | 0.10 | 0.10 | GFR | \u22120.15 | \u22120.15 |\n| fat volume (fraction of BW) | 0.11 | 0.10 | fat volume | \u22120.16 | \u22120.16 |",
+    "title": "Table 4",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "table_xml",
+    "content": "Table 5:\n| Studies used for exposure estimation (media; time for which exposure was estimated) | estimated PFOA exposure (ug/kg/day); 3.8 yr half-life | estimated PFOA exposure (ug/kg/day); 2.3 yr half-life | estimated PFOS exposure (ug/kg/day); 5.4 yr half-life |\n|---|---|---|---|\n| gestation |  |  |  |\n| Fromme, et al 2010 (plasma; week 34) | 1.9E-04 | 3.0E-04 | 3.8E-04 |\n| Apelberg, et al 2007 (plasma; delivery) | 1.2E-04 | 2.0E-04 | 5.8E-04 |\n| Inoue, et al 2004 (plasma; delivery) | 1.15E-04 | 1.9E-04 | 1.2E-03 |\n| Midasch, et al 2007 (plasma; delivery) | 2.0E-04 | 3.4E-04 | 1.35E-03 |\n| Fei, et al 2007 (plasma; week 7) | 3.60E-04 | 6.9E-04 | 3.7E-03 |\n| Washino, et al 2009 (plasma; delivery) | 1.25E-04 | 2.2E-04 | 7.4E-04 |\n| Monroy, et al 2008 (plasma; week 26) | 1.8E-04 | 3.0E-04 | 2.0E-03 |\n| Hanssen, et al 2010 (plasma; delivery) | 1.15E-04 | 1.7E-04 | 1.9E-04 |\n| Kim, et al 2011 (plasma; delivery) | 1.3E-04 | 2.3E-04 | 6.9E-04 |\n| Kim, et al 2011 (plasma; 3rd trimester) | 1.15e-04 | 2.05E-04 | 3.5e-04 |\n| Tittlemier, et al 2004 (plasma; delivery) | 1.6E-04 | 2.8E-04 | 4.4E-03 |\n| lactation |  |  |  |\n| Karrman, et al 2007 (plasma; 3 weeks postpartum) | 2.8E-04 |  | 2.3E-03 |\n| von Ehrenstein, et al 2009 (plasma; 4 weeks postpartum) | 2.4E-04 |  | 2.25E-03 |\n| Volkel, et al 2008 (milk; 4 weeks postpartum) | NA (PFOA < LOD in milk) |  | 3.5E-04 |\n| Fromme, et al 2010 (plasma; 6 months postpartum) | 2.4e-4 (1 st 6 months postpartum); PFOA < LOD in milk |  | 4.75e-4 (1 st 6 months); 3.8e-04 (after 6 months) |\n| Kim, et al 2011 (milk; 7 days postpartum) | 1.63e-4 (1 st 6 months); 1.3e-4 (after 6 months) |  | 8.6e-4 (1 st 6 months); 6.9e-4 (after 6 months) |\n| Kim, et al 2011 (plasma during pregnancy; milk collected 1 month postpartum) | 1.44e-04 (1 st 6 months postpartum); 1.15e-04 (after 6 months) |  | 4.4e-04 (1 st 6 months); 3.5e-4 (after 6 months) |\n| Thomsen, et al 2010 (milk; birth) | 1.7E-04 |  | 1.4E-03 |\n| Liu, et al 2011 (plasma; 1 week postpartum) | 1.4e-4 (1 st 6 months); 1.1e-4 (after 6 months) |  | 4.6e-4 (1 st 6 months); 3.7e-4(after 6 months) |\n| General population (estimated using adult human model) |  |  |  |\n| Calafat, et al 2007 (NHANES 2003\u201304) | 2.50E-04 | 4.20E-04 | 1.75E-03 |\n| Olsen, et al 2008 (Red Cross blood donors) | 2.2e-04-4.4e-04 | 1.3e-04-2.65e-04 | 8.5e-04-1.8e-03 |",
+    "title": "Table 5",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "equation_xml",
+    "content": "Equation 1:\n<disp-formula id=\"FD1\"><mml:math display=\"block\" id=\"M1\" overflow=\"scroll\"><mml:mrow><mml:mi>s</mml:mi><mml:mi>e</mml:mi><mml:mi>n</mml:mi><mml:mi>s</mml:mi><mml:mi>i</mml:mi><mml:mi>t</mml:mi><mml:mi>i</mml:mi><mml:mi>v</mml:mi><mml:mi>i</mml:mi><mml:mi>t</mml:mi><mml:mi>y</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>c</mml:mi><mml:mi>o</mml:mi><mml:mi>e</mml:mi><mml:mi>f</mml:mi><mml:mi>f</mml:mi><mml:mi>i</mml:mi><mml:mi>c</mml:mi><mml:mi>i</mml:mi><mml:mi>e</mml:mi><mml:mi>n</mml:mi><mml:mi>t</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mrow><mml:mrow><mml:mo>(</mml:mo><mml:mi>A</mml:mi><mml:mo>\u2212</mml:mo><mml:mi>B</mml:mi><mml:mo>)</mml:mo></mml:mrow><mml:mo>\u2215</mml:mo><mml:mi>B</mml:mi></mml:mrow><mml:mrow><mml:mrow><mml:mo>(</mml:mo><mml:mi>C</mml:mi><mml:mo>\u2212</mml:mo><mml:mi>D</mml:mi><mml:mo>)</mml:mo></mml:mrow><mml:mo>\u2215</mml:mo><mml:mi>D</mml:mi></mml:mrow></mml:mfrac></mml:mrow></mml:math></disp-formula>",
+    "title": "Equation 1",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "equation_xml",
+    "content": "Equation 2:\n<disp-formula id=\"FD2\"><mml:math display=\"block\" id=\"M2\" overflow=\"scroll\"><mml:mrow><mml:mi>G</mml:mi><mml:mi>r</mml:mi><mml:mi>o</mml:mi><mml:mi>w</mml:mi><mml:mi>t</mml:mi><mml:mi>h</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>e</mml:mi><mml:mi>q</mml:mi><mml:mi>u</mml:mi><mml:mi>a</mml:mi><mml:mi>t</mml:mi><mml:mi>i</mml:mi><mml:mi>o</mml:mi><mml:mi>n</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>w</mml:mi><mml:mi>i</mml:mi><mml:mi>t</mml:mi><mml:mi>h</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mn>1</mml:mn><mml:mo>%</mml:mo><mml:mspace width=\"thinmathspace\"/><mml:mi>i</mml:mi><mml:mi>n</mml:mi><mml:mi>c</mml:mi><mml:mi>r</mml:mi><mml:mi>e</mml:mi><mml:mi>a</mml:mi><mml:mi>s</mml:mi><mml:mi>e</mml:mi><mml:mo>=</mml:mo><mml:mi>o</mml:mi><mml:mi>r</mml:mi><mml:mi>i</mml:mi><mml:mi>g</mml:mi><mml:mi>i</mml:mi><mml:mi>a</mml:mi><mml:mi>n</mml:mi><mml:mi>l</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>g</mml:mi><mml:mi>r</mml:mi><mml:mi>o</mml:mi><mml:mi>w</mml:mi><mml:mi>t</mml:mi><mml:mi>h</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>e</mml:mi><mml:mi>q</mml:mi><mml:mi>u</mml:mi><mml:mi>a</mml:mi><mml:mi>t</mml:mi><mml:mi>i</mml:mi><mml:mi>o</mml:mi><mml:mi>n</mml:mi><mml:mo>+</mml:mo><mml:mn>0.01</mml:mn><mml:mspace width=\"thinmathspace\"/><mml:mo>\u2217</mml:mo><mml:mspace width=\"thinmathspace\"/><mml:mi>o</mml:mi><mml:mi>r</mml:mi><mml:mi>i</mml:mi><mml:mi>g</mml:mi><mml:mi>i</mml:mi><mml:mi>n</mml:mi><mml:mi>a</mml:mi><mml:mi>l</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>g</mml:mi><mml:mi>r</mml:mi><mml:mi>o</mml:mi><mml:mi>w</mml:mi><mml:mi>t</mml:mi><mml:mi>h</mml:mi><mml:mspace width=\"thinmathspace\"/><mml:mi>e</mml:mi><mml:mi>q</mml:mi><mml:mi>u</mml:mi><mml:mi>a</mml:mi><mml:mi>t</mml:mi><mml:mi>i</mml:mi><mml:mi>o</mml:mi><mml:mi>n</mml:mi></mml:mrow></mml:math></disp-formula>",
+    "title": "Equation 2",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 1:\nCaption: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right). Fetal plasma circulation is separate from the maternal circulation. Only the mother is exposed directly; chemical is transferred to the fetus through the placenta. Placental transfer is described by a simple diffusion process (ktrans1 and ktrans2). Q's represent blood flows to and from the tissues; only the free fraction of chemical in plasma is available for uptake into tissues. Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma; maternal exposure can also be through drinking water.",
+    "title": "Figure 1",
+    "caption": "PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right). Fetal plasma circulation is separate from the maternal circulation. Only the mother is exposed directly; chemical is transferred to the fetus through the placenta. Placental transfer is described by a simple diffusion process (ktrans1 and ktrans2). Q's represent blood flows to and from the tissues; only the free fraction of chemical in plasma is available for uptake into tissues. Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma; maternal exposure can also be through drinking water.",
+    "image_href": "nihms-403084-f0001.jpg",
+    "is_diagram": true,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 2:\nCaption: PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans (maternal, left; infant, right). Maternal exposure is by direct intake; the infant exposure is through milk. No data were available for PFOA or PFOS partitioning into mammary tissue; chemical in plasma was assumed to be in direct contact with the milk compartment. Transfer from the plasma to the milk compartment was assumed to be flow-limited. Limited data was available for concentrations of PFAAs in the infant; thus, the infant was treated as a single compartment. Only the free fraction of chemical in plasma was available for uptake into tissues or milk.",
+    "title": "Figure 2",
+    "caption": "PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans (maternal, left; infant, right). Maternal exposure is by direct intake; the infant exposure is through milk. No data were available for PFOA or PFOS partitioning into mammary tissue; chemical in plasma was assumed to be in direct contact with the milk compartment. Transfer from the plasma to the milk compartment was assumed to be flow-limited. Limited data was available for concentrations of PFAAs in the infant; thus, the infant was treated as a single compartment. Only the free fraction of chemical in plasma was available for uptake into tissues or milk.",
+    "image_href": "nihms-403084-f0002.jpg",
+    "is_diagram": true,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 3:\nCaption: Example of the general features/trends of the model predictions for PFOA during gestation and lactation (maternal exposure was 1.5e-4 ug/kg BW/day). The plots show the model predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant plasma at up to 6 months after birth. Infant exposure to PFCs was assumed to be only through milk and breastfeeding was assumed to last 6 months postpartum.",
+    "title": "Figure 3",
+    "caption": "Example of the general features/trends of the model predictions for PFOA during gestation and lactation (maternal exposure was 1.5e-4 ug/kg BW/day). The plots show the model predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant plasma at up to 6 months after birth. Infant exposure to PFCs was assumed to be only through milk and breastfeeding was assumed to last 6 months postpartum.",
+    "image_href": "nihms-403084-f0003.jpg",
+    "is_diagram": false,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 4:\nCaption: Example of the general features/trends of the model predictions for PFOS during gestation and lactation (maternal dose was 1.35e-3 ug/kg BW/day). The plots show the model predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant plasma at up to 6 months postpartum. Infant exposure to PFCs was through milk and breastfeeding lasted 6 months postpartum.",
+    "title": "Figure 4",
+    "caption": "Example of the general features/trends of the model predictions for PFOS during gestation and lactation (maternal dose was 1.35e-3 ug/kg BW/day). The plots show the model predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant plasma at up to 6 months postpartum. Infant exposure to PFCs was through milk and breastfeeding lasted 6 months postpartum.",
+    "image_href": "nihms-403084-f0004.jpg",
+    "is_diagram": false,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 5:\nCaption: Comparison of model-predicted and observed values for PFAAs in maternal and fetal plasma during gestation. The figure compares the predicted and observed concentrations and maternal:fetal plasma concentration ratios for PFOA (top) and PFOS (bottom) from several pregnancy studies in which there were paired maternal and fetal observations available.",
+    "title": "Figure 5",
+    "caption": "Comparison of model-predicted and observed values for PFAAs in maternal and fetal plasma during gestation. The figure compares the predicted and observed concentrations and maternal:fetal plasma concentration ratios for PFOA (top) and PFOS (bottom) from several pregnancy studies in which there were paired maternal and fetal observations available.",
+    "image_href": "nihms-403084-f0005.jpg",
+    "is_diagram": false,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 6:\nCaption: Comparison of model-predicted and observed values for PFAAs in maternal plasma and milk during lactation. The figure compares the predicted and observed concentrations and the plasma:milk concentration ratios for PFOA (top) and PFOS (bottom) from several lactation studies.",
+    "title": "Figure 6",
+    "caption": "Comparison of model-predicted and observed values for PFAAs in maternal plasma and milk during lactation. The figure compares the predicted and observed concentrations and the plasma:milk concentration ratios for PFOA (top) and PFOS (bottom) from several lactation studies.",
+    "image_href": "nihms-403084-f0006.jpg",
+    "is_diagram": false,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "figure_xml",
+    "content": "Figure 7:\nCaption: Predicted PFOA concentrations in maternal, fetal, and infant plasma in Little Hocking (top) and Arnsberg, Germany (bottom) through pregnancy (left panel), lactation, and up to 5 years after birth (right panel).",
+    "title": "Figure 7",
+    "caption": "Predicted PFOA concentrations in maternal, fetal, and infant plasma in Little Hocking (top) and Arnsberg, Germany (bottom) through pregnancy (left panel), lactation, and up to 5 years after birth (right panel).",
+    "image_href": "nihms-403084-f0007.jpg",
+    "is_diagram": false,
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Due to the stability of the C\u2013F bond, these compounds are highly resistant to biodegradation and metabolism and thus are persistent .\nThe average serum half-life in humans is estimated at 3.8 years for PFOA and 5.4 years for PFOS .\nPostnatal survival is similar for PFOS exposure in rats and mice; however, there are marked differences in PFOA effects, which may be due to species and gender differences in pharmacokinetics of PFOA.\nMost notably, the female rat has a short serum half-life for PFOA (approximately 2-4 hours), while the half-lives observed in male rats and other species (e.g., mouse, monkey, and humans) are several days to years ( ; ; ; ).",
+    "title": "Introduction",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Data in rats showed that PFAAs are present in amniotic fluid ; thus, an amniotic fluid compartment was included in the rat models and also in the human models presented here.\nTransfer rates between the amniotic fluid compartment and the fetal body are described as simple diffusion (ktrans3C and ktrans4C; Table 3 ).",
+    "title": "Model Structures",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Volumes of liver, kidney, filtrate, and gut remained constant fractions of the prepregnancy (non-pregnant) maternal body weight (BWinit); fractional volumes of these tissues for nonpregnant women was taken from .\nThe filtrate compartment, as in the adult human model, was set at 10% of the kidney volume (the model is not sensitive to this value).",
+    "title": "Gestation model\u2013physiology",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Because the volume of mammary tissue changes during lactation, these volume changes were accounted for by lumping this change in volume in with the remaining maternal tissue volume.\nChanging glomerular filtration rate (QFil) after pregnancy was adapted from data from and returned to the pre-pregnancy level at 6 weeks postpartum.\nSince there were no available data on renal plasma flow changes during lactation, renal plasma flow was assumed to be approximately 5 times that of the GFR (GFR is normally approximately 20% of renal plasma flow).",
+    "title": "Lactation Model\u2013physiology",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Renal Resorption The estimated geometric mean serum elimination half-life in the human is approximately 3.5 years for PFOA (arithmetic mean 3.8 years) and 4.8 years for PFOS (arithmetic mean 5.4 years) based on a study of retired fluorochemical workers .\nA more recent study conducted on a population that had previous exposure to PFOA in drinking water estimated a median plasma half-life for PFOA of 2.3 years .",
+    "title": "Renal Resorption",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Sensitivity Analysis A normalized sensitivity analysis was performed on the gestation and lactation models for both chemicals in order to examine the influences of each model parameter on the model output.\nThe influence of each model parameter on maternal plasma, fetal plasma, and infant concentrations was examined by calculating the area under the curve (AUC) for maternal, fetal, or infant plasma PFAA concentration that resulted from increasing each parameter by 1%.\nEach parameter was increased separately.\nThe normalized sensitivity coefficients (SC) were calculated by the following equation: A is the AUC resulting from the 1% increase in parameter value, B is the AUC resulting from the original parameter value, C is the parameter value increased by 1%, and D is the original parameter value.\nFor parameters that describe the growth or changes (and change during the simulation time), a 1% increase in the parameter was calculated by the following equation: This equation will allow for the parameter value to increase by 1% of the original value during the entire simulation.\nThe relative impact of each model parameter was examined for the dose metrics of interest, which were the total plasma AUC in the mother and fetus (at embryonic week 39) for the gestation models or the total maternal plasma AUC and infant body AUC (at 6 months postpartum) for the lactation models.",
+    "title": "Sensitivity Analysis",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "Exposure estimation and predictions of internal dose for general population In order to estimate maternal exposure for the various general population studies, maternal PFOA and PFOS exposure was modeled as a generic input to the plasma compartment (designated as \u201cIV\u201d in Figures 1 and 2 ) as contributions of PFAA exposure from different exposure routes are not well understood .\nWith a shorter half-life, a higher exposure would be needed to yield the same plasma concentration at a specified time point than with a longer half-life.\nWhen exposures were estimated using the pregnancy model, both the 3.8 and 2.3 year half-lives were used in the model (by adjusting Tm), and an exposure was estimated that would yield the reported plasma concentrations at the specified time points for each half-life.",
+    "title": "Exposure estimation and predictions of internal dose for general population",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "For the mother, these include parameters such as BW, the flow to the filtrate compartment (QFil; analogous to GFR), and the free fraction of chemical in plasma.\nAll of the tissue volumes in the mother are scaled to BW (and maternal BW increases by approximately 25 kg during pregnancy); the flow to the filtrate compartment will affect how quickly the chemical is eliminated; and the free fraction of chemical controls how much chemical will be available for tissue uptake or filtration.\nFat volume also constitutes a large % BW in humans (approximately 20% of BW in non-pregnant women), especially in pregnant women (approximately 30% of BW) as this increases as the pregnancy progresses.\nIn the fetus, maternal body weight and flow to the filtrate compartment affect the fetal plasma AUC in addition to the free fraction of chemical in maternal and fetal plasma (Free and FreeF) and the bidirectional placental transfer rate constants (ktrans1c and ktrans2c).\nThe fetal plasma AUC is also affected by the maternal renal resorption parameters (Tm and Kt) as these will determine how much chemical is eliminated from the maternal system rather than being available for transfer to the fetus.\nIn the lactation model, the maternal plasma AUC at 6 months postpartum is affected by many of the same maternal parameters as during gestation.\nKmilkC will determine how quickly the chemical is then transferred from breast milk to the nursing infant, and the infant AUC is more sensitive to this parameter than the mother's plasma AUC.\nFor the infant, some of the parameters that affect the fetal plasma AUC also affect the infant AUC at 6 months postpartum.",
+    "title": "Sensitivity Analysis",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "PFOS was detected in all studies in plasma or milk, and estimated maternal PFOS exposures during lactation ranged from 3.5e \u221204 to 2.3e \u221203 ug/kg BW/day.\nThese estimates were obtained by modeling exposure as a generic input to the plasma compartment (see Methods) and assuming constant exposure over a 24 hour time period.",
+    "title": "Estimated exposures to PFOA and PFOS for the general population",
+    "kept": true,
+    "skip_reason": ""
+  },
+  {
+    "role": "narrative_xml",
+    "content": "A recent study on PFAA intake in the Netherlands, based on analysis of PFAA concentrations in food, estimated the median intake to be 0.2 ng/kg BW/day for PFOA and 0.3 ng/kg BW/day for PFOS .\nThe model-predicted intake of PFOA is in excellent agreement with their estimate; for a 3.8-yr half-life, our median estimated intake was 0.15 ng/kg BW/day.\nRenal reabsorption is thought to be responsible for the long half-lives observed in humans and other species ( ; ; ).\nThe female rat does not express high levels of the renal transporter (Oatp1a1) thought to be responsible for resorption and has a very short half-life.\nThis species difference is attributed to the fact that the chemical is eliminated quickly by the female rat and thus adverse effects are not observed.\nIn mice, the half-life of PFAA is longer (12\u201320 days ), a pronounced sex difference in clearance is not observed , and developmental effects (increased neonatal mortality, eye opening delays, and alterations in mammary gland development) have been observed at lower doses than in rats, indicating that mice may be a more sensitive species than rats ( ; ; ).\nCurrently, it is not clear if the diminished sex difference and slower clearance of PFAA mice (and thus greater sensitivity to PFAA exposure) is related to renal transporters such as Oatp1a1 for PFAA .",
+    "title": "Gestation and Lactation Models",
+    "kept": true,
+    "skip_reason": ""
+  }
+]

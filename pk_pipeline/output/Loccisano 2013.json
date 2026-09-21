@@ -1,99 +1,5165 @@
 {
   "page_metadata": {
-    "title": null,
+    "title": "Development of PBPK Models for PFOA and PFOS for Human Pregnancy and Lactation Life Stages",
     "authors": [
-      "Loccisano et al."
+      "Anne E. Loccisano",
+      "Matthew P. Longnecker",
+      "Jerry L. Campbell",
+      "Melvin E. Andersen",
+      "Harvey J. Clewell"
     ],
-    "journal": null,
-    "year": null
+    "journal": "Journal of toxicology and environmental health. Part A",
+    "year": 2013
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right)."
+    "evidence_quote": null
   },
   "structure": {
     "compartments": [
-      "Plasma (free fraction available for uptake into tissues)",
-      "Gut",
-      "Liver",
-      "Fat",
-      "Placenta",
-      "Skin",
-      "Mammary",
-      "Rest of body",
-      "Kidney",
-      "Filtrate",
-      "Fetal plasma (free fraction)",
-      "Amniotic fluid",
-      "Rest of fetal body"
+      {
+        "id": "Plasma",
+        "label_raw": "Plasma (free fraction available for uptake into tissues)",
+        "confidence": 1.0
+      },
+      {
+        "id": "Gut",
+        "label_raw": "Gut",
+        "confidence": 1.0
+      },
+      {
+        "id": "Liver",
+        "label_raw": "Liver",
+        "confidence": 1.0
+      },
+      {
+        "id": "Fat",
+        "label_raw": "Fat",
+        "confidence": 1.0
+      },
+      {
+        "id": "Placenta",
+        "label_raw": "Placenta",
+        "confidence": 1.0
+      },
+      {
+        "id": "Skin",
+        "label_raw": "Skin",
+        "confidence": 1.0
+      },
+      {
+        "id": "Mammary",
+        "label_raw": "Mammary",
+        "confidence": 1.0
+      },
+      {
+        "id": "Rest of body",
+        "label_raw": "Rest of body",
+        "confidence": 1.0
+      },
+      {
+        "id": "Kidney",
+        "label_raw": "Kidney",
+        "confidence": 1.0
+      },
+      {
+        "id": "Filtrate",
+        "label_raw": "Filtrate",
+        "confidence": 1.0
+      },
+      {
+        "id": "Fetal plasma",
+        "label_raw": "Fetal plasma (free fraction)",
+        "confidence": 1.0
+      },
+      {
+        "id": "Amniotic fluid",
+        "label_raw": "Amniotic fluid",
+        "confidence": 1.0
+      },
+      {
+        "id": "Rest of fetal body",
+        "label_raw": "Rest of fetal body",
+        "confidence": 1.0
+      },
+      {
+        "id": "storage",
+        "label_raw": "storage",
+        "confidence": 1.0
+      }
     ],
     "connections": [
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Gut"
+        "source": "Gut",
+        "target": "Plasma",
+        "label_raw": "QGut",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Liver"
+        "source": "Liver",
+        "target": "Plasma",
+        "label_raw": "QLiv",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Fat"
+        "source": "Fat",
+        "target": "Plasma",
+        "label_raw": "QFat",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Placenta"
+        "source": "Placenta",
+        "target": "Plasma",
+        "label_raw": "QPla",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Skin"
+        "source": "Skin",
+        "target": "Plasma",
+        "label_raw": "QSk",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Mammary"
+        "source": "Mammary",
+        "target": "Plasma",
+        "label_raw": "QMam",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Rest of body"
+        "source": "Rest of body",
+        "target": "Plasma",
+        "label_raw": "QR",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Kidney"
+        "source": "Kidney",
+        "target": "Plasma",
+        "label_raw": "QKid",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Plasma (free fraction available for uptake into tissues)",
-        "to_comp": "Filtrate"
+        "source": "Filtrate",
+        "target": "Plasma",
+        "label_raw": "QFil",
+        "direction": "forward",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Gut",
-        "to_comp": "Liver"
+        "source": "Plasma",
+        "target": "Gut",
+        "label_raw": "QGut",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Placenta",
-        "to_comp": "Fetal plasma (free fraction)"
+        "source": "Plasma",
+        "target": "Liver",
+        "label_raw": "QLiv",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Fetal plasma (free fraction)",
-        "to_comp": "Amniotic fluid"
+        "source": "Plasma",
+        "target": "Fat",
+        "label_raw": "QFat",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Fetal plasma (free fraction)",
-        "to_comp": "Rest of fetal body"
+        "source": "Plasma",
+        "target": "Placenta",
+        "label_raw": "QPla",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Amniotic fluid",
-        "to_comp": "Rest of fetal body"
+        "source": "Plasma",
+        "target": "Skin",
+        "label_raw": "QSk",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "Filtrate",
-        "to_comp": "storage"
+        "source": "Plasma",
+        "target": "Mammary",
+        "label_raw": "QMam",
+        "direction": "reverse",
+        "confidence": 1.0
       },
       {
-        "from_comp": "storage",
-        "to_comp": "urine"
+        "source": "Plasma",
+        "target": "Rest of body",
+        "label_raw": "QR",
+        "direction": "reverse",
+        "confidence": 1.0
+      },
+      {
+        "source": "Plasma",
+        "target": "Kidney",
+        "label_raw": "QKid",
+        "direction": "reverse",
+        "confidence": 1.0
+      },
+      {
+        "source": "Plasma",
+        "target": "Filtrate",
+        "label_raw": "QFil",
+        "direction": "reverse",
+        "confidence": 1.0
+      },
+      {
+        "source": "Placenta",
+        "target": "Fetal plasma",
+        "label_raw": "ktrans1",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Fetal plasma",
+        "target": "Placenta",
+        "label_raw": "ktrans2",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Fetal plasma",
+        "target": "Amniotic fluid",
+        "label_raw": "ktrans3",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Amniotic fluid",
+        "target": "Fetal plasma",
+        "label_raw": "ktrans4",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Fetal plasma",
+        "target": "Rest of fetal body",
+        "label_raw": "QRFet",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Rest of fetal body",
+        "target": "Fetal plasma",
+        "label_raw": "QRFet",
+        "direction": "reverse",
+        "confidence": 1.0
+      },
+      {
+        "source": "Kidney",
+        "target": "Filtrate",
+        "label_raw": "Tm,Kt",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Filtrate",
+        "target": "storage",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "storage",
+        "target": "urine",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Gut",
+        "target": "Oral dose, Drinking H2O",
+        "direction": "forward",
+        "confidence": 1.0
+      },
+      {
+        "source": "Plasma",
+        "target": "IV",
+        "direction": "forward",
+        "confidence": 1.0
       }
     ],
     "source_location": "Figure 1"
   },
-  "parameters": []
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Maternal body weight (BW; kg) and fetal weight (VFet; kg)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "56.9 \u2013 70 (initial); 65.3 \u2013 79.6 (increasing)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Maternal body weight (BW; kg) and fetal weight (VFet; kg) | 56.9 \u2013 70 (initial); 65.3 \u2013 79.6 (increasing) | 0 \u2013 3.8 * | Clewell, et al 1999 ; Gentry, et al 2003",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Tissue volumes (fraction of BW or VFet)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Tissue volumes (fraction of BW or VFet) |  |  |  ",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut, VGutC",
+      "symbol": "VGutC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0171",
+        "value": 0.0171,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Gut, VGutC | 0.0171 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver, VLivC",
+      "symbol": "VLivC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Liver, VLivC | 0.026 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney, VKidC",
+      "symbol": "VKidC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Kidney, VKidC | 0.004 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Filtrate, VFilC",
+      "symbol": "VFilC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Filtrate, VFilC | 0.0004 | - | 10% of kidney volume",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat, VFatC (initial volume)",
+      "symbol": "VFatC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.214",
+        "value": 0.214,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Fat, VFatC (initial volume) | 0.214 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue, VMamC (initial volume)",
+      "symbol": "VMamC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0062",
+        "value": 0.0062,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, VMamC (initial volume) | 0.0062 | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fetal plasma, VPIasFC",
+      "symbol": "VPIasFC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Fetal plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0428",
+        "value": 0.0428,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Fetal plasma, VPIasFC | - | 0.0428 | Davies & Morris, 1993",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Tissue volume (L, age-dependent)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Tissue volume (L, age-dependent) |  |  |  ",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat, VFat",
+      "symbol": "VFat",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "14.0 \u2013 19.5 *",
+        "value": null,
+        "range_low": 14.0,
+        "range_high": 19.5,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Fat, VFat | 14.0 \u2013 19.5 * | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue, VMam",
+      "symbol": "VMam",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.41 \u2013 0.79 *",
+        "value": null,
+        "range_low": 0.41,
+        "range_high": 0.79,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, VMam | 0.41 \u2013 0.79 * | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Placenta, VPIa",
+      "symbol": "VPIa",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Placenta",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0 \u2013 0.63 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 0.63,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Placenta, VPIa | 0 \u2013 0.63 * | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Plasma, VPIas",
+      "symbol": "VPIas",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.7 \u2013 3.2 *",
+        "value": null,
+        "range_low": 2.7,
+        "range_high": 3.2,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Plasma, VPIas | 2.7 \u2013 3.2 * | - | Salas, et al 2006",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Remaining tissues, VR",
+      "symbol": "VR",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "34.5 \u2013 31.9 *",
+        "value": null,
+        "range_low": 34.5,
+        "range_high": 31.9,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Remaining tissues, VR | 34.5 \u2013 31.9 * |  | difference between BW and sum of other tissues",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Amniotic fluid (L, one fetus)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Amniotic fluid",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0 \u2013 0.51 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 0.51,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Amniotic fluid (L, one fetus) | - | 0 \u2013 0.51 * | Beall, et al 2007",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flows (fraction of QC)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Blood flows (fraction of QC) |  |  |  ",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac output (QCC, L/h/kg 0.75 ; initial)",
+      "symbol": "QCC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "20.0",
+        "value": 20.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Cardiac output (QCC, L/h/kg 0.75 ; initial) | 20.0 | - | Clewell, et al 1999",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fetal cardiac output (L/h/kg blood)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "54.0",
+        "value": 54.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "fetal cardiac output (L/h/kg blood) | - | 54.0 | Clewell, et al 1999",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut, QGutC",
+      "symbol": "QGutC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Gut, QGutC | 0.181 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver, QLivC",
+      "symbol": "QLivC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Liver, QLivC | 0.25 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Skin, QSkC",
+      "symbol": "QSkC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Skin",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.058",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Skin, QSkC | 0.058 | - | Brown, et al 1997",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "hematocrit, Htc",
+      "symbol": "Htc",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.38 \u2013 0.367 *",
+        "value": null,
+        "range_low": 0.38,
+        "range_high": 0.367,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "hematocrit, Htc | 0.38 \u2013 0.367 * | 0.5 | Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flows (L/h, age-dependent)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Blood flows (L/h, age-dependent) |  |  |  ",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac output, increasing, QC",
+      "symbol": "QC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "295 \u2013 355 *",
+        "value": null,
+        "range_low": 295.0,
+        "range_high": 355.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Cardiac output, increasing, QC | 295 \u2013 355 * | 0 \u2013 4.8 * | Gentry, et al 2003",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat, QFat",
+      "symbol": "QFat",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "14.8 \u2013 21.2 *",
+        "value": null,
+        "range_low": 14.8,
+        "range_high": 21.2,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Fat, QFat | 14.8 \u2013 21.2 * | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue, QMam",
+      "symbol": "QMam",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.7 \u2013 15.4 *",
+        "value": null,
+        "range_low": 7.7,
+        "range_high": 15.4,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, QMam | 7.7 \u2013 15.4 * | - | Gentry, et al 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Placenta, QPIa",
+      "symbol": "QPIa",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Placenta",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0 \u2013 23.4 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 23.4,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Placenta, QPIa | 0 \u2013 23.4 * | - | Clewell, et al, 2002",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney, QKid ; plasma flow",
+      "symbol": "QKid",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "24.4 \u2013 40.3 *",
+        "value": null,
+        "range_low": 24.4,
+        "range_high": 40.3,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Kidney, QKid ; plasma flow | 24.4 \u2013 40.3 * | - | Sims & Krantz, 1958",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Filtrate, QFilC\u2014glomular filtration rate (L/h)",
+      "symbol": "QFilC",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "6.0 \u2013 9.1 *",
+        "value": null,
+        "range_low": 6.0,
+        "range_high": 9.1,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Filtrate, QFilC\u2014glomular filtration rate (L/h) | 6.0 \u2013 9.1 * | - | Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Remaining tissue, QR",
+      "symbol": "QR",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Remaining tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "108 \u2013 115 *",
+        "value": null,
+        "range_low": 108.0,
+        "range_high": 115.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Remaining tissue, QR | 108 \u2013 115 * | 0 \u2013 4.0 * | difference between total CO and flows to other tissues",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "BW (kg) (changing)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "72 \u2013 67.5 *",
+        "value": 72.0,
+        "range_low": 67.5,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "BW (kg) (changing) | 72 \u2013 67.5 * | 3.5 \u2013 8 * | Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "BW (kg) (changing)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Infant",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.5 \u2013 8 *",
+        "value": 3.5,
+        "range_low": 3.5,
+        "range_high": 8.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "BW (kg) (changing) | 72 \u2013 67.5 * | 3.5 \u2013 8 * | Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut, VGutC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0171",
+        "value": 0.0171,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Gut, VGutC | 0.0171 | - | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver, VLivC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Liver, VLivC | 0.026 |  | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat, VFatC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.30 \u2013 0.285 *",
+        "value": 0.3,
+        "range_low": 0.285,
+        "range_high": 0.3,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Fat, VFatC | 0.30 \u2013 0.285 * | - | Wosje, et al 2004",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney, VKidC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Kidney, VKidC | 0.004 | - | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Filtrate, VFilC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Filtrate, VFilC | 0.0004 | - | 10% of kidney volume",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Remaining tissues, VR (L)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "31.4 \u2013 30.2 *",
+        "value": 31.4,
+        "range_low": 30.2,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Tissue volume (fraction of BW) |  |  |  | Remaining tissues, VR (L) | 31.4 \u2013 30.2 * |  | difference between BW and sum of other tissues",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Residual milk volume, Vmilk (L)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Residual milk volume, Vmilk (L) | 0.25 | - | Gentry, et al 2003",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Plasma, VPIas (L)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.2 \u2013 2.4 *",
+        "value": 3.2,
+        "range_low": 2.4,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Plasma, VPIas (L) | 3.2 \u2013 2.4 * | - | Salas, et al 2006 (mother)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue (L)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.82 \u2013 1.37 *",
+        "value": 0.82,
+        "range_low": 0.82,
+        "range_high": 1.37,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mammary tissue (L) | 0.82 \u2013 1.37 * | - | Gentry, et al 2003",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac output",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "20.0",
+        "value": 20.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ; nonpregnant",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Cardiac output |  |  |  | Maternal (QCC; L/h/kg 0.75 ; nonpregnant) | 20.0 |  | Gentry, et al 2003",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac output",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "335\u2013330 *",
+        "value": 335.0,
+        "range_low": 330.0,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Cardiac output |  |  |  | Maternal (changing; L/h) | 335\u2013330 * |  | ",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut, QGutC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of cardiac output",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Gut, QGutC | 0.181 | - | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver, QLivC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of cardiac output",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Liver, QLivC | 0.25 |  | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Skin, QSkC",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Skin",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.058",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "fraction of cardiac output",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Skin, QSkC | 0.058 | - | Brown, et al 1997",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney, QKid (L/h)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "38.5 \u2013 30 *",
+        "value": 38.5,
+        "range_low": 30.0,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Kidney, QKid (L/h) | 38.5 \u2013 30 * | - | GFR ~ 20% of renal plasma flow",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Filtrate, QFilC (glomerular filtration rate; L/h)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.7 \u2013 6.0 *",
+        "value": 7.7,
+        "range_low": 6.0,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Filtrate, QFilC (glomerular filtration rate; L/h) | 7.7 \u2013 6.0 * | - | Sims & Krantz, 1958",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat, QFat (L/h)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "21.4 \u2013 20.3 *",
+        "value": 21.4,
+        "range_low": 20.3,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Fat, QFat (L/h) | 21.4 \u2013 20.3 * | - | Gentry, et al 2003",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary, QMam (L/h)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Mammary",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "13.7 \u2013 21.0 *",
+        "value": 13.7,
+        "range_low": 13.7,
+        "range_high": 21.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Mammary, QMam (L/h) | 13.7 \u2013 21.0 * |  | Gentry, et al 2003",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Remaining tissues, QR (L/h)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "96.7 \u2013 96.6 *",
+        "value": 96.7,
+        "range_low": 96.6,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Blood flows (fraction of cardiac output) |  |  |  | Remaining tissues, QR (L/h) | 96.7 \u2013 96.6 * | - | difference between total CO and flows to other tissues",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hematocrit",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.38",
+        "value": 0.38,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Hematocrit | 0.38 | - | Davies & Morris 1993",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk production rate, kmilk (L/hr)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mother",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0 \u2013 0.037 *",
+        "value": 0.0,
+        "range_low": 0.0,
+        "range_high": 0.037,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/hr",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Milk production rate, kmilk (L/hr) | 0.0 \u2013 0.037 * | milk production rate = suckling rate | Dewey, et al 1983",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Free fraction of chemical in plasma (Free)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.02",
+        "value": 0.02,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Free fraction of chemical in plasma (Free) | 0.02 | 0.02 | 0.02 | 0.025 | 0.025 | 0.025",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Free fraction of chemical in plasma (Free)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.025",
+        "value": 0.025,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Free fraction of chemical in plasma (Free) | 0.02 | 0.02 | 0.02 | 0.025 | 0.025 | 0.025",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution (Vdc; infant only, scaled to BWKid)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.17",
+        "value": 0.17,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Volume of distribution (Vdc; infant only, scaled to BWKid) | - | - | 0.17 |  | - | 0.22",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution (Vdc; infant only, scaled to BWKid)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.22",
+        "value": 0.22,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Volume of distribution (Vdc; infant only, scaled to BWKid) | - | - | 0.17 |  | - | 0.22",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "transporter maximum, Tmc (ug/h/kg 0.75 )",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10",
+        "value": 10.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "transporter maximum, Tmc (ug/h/kg 0.75 ) | 10 | - | - | 3.5 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "transporter maximum, Tmc (ug/h/kg 0.75 )",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.5",
+        "value": 3.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "transporter maximum, Tmc (ug/h/kg 0.75 ) | 10 | - | - | 3.5 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "affinity constant, Kt (ug/L)",
+      "symbol": "Kt",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.055",
+        "value": 0.055,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/L",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "affinity constant, Kt (ug/L) | 0.055 | - | - | 0.023 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "affinity constant, Kt (ug/L)",
+      "symbol": "Kt",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.023",
+        "value": 0.023,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/L",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "affinity constant, Kt (ug/L) | 0.055 | - | - | 0.023 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut:plasma (Pgut)",
+      "symbol": "Pgut",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.05",
+        "value": 0.05,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Gut:plasma (Pgut) | 0.05 | - | - | 0.57 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gut:plasma (Pgut)",
+      "symbol": "Pgut",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.57",
+        "value": 0.57,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Gut:plasma (Pgut) | 0.05 | - | - | 0.57 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver:plasma (Pliv)",
+      "symbol": "Pliv",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.2",
+        "value": 2.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Liver:plasma (Pliv) | 2.2 | - | - | 3.72 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver:plasma (Pliv)",
+      "symbol": "Pliv",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.72",
+        "value": 3.72,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Liver:plasma (Pliv) | 2.2 | - | - | 3.72 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney: plasma (Pkid)",
+      "symbol": "Pkid",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.05",
+        "value": 1.05,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Kidney: plasma (Pkid) | 1.05 | - | - | 0.8 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kidney: plasma (Pkid)",
+      "symbol": "Pkid",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.8",
+        "value": 0.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Kidney: plasma (Pkid) | 1.05 | - | - | 0.8 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat: plasma (Pfat)",
+      "symbol": "Pfat",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.04",
+        "value": 0.04,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Fat: plasma (Pfat) | 0.04 | - | - | 0.13 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat: plasma (Pfat)",
+      "symbol": "Pfat",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.13",
+        "value": 0.13,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Fat: plasma (Pfat) | 0.04 | - | - | 0.13 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary Tissue: plasma (Pmam; gestation only)",
+      "symbol": "Pmam",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.13",
+        "value": 0.13,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Mammary Tissue: plasma (Pmam; gestation only) | 0.13 | - | - | 0.16 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary Tissue: plasma (Pmam; gestation only)",
+      "symbol": "Pmam",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.16",
+        "value": 0.16,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Mammary Tissue: plasma (Pmam; gestation only) | 0.13 | - | - | 0.16 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rest of body tissues: plasma (Ptis)",
+      "symbol": "Ptis",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.12",
+        "value": 0.12,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Rest of body tissues: plasma (Ptis) | 0.12 | 0.12 | - | 0.20 | 0.20 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rest of body tissues: plasma (Ptis)",
+      "symbol": "Ptis",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.20",
+        "value": 0.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Rest of body tissues: plasma (Ptis) | 0.12 | 0.12 | - | 0.20 | 0.20 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Placenta:Plasma (Ppla)",
+      "symbol": "Ppla",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.28",
+        "value": 0.28,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placenta:Plasma (Ppla) | 0.28 | - | - | 0.41 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Placenta:Plasma (Ppla)",
+      "symbol": "Ppla",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.41",
+        "value": 0.41,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placenta:Plasma (Ppla) | 0.28 | - | - | 0.41 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Skin: plasma (PSk)",
+      "symbol": "PSk",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Skin: plasma (PSk) | 0.1 | - | - | 0.29 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Skin: plasma (PSk)",
+      "symbol": "PSk",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.29",
+        "value": 0.29,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Skin: plasma (PSk) | 0.1 | - | - | 0.29 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue:plasma (PMam; gestation only)",
+      "symbol": "PMam",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.13",
+        "value": 0.13,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Mammary tissue:plasma (PMam; gestation only) | 0.13 | - |  | 0.16 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mammary tissue:plasma (PMam; gestation only)",
+      "symbol": "PMam",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.16",
+        "value": 0.16,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Mammary tissue:plasma (PMam; gestation only) | 0.13 | - |  | 0.16 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk: plasma (PMilk; lactation only)",
+      "symbol": "PMilk",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.038",
+        "value": 0.038,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Milk: plasma (PMilk; lactation only) | 0.038 | - | - | 0.0122 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk: plasma (PMilk; lactation only)",
+      "symbol": "PMilk",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0122",
+        "value": 0.0122,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Milk: plasma (PMilk; lactation only) | 0.038 | - | - | 0.0122 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+      "symbol": "kurinec",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h/kg-0.25",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+      "symbol": "kurinec",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.005",
+        "value": 0.005,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h/kg-0.25",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+      "symbol": "kurinec",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.005",
+        "value": 0.005,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h/kg-0.25",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+      "symbol": "kurinec",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.001",
+        "value": 0.001,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h/kg-0.25",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "mother to fetus, ktrans1C (L/h/kg 0.75 )",
+      "symbol": "ktrans1C",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.46",
+        "value": 0.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placental transfer (gestation only) |  |  |  |  |  |  | mother to fetus, ktrans1C (L/h/kg 0.75 ) | 0.46 | - | - | 0.46 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "mother to fetus, ktrans1C (L/h/kg 0.75 )",
+      "symbol": "ktrans1C",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.46",
+        "value": 0.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placental transfer (gestation only) |  |  |  |  |  |  | mother to fetus, ktrans1C (L/h/kg 0.75 ) | 0.46 | - | - | 0.46 | - | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fetus to mother, ktrans2C (L/h/kg 0.75 )",
+      "symbol": "ktrans2C",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.46",
+        "value": 0.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placental transfer (gestation only) |  |  |  |  |  |  | fetus to mother, ktrans2C (L/h/kg 0.75 ) | - | 0.46 | - | - | 1.01 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fetus to mother, ktrans2C (L/h/kg 0.75 )",
+      "symbol": "ktrans2C",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.01",
+        "value": 1.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Placental transfer (gestation only) |  |  |  |  |  |  | fetus to mother, ktrans2C (L/h/kg 0.75 ) | - | 0.46 | - | - | 1.01 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fetus to fluid, ktrans3C (L/h/kg 0.75 )",
+      "symbol": "ktrans3C",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.008",
+        "value": 0.008,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Amniotic fluid transfer (gestation only) |  |  |  |  |  |  | fetus to fluid, ktrans3C (L/h/kg 0.75 ) | - | 0.008 | - | - | 0.006 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fetus to fluid, ktrans3C (L/h/kg 0.75 )",
+      "symbol": "ktrans3C",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.006",
+        "value": 0.006,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Amniotic fluid transfer (gestation only) |  |  |  |  |  |  | fetus to fluid, ktrans3C (L/h/kg 0.75 ) | - | 0.008 | - | - | 0.006 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fluid to fetus, ktrans4C (L/h/kg 0.75 )",
+      "symbol": "ktrans4C",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.001",
+        "value": 0.001,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Amniotic fluid transfer (gestation only) |  |  |  |  |  |  | fluid to fetus, ktrans4C (L/h/kg 0.75 ) | - | 0.001 | - | - | 0.001 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fluid to fetus, ktrans4C (L/h/kg 0.75 )",
+      "symbol": "ktrans4C",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.001",
+        "value": 0.001,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.75 ",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Amniotic fluid transfer (gestation only) |  |  |  |  |  |  | fluid to fetus, ktrans4C (L/h/kg 0.75 ) | - | 0.001 | - | - | 0.001 | -",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "initial BW (maternal)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.75",
+        "value": -0.75,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "initial BW (maternal) | \u22120.75 | \u22120.74",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "initial BW (maternal)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.79",
+        "value": -0.79,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "initial BW (maternal) | \u22120.79 | \u22120.79",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "liver volume (fraction of BW)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.36",
+        "value": -0.36,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "liver volume (fraction of BW) | \u22120.36 | \u22120.37",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "liver volume (fraction of BW)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.34",
+        "value": -0.34,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "liver volume (fraction of BW) | \u22120.34 | \u22120.33",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "liver: plasma PC",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.38",
+        "value": -0.38,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "liver: plasma PC | \u22120.38 | \u22120.39",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "liver:plasma PC",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.34",
+        "value": -0.34,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "liver:plasma PC | \u22120.34 | \u22120.34",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "rest of body:plasma PC",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.39",
+        "value": -0.39,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "rest of body:plasma PC | \u22120.39 | \u22120.39",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fat:plasma PC",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.12",
+        "value": -0.12,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "fat:plasma PC | \u22120.12 | \u22120.13",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "rest of body: plasma PC",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.32",
+        "value": -0.32,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "rest of body: plasma PC | \u22120.32 | \u22120.32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "resorption maximum (Tmc)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.35",
+        "value": 0.35,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "resorption maximum (Tmc) | 0.35 | \u22120.35",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "resorption maximum (Tmc)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.07",
+        "value": 0.07,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "resorption maximum (Tmc) | 0.07 | 0.07",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "affinity constant (Kt)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.35",
+        "value": -0.35,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "affinity constant (Kt) | \u22120.35 | \u22120.35",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "affinity constant (Kt)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.07",
+        "value": -0.07,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "affinity constant (Kt) | \u22120.07 | \u22120.07",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "free fraction in plasma",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.11",
+        "value": -0.11,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "free fraction in plasma | \u22120.11 | 0.88",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "free fraction in plasma",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.08",
+        "value": -0.08,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "free fraction in plasma | \u22120.08 | 0.92",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "free fraction (fetus)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "--",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "free fraction (fetus) | -- | \u22120.98",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "free fraction (fetus)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.98",
+        "value": -0.98,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "free fraction (fetus) | -- | \u22120.98",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "placental transfer rate constant (m to f)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.01",
+        "value": -0.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "placental transfer rate constant (m to f) | \u22120.01 | 0.98",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "placental transfer rate constant (m to f)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "--",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "placental transfer rate constant (m to f) | -- | 0.99",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "placental transfer rate constant (f to m)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.01",
+        "value": 0.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "placental transfer rate constant (f to m) | 0.01 | \u22120.98",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "placental transfer rate constant (f to m)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "--",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "placental transfer rate constant (f to m) | -- | \u22120.98",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "GFR",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.19",
+        "value": -0.19,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "GFR | \u22120.19 | \u22120.19",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "GFR",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.15",
+        "value": -0.15,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "GFR | \u22120.15 | \u22120.15",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fat volume",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.10",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "fat volume | 0.10 | 0.10",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fat volume",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "\u22120.16",
+        "value": -0.16,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "fat volume | \u22120.16 | \u22120.16",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "fat volume (fraction of BW)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA gestation",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.11",
+        "value": 0.11,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "fat volume (fraction of BW) | 0.11 | 0.10",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.9E-04",
+        "value": 0.00019,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Fromme, et al 2010 (plasma; week 34) | 1.9E-04 | 3.0E-04 | 3.8E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.2E-04",
+        "value": 0.00012,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Apelberg, et al 2007 (plasma; delivery) | 1.2E-04 | 2.0E-04 | 5.8E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.15E-04",
+        "value": 0.000115,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Inoue, et al 2004 (plasma; delivery) | 1.15E-04 | 1.9E-04 | 1.2E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.0E-04",
+        "value": 0.0002,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Midasch, et al 2007 (plasma; delivery) | 2.0E-04 | 3.4E-04 | 1.35E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.60E-04",
+        "value": 0.00036,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Fei, et al 2007 (plasma; week 7) | 3.60E-04 | 6.9E-04 | 3.7E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.25E-04",
+        "value": 0.000125,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Washino, et al 2009 (plasma; delivery) | 1.25E-04 | 2.2E-04 | 7.4E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.8E-04",
+        "value": 0.00018,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Monroy, et al 2008 (plasma; week 26) | 1.8E-04 | 3.0E-04 | 2.0E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.15E-04",
+        "value": 0.000115,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Hanssen, et al 2010 (plasma; delivery) | 1.15E-04 | 1.7E-04 | 1.9E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.3E-04",
+        "value": 0.00013,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Kim, et al 2011 (plasma; delivery) | 1.3E-04 | 2.3E-04 | 6.9E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.15e-04",
+        "value": 0.000115,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Kim, et al 2011 (plasma; 3rd trimester) | 1.15e-04 | 2.05E-04 | 3.5e-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "gestation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.6E-04",
+        "value": 0.00016,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Tittlemier, et al 2004 (plasma; delivery) | 1.6E-04 | 2.8E-04 | 4.4E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.3E-03",
+        "value": 0.0023,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Karrman, et al 2007 (plasma; 3 weeks postpartum) | 2.8E-04 |  | 2.3E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.25E-03",
+        "value": 0.00225,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "von Ehrenstein, et al 2009 (plasma; 4 weeks postpartum) | 2.4E-04 |  | 2.25E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.5E-04",
+        "value": 0.00035,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Volkel, et al 2008 (milk; 4 weeks postpartum) | NA (PFOA < LOD in milk) |  | 3.5E-04",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.4e-4 (1 st 6 months postpartum); PFOA < LOD in milk",
+        "value": 0.00024,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Fromme, et al 2010 (plasma; 6 months postpartum) | 2.4e-4 (1 st 6 months postpartum); PFOA < LOD in milk |  | 4.75e-4 (1 st 6 months); 3.8e-04 (after 6 months)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.63e-4 (1 st 6 months); 1.3e-4 (after 6 months)",
+        "value": 0.000163,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Kim, et al 2011 (milk; 7 days postpartum) | 1.63e-4 (1 st 6 months); 1.3e-4 (after 6 months) |  | 8.6e-4 (1 st 6 months); 6.9e-4 (after 6 months)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.44e-04 (1 st 6 months postpartum); 1.15e-04 (after 6 months)",
+        "value": 0.000144,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Kim, et al 2011 (plasma during pregnancy; milk collected 1 month postpartum) | 1.44e-04 (1 st 6 months postpartum); 1.15e-04 (after 6 months) |  | 4.4e-04 (1 st 6 months); 3.5e-4 (after 6 months)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.7E-04",
+        "value": 0.00017,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Thomsen, et al 2010 (milk; birth) | 1.7E-04 |  | 1.4E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "lactation",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.4e-4 (1 st 6 months); 1.1e-4 (after 6 months)",
+        "value": 0.00014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Liu, et al 2011 (plasma; 1 week postpartum) | 1.4e-4 (1 st 6 months); 1.1e-4 (after 6 months) |  | 4.6e-4 (1 st 6 months); 3.7e-4(after 6 months)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "general population",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.50E-04",
+        "value": 0.00025,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Calafat, et al 2007 (NHANES 2003\u201304) | 2.50E-04 | 4.20E-04 | 1.75E-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": "general population",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.2e-04-4.4e-04",
+        "value": 0.00022,
+        "range_low": 0.00022,
+        "range_high": 0.00044,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Olsen, et al 2008 (Red Cross blood donors) | 2.2e-04-4.4e-04 | 1.3e-04-2.65e-04 | 8.5e-04-1.8e-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": "general population",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.5e-04-1.8e-03",
+        "value": 0.00085,
+        "range_low": 0.00085,
+        "range_high": 0.0018,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ug/kg/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "Olsen, et al 2008 (Red Cross blood donors) | 2.2e-04-4.4e-04 | 1.3e-04-2.65e-04 | 8.5e-04-1.8e-03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "serum half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.8 years",
+        "value": 3.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Document Text",
+        "source_quote": "The average serum half-life in humans is estimated at 3.8 years for PFOA and 5.4 years for PFOS .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "serum half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.4 years",
+        "value": 5.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Document Text",
+        "source_quote": "The average serum half-life in humans is estimated at 3.8 years for PFOA and 5.4 years for PFOS .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "serum half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "female rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "approximately 2-4 hours",
+        "value": null,
+        "range_low": 2.0,
+        "range_high": 4.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "hours",
+        "unit_inherited": false,
+        "value_qualifier": "approximately"
+      },
+      "provenance": {
+        "source_location": "Document Text",
+        "source_quote": "the female rat has a short serum half-life for PFOA (approximately 2-4 hours), while the half-lives observed in male rats and other species (e.g., mouse, monkey, and humans) are several days to years ( ; ; ; ).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10%",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "The filtrate compartment, as in the adult human model, was set at 10% of the kidney volume (the model is not sensitive to this value).",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10% of the kidney volume",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "The filtrate compartment, as in the adult human model, was set at 10% of the kidney volume (the model is not sensitive to this value).",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Serum elimination half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "retired fluorochemical workers"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "approximately 3.5 years",
+        "value": 3.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": "estimated geometric mean"
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "Renal Resorption The estimated geometric mean serum elimination half-life in the human is approximately 3.5 years for PFOA (arithmetic mean 3.8 years) and 4.8 years for PFOS (arithmetic mean 5.4 years) based on a study of retired fluorochemical workers .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Serum elimination half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "population that had previous exposure to PFOA in drinking water"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.3 years",
+        "value": 2.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "A more recent study conducted on a population that had previous exposure to PFOA in drinking water estimated a median plasma half-life for PFOA of 2.3 years .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Serum elimination half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "retired fluorochemical workers"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.8 years",
+        "value": 4.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": "estimated geometric mean"
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "Renal Resorption The estimated geometric mean serum elimination half-life in the human is approximately 3.5 years for PFOA (arithmetic mean 3.8 years) and 4.8 years for PFOS (arithmetic mean 5.4 years) based on a study of retired fluorochemical workers .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Serum elimination half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "retired fluorochemical workers"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.4 years",
+        "value": 5.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": "arithmetic mean"
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "Renal Resorption The estimated geometric mean serum elimination half-life in the human is approximately 3.5 years for PFOA (arithmetic mean 3.8 years) and 4.8 years for PFOS (arithmetic mean 5.4 years) based on a study of retired fluorochemical workers .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.15 ng/kg BW/day",
+        "value": 0.15,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg BW/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "for a 3.8-yr half-life, our median estimated intake was 0.15 ng/kg BW/day.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.2 ng/kg BW/day",
+        "value": 0.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg BW/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "estimated the median intake to be 0.2 ng/kg BW/day for PFOA",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.3 ng/kg BW/day",
+        "value": 0.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg BW/day",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "estimated the median intake to be 0.3 ng/kg BW/day for PFOS.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFAA",
+        "subject_species": "female rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "very short half-life",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "The female rat does not express high levels of the renal transporter (Oatp1a1) thought to be responsible for resorption and has a very short half-life.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFAA",
+        "subject_species": "mice",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "12\u201320 days",
+        "value": null,
+        "range_low": 12.0,
+        "range_high": 20.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "days",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "In mice, the half-life of PFAA is longer (12\u201320 days)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "PFAA",
+        "subject_species": "female rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.8-yr",
+        "value": 3.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "yr",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Narrative text",
+        "source_quote": "for a 3.8-yr half-life",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published"
 }

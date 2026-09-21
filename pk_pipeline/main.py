@@ -52,18 +52,144 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     # --- NEW: Paper Resolution ---
     from .ingestion.pmc_fetcher import extract_doi_from_pdf, extract_title_from_pdf, resolve_paper
     
-    print("Step 0/3: Resolving paper via PMC/Unpaywall/Semantic Scholar...")
+    print("Step 0/3: Resolving paper via PMC/EuropePMC/Unpaywall/Semantic Scholar...")
     doi = extract_doi_from_pdf(pdf_path)
-    title = extract_title_from_pdf(pdf_path)
-    
+    title = extract_title_from_pdf(pdf_path, doi=doi)
+
+    res = {"xml_path": None, "pdf_path": None, "source": None, "source_type": "published"}
     if doi or title:
-        res = resolve_paper(doi=doi, title=title)
-        
+        res = resolve_paper(doi=doi, title=title, pdf_path=pdf_path)
+
         if res.get("xml_path"):
-            print(f"  -> XML available at {res['xml_path']} (JATS XML fast-path not yet implemented. Proceeding with PDF OCR.)")
-            
-        if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar"]:
-            print(f"  -> Switching from local PDF to Open Access PDF: {res['pdf_path']}")
+            print(f"  -> XML available at {res['xml_path']}! Using JATS XML fast-path...")
+            from .ingestion.xml_parser import parse_jats_xml
+
+            xml_data = parse_jats_xml(res["xml_path"], filter_narrative=True)
+
+            final_document = {
+                "page_metadata": xml_data.get("metadata", {"title": None, "authors": None, "journal": None, "year": None}),
+                "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
+                "structure": None,
+                "parameters": [],
+                "ingestion_source": res.get("source"),
+                "ingestion_source_type": res.get("source_type", "published"),
+            }
+
+            # Filter out chunks that were skipped by the narrative filter
+            chunks = [c for c in xml_data.get("chunks", []) if c.get("kept", True)]
+
+            # Separate figure chunks — they may need image download + visual dispatch
+            figure_chunks  = [c for c in chunks if c["role"] == "figure_xml"]
+            text_chunks    = [c for c in chunks if c["role"] != "figure_xml"]
+
+            diagram_chunks = [c for c in figure_chunks if c.get("is_diagram")]
+            caption_chunks = [c for c in figure_chunks if not c.get("is_diagram")]
+
+            # ONLY extract images for chunks that are strictly diagrams
+            if diagram_chunks:
+                # If we have the local PDF, extract the diagram pages directly from it!
+                if pdf_path and os.path.exists(pdf_path):
+                    print(f"  -> Extracting {len(diagram_chunks)} diagram images directly from local PDF...")
+                    pdf_images = convert_pdf_to_images(pdf_path)
+                    pdf_doc = fitz.open(pdf_path)
+                    
+                    for chunk in diagram_chunks:
+                        title_to_find = chunk.get("title", "").lower().strip()
+                        caption_snippet = chunk.get("caption", "").lower().strip()[:50]
+                        best_page_idx = -1
+                        
+                        for i in range(len(pdf_doc)):
+                            page_text = pdf_doc[i].get_text("text").lower()
+                            # Prioritize exact caption match
+                            if caption_snippet and caption_snippet in page_text:
+                                best_page_idx = i
+                                break
+                            # Fallback to title match
+                            elif title_to_find and title_to_find in page_text:
+                                best_page_idx = i
+                                
+                        if best_page_idx != -1:
+                            chunk["image_obj"] = pdf_images[best_page_idx]
+                            print(f"    - Matched '{title_to_find}' to PDF page {best_page_idx + 1}")
+                        else:
+                            print(f"    - Could not locate '{title_to_find}' in PDF text.")
+                else:
+                    # Fallback to PMC downloader if no local PDF was provided
+                    from .ingestion.pmc_fetcher import fetch_all_figures
+                    xml_stem = os.path.splitext(os.path.basename(res["xml_path"]))[0]
+                    pmcid_for_figs = xml_stem.split("_")[0]
+                    print(f"  -> Downloading {len(diagram_chunks)} diagram images from PMC for {pmcid_for_figs}...")
+                    diagram_chunks = fetch_all_figures(pmcid_for_figs, diagram_chunks)
+                    from PIL import Image
+                    for c in diagram_chunks:
+                        if c.get("image_path"):
+                            try:
+                                c["image_obj"] = Image.open(c["image_path"])
+                            except Exception as e:
+                                print(f"    - Failed to load PMC image {c['image_path']}: {e}")
+                
+                # Keep only diagrams that have a successfully loaded PIL Image
+                diagram_chunks = [c for c in diagram_chunks if "image_obj" in c]
+
+            n_text    = len(text_chunks) + len(caption_chunks)
+            n_visual  = len(diagram_chunks)
+            print(f"  -> {n_text} text chunks + {n_visual} visual figure chunks queued for LLM.")
+
+            if text_chunks or caption_chunks or diagram_chunks:
+                print(f"Step 1/1: Running Extraction ({n_text} text + {n_visual} visual)...")
+                # SGLang supports massive continuous batching. Increase concurrency to 10.
+                sem = asyncio.Semaphore(10)
+
+                async def bound_extract_text(chunk):
+                    async with sem:
+                        return await get_extractor().extract_from_text(
+                            chunk["content"], 
+                            role=chunk["role"], 
+                            chunk_title=chunk.get("title", "")
+                        )
+
+                async def bound_extract_image(chunk):
+                    async with sem:
+                        img = chunk["image_obj"]
+                        return await get_extractor().extract_data(
+                            img,
+                            role="figure_crop",
+                            evidence_text=f"{chunk['title']}: {chunk['caption']}",
+                            chunk_title=chunk.get("title", "")
+                        )
+
+                tasks = (
+                    [bound_extract_text(c) for c in text_chunks + caption_chunks]
+                    + [bound_extract_image(c) for c in diagram_chunks]
+                )
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+
+                # Filter out exceptions and log them
+                extracted_chunks = []
+                for chunk_idx, res_item in enumerate(results):
+                    if isinstance(res_item, Exception):
+                        print(f"Warning: Chunk {chunk_idx} failed extraction: {res_item}")
+                    else:
+                        extracted_chunks.append(res_item)
+
+                for extracted_page in extracted_chunks:
+                    if extracted_page and extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
+                        if final_document["model_classification"]["model_type"] == "not_applicable":
+                            final_document["model_classification"] = extracted_page.model_classification.model_dump()
+
+                    if extracted_page and extracted_page.structure and not final_document["structure"]:
+                        final_document["structure"] = extracted_page.structure.model_dump(by_alias=True, exclude_none=True)
+
+                    if extracted_page.parameters:
+                        final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
+
+            logger.info("Successfully completed XML extraction fast-path.")
+            return final_document
+
+        if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
+            print(f"  -> Switching from local PDF to Open Access PDF ({res['source']}): {res['pdf_path']}")
+            if res.get("source_type") == "preprint":
+                print(f"  -> ⚠️  Source is a PREPRINT — results will carry ingestion_source_type='preprint'.")
             pdf_path = res["pdf_path"]
     else:
         print("  -> Could not extract DOI or Title from local PDF. Proceeding with local file.")
