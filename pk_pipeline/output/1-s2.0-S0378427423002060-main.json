@@ -1,0 +1,109 @@
+{
+  "page_metadata": {
+    "title": "Development of a rat physiologically based kinetic model (PBK) for three organophosphate flame retardants (TDCIPP, TCIPP, TCEP)",
+    "authors": [
+      "D. Deepika et al."
+    ],
+    "journal": "Toxicology Letters",
+    "year": 2023
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "PBK Model was able to adequately describe the concentration-time"
+  },
+  "structure": {
+    "compartments": [
+      "Chemical Input",
+      "Gut",
+      "Liver",
+      "Brain",
+      "Kidney",
+      "Fat",
+      "Rest Body"
+    ],
+    "connections": [
+      {
+        "from": "Chemical Input",
+        "to": "Gut"
+      },
+      {
+        "from": "Gut",
+        "to": "Liver"
+      },
+      {
+        "from": "Liver",
+        "to": "Brain"
+      },
+      {
+        "from": "Liver",
+        "to": "Kidney"
+      },
+      {
+        "from": "Liver",
+        "to": "Fat"
+      },
+      {
+        "from": "Liver",
+        "to": "Rest Body"
+      },
+      {
+        "from": "Brain",
+        "to": "Kidney"
+      },
+      {
+        "from": "Brain",
+        "to": "Fat"
+      },
+      {
+        "from": "Brain",
+        "to": "Rest Body"
+      },
+      {
+        "from": "Kidney",
+        "to": "Fat"
+      },
+      {
+        "from": "Kidney",
+        "to": "Rest Body"
+      },
+      {
+        "from": "Fat",
+        "to": "Rest Body"
+      },
+      {
+        "from": "Gut",
+        "to": "Feces"
+      },
+      {
+        "from": "Liver",
+        "to": "Gut*"
+      },
+      {
+        "from": "Liver*",
+        "to": "Feces"
+      },
+      {
+        "from": "Liver*",
+        "to": "Urine"
+      },
+      {
+        "from": "Liver*",
+        "to": "Brain*"
+      },
+      {
+        "from": "Liver*",
+        "to": "Kidney*"
+      },
+      {
+        "from": "Liver*",
+        "to": "Fat*"
+      },
+      {
+        "from": "Liver*",
+        "to": "Rest Body*"
+      }
+    ],
+    "source_location": "Fig. 1"
+  },
+  "parameters": []
+}

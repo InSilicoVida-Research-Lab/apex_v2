@@ -4,10 +4,10 @@ import argparse
 import asyncio
 from pdf2image import convert_from_path
 
-from schemas import ExtractionRequest
-from ml_services import ColQwenRetriever, SGLangExtractor
-from ingestion.table_cropper import TableCropper
-from config import logger
+from .schemas import ExtractionRequest
+from .ml_services import ColQwenRetriever, SGLangExtractor
+from .ingestion.table_cropper import TableCropper
+from .config import logger
 
 # Initialize models lazily
 retriever = None
@@ -57,6 +57,8 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     # 2. Run ColQwen2.5 filter to find the exact pages
     print("Step 2/3: Searching for Pharmacokinetic tables across all pages...")
     logger.debug("Step 2: Intra-Document Search")
+    # Keep a reference to the original images to find their indices later
+    original_images = images.copy()
     
     # Build dynamic queries
     table_query = "Pharmacokinetic parameters table"
@@ -78,32 +80,37 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     
     # 2.5 Crop table regions, but leave diagram and text pages uncropped
     print("Step 2.5: Cropping table regions (leaving diagrams and text uncropped)...")
-    cropper = TableCropper(padding=25)
+    cropper = TableCropper()
     
     # Only crop table pages
     cropped_tables = cropper.crop_all(table_pages)
     
-    # Combine table and diagram images (deduplicate if the same page was found in both)
     vlm_inputs = []
-    processed_orig_ids = set()
     
-    # 1. Add cropped table pages FIRST to guarantee optimal pixel density
+    # 1. Add cropped table pages
     for orig, cropped in zip(table_pages, cropped_tables):
-        if id(orig) not in processed_orig_ids:
-            vlm_inputs.append(cropped)
-            processed_orig_ids.add(id(orig))
+        page_index = original_images.index(orig) + 1 # 1-indexed
+        # If the cropper returned the original image, mark it as full_page so the VLM prompt is accurate
+        role = "table_crop" if orig is not cropped else "full_page"
+        vlm_inputs.append({"img": cropped, "page_index": page_index, "role": role})
             
     # 2. Add diagram pages uncropped
     for orig in diagram_pages:
-        if id(orig) not in processed_orig_ids:
-            vlm_inputs.append(orig)
-            processed_orig_ids.add(id(orig))
+        page_index = original_images.index(orig) + 1
+        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page"})
             
     # 3. Add narrative text pages uncropped
     for orig in text_pages:
-        if id(orig) not in processed_orig_ids:
-            vlm_inputs.append(orig)
-            processed_orig_ids.add(id(orig))
+        page_index = original_images.index(orig) + 1
+        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page"})
+        
+    # Deduplicate based on (page_index, role)
+    unique_inputs = {}
+    for item in vlm_inputs:
+        key = (item["page_index"], item["role"])
+        if key not in unique_inputs:
+            unique_inputs[key] = item
+    vlm_inputs = list(unique_inputs.values())
             
     cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)
     print(f"Cropped {cropped_count}/{len(cropped_tables)} table pages.")
@@ -112,9 +119,9 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
     debug_dir = os.path.join(os.path.dirname(pdf_path), f"{pdf_stem}_vlm_inputs")
     os.makedirs(debug_dir, exist_ok=True)
-    for idx, img in enumerate(vlm_inputs):
-        img_path = os.path.join(debug_dir, f"page_{idx + 1:02d}.png")
-        img.save(img_path)
+    for item in vlm_inputs:
+        img_path = os.path.join(debug_dir, f"page_{item['page_index']:02d}_{item['role']}.png")
+        item['img'].save(img_path)
     print(f"Saved {len(vlm_inputs)} VLM input images to: {debug_dir}")
     
     # 3. Extract data using SGLang with schema enforcement
@@ -129,11 +136,11 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     }
     # Use a Semaphore to limit concurrency to 2 pages at a time to prevent GPU OOM deadlocks
     sem = asyncio.Semaphore(2)
-    async def bound_extract(img):
+    async def bound_extract(item):
         async with sem:
-            return await get_extractor().extract_data(img)
+            return await get_extractor().extract_data(item["img"], role=item["role"])
             
-    tasks = [bound_extract(img) for img in vlm_inputs]
+    tasks = [bound_extract(item) for item in vlm_inputs]
     extracted_pages = await asyncio.gather(*tasks)
     
     for extracted_page in extracted_pages:
@@ -157,7 +164,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         
         # Merge structure (take the first one we find)
         if extracted_page.structure and not final_document["structure"]:
-            final_document["structure"] = extracted_page.structure.model_dump()
+            final_document["structure"] = extracted_page.structure.model_dump(by_alias=True, exclude_none=True)
             
         # Aggregate all parameters
         if extracted_page.parameters:

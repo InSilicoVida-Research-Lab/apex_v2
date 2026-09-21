@@ -1,6 +1,10 @@
 import json
+from pathlib import Path
 
-with open('/home/gautam/Desktop/project/apex_v2/test_data/papers_json/Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).json', 'r') as f:
+ROOT = Path(__file__).resolve().parent
+input_path = ROOT / "pk_pipeline" / "test_data" / "Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).json"
+
+with open(input_path, 'r') as f:
     benchmark = json.load(f)
 
 # Pipeline extracted values
@@ -13,7 +17,19 @@ pipeline_values = [
 
 # Benchmark values
 benchmark_params = benchmark.get("parameters", [])
-benchmark_values = [str(p.get("Value_Status")) for p in benchmark_params if p.get("Value_Status") is not None]
+benchmark_values = []
+for p in benchmark_params:
+    if "quantitative_data" in p and p["quantitative_data"] is not None:
+        q = p["quantitative_data"]
+        val = q.get("value_text")
+        if val is None:
+            val = q.get("value")
+        if val is not None:
+            benchmark_values.append(str(val))
+    elif p.get("value_text") is not None:
+        benchmark_values.append(str(p["value_text"]))
+    elif p.get("value") is not None:
+        benchmark_values.append(str(p["value"]))
 
 # Clean up values for comparison
 pipeline_clean = [v.split()[0] if "(" in v else v for v in pipeline_values]
