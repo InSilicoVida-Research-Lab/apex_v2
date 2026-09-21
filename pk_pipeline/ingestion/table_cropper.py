@@ -1,96 +1,116 @@
+import os
 import cv2
 import numpy as np
 from PIL import Image
 from typing import Optional, List, Tuple
-from config import logger
-
+from ..config import logger
 
 class TableCropper:
     """
     Isolates table regions from full-page PDF images before passing to the VLM.
 
     Two-pronged approach:
-      1. Primary  — MinerU bounding boxes (if available from a layout parser)
-      2. Fallback — OpenCV morphological line detection for any page including scanned images
-    
-    Feeding the VLM a tight crop instead of a full A4 page:
-      - Maximises pixel density per table cell (critical for tiny subscripts/superscripts)
-      - Reduces visual token count, lowering VRAM pressure and speeding up generation
-      - Eliminates noisy regions (headers, footers, reference lists) that confuse the VLM
+      1. Primary  — YOLOv8 Document Layout Detection (if confident)
+      2. Fallback — OpenCV morphological line detection
     """
 
-    def __init__(self, padding: int = 25):
-        """
-        Args:
-            padding: Extra pixels added around every detected bounding box so that
-                     table footnotes and border lines are never accidentally clipped.
-        """
-        self.padding = padding
+    def __init__(self):
+        logger.info("Initializing TableCropper and YOLOv8 model...")
+        try:
+            from ultralytics import YOLO
+            from huggingface_hub import hf_hub_download
+            
+            # Explicitly define model and revision
+            repo_id = "foduucom/table-detection-and-extraction"
+            filename = "best.pt"
+            
+            weights_path = hf_hub_download(
+                repo_id=repo_id,
+                filename=filename
+            )
+            self.yolo_model = YOLO(weights_path)
+            self.device = os.getenv("TABLE_DETECTOR_DEVICE", "cpu")
+            self.is_yolo_loaded = True
+        except Exception as e:
+            logger.error(f"Failed to load YOLO table detector: {e}")
+            self.is_yolo_loaded = False
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Primary Method: MinerU / magic-pdf bounding boxes
-    # ──────────────────────────────────────────────────────────────────────────
-
-    def crop_from_bbox(
-        self,
-        pil_image: Image.Image,
-        bbox: Tuple[float, float, float, float],
-    ) -> Image.Image:
-        """
-        Crop using an (x0, y0, x1, y1) bounding box from a layout parser (e.g. MinerU).
-        Applies self.padding on all sides while respecting image boundaries.
-        """
-        x0, y0, x1, y1 = bbox
+    def crop_yolo(self, pil_image: Image.Image) -> Optional[Image.Image]:
+        if not self.is_yolo_loaded:
+            return None
+            
+        # Run inference
+        results = self.yolo_model(pil_image, device=self.device, verbose=False)
+        if not results or len(results[0].boxes) == 0:
+            return None
+            
         w, h = pil_image.size
-        crop_box = (
-            max(0, int(x0) - self.padding),
-            max(0, int(y0) - self.padding),
-            min(w, int(x1) + self.padding),
-            min(h, int(y1) + self.padding),
-        )
-        logger.debug(f"TableCropper: MinerU bbox crop → {crop_box}")
-        return pil_image.crop(crop_box)
+        page_area = w * h
+        best_bbox = None
+        best_conf = 0.0
+        
+        for box in results[0].boxes:
+            conf = float(box.conf[0])
+            cls_id = int(box.cls[0])
+            cls_name = self.yolo_model.names[cls_id].lower()
+            
+            # Check confidence and class
+            if conf < 0.3 or "table" not in cls_name:
+                continue
+                
+            x1, y1, x2, y2 = map(int, box.xyxy[0])
+            box_w = x2 - x1
+            box_h = y2 - y1
+            area = box_w * box_h
+            
+            # Area checks (prevent extreme false positives)
+            if area < page_area * 0.01 or area > page_area * 0.95:
+                continue
+                
+            # Aspect ratio checks (tables shouldn't be 100x taller than wide)
+            if box_w == 0 or box_h / box_w > 10.0:
+                continue
+                
+            if conf > best_conf:
+                best_conf = conf
+                
+                # Asymmetric padding: 5% left/right, 10% top (caption), 15% bottom (footnotes)
+                pad_x = int(w * 0.05)
+                pad_y_top = int(h * 0.10)
+                pad_y_bottom = int(h * 0.15)
+                
+                # Clamp to image boundaries
+                best_bbox = (
+                    max(0, x1 - pad_x),
+                    max(0, y1 - pad_y_top),
+                    min(w, x2 + pad_x),
+                    min(h, y2 + pad_y_bottom)
+                )
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Fallback Method: OpenCV morphological grid detection
-    # ──────────────────────────────────────────────────────────────────────────
+        if best_bbox:
+            logger.info(f"TableCropper: YOLO detected table at bbox {best_bbox} (conf={best_conf:.2f})")
+            return pil_image.crop(best_bbox)
+            
+        return None
 
-    def crop_largest_table(self, pil_image: Image.Image) -> Image.Image:
-        """
-        Fallback: detects the largest table grid in the page using OpenCV morphological
-        operations (horizontal + vertical line detection → contour bounding box).
-
-        Works well for:
-          - Bordered tables in digital PDFs
-          - Scanned pages with visible grid lines
-
-        Falls back to returning the original page if no grid is found (e.g. borderless tables),
-        which is still fine — the VLM sees the full page in that case.
-        """
+    def crop_opencv(self, pil_image: Image.Image) -> Optional[Image.Image]:
         img_np = np.array(pil_image.convert("RGB"))
-        img_bgr = img_np[:, :, ::-1].copy()  # RGB → BGR for OpenCV
+        img_bgr = img_np[:, :, ::-1].copy()
 
         gray = cv2.cvtColor(img_bgr, cv2.COLOR_BGR2GRAY)
-
-        # Otsu binarisation + invert so that lines are white on black
         _, img_bin = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
         img_bin = 255 - img_bin
 
         page_width = img_bgr.shape[1]
-        # Minimum line length: 1/80th of page width (tuned for A4 at 200–300 DPI)
         kernel_len = max(20, page_width // 80)
 
-        # ── Detect vertical lines ──────────────────────────────────────────────
         v_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1, kernel_len))
         v_lines = cv2.dilate(cv2.erode(img_bin, v_kernel, iterations=3), v_kernel, iterations=3)
 
-        # ── Detect horizontal lines ────────────────────────────────────────────
         h_kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (kernel_len, 1))
         h_lines = cv2.dilate(cv2.erode(img_bin, h_kernel, iterations=3), h_kernel, iterations=3)
 
-        # ── Merge into a single grid mask ─────────────────────────────────────
         grid_mask = cv2.addWeighted(v_lines, 0.5, h_lines, 0.5, 0.0)
-        # Invert and clean up small noise
         grid_mask = cv2.erode(
             255 - grid_mask,
             cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2)),
@@ -98,7 +118,6 @@ class TableCropper:
         )
         _, grid_mask = cv2.threshold(grid_mask, 128, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
 
-        # ── Find contours and pick the largest plausible table region ─────────
         contours, _ = cv2.findContours(255 - grid_mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
 
         page_area = img_bgr.shape[0] * img_bgr.shape[1]
@@ -108,56 +127,43 @@ class TableCropper:
         for c in contours:
             x, y, cw, ch = cv2.boundingRect(c)
             area = cw * ch
-            # Minimum 100 × 100 px; ignore whole-page contours (> 90 % of area)
             if cw > 100 and ch > 100 and area > best_area and area < page_area * 0.90:
                 best_area = area
-                best_bbox = (x, y, x + cw, y + ch)
+                
+                # Standard symmetric padding for OpenCV 25px
+                padding = 25
+                w, h = pil_image.size
+                best_bbox = (
+                    max(0, x - padding),
+                    max(0, y - padding),
+                    min(w, x + cw + padding),
+                    min(h, y + ch + padding),
+                )
 
-        # Only crop if the best bounding box is reasonably large (at least 8% of the page).
-        # This prevents the cropper from isolating a margin artifact or a single column
-        # when a borderless table is present elsewhere on the page.
         if best_bbox and best_area > page_area * 0.08:
             logger.info(f"TableCropper: OpenCV detected table at bbox {best_bbox} (area={best_area}px²)")
-            return self.crop_from_bbox(pil_image, best_bbox)
-        else:
-            logger.warning(
-                "TableCropper: No clear grid found (or grid was too small). "
-                "Returning full page to VLM."
-            )
-            return pil_image
+            return pil_image.crop(best_bbox)
+            
+        return None
 
-    # ──────────────────────────────────────────────────────────────────────────
-    # Convenience: try MinerU bbox first, then OpenCV fallback
-    # ──────────────────────────────────────────────────────────────────────────
+    def crop(self, pil_image: Image.Image) -> Image.Image:
+        # 1. Try YOLO layout detection
+        yolo_crop = self.crop_yolo(pil_image)
+        if yolo_crop is not None:
+            return yolo_crop
+            
+        # 2. Fallback to OpenCV contour detection
+        opencv_crop = self.crop_opencv(pil_image)
+        if opencv_crop is not None:
+            return opencv_crop
+            
+        # 3. Fallback to original image
+        logger.warning("TableCropper: Both YOLO and OpenCV failed. Returning full original image.")
+        return pil_image
 
-    def crop(
-        self,
-        pil_image: Image.Image,
-        mineru_bbox: Optional[Tuple[float, float, float, float]] = None,
-    ) -> Image.Image:
-        """
-        Main entry point.
-        - If `mineru_bbox` is supplied → use the precise layout-parser crop.
-        - Otherwise → run the OpenCV heuristic fallback automatically.
-        """
-        if mineru_bbox is not None:
-            return self.crop_from_bbox(pil_image, mineru_bbox)
-        return self.crop_largest_table(pil_image)
-
-    def crop_all(
-        self,
-        images: List[Image.Image],
-        mineru_bboxes: Optional[List[Optional[Tuple]]] = None,
-    ) -> List[Image.Image]:
-        """
-        Batch-crop a list of pages. `mineru_bboxes` can be a parallel list of
-        bounding boxes (or None entries for pages where MinerU found nothing).
-        """
-        if mineru_bboxes is None:
-            mineru_bboxes = [None] * len(images)
-
+    def crop_all(self, images: List[Image.Image]) -> List[Image.Image]:
         cropped = []
-        for i, (img, bbox) in enumerate(zip(images, mineru_bboxes)):
+        for i, img in enumerate(images):
             logger.debug(f"TableCropper: Processing page {i + 1}/{len(images)}")
-            cropped.append(self.crop(img, bbox))
+            cropped.append(self.crop(img))
         return cropped

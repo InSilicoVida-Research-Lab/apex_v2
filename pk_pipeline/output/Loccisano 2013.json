@@ -1,0 +1,99 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": [
+      "Loccisano et al."
+    ],
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right)."
+  },
+  "structure": {
+    "compartments": [
+      "Plasma (free fraction available for uptake into tissues)",
+      "Gut",
+      "Liver",
+      "Fat",
+      "Placenta",
+      "Skin",
+      "Mammary",
+      "Rest of body",
+      "Kidney",
+      "Filtrate",
+      "Fetal plasma (free fraction)",
+      "Amniotic fluid",
+      "Rest of fetal body"
+    ],
+    "connections": [
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Gut"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Liver"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Fat"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Placenta"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Skin"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Mammary"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Rest of body"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Kidney"
+      },
+      {
+        "from_comp": "Plasma (free fraction available for uptake into tissues)",
+        "to_comp": "Filtrate"
+      },
+      {
+        "from_comp": "Gut",
+        "to_comp": "Liver"
+      },
+      {
+        "from_comp": "Placenta",
+        "to_comp": "Fetal plasma (free fraction)"
+      },
+      {
+        "from_comp": "Fetal plasma (free fraction)",
+        "to_comp": "Amniotic fluid"
+      },
+      {
+        "from_comp": "Fetal plasma (free fraction)",
+        "to_comp": "Rest of fetal body"
+      },
+      {
+        "from_comp": "Amniotic fluid",
+        "to_comp": "Rest of fetal body"
+      },
+      {
+        "from_comp": "Filtrate",
+        "to_comp": "storage"
+      },
+      {
+        "from_comp": "storage",
+        "to_comp": "urine"
+      }
+    ],
+    "source_location": "Figure 1"
+  },
+  "parameters": []
+}

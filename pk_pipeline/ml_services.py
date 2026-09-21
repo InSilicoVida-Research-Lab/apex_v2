@@ -4,8 +4,8 @@ from PIL import Image
 import json
 import os
 
-from schemas import ExtractedPage, ExtractedParameter
-from config import logger, Config
+from .schemas import ExtractedPage, ExtractedParameter
+from .config import logger, Config
 
 # Note: These imports will require a GPU environment with sglang and colpali_engine installed.
 try:
@@ -124,7 +124,7 @@ class ColQwenRetriever:
         return [images[i] for i in top_indices]
 
 
-from schemas import ExtractedPage, ExtractedParameter
+from .schemas import ExtractedPage, ExtractedParameter
 
 SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are shown an image of a single page from a scientific paper. Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
 
@@ -167,7 +167,8 @@ For each PK parameter explicitly reported on the page, capture:
 
 - **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). If the table only prints the symbol with no accompanying descriptive label, leave this null. Do NOT invent a name.
 - **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
-- **value / range_low / range_high**: The primary value and, if printed as "X (low, high)" format, the bracketed bounds go into range_low and range_high as separate fields.
+- **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
+- **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
 - **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
 - **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
 - **unit**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
@@ -260,9 +261,9 @@ class SGLangExtractor:
             logger.error(f"Failed to load SGLang engine: {e}")
             self.is_loaded = False
 
-    async def extract_data(self, image) -> ExtractedPage:
+    async def extract_data(self, image, role="full_page") -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
-        logger.debug("SGLang: Extracting data from image with schema enforcement...")
+        logger.debug(f"SGLang: Extracting data from {role} image with schema enforcement...")
         
         import uuid
         temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.jpg"
@@ -271,10 +272,16 @@ class SGLangExtractor:
         schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
         system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
         
+        user_instruction = "Extract parameters from this image strictly into the JSON schema."
+        if role == "table_crop":
+            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values."
+        elif role == "full_page":
+            user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
+
         # Construct the conversation for Qwen-VL manually using its chat template
         prompt_text = (
             f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
-            f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Extract parameters from this image strictly into the JSON schema.<|im_end|>\n"
+            f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
         

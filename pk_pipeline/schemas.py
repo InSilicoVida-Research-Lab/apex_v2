@@ -61,19 +61,23 @@ class BiologicalContext(BaseModel):
     )
 
 class QuantitativeData(BaseModel):
+    value_text: Optional[str] = Field(
+        None,
+        description="The exact printed value text verbatim, preserving all original formatting (e.g., '5a', '0.008b', '<1', '~3'). "
+                    "This MUST ALWAYS be populated if a value exists, regardless of whether it is a valid float or contains letters."
+    )
     value: Optional[float] = Field(
         None,
-        description="The primary numerical value. If only a range is given, place the bounds in range_low and range_high."
+        description="The primary numerical value as a pure float. ONLY populate this if the value can be safely parsed as a float. "
+                    "If the value contains text like '5a' or '<1', leave this field null."
     )
     range_low: Optional[float] = Field(
         None,
-        description="Lower bound when the parameter is printed as a range "
-                    "(e.g., the '0.18' in '0.23 (0.18, 0.29)' or a time-varying lower bound)."
+        description="Lower bound when the parameter is printed as a range (e.g., the '0.18' in '0.23 (0.18, 0.29)')."
     )
     range_high: Optional[float] = Field(
         None,
-        description="Upper bound when the parameter is printed as a range "
-                    "(e.g., the '0.29' in '0.23 (0.18, 0.29)')."
+        description="Upper bound when the parameter is printed as a range (e.g., the '0.29' in '0.23 (0.18, 0.29)')."
     )
     variance: Optional[float] = Field(
         None,

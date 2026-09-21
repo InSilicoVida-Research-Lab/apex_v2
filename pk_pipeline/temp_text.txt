@@ -1,0 +1,3126 @@
+NIH Public Access
+Author Manuscript
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+Published in final edited form as:
+J Toxicol Environ Health A. 2013 ; 76(1): 25–57. doi:10.1080/15287394.2012.722523.
+
+Development of PBPK Models for PFOA and PFOS for Human
+Pregnancy and Lactation Life Stages
+$watermark-text
+
+Anne E. Loccisano1, Matthew P. Longnecker2, Jerry L. Campbell Jr.1, Melvin E. Andersen1,
+and Harvey J. Clewell III1
+1Center for Human Health Assessment, The Hamner Institutes for Health Sciences, 6 Davis
+Drive, P.O. Box 12137, Research Triangle Park, NC 27709
+2National Institute of Environmental Health Sciences, National Institutes of Health, Department of
+
+Health and Human Services, P.O. Box 12233, Mail drop A3-05, Research Triangle Park, NC
+27709
+
+Abstract
+
+$watermark-text
+$watermark-text
+
+Perfluoroalkyl acid carboxylates and sulfonates (PFAAs) have many consumer and industrial
+applications. Developmental toxicity studies in animals have raised concern about potential
+reproductive/developmental effects of perfluorooctanoic acid (PFOA) and perfluorooctane
+sulfonate (PFOS); however, in humans conflicting results have been reported for associations
+between maternal PFAA levels and these outcomes. Risk assessments and interpretation of
+available human data during gestation and lactation are hindered due to lack of a framework for
+understanding and estimating maternal, fetal, and neonatal pharmacokinetics (PK).
+Physiologically-based pharmacokinetic (PBPK) models were developed for PFOA & PFOS for
+the gestation and lactation life stages in humans to understand how the physiological changes
+associated with development affect pharmacokinetics of these compounds in the mother, fetus,
+and infant. These models were derived from PBPK models for PFOA/PFOS that were previously
+developed for adult humans and rats during gestation and lactation and from existing human
+pregnancy and lactation models developed for other chemicals. The models simulated PFOA and
+PFOS concentrations in fetal, infant, and maternal plasma and milk, were compared to available
+data in humans, and also used to estimate maternal exposure. The models reported here identified
+several research needs, which include: 1) the identification of transporters involved in renal
+resorption to explain the multi-year half-lives of these compounds in humans, 2) factors affecting
+clearance of PFOA/PFOS during gestation and lactation, and 3) data to estimate clearance of
+PFOA/PFOS in infants. These models may help address concerns regarding possible adverse
+health effects due to PFOA/PFOS exposure in the fetus and infant and may be useful in comparing
+pharmacokinetics across life stages.
+
+Address of Correspondence: Anne Loccisano United States Environmental Protection Agency 1200 Pennsylvania Avenue, NW Mail
+Code 8601P Washington, DC 20460 Loccisano.Anne@epa.gov Phone: 703-347-0345 Fax: 703-347-8699.
+Co-authors: Matthew P. Longnecker National Institute of Environmental Health Sciences National Institutes of Health, Department
+of Health and Human Services P.O. Box 12233 Mail Drop A3-05 Research Triangle Park, NC 27709 longnec1@niehs.nih.gov Phone:
+919-541-5118 Fax: 919-541-2511
+Jerry L. Campbell The Hamner Institutes for Health Sciences 6 Davis Drive PO Box 12137 Research Triangle Park, NC 27709
+jcampbell@thehamner.org Phone: 919-558-1200 Fax: 919-558-1400
+Melvin Andersen The Hamner Institutes for Health Sciences 6 Davis Drive PO Box 12137 Research Triangle Park, NC 27709
+mandersen@thehamner.org Phone: 919-558-1200 Fax: 919-558-1400
+Harvey Clewell The Hamner Institutes for Health Sciences 6 Davis Drive PO Box 12137 Research Triangle Park, NC 27709
+hclewell@thehamner.org Phone: 919-558-1200 Fax: 919-558-1400
+Conflict of interest The authors declare that there are no conflicts of interest.
+
+Loccisano et al.
+
+Page 2
+
+Keywords
+PFOA; PFOS; perfluoroalkyls; gestation; lactation; physiologically based pharmacokinetic model;
+PBPK
+
+Introduction
+
+$watermark-text
+$watermark-text
+
+Perfluoroalkyl acids (PFAA) are fully fluorinated man-made carboxylates and sulfonates.
+The most prevalent PFAA are perfluorooctanoic acid (PFOA) and perfluorooctane sulfonate
+(PFOS). The unique chemical properties imparted by the C–F bond allows for their use in a
+variety of both industrial and consumer applications, such as surfactants, paper and
+packaging treatments for grease and stain resistance, and as processing aids in the
+manufacture of fluoropolymers (Olsen et al. 2008; Raymer et al. 2012). Compounds in this
+class have been produced since the 1950s, and the use, distribution, manufacture, and
+disposal of these and other chemicals that break down to form PFOA and PFOS have
+resulted in the widespread exposure of both environmental media and humans (Lindstrom et
+al. 2011). Due to the stability of the C–F bond, these compounds are highly resistant to
+biodegradation and metabolism and thus are persistent (Lau 2009). The average serum halflife in humans is estimated at 3.8 years for PFOA and 5.4 years for PFOS (Olsen et al.
+2007). Biomonitoring studies detected PFOA and PFOS in serum of both occupationally and
+non-occupationally exposed humans, including pregnant and lactating women, fetal cord
+blood, and infants (Olsen et al. 2009; 2007). The long half-lives in humans are of particular
+concern because this indicates that these compounds are bioaccumulative, which may result
+in higher body burdens, allowing for a greater potential for adverse health effects. Pathways
+for human exposure to PFAA have not been well-characterized, although it was suggested
+that dietary exposure is the main contributing pathway in adults (Fromme et al. 2009;
+Vestergren and Cousins 2009). Other exposure sources include drinking water, dust, and
+household/consumer products treated with PFOA and PFOS (Trudel et al. 2008; Fromme et
+al. 2009). Communities with high levels of PFOA in their drinking water have also been
+found to have serum PFOA levels significantly higher than those reported for the general
+population (Emmett et al. 2006; Holzer et al. 2008). Exposure to PFOA and PFOS can also
+occur as the result of the breakdown of other larger fluoropolymers (Vestergren et al. 2008;
+Paul et al. 2009; Prevedouros et al. 2006).
+
+$watermark-text
+
+Reviews on the reproductive and developmental outcomes resulting from exposure to PFOA
+and PFOS in experimental animals have been published (Lau et al. 2007; 2004). Although
+the toxicity observed in the animal studies occurred at much higher doses and higher blood
+levels than the levels observed in human serum from biomonitoring studies, maternal
+exposure to PFOA and PFOS has resulted in dose-dependent developmental effects in rats,
+mice, and rabbits. These effects include reduced birth weight, reduced postnatal survival and
+growth of the offspring, and delayed lung maturation (Case et al. 2001; Grasty et al. 2005;
+Lau et al. 2003; Luebker et al. 2005a; 2005b; Thibodeaux et al. 2003). Maternal effects
+include reduced food intake and reduced weight gain (Thibodeaux et al. 2003). Postnatal
+survival is similar for PFOS exposure in rats and mice; however, there are marked
+differences in PFOA effects, which may be due to species and gender differences in
+pharmacokinetics of PFOA. Most notably, the female rat has a short serum half-life for
+PFOA (approximately 2-4 hours), while the half-lives observed in male rats and other
+species (e.g., mouse, monkey, and humans) are several days to years (Seacat et al. 2002;
+Kudo et al. 2002; Olsen et al. 2007; Lou et al. 2009). The variation in half-life is most likely
+due to differences in expression of organic anion transporters in the proximal tubule (Kudo
+et al. 2002; Weaver et al. 2009), which are thought to be responsible for renal resorption of
+PFOA and thus the long half-lives observed across species (Andersen et al. 2006; Loccisano
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 3
+
+$watermark-text
+
+et al. 2011; 2012b). Several renal transporters were found to transport PFOA (Katakura et al.
+2007; Kato et al. 2002; Kudo et al. 2002; Nakagawa et al. 2007; Weaver et al. 2009; Yang et
+al. 2009), and although no study examined PFOS transport explicitly, PFOS is also ionized
+at physiological pH and is most likely subject to uptake by the same transporters.
+Elimination kinetics of PFOA and PFOS may also be influenced by branching on the carbon
+chain (Beesoon et al. 2011; Benskin et al. 2009) or by binding to plasma proteins (PFOA
+and PFOS are >97% bound to plasma albumin in the rat, monkey, and human (Han et al.
+2003; Kerstner-Wood et al. 2003)). Animal studies have shown that these chemicals are
+well-absorbed orally, poorly eliminated, not metabolized, and that they are distributed
+mainly to liver, plasma, and kidney (Johnson et al. 1984; Kuslikis et al. 1992; Ophaug and
+Singer 1980; Vanden Heuvel et al. 1991). The pharmacokinetics of PFOA and PFOS have
+been reviewed by several authors (Han et al. 2012; Lau et al. 2004; Andersen et al. 2008;
+Post et al. 2012).
+
+$watermark-text
+
+Due to (1) widespread use, (2) bioaccumulative properties of PFAAs, (3) developmental
+effects observed in animals, and because (4) PFOA and PFOS have been found in pregnant
+women, cord blood, breast milk, and infants, epidemiologists began to focus on reproductive
+and developmental outcomes in humans in relation to exposure to PFOA and PFOS.
+Measurement of PFOA and PFOS in cord blood samples confirmed placental transfer, and
+measurement in breast milk shows exposure of the infant via this route is also possible.
+Epidemiology studies reported associations between PFAA exposure and various
+reproductive and developmental outcomes (Olsen et al. 2009), including time-to-pregnancy
+and birth weight, though the findings are inconsistent. Many of these outcomes may also be
+influenced by or correlated with maternal factors including body mass index (BMI),
+maternal size, nutrition, volume expansion, glomerular filtration rate, preexisting maternal
+conditions, and other physiological variables.
+
+$watermark-text
+
+Pharmacokinetic data for PFOA and PFOS in pregnant and lactating women, the fetus, and
+infant are limited. However, the use of a physiologically based pharmacokinetic (PBPK)
+model may aid in understanding the determinants of human pharmacokinetics; the model
+might also provide an improved understanding of how the physiological changes associated
+with development affect tissue distributions of these compounds in the mother, fetus, and
+infant, thus improving the scientific basis of age- and life stage-specific risk assessment for
+PFAA. In order to estimate maternal exposure from blood or milk concentrations of PFOA
+and PFOS and help define the relationship between maternal exposure, internal tissue
+concentrations in the mother, fetus, and infant, PBPK models were developed for PFOA and
+PFOS for both the gestation and lactation life stages in the human. The gestation and
+lactation models also allow for examining integrative exposure and internal dose during both
+the in utero and postnatal periods. Not only can the model be used to predict the internal
+dose in the fetus or neonate resulting from maternal exposure, but the model can also be
+used to examine whether the reproductive associations observed in epidemiologic studies
+might be able to be predicted on the basis of pharmacokinetics. The latter application will be
+presented in a subsequent manuscript.
+
+Methods
+Previously developed adult rat, monkey, and human PBPK models for both PFOA and
+PFOS have been described (Loccisano et al. 2011; 2012b). In addition, pregnancy and
+lactation models for PFOA and PFOS were developed and described for the rat (Loccisano
+et al. 2012a). In this study, the adult human model was extended to the gestation and
+lactation life stages in order to provide estimates of maternal, fetal, and infant exposure to
+PFOA and PFOS. These have been documented elsewhere (Loccisano et al. 2011;
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 4
+
+Loccisano et al. 2012b; Loccisano et al. 2012a); only the development of the human
+gestation and lactation models is described here.
+
+$watermark-text
+
+The pregnancy and lactation models retained all the features used to describe PFOA and
+PFOS kinetics in the adult human, including a constant free fraction of chemical in plasma
+and renal resorption in the filtrate compartment. The pregnancy and lactation models also
+retained all the tissue compartments of the adult human, which included plasma, liver,
+kidneys, filtrate, fat, skin, and a lumped compartment for the remaining body tissues. The
+descriptions for pregnancy and lactation in humans were based on previously published
+pregnancy and lactation models (Gentry et al. 2003; Clewell et al. 1999) and physiological
+data on the changes that occur during these life stages (Salas et al. 2006; Sims and Krantz
+1958; Beall et al. 2007; Dewey et al. 1991; Dunlop 1981; Duvekot et al. 1995; Wosje and
+Kalkwarf 2004). The models were coded in the acslX program (version 3.0; AEgis
+Technologies Group, Huntsville, AL). The model code can be found in the Supporting
+Information.
+Model Structures
+
+$watermark-text
+
+The human gestation and lactation models simulated environmental exposure to PFAA
+during pregnancy and lactation for the mother, fetus, and infant. The basic structures
+(Figures 1 and 2) are based on the rat gestation and lactation models for PFAA. The
+structural changes made to the adult human model were the addition of mammary tissue,
+placenta, and fetal compartments, and a milk compartment for lactation. The physiological
+and PFAA-specific parameters are adapted from the adult human model and modified for
+the gestation and lactation life stages as outlined below. Only the mother was assumed to
+have direct exposure to PFAA, and only the free fraction of chemical in plasma is assumed
+to be available for uptake into tissues. Transport into tissues was flow-limited. Clearance of
+PFAA in the mother occurs by urinary elimination from the filtrate compartment in both
+models; clearance in the infant is described with a generic first-order rate constant from the
+central compartment.
+
+$watermark-text
+
+Fetal exposure to PFAA is through placental transfer, which is described as a bidirectional
+transfer process (from mother to fetus and fetus to mother) between free chemical in the
+placenta and fetal plasma. Placental transfer was described as a simple diffusion process
+(ktrans1C and ktrans2C; Table 3). However, just because simple diffusion appears to be
+sufficient, the possibility that placental transport is also facilitated by an active transport
+process cannot be ruled out because PFOA and PFOS will be mostly ionized at
+physiological pH. For example, organic anion transporter 4 (OAT4) is expressed in human
+kidney proximal tubule cells (apical side) and plays a role in resorption of organic anions
+(Nakagawa et al. 2007; 2009). This transporter is also expressed in human placenta (Cha et
+al. 2000) and may also play a role in transport of PFOA and PFOS there. However, the
+possible roles that these transporters play in placental transport of PFOA and PFOS remains
+to be elucidated; thus, a description using simple diffusion was used in the current model.
+Data in rats showed that PFAAs are present in amniotic fluid (Hinderliter et al. 2005); thus,
+an amniotic fluid compartment was included in the rat models and also in the human models
+presented here. Transfer rates between the amniotic fluid compartment and the fetal body
+are described as simple diffusion (ktrans3C and ktrans4C; Table 3). Transport of chemical
+from fetal plasma into the rest of fetal body compartment was also flow-limited.
+In the lactation model, no data were available for PFAA partitioning into mammary tissue,
+so chemical in plasma was placed in direct contact with the milk compartment, and transfer
+from the plasma to the milk compartment was flow-limited. Only the free fraction of
+chemical in plasma was available for transfer into milk. The infant was exposed only
+through milk, and breastfeeding lasted for 6 months postpartum.
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 5
+
+Gestation model–physiology
+
+$watermark-text
+
+The modifications for pregnancy to the adult human model were based on previously
+published human pregnancy models for methylmercury (Clewell et al. 1999), isopropanol
+(Gentry et al. 2002), and various environmental toxicants (Gentry et al. 2003) well as other
+physiological data for changes that occur during pregnancy (Beall et al. 2007; Dunlop 1981;
+Duvekot et al. 1995; Salas et al. 2006; Sims and Krantz 1958). Equations were added to the
+adult human PFAA model to account for changing volumes of fat, mammary tissue, and
+placenta, expanding plasma volume and the growing fetus. The physiological parameters are
+given in Table 1; all of the equations used can be found in the model code in the Supporting
+Information. Initial fractional tissue volumes for fat and mammary tissue were from Gentry
+et al.(2003). The equations describing the expanding fat and mammary tissue, placental
+growth, and fetal growth were adapted from Gentry et al. (2003). Plasma volume expansion
+during pregnancy was based on Salas et al.(2006). Volumes of liver, kidney, filtrate, and gut
+remained constant fractions of the prepregnancy (non-pregnant) maternal body weight
+(BWinit); fractional volumes of these tissues for nonpregnant women was taken from Brown
+et al. (1997). The filtrate compartment, as in the adult human model, was set at 10% of the
+kidney volume (the model is not sensitive to this value). Increasing maternal body weight
+(BW) was calculated as the sum of the changing tissue volumes and the prepregnancy (nonpregnant) body weight. The volume of remaining body tissues (VR) was calculated by
+subtracting the sum of all other tissues from the total maternal BW; this takes into account
+the increasing BW and other changing tissue volumes.
+
+$watermark-text
+$watermark-text
+
+Increasing maternal cardiac output (QC) was calculated by the method of Gentry et al.
+(2003). The prepregnancy (non-pregnant) cardiac output was taken from Clewell et al.
+(1999). Because PFOA and PFOS do not partition into red blood cells (Ehresman et al.
+2007), the cardiac output was modified for plasma flows by multiplying QC by 1hematocrit; the maternal hematocrit was 0.41 (Milman et al. 1999). The fraction of cardiac
+output to the liver, gut, and skin were calculated by multiplying the fractional blood flows to
+these tissues for nonpregnant women by the prepregnancy (non-pregnant) cardiac output.
+Fractional blood flows to these tissues were obtained from Brown et al. (1997). Increasing
+blood flows to the fat, mammary tissue, and placenta were calculated by the method of
+Gentry et al. (2003). Changing renal plasma flow was adapted from the data of Sims &
+Krantz (1958). Increasing glomerular filtration rate (QFil) during pregnancy was adapted
+and combined from several data sets (Dunlop 1981; Duvekot et al. 1995; Sims and Krantz
+1958). Plasma flow to the rest of body tissues (QR) was calculated by subtracting the sum of
+the plasma flows to all other tissues from the total cardiac output.
+The fetal part of the model consisted of a fetal plasma compartment, a rest of body
+compartment, and an amniotic fluid compartment. Fetal growth was described by the
+method of Gentry et al. (2003). Fetal plasma volume was a constant fraction of fetal body
+weight and the same as that for the nonpregnant adult human (Davies and Morris 1993). The
+volume of fetal tissues was calculated as the total fetal body weight minus the weight of the
+plasma compartment. Changing amniotic fluid volume was taken from the data of Beall et
+al. (2007), and the data points were interpolated using a TABLE function in acslX. Fetal
+cardiac output (QFet) was defined as a function of fetal blood volume (Clewell et al. 1999),
+and, as for the maternal cardiac output, the fetal cardiac output was modified for plasma
+flows by multiplying QFet by (1-hematocrit) for the fetus (Sisson et al. 1959). The plasma
+flow to the fetal tissues was equal to the total fetal cardiac output as no fetal tissues were
+explicitly represented.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 6
+
+Lactation Model–physiology
+
+$watermark-text
+$watermark-text
+
+In order to simulate changing PFAA concentrations in the mother, breast milk, and the
+nursing infant, the adult human model was modified in a similar manner to the rat model for
+lactation (Loccisano et al. 2012a). The changes were based on those of Gentry et al.(2003),
+and other physiological data for changes occurring during lactation in the mother and
+growing infant. The structure of the lactation model is in Figure 2. Equations were added to
+describe the changing volume of fat tissue, maternal BW and growing infant, and changing
+blood flows to tissues. The physiological parameters for the lactation model are given in
+Table 2, and all of the equations are in the Supporting Information. Decreasing maternal BW
+for up to 6 months postpartum was obtained from Wosje & Kalkwarf (2004), and data points
+were interpolated using a TABLE function in acslX. Fractional values for fat as a %
+maternal BW for lactating women up to 6 months postpartum were also obtained from
+Wosje & Kalkwarf (2004). Fat volume was then calculated by scaling to decreasing
+maternal BW. A mammary compartment is not explicitly represented in the lactation model,
+as no human data were available for PFAA partitioning from mammary tissue into milk.
+Chemical in plasma was placed in direct contact with the milk compartment as there are
+human concentration data in plasma and in milk (Fromme et al. 2010; Karrman et al. 2007;
+Thomsen et al. 2010). Plasma flow to the milk compartment was assumed to be the same as
+the plasma flow to a mammary tissue compartment, which was adapted from Gentry et al.
+(2003). Milk:plasma partition coefficients (PMilk) were estimated from three human studies
+where the concentrations of PFOA and PFOS were measured in both maternal plasma and
+milk (Karrman et al. 2007; Fromme et al. 2010; Haug 2010). Milk production rates (kmilk)
+were from Dewey et al (1991) and were assumed to be equal to infant suckling rates.
+Residual milk volume was obtained from Gentry et al.(2003). Tissue volumes for liver,
+kidney, filtrate, and gut were constant fractions of pre-pregnancy (non-pregnant) BW.
+Decreasing plasma volume was adapted from data of Salas et al.(2006). Volume of the
+remaining maternal tissues was calculated as the total maternal BW minus the remaining
+tissue volumes.
+
+$watermark-text
+
+Changing maternal cardiac output (QC) was calculated by the method of Gentry et al.(2003).
+As in the gestation model, the cardiac output was modified for plasma flows rather than
+blood flows by multiplying QC by (1-hematocrit). The fraction of cardiac output to the liver,
+gut, and skin were calculated by multiplying the fractional blood flows to these tissues for
+nonpregnant women by the prepregnancy (non-pregnant) cardiac output. Fractional blood
+flows to these tissues were obtained from Brown et al. (1997). Increasing blood flows to the
+fat and mammary tissue were calculated by the method of Gentry et al. (2003). Although a
+separate mammary tissue compartment was not included in the model, a blood flow to the
+milk compartment was needed. The blood flow to the milk compartment was assumed to be
+the same as what it would be for a blood flow to the mammary tissue; thus, the blood flow to
+the mammary tissue (QMam) was still calculated. In order to derive QMam, the volume of
+mammary tissue had to be calculated, and this was also done according to the methods of
+Gentry et al.(2003). Because the volume of mammary tissue changes during lactation, these
+volume changes were accounted for by lumping this change in volume in with the remaining
+maternal tissue volume. Changing glomerular filtration rate (QFil) after pregnancy was
+adapted from data from Sims & Krantz (1958) and returned to the pre-pregnancy level at 6
+weeks postpartum. Since there were no available data on renal plasma flow changes during
+lactation, renal plasma flow was assumed to be approximately 5 times that of the GFR (GFR
+is normally approximately 20% of renal plasma flow). Plasma flow to the rest of body
+tissues (QR) was calculated by subtracting the sum of the plasma flows to all other tissues
+from the total cardiac output.
+Due to limited data on PFAA in the infant, the infant part of the model was treated as a
+single compartment with a volume of distribution. The volume of distribution for PFOA and
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 7
+
+PFOS were the volumes of distribution estimated for compartment models for the monkey
+(Tan et al. 2008) and then scaled to infant body weight. Infant growth was obtained from the
+CDC's growth charts (CDC 2002), and data points were interpolated using a TABLE
+function in acslX.
+Gestation and Lactation Models—Chemical Parameters
+
+$watermark-text
+
+Chemical-specific parameters used in the human gestation and lactation models for PFOA
+and PFOS were the same as those used in the adult human model, with the exception of
+those that were calibrated using available biomonitoring data in pregnant and lactating
+women, which include the placental transfer rate constants, milk:plasma partition
+coefficients, and the elimination rate constant for the infant. Further details on chemicalspecific parameters and model calibration are outlined below.
+
+$watermark-text
+$watermark-text
+
+Mother—Chemical-specific parameters used in the human gestation and lactation models
+for PFOA and PFOS are given in Table 3. The chemical-specific parameters for the pregnant
+and lactating mother are the same as those used in the adult human model (Loccisano et al.
+2011). The parameters from the adult model allowed for good agreement with gestation and
+lactation data when they were used in the pregnancy and lactation models, and as there were
+no available data on perfluorinated compound (PFC)-specific parameters in pregnant or
+lactating women, the adult values were retained in the life stage models presented here. Any
+changes made for the fetus or infant are outlined in the text below. Free fractions of
+chemical in plasma. Only the free concentration of chemical partitions into tissues. As in the
+monkey and rat, PFOA and PFOS are highly bound to plasma proteins in the human (>97%
+bound)(Kerstner-Wood et al. 2003; Han et al. 2003). The species differences in half-lives of
+these compounds does not appear to be due to differences in protein binding (Han et al.
+2003), so the same free fractions estimated for monkeys for PFOA and PFOS were used in
+the adult human model (Loccisano et al. 2011), and these values were subsequently used in
+the gestation and lactation models reported here. Although the overall concentration of
+serum proteins decreases during gestation due to increased plasma volume (Notarianni 1990;
+Perucca and Crema 1982; Krauer et al. 1980), there are no data available on PFAA binding
+to plasma proteins during pregnancy nor are there available data to provide evidence that the
+free fraction of PFAAs change during pregnancy. Thus, explicit binding of PFAAs to
+plasma proteins is not simulated (as in the monkey and adult human models (Loccisano et
+al. 2011)), but a constant free fraction of chemical in plasma is accounted for, as the free
+fraction will determine how much chemical is available for uptake into tissues. Urinary
+elimination rate constants were scaled as BW−0.25 and estimated by fitting the model to the
+data of Harada et al. (2005), where serum and urine PFOA and PFOS concentrations were
+measured.
+Renal Resorption—The estimated geometric mean serum elimination half-life in the
+human is approximately 3.5 years for PFOA (arithmetic mean 3.8 years) and 4.8 years for
+PFOS (arithmetic mean 5.4 years) based on a study of retired fluorochemical workers (Olsen
+et al. 2007). A more recent study conducted on a population that had previous exposure to
+PFOA in drinking water estimated a median plasma half-life for PFOA of 2.3 years (Bartell
+et al. 2010). It is postulated that renal resorption is responsible for the persistence in humans
+(Andersen et al. 2006). Renal resorption in the model is described by a transporter maximum
+(Tm) and an affinity constant (Kt). For a more detailed discussion of how the Tm and Kt
+values were derived for the adult human model, please see Loccisano et al. (2011). Although
+renal function is altered during pregnancy (Dunlop 1979; 1981), no data were available on
+the changes in renal resorption of PFAA during this life stage. Thus, the same values used
+for Tm and Kt in the adult human model were used for the mother in the gestation and
+lactation models.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 8
+
+$watermark-text
+
+Partition Coefficients (PC)—For PFOA, the PC for liver, kidney, skin, fat, gut, and rest
+of body tissues were estimated from tissue concentration data reported by Kudo et al.(2007)
+for a single IV dose of PFOA to male Wistar rats. For PFOS, PC were estimated from tissue
+concentration data resulting from 5 days of dietary dosing in male C57Bl/6 mice (DePierre
+2009). There was no available data on concentrations of PFAA in the human placenta. For
+PFOA, the PC for the placenta was estimated from a developmental study in rats
+(Hinderliter et al. 2005). For PFOS, the PC for the placenta was that estimated for rapidly
+perfused tissues from mouse feeding data (DePierre 2009). A mammary tissue:plasma PC is
+used in the gestation model (PMam). For PFOA, this was estimated from mouse tissue data
+from Fenton et al.(2009); for PFOS, this was estimated from concentrations in slowly
+perfused tissues from mouse feeding data (DePierre 2009) as no concentration data for
+PFOS in mammary tissue could be found. Fiserova-Bergerova (1975), examined partition
+coefficients for two compounds (Forane and methylene chloride) in several species (man,
+monkey, dog, and rat). Tissue:blood partition coefficients were similar for the tissues
+examined across species; thus, it is reasonable to use the same partition coefficients in the
+human models. Milk:plasma partition coefficients were calibrated from three human
+biomonitoring studies where the concentrations of PFOA and PFOS were measured in both
+maternal plasma and milk (Karrman et al. 2007; Fromme et al. 2010; Haug 2010). These
+estimates yielded predicted milk or plasma concentrations similar to those observed in
+epidemiology studies (Liu et al. 2011; Volkel et al. 2008; von Ehrenstein et al. 2009;
+Thomsen et al. 2010; Kim et al. 2011b; Kim et al. 2011a).
+
+$watermark-text
+$watermark-text
+
+Fetus and infant—Transfer of both PFOA and PFOS across the placenta was described as
+a simple diffusion process between free chemical in the placenta and free chemical in
+plasma. Due to lack of data in humans, the rate constants (ktrans1C and ktrans2C) used in
+the human models were the same as those estimated for the pregnant rat (Loccisano et al.
+2012a). In the case of PFOS, the rate constants for the transfer of chemical from mother to
+fetus and fetus to mother were the same values as those used for the rat (ktrans1C = 0.46 and
+ktrans2C = 1.01). When compared to available biomonitoring data, these values yield
+predicted maternal:fetal plasma concentration ratios similar to those observed in
+epidemiology studies (observed ratios = approximately 2–3; predicted ratios =
+approximately 2.2). However, for PFOA, symmetric transfer (ktrans1C = ktrans2C = 0.46),
+rather than the asymmetric transfer that was used for PFOS, predicted maternal:fetal plasma
+concentration ratios that were more similar to the observed ratios than asymmetric transfer
+did (observed ratios = approximately 0.6 – 1.5; predicted ratios = approximately 1.0). The
+placental transfer rate constants were adjusted (calibrated) to yield the maternal:fetal ratios
+observed in several of the datasets that reported maternal or cord blood PFC levels
+(Apelberg et al. 2007; Fei et al. 2007; Midasch et al. 2007; Washino et al. 2009). The
+parameters for placental transfer were scaled to fetal body weight0.75. There is no available
+human data on concentration of PFAA in amniotic fluid; parameters for transfer to and from
+the amniotic fluid (ktrans3c and ktrans4c) for both chemicals were the same as those
+estimated for the rat (Loccisano et al. 2012a), and scaled to fetal BW0.75. Fetal tissue:blood
+partition coefficients for PFOA and PFOS and the free fraction of chemical in fetal/infant
+plasma were the same values as used for the mother (the fetal/infant rest of body
+tissues:blood PC was the same as the maternal rest of body tissues:blood PC). Neither the
+fetus nor the infant includes a description of renal resorption. The kidneys (GFR, resorption,
+and secretion) do not function at the level of the adult (Alcorn and McNamara 2003), and
+there are no available data on resorption or secretion of PFAA for these life stages; thus,
+resorption was not included for the fetus or infant. The elimination rate constant for the
+infant was calibrated by fitting the model to the plasma concentration data of Fromme, et al.
+(2010).
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 9
+
+Model simulations
+Exposure before pregnancy—Exposure to PFAA started for the mother before
+becoming pregnant so that steady-state concentrations of PFAA would have been achieved
+in the tissues. To obtain the steady-state tissue concentrations at the start of pregnancy, the
+non-pregnant adult human model was run for 30 years in order to reach a steady-state
+concentration in plasma. The daily intake used in the adult model in order to achieve the
+steady-state concentrations of PFAA in the blood after 30 years of exposure was that
+estimated to yield the first concentration reported during pregnancy or lactation (see text
+below), and the daily intake was scaled to BW. The tissue concentrations at 30 years were
+then used as the starting tissue concentrations of PFAA for the pregnancy model.
+
+$watermark-text
+
+Obviously, pregnancy could occur at an age before or after 30, but for simplicity and the
+purposes of the simulations reported here, pregnancy was assumed to occur at 30 years old
+because the plasma PFAA concentrations reached steady state at 30 years. When running the
+adult (pre-pregnancy) human model with exposures that yield the plasma concentrations of
+PFOA or PFOS reported for the general population (~1e-04 to 2e-03 ug/kg BW/day), it took
+approximately 30 years to reach a steady-state plasma concentration. At exposures near
+those of the general population for women much younger than 30, these women's plasma
+PFAA concentrations simply would not have reached steady state before they became
+pregnant.
+
+$watermark-text
+
+For lactation, the tissue concentrations at the delivery/birth of the baby (embryonic week 39)
+were used as the starting tissue concentrations for lactation. The daily dose (ug/kg BW/day)
+before, during, and after pregnancy stayed the same; however, the daily intake was scaled to
+maternal BW; thus, as energy requirements change, so does PFAA intake. During lactation,
+the energy requirements remain increased during breastfeeding; however, maternal BW
+decreases during this period. To adjust for a higher energy requirement and thus higher daily
+intake of PFAA, the daily dose was increased by 25% during the first 6 months postpartum
+and then decreased again at 6 months postpartum to the daily dose used before and during
+pregnancy (scaled to maternal BW). The energy cost of lactation in the first 6 months after
+delivery is 500 kcal/day (Otten et al. 2006). The mean energy intake of US women of
+reproductive age in 1999–2000 was 2028 kcal/day (CDC 2004). Thus, the energy intake was
+assumed to increase 25% during lactation, and the dose of PFCs was increased
+proportionally.
+
+$watermark-text
+
+Model Evaluation
+The human data where more than one concentration during pregnancy or lactation was
+available was used for model evaluation. For example, if a pregnancy study reported a
+maternal blood concentration at a time during pregnancy and also at delivery or in cord
+blood, the concentration during pregnancy was used for exposure estimation and the model
+was evaluated by assessing the consistency between the maternal concentrations at delivery
+or cord blood. For the lactation model, if a plasma concentration was reported, the exposure
+was estimated to yield this concentration and then the resulting predicted milk or infant
+blood concentration was compared to the observed value to evaluate the model structure and
+parameters. The goodness of the model fit to the latter data points was considered to reflect
+the validity of the model structure and parameterization approach. Agreement of model
+predictions with reported data was examined graphically. Exposure estimation was an
+iterative process; if the model did not correctly predict the reported concentration at the
+specified time during pregnancy or lactation, a new exposure was tried, and the whole
+sequence was repeated (the concentrations in the adult model were allowed to reach steady
+state, the end concentrations were input to the pregnancy model, and the end pregnancy
+tissue concentrations were input to the lactation model) until the model predicted the
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 10
+
+reported mean or median concentration. For exposure estimations, agreement between
+predicted and observed concentrations was considered satisfactory if the predicted value was
+within 1% of the observed value. If the difference was more than that, exposure was reestimated.
+Sensitivity Analysis
+
+$watermark-text
+
+A normalized sensitivity analysis was performed on the gestation and lactation models for
+both chemicals in order to examine the influences of each model parameter on the model
+output. The influence of each model parameter on maternal plasma, fetal plasma, and infant
+concentrations was examined by calculating the area under the curve (AUC) for maternal,
+fetal, or infant plasma PFAA concentration that resulted from increasing each parameter by
+1%. Each parameter was increased separately. The normalized sensitivity coefficients (SC)
+were calculated by the following equation:
+
+$watermark-text
+
+A is the AUC resulting from the 1% increase in parameter value, B is the AUC resulting
+from the original parameter value, C is the parameter value increased by 1%, and D is the
+original parameter value. Thus, an SC with the absolute value of 1 means that there is a 1:1
+relationship between the change in the parameter and the dose metric. For parameters that
+describe the growth or changes (and change during the simulation time), a 1% increase in
+the parameter was calculated by the following equation:
+
+This equation will allow for the parameter value to increase by 1% of the original value
+during the entire simulation.
+
+$watermark-text
+
+The relative impact of each model parameter was examined for the dose metrics of interest,
+which were the total plasma AUC in the mother and fetus (at embryonic week 39) for the
+gestation models or the total maternal plasma AUC and infant body AUC (at 6 months
+postpartum) for the lactation models. Normalized SC's were calculated for all model
+parameters, but only those with an SC ≥ 1 or SC ≤ −1 are reported here. For PFOA,
+sensitivity analysis was performed assuming an estimated maternal exposure of 1.9e-4 ug/kg
+BW/day for both gestation and lactation; for PFOS, the analysis was performed assuming an
+estimated maternal exposure of 4.0e-4 ug/kg BW/day for both the gestation and lactation
+models. These exposures were those estimated for the data of Fromme et al.(2010), which
+were the only data available for the mother and infant pairs during both pregnancy and
+lactation.
+Model Predictions of Exposure
+Exposure estimation and predictions of internal dose for general population—
+In order to estimate maternal exposure for the various general population studies, maternal
+PFOA and PFOS exposure was modeled as a generic input to the plasma compartment
+(designated as “IV” in Figures 1 and 2) as contributions of PFAA exposure from different
+exposure routes are not well understood (Fromme et al. 2009). When considering IV versus
+oral exposure, a first-pass effect will not be an issue with these chemicals. When
+administered orally to animals, PFAA are well-absorbed and are not metabolized
+appreciably, so most of the compound reaches systemic circulation (Johnson et al. 1984;
+Kuslikis et al. 1992; Ophaug and Singer 1980; Vanden Heuvel et al. 1991). Several studies
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 11
+
+$watermark-text
+
+were available that reported concentrations of PFAA in maternal plasma, fetal or infant
+plasma, and/or milk at specified time points during pregnancy or lactation (Apelberg et al.
+2007; Fei et al. 2007; Fromme et al. 2010; Hanssen et al. 2010; Inoue et al. 2004; Kim et al.
+2011b; Kim et al. 2011a; Midasch et al. 2007; Monroy et al. 2008; Tittlemier et al. 2004;
+Karrman et al. 2007; Liu et al. 2011; Thomsen et al. 2010; von Ehrenstein et al. 2009;
+Volkel et al. 2008). For each study, the gestation and lactation models were used to estimate
+maternal exposure and the resulting maternal, fetal, or infant internal dose. Some reports
+provided paired maternal and fetal observations at delivery (Fei et al. 2007; Fromme et al.
+2010; Hanssen et al. 2010; Kim et al. 2011b; Kim et al. 2011a; Midasch et al. 2007; Monroy
+et al. 2008; Tittlemier et al. 2004); for these data, the exposure was estimated to yield the
+mother's plasma concentration at delivery. If the mother's concentration at a time during
+pregnancy was reported (before delivery) (Fei et al. 2007; Fromme et al. 2010; Monroy et al.
+2008), the exposure was estimated to yield this concentration. For the lactation model,
+maternal exposures were estimated to give the reported mean or median PFAA
+concentration in milk or maternal plasma at a specific time point after the birth of the baby.
+
+$watermark-text
+
+Two estimates of serum half-lives of PFOA are reported in the literature (3.8 years and 2.3
+years) (Olsen et al. 2007; Bartell et al. 2010). Based on model predictions with the adult
+human model, either half-life appeared to be likely (Loccisano et al. 2011). For the PFOA
+models reported here, when an observed serum concentration was used to estimate maternal
+exposures, the exposures were based on both half-lives estimated for PFOA. The renal
+resorption parameters (Tm, Kt) control the half-life of the chemical, i.e., the higher Tm is,
+the more efficient resorption is and thus, there would be a longer half-life. With a shorter
+half-life, a higher exposure would be needed to yield the same plasma concentration at a
+specified time point than with a longer half-life. When exposures were estimated using the
+pregnancy model, both the 3.8 and 2.3 year half-lives were used in the model (by adjusting
+Tm), and an exposure was estimated that would yield the reported plasma concentrations at
+the specified time points for each half-life.
+
+$watermark-text
+
+Prediction of internal dose for Little Hocking and Arnsberg—There are human
+data available for two populations (Little Hocking (LH), Ohio and Arnsberg, Germany)
+exposed to high levels of PFOA in their drinking water (Emmett et al. 2006; Holzer et al.
+2008); however, there are no data available for pregnant or lactating women or for infants
+from these populations. This group constitutes a potentially sensitive subpopulation, and one
+use of the model is the prediction of internal dose in the mother, fetus, and infant resulting
+from drinking the contaminated water. For women exposed to high levels of PFOA through
+drinking water, simulated exposure was from drinking water only. The reported
+concentrations for PFOA in drinking water were used (3.55 ppb for Little Hocking)(Emmett
+et al. 2006) and 0.519 ppb for Arnsberg (Holzer et al. 2008)), and drinking water rates for
+pregnant and lactating women were adapted from the data of Ershow et al. (1991). For nonpregnant, pregnant, and lactating women, the drinking water rates used were 19.1, 18.3, and
+21.4 mL/kg BW/day, respectively. These simulations were performed in the same way as for
+the general population: exposure was assumed to start before pregnancy, so the adult human
+model was run for 30 years in order to reach steady state, and the resulting tissue
+concentrations were used as the starting concentrations for the gestation model. When
+simulating the women in these communities, the concentration of PFOA in the water was
+held constant while the drinking water intake changed based on life stage. Drinking water
+exposure lasted for the entire length of gestation (39 embryonic weeks) and for 6 months
+after birth. Breast milk was the only exposure assumed for the infant; no further exposure
+was assumed for the child when breastfeeding stopped for these simulations.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 12
+
+Results
+Model Predictions
+
+$watermark-text
+$watermark-text
+
+Figures 3 and 4 illustrate the general features and trends of the gestation and lactation model
+predictions for PFOA (Figure 3) and PFOS (Figure 4). The top left plots in each figure show
+the PFC concentration in maternal plasma during pregnancy and lactation. As pregnancy
+progresses, the maternal PFC concentration decreases, and there is an increase right at the
+time of delivery. For the decrease in PFC concentration during pregnancy, the model is line
+with existing data (Fei et al. 2007; Fromme et al. 2010; Monroy et al. 2008) where maternal
+blood concentration has been measured at 2 time points during pregnancy and the
+concentration was observed to decrease. While there are data on the maternal plasma
+concentrations of PFCs at delivery and during lactation (see Figures 5 and 6 for these
+studies), no data on plasma concentration during the first few hours to days after birth could
+be found (the earliest time point found was 7 days postpartum (Liu et al. 2011)). One use of
+the model is to be able to use it to predict PFAA concentrations at time points where data is
+lacking, such as this one. The fetus and milk are routes of excretion for the mother, and the
+increase in PFC concentration predicted by the model could be due to these extra routes of
+excretion not being present (the fetus is gone and the mother does not start producing milk
+until a few days after birth (Neville and Morton 2001), which is also reflected in the current
+models). The mother's PFC concentration decreases during the first 6 months postpartum
+when she is breastfeeding, and then increases when breastfeeding stops. Thus, the fetus and
+milk are equivalent to routes of excretion for the mother. The top right plots in Figures 3 and
+4 show the PFC concentration in the fetus during gestation; as for the mother, the fetal
+concentration decreases as gestation progresses. For PFOA, the levels in maternal plasma
+are about the same as in the fetus, while for PFOS, maternal blood levels are about twice
+fetal levels. The bottom left plots in Figure 3 and 4 show the PFC concentrations in milk for
+up to 6 months of breastfeeding. As lactation progresses, the concentration in milk decreases
+for both chemicals (0.03 ug/L for PFOA and 0.01 ug/L for PFOS). The plots on the bottom
+right in Figures 3 and 4 show the PFC concentration in infant plasma for up to 6 months
+after birth. For simulation purposes, lactation lasted 6 months; the infants' only exposure to
+PFC was through breast milk. During the first 6 months of life, for infants who are
+exclusively breastfed, the rise in PFC concentration during this time is most likely due to
+exposure from breast milk.
+Evaluation by comparing modeled results with available human data
+
+$watermark-text
+
+Figure 5 compares the observed and model-predicted maternal and fetal plasma PFC
+concentrations and maternal:fetal (cord blood) PFC plasma concentration ratios. For PFOA,
+the observed maternal:fetal ratios range from 0.65 – 1.45. For PFOS, the observed ratios
+exhibit more variability than for PFOA and range from 1.03 – 3.5. The larger value of the
+PFOS ratio compared to PFOA indicates that there is probably more efficient placental
+transfer of PFOA (Olsen et al. 2009). Good agreement between the model-predicted and
+reported concentrations (Fei et al. 2007; Fromme et al. 2009; Hanssen et al. 2010; Inoue et
+al. 2004; Midasch et al. 2007; Monroy et al. 2008; Tittlemier et al. 2004; Kim et al. 2011a;
+Kim et al. 2011b) was observed; the model predicted concentrations and maternal:fetal
+ratios are all within a factor of 2 of the reported values. Maternal and fetal predictions were
+compared to the reported standard deviations, interquartile ranges, or concentration ranges if
+theses data were available; all predicted values were within one standard deviation of the
+reported mean, were within the interquartile range, or were within the reported concentration
+ranges of the observed data. Thus, based on the model-estimated maternal exposures of
+PFOA and PFOS, the model can reasonably predict the internal dose in the fetus.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 13
+
+$watermark-text
+
+Figure 6 compares the predicted and reported milk and plasma concentrations (and
+milk:plasma ratios where available) during lactation. Good agreement is observed between
+the model and the available human lactation data; the predicted concentrations and ratios for
+both PFOA and PFOS are all within a factor of 2.3 of the observed concentrations and
+ratios. Not all studies reported observed concentrations for both milk and plasma during
+lactation (Thomsen et al. 2010; Volkel et al. 2008; von Ehrenstein et al. 2009; Kim et al.
+2011b; Kim et al. 2011a). For some of the studies that examined milk concentration, PFOA
+was below the limit of detection (LOD) so no comparison could be made between the model
+predictions and data (Fromme et al. 2010; Volkel et al. 2008). All maternal exposure
+estimates for the studies listed (Fromme et al. 2010; Karrman et al. 2007; Liu et al. 2011)
+were made using maternal plasma concentrations either during pregnancy or lactation; the
+agreement between predicted and observed milk concentrations indicates that the model can
+reasonably predict the resulting PFAA concentrations in milk. This in turn can provide
+information on PFAA exposure in nursing infants. For the studies of von Ehrenstein et al.
+(2009) and Thomsen et al. (2010), no plasma concentrations were measured; thus, maternal
+exposure estimates had to be made using the observed milk concentrations (first
+observation). For both PFOA and PFOS, the model predictions for the second observations
+for both studies were within a factor of 2 of the observed milk concentrations, indicating
+good agreement with the data (comparison not shown in Figure 6). When predicted plasma
+and milk concentrations were compared to any available reported standard deviations,
+interquartile ranges, and concentration ranges, all predicted values were within one standard
+deviation of the reported mean, were within the interquartile range, or were within the
+reported concentration ranges of the observed data.
+
+$watermark-text
+
+The only study that provided information on infant plasma concentrations was Fromme et al.
+(2010)(they measured infant plasma concentrations at 6 months postpartum); thus, these
+were the only data that could be used for comparison of observed and model-predicted data
+for the PFAA levels in the infant. The model predictions are in good agreement with the
+reported values (within one standard deviation of the mean), indicating that the model can
+reasonably predict the internal dose in the infant several months after birth based solely on
+exposure through breast milk. The observed concentration for PFOS in infants at 6 months
+of age was 3.3 ug/L, and the predicted value is 3.5 ug/L. For PFOA, the observed
+concentration is 8.0 ug/L, while the predicted value is 8.2 ug/L.
+Sensitivity Analysis
+
+$watermark-text
+
+The normalized sensitivity coefficients for both the gestation and lactation models for PFOA
+and PFOS are shown in Table 4 (gestation, top; lactation, bottom). Several parameters affect
+the maternal and fetal plasma AUC during gestation. For the mother, these include
+parameters such as BW, the flow to the filtrate compartment (QFil; analogous to GFR), and
+the free fraction of chemical in plasma. All of the tissue volumes in the mother are scaled to
+BW (and maternal BW increases by approximately 25 kg during pregnancy); the flow to the
+filtrate compartment will affect how quickly the chemical is eliminated; and the free fraction
+of chemical controls how much chemical will be available for tissue uptake or filtration. Tm
+and Kt, the renal resorption parameters, determine how much chemical will get taken back
+into the plasma or eliminated through urinary excretion. Many of the other physiological
+parameters to which the maternal plasma AUC exhibits sensitivity determine how much
+chemical is available for uptake into tissues. Liver volume (VLC), fat volume (VFatC),
+liver:plasma partition coefficient (PL), fat:plasma partition coefficient (PFat), and the rest of
+tissues:plasma partition coefficient (PR) also control how much chemical gets into liver, fat,
+and rest of body tissues. Fat volume also constitutes a large % BW in humans
+(approximately 20% of BW in non-pregnant women), especially in pregnant women
+(approximately 30% of BW) as this increases as the pregnancy progresses.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 14
+
+$watermark-text
+
+In the fetus, maternal body weight and flow to the filtrate compartment affect the fetal
+plasma AUC in addition to the free fraction of chemical in maternal and fetal plasma (Free
+and FreeF) and the bidirectional placental transfer rate constants (ktrans1c and ktrans2c).
+The free fraction of chemical in maternal and fetal plasma and the placental transfer rates
+determine how much chemical is available for tissue uptake in both mother and fetus and
+how quickly chemical is transferred from the mother to the fetus (and from the fetus back to
+the mother). Maternal parameters such as liver volume, fat volume, liver:plasma PC,
+fat:plasma PC, and rest of body:plasma PC affect how much chemical can get into the
+maternal liver and fat versus being transferred to the fetus. The fetal plasma AUC is also
+affected by the maternal renal resorption parameters (Tm and Kt) as these will determine
+how much chemical is eliminated from the maternal system rather than being available for
+transfer to the fetus.
+
+$watermark-text
+$watermark-text
+
+In the lactation model, the maternal plasma AUC at 6 months postpartum is affected by
+many of the same maternal parameters as during gestation. BW is still a sensitive parameter
+as all of the tissue volumes and cardiac output are scaled to this parameter, and there is a
+decrease in BW during the lactation period. QFil (GFR) controls how quickly the chemical
+is filtered and is thus eliminated versus staying in the blood and being transferred to breast
+milk. Parameters such as liver volume, liver:plasma PC, fat:plasma PC, and rest of
+body:plasma PC all determine how much chemical is available for uptake into these tissues
+(liver, fat, and rest of body). Two parameters specific to the lactation model that affect the
+maternal plasma AUC are the milk:plasma partition coefficient (PmilkP) and the milk
+production/suckling rate (kmilkC). Because the model is constructed so that milk is in direct
+contact with plasma, and PmilkP will determine how much chemical is available for uptake
+into breast milk from maternal plasma. KmilkC will determine how quickly the chemical is
+then transferred from breast milk to the nursing infant, and the infant AUC is more sensitive
+to this parameter than the mother's plasma AUC. For the infant, some of the parameters that
+affect the fetal plasma AUC also affect the infant AUC at 6 months postpartum. These
+include the infant BW and several maternal parameters, such as GFR, liver volume,
+liver:plasma PC, fat:plasma PC, and rest of body:plasma PC; these maternal factors control
+how quickly the chemical is eliminated from the mother or partitioned into other tissues
+rather than partitioning into breast milk and transferring chemical to the infant. Parameters
+for milk production and partitioning into milk also affect the infant AUC. The infant's only
+exposure to PFAA is through milk, and kmilkC and PMilkP will control how much chemical
+reaches the breast milk and how much chemical is then received by the infant. The
+sensitivity of plasma AUC to PmilkP and kmilkC is in line with observations from
+epidemiology studies; milk appears to be a significant route of excretion of PFAA for the
+mother and a significant exposure source for the infant.
+Estimated exposures to PFOA and PFOS for the general population
+Table 5 lists each pregnancy and lactation study used for maternal exposure estimation. For
+most gestation studies, exposure was estimated based on the maternal plasma concentration
+at delivery, but a few were estimated based on concentrations observed earlier in pregnancy.
+During lactation, estimated exposures were based on maternal plasma concentration at a
+specified time point during lactation, or if that was not reported, estimated exposures were
+based on milk PFAA concentrations.
+For PFOA exposure during pregnancy, estimated maternal exposures ranged from 1.1e−04 to
+6.9e−04 ug/kg BW/day, and for PFOS, estimated maternal exposures ranged from 1.9e−04 to
+4.4e−03 ug/kg BW/day. For PFOA during lactation, estimated exposures ranged from
+1.1e−04 to 2.8e−04 ug/kg BW/day. However, PFOA concentrations in milk were < LOD in
+some studies (Fromme et al. 2010; Volkel et al. 2008), so no PFOA exposure could be
+estimated for the women in these studies based on milk concentrations. PFOS was detected
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 15
+
+in all studies in plasma or milk, and estimated maternal PFOS exposures during lactation
+ranged from 3.5e−04 to 2.3e−03 ug/kg BW/day. These estimates were obtained by modeling
+exposure as a generic input to the plasma compartment (see Methods) and assuming
+constant exposure over a 24 hour time period. Although exposure routes are not well
+understood, the women most likely have exposure to PFAAs throughout the day through
+food, dust, and in some cases, drinking water, and while exposure could be turned off while
+they are sleeping, etc., these compounds have such a long half-life that turning off exposure
+for a few hours probably will not make much difference in their blood levels.
+Predicted PFOA concentrations in populations exposed via contaminated drinking water
+
+$watermark-text
+
+One use of the PBPK models reported here was to predict the maternal, fetal, and infant
+PFOA concentrations resulting from high maternal exposure to PFOA in the drinking water.
+For the Little Hocking population, it is unknown for how long the residents were exposed to
+the contaminated water, but it is thought that some residents may have been exposed for
+long periods of time (Emmett et al. 2006). For the Arnsberg population, the exposure
+duration is also unknown, but unlike LH, it is suspected that the exposure was for only on
+the order of a few years (Holzer et al. 2008). The concentration of PFOA in the drinking
+water was approximately 7 times lower than that measured in Little Hocking (0.519 ppb vs.
+3.55 ppb). The shorter exposure duration and lower PFOA water concentration is not
+sufficient for the plasma PFOA concentration to reach steady state, so when the gestation
+model was started, the women from LH had reached steady state but the women from
+Arnsberg had not.
+
+$watermark-text
+
+Figure 7 (left panel) shows the model predicted PFOA concentrations in maternal and fetal
+plasma during gestation for LH (top) and Arnsberg (bottom). For LH, the PFOA plasma
+concentrations resulting from drinking water exposure resemble the model predicted
+concentrations for the general population (see Figure 3); both the maternal and fetal
+concentrations decrease as gestation progresses, and the concentrations are similar in
+magnitude in the mother and fetus. In the Arnsberg population, like LH, maternal and fetal
+concentrations are similar in magnitude. However, unlike for LH, where the maternal and
+fetal concentration decreases as gestation progresses, the concentrations in both mother and
+fetus in Arnsberg continue to increase over the course of gestation and then level off around
+50 ppb towards the end of pregnancy. This is most likely because the mother's plasma
+concentration did not reach steady state before pregnancy, and since she is still exposed
+during pregnancy, her plasma concentration is still rising to achieve steady state.
+
+$watermark-text
+
+The predicted maternal plasma concentrations for both communities was higher than the
+concentrations reported by Emmett et al. (2006) and Holzer et al. (2008) for men and nonpregnant women (448 ppb reported by Emmett vs. a median of 618 ppb predicted by the
+model for LH during the whole length of gestation and 26.7 ± 13.8 ppb reported by Holzer
+vs. a median concentration of 48 ppb predicted by the model for Arnsberg during gestation).
+This could be due to differences in tap water intake; intake rates reported for pregnant
+women by Ershow et al. (1991) may be higher than those for the LH or Arnsberg
+populations, resulting in higher model predicted maternal PFOA concentrations. The
+reported range for the LH water supply is 1.5 – 7.2 ppb, with a median concentration of 3.55
+ppb. If a PFOA water concentration in the range of 2 –3 ppb is used in the pregnancy model
+in combination with the mean tap water intake rate reported by Ershow et al. (1991), the
+maternal PFOA concentration over the length of pregnancy is within the range of blood
+PFOA concentrations reported by Emmett et al. (2006) for the LH cohort (interquartile
+range was 221–576 ug/L). In addition to variability in tap water intake rates and PFOA
+water concentration, it is likely that there is high variability the serum half-life of PFOA, and
+in how much exposure comes from drinking water vs. other sources (Loccisano et al. 2011).
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 16
+
+$watermark-text
+$watermark-text
+
+For lactation in both communities, the tissue concentrations at the end of embryonic week
+39 (9 months) were used as starting tissue concentrations for the lactation model. The
+reported water concentrations in both communities were used, and the reported tap water
+intake rate for lactating women reported by Ershow et al. (1991) was used (21.4 mL/kg BW/
+day). The women breast fed the infants for 6 months postpartum and breast milk was the
+only exposure source of PFOA for infants. The model-predicted maternal and infant plasma
+PFOA concentrations are shown in Figure 7 (right panel). The trends observed in the
+concentrations are similar to what is observed in the data of Fromme et al.(2010): the infant
+concentration is higher than that of the mother, but then starts to decrease at 6 months
+postpartum when breastfeeding stops. Fromme et al.(2010) reported low concentrations of
+PFOA in breast milk relative to plasma concentration, but that the intake of breast milk led
+to a higher body burden of PFOA in infants than in the mother (Fromme et al. 2010). This
+phenomenon is also observed in the LH and Arnsberg mothers and infants. During the first 6
+months of life, breast milk intake by infants ranges from approximately 400 – 1200 g/day
+(Dewey et al. 1991), so the rise in PFOA concentration during this time is probably due to
+exposure from breast milk. Thomsen et al.(2010) showed that even though the
+concentrations PFCs in breast milk are low compared to the levels in plasma, the infant
+intake through breast milk is comparable to the dietary intake for Norwegian adults
+(Thomsen et al. 2010). After 6 months, the intake of breast milk decreases, and thus the
+infants' plasma concentration decreases, although they most likely receive PFOA from other
+sources as they begin to eat other foods (Fromme et al. 2010; Llorca et al. 2010). At the
+same time that the infants' plasma concentrations are rising, the mothers' plasma
+concentration decreases, indicating that milk is a source of excretion of PFOA. Once
+breastfeeding stops, the mother's concentration starts to rise again because she is no longer
+excreting PFOA in milk.
+
+$watermark-text
+
+Although the gestation and lactation models appear to yield reasonable predictions of
+plasma PFOA concentration in pregnant and lactating women, the fetus, and infants in LH
+and Arnsberg, variability exists in several areas, including drinking water intake rates,
+variability in other exposure sources, and serum half-lives of PFOA, which all must be
+considered when using the model to make predictions. When simulating these populations,
+drinking water was assumed to be the only source of exposure, when in reality, the women
+and infants are probably receiving additional exposure from food consumed and dust in their
+environment. However, because these populations had very high levels of PFOA in their
+water, the contribution from food or dust would be very small compared to what they are
+exposed to from water and probably would not contribute greatly to their overall blood
+PFOA concentration in these cases.
+Filtration systems have since been installed in both the LH and Arnsberg communities in
+order to reduce PFOA exposure (and subsequently serum PFOA concentrations are not as
+high as they once were). However, this exercise demonstrates the predictive ability of the
+model and where it can be used where data on potentially susceptible individuals is lacking.
+
+Discussion
+Gestation and lactation models enable understanding of how physiologic changes during
+development may affect disposition of chemicals in the mother, fetus, and infant. The
+models presented here provide a framework for understanding the relationship between
+maternal exposure and target tissue dose in the fetus or infant. These human PBPK models
+were used to estimate maternal exposure to PFAA for women in the general population, and
+based on the estimated exposure the models are also able to simulate PFOA and PFOS
+concentrations in the fetus, milk, and infant. Limited data are available on the internal dose
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 17
+
+in the fetus and infant and the models provide indirect estimates in these sensitive
+populations where risk is a concern.
+Gestation and Lactation Models
+
+$watermark-text
+
+The agreement between the predicted and observed concentrations of PFOA and PFOS in
+maternal plasma or milk, or in infant or cord plasma was good, with the ratios of predicted
+to observed concentrations all within a factor of 2. While this agreement was reassuring, the
+predicted values were often based on observed values that were temporally close, thus the
+prediction task was only modestly challenging. The observed concentrations of PFCs in
+maternal plasma, cord plasma, or milk were reported at time points that were only several
+days to weeks apart. Because these chemicals have such long half-lives and exposures
+probably will not change appreciably over time periods of this length, the magnitude of the
+concentrations in plasma or milk probably will not change greatly; however, if observations
+had been reported over several years, exposures and thus plasma levels may change, and it
+may be more difficult to obtain model predictions that are in close agreement with the
+reported data. Validation data based on paired samples with greater temporal separation or
+with greater expected variation, such as in women who did or did not breast feed, would
+support a more informative validation.
+
+$watermark-text
+
+Another use of the models is the comparison of internal dose in the pregnant mother and
+fetus and lactating mother and nursing infant. During gestation, maternal and fetal levels of
+PFOA are similar and both decrease as gestation progresses. For PFOS, the same trend of
+decreasing concentration is observed; however, the maternal levels of PFOS are about twice
+that of what is observed in the fetus (see Figures 5 and 6). During lactation, however, the
+concentration of PFAA in the infant is equal to or higher than the mother's concentration
+(which decreases during lactation), indicating that milk is a route of excretion for the mother
+and also that intake in breast milk is a substantial source of exposure for the infant. This
+conclusion is in line with the findings of Haug et al. and Thomsen et al.; they found that
+although the concentrations of PFAA in milk are low relative to blood, the intake from milk
+by the infant is comparable to dietary intake by adults (Haug et al. 2011; Thomsen et al.
+2010).
+
+$watermark-text
+
+One application of our human models presented here was to estimate maternal exposure to
+PFOA and PFOS using observed maternal blood PFAA concentrations from biomonitoring
+studies in pregnant or lactating women. The women in these studies were considered
+“general population” in that they were not known to be exposed to unusually high
+concentrations of PFOA or PFOS (for example, not occupationally exposed or drinking
+water with higher than average concentrations). Because contributions from various
+exposure sources were not known, intake for the general population exposure was simulated
+as a direct input to blood (effectively an IV dose). For PFOA during pregnancy and
+lactation, estimated maternal exposures ranged from 1.1e−04 to 6.9e−04 ug/kg BW/day; for
+PFOS, estimated maternal exposures ranged from 1.9e−04 to 4.4e−03 ug/kg BW/day. These
+estimates are similar to those estimated for the US general population using the adult human
+model (1.3e−04 – 4.4e−04 ug/kg BW/day for PFOA and 8.5e−04 – 1.8e−03 ug/kg BW/day for
+PFOS)(Loccisano et al. 2011), and depend on the region in which the women lived or in
+which years the blood was collected. These estimates were based on PFAA blood levels
+measured in participants in the NHANES 2003–2004 study and in US Red Cross blood
+donors (Calafat et al. 2007; Olsen et al. 2008). In 2002, 3M completely ceased production of
+PFOS-producing chemicals, but in some of the cohorts, the women's blood was sampled
+over a period of several years, including the years before the phase-out. The overall means
+or medians reported in these studies may reflect higher past exposure for some women.
+From the exposures estimated from the models, it appears that pregnant and lactating
+women do not have appreciably higher exposures to PFOA or PFOS than the general
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 18
+
+population, even though the dose was scaled to increasing maternal BW. Increased food
+intake due to increased caloric needs in pregnant and lactating women was accounted for by
+scaling the daily dose to the increasing maternal BW and then increasing the dose by 25%
+during the first 6 months after delivery. For studies that had points during pregnancy and
+lactation, the exposure was estimated for pregnancy, increased by 25% during for the first 6
+months postpartum, and decreased back to the pre-pregnancy estimate after 6 months.
+
+$watermark-text
+
+For studies with only a plasma or milk observation during lactation, exposure was estimated
+to yield this observed concentration. Thus, the estimated intake may not reflect recent
+increases that occur with the onset of lactation. These compounds have a long half-life; it
+will take some time to reach a steady state plasma concentration. With a higher intake
+during this short period, the blood concentration probably has not reached steady state.
+However, this is the best exposure estimate that can be obtained without knowing more
+specific information about their intake. Because food intake has been suggested to be the
+main exposure route to PFAA in adult general populations (Fromme et al. 2009; Trudel et al.
+2008; Vestergren and Cousins 2009; Tittlemier et al. 2007), food intake by women in these
+life stages is probably the most important exposure route to consider when estimating
+exposure.
+
+$watermark-text
+
+In LH and Arnsberg the gestation and lactation models yield reasonable predictions of
+plasma PFOA concentration in pregnant and lactating women, the fetus, and infants,
+although variability exists in several areas, including drinking water intake rates, other
+exposure sources, and serum half-lives of PFOA that should be considered when using the
+model to make predictions. Also, when simulating these populations, drinking water was the
+only source of exposure. Women and infants may receive additional exposure from food and
+from dust in their environment; however, because the drinking water levels of PFOA were
+so high for these populations, the contribution from food would be very small compared to
+what they are exposed to from water and probably would not contribute much to their
+overall blood PFOA concentration in these cases. Filtration systems have since been
+installed in both the LH and Arnsberg communities to reduce PFOA exposure (and
+subsequently serum PFOA concentrations are not as high as they once were). However, this
+exercise with only drinking water as an exposure source demonstrates the predictive
+capacity of the model and situations where it can be used even though data are lacking on
+potentially susceptible individuals.
+
+$watermark-text
+
+A recent study on PFAA intake in the Netherlands, based on analysis of PFAA
+concentrations in food, estimated the median intake to be 0.2 ng/kg BW/day for PFOA and
+0.3 ng/kg BW/day for PFOS (Noorlander et al. 2011). The model-predicted intake of PFOA
+is in excellent agreement with their estimate; for a 3.8-yr half-life, our median estimated
+intake was 0.15 ng/kg BW/day. For PFOS, the model-estimated intake is high; our median
+estimated intake was 0.98 ng/kg BW/day. This discrepancy could arise for several reasons:
+the intake was estimated for studies where the samples were taken from a range of years,
+some starting in 1994 (before the phase-out of PFOS/PFOS products). The Noorlander et al.
+study analyzed food samples from 2009, so it does not reflect the decreasing amount of
+PFOS exposure in foods over time. The studies used in the current work were conducted in
+several geographic areas (Noorlander was Netherlands only), and this geographic variation
+might contribute to the difference. PFOA and PFOS can be created by the breakdown of
+fluoropolymers, to which people are exposed. Here only direct exposure to PFOA and PFOS
+was considered; a more complete estimate of exposure would include the contribution of
+breakdown products in estimates of internal exposure.
+The same PFAA-specific parameters that were used in the adult human model were used
+when extending the adult model to pregnancy and lactation. Good agreement was observed
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 19
+
+$watermark-text
+
+between the model predictions and the observed values for the gestation and lactation
+models using the same chemical-specific parameters that worked in the adult model. The
+same PFAA-specific parameters that were used in the adult human model could be used in
+the pregnancy/lactation models, indicating that tissue partitioning, protein binding, an renal
+resorption of these chemicals do not change significantly during pregnancy. Modification of
+the physiology to account for the life stage differences appears to be sufficient to describe
+the pharmacokinetics of PFAA in pregnant/lactating women, the fetus, and the infant.
+Possible physiology changes that may alter the PK of PFAAs during these life stages include
+the fat volume increase and growth of the placenta and fetus during pregnancy and the
+addition of the milk compartment during lactation. Although PFAAs do not partition
+appreciably into fat, this compartment serves as an exclusionary volume that may allow for
+higher concentrations or greater distribution in the plasma or other maternal tissues. The
+placenta and fetus contain lower concentrations of PFAAs relative to maternal tissues, but
+they are additional compartments where PFAAs are found, thus lowering concentrations in
+the mother. In addition, the higher GFR during pregnancy may allow for faster excretion of
+PFAAs. During lactation, milk serves as a route of excretion for the mother, thus changing
+the normal clearance kinetics of PFAAs. Maternal exposures estimated during pregnancy
+allow for good model predictions of cord blood concentrations at delivery and maternal
+plasma and milk concentrations during lactation. Although some additional physiological
+variables are altered during pregnancy such as levels of serum PFAA-binding proteins
+(Perucca and Crema 1982), there are no available data on how this modification may affect
+PFAA binding during pregnancy, so the non-pregnant values were used.
+
+$watermark-text
+
+As in the rat models, placental transfer of chemical was described as a simple diffusion
+process, and still provided good agreement between predicted cord blood concentrations and
+available data. There is evidence from in vitro data that human organic anion transporter 4
+(OAT4) in the kidney can mediate saturable cellular uptake of PFAA (Yang et al. 2010);
+there is also evidence that these same transporters are present in the human placenta
+(Nakagawa et al. 2009). OAT4 is expressed in the fetal-facing membrane and thought to be
+responsible for the elimination and detoxification of harmful anionic substances from the
+fetus (Nakagawa et al. 2009; Cha et al. 2000). No data on a Km for hOAT4 in the placenta
+were found. Based on the fact that OAT4 can transport PFAA and that OAT4 is found in the
+placenta, this may be a possible transport mechanism for removal of PFAA from the fetus in
+addition to simple diffusion across the placenta. If this is a detoxification mechanism,
+saturation of this transporter may mean that PFAA could accumulate in the fetus and the
+fetus would thus experience increased PFAA exposure.
+
+$watermark-text
+
+Unlike the rat lactation models, which had simple diffusion for transport of PFAA from
+mammary tissue into milk, the human models had flow-limited transport of PFAA into milk.
+No human data were found for PFAA concentrations in mammary tissue, and the flowlimited description appears to be sufficient. However, limited data were available for
+estimating the milk:plasma partition coefficient, especially for PFOA. In several of the
+available studies that measured the concentration of PFAA in milk, the concentration of
+PFOA was below the detection limit; thus, only a limited number of measurements were
+available with which to estimate the PFOA milk:plasma partition coefficient. Additional
+biomonitoring data on matched serum and milk concentrations may improve the lactation
+model predictions.
+For renal resorption, the same parameters used in the adult human model were used for the
+pregnant and lactating woman. There were no available data on how resorption of PFAA
+may be altered during pregnancy; however, use of the non-pregnant adult values gave model
+predictions in good agreement with observed data. Similarly, for the fetus or newborn, there
+were little available data for PFAA-specific kinetics, such as plasma protein binding or renal
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 20
+
+reabsorption. Additional data on renal resorption of PFAA in the mother, fetus, and infant
+(and thus how long the chemicals will be retained in the body) should improve the ability of
+the models to recapitulate human studies.
+
+$watermark-text
+$watermark-text
+
+Another factor to be considered in risk assessments for PFAA is the difference in renal
+reuptake and half-lives across species. Renal reabsorption is thought to be responsible for
+the long half-lives observed in humans and other species (Andersen et al. 2006; Han et al.
+2012; Loccisano et al. 2011). The female rat does not express high levels of the renal
+transporter (Oatp1a1) thought to be responsible for resorption and has a very short half-life.
+In developmental toxicity studies in rats with PFAAs (PFOA especially), no remarkable
+findings are observed in the mother or fetuses even at very high maternal doses (a NOAEL
+of 150 mg/kg/day PFOA was reported for developmental toxicity by Gortner et al. (1981),
+and maternal toxicity at this level was indicated by a decrease in body weight). This species
+difference is attributed to the fact that the chemical is eliminated quickly by the female rat
+and thus adverse effects are not observed. In mice, the half-life of PFAA is longer (12–20
+days (Rodriguez et al. 2009)), a pronounced sex difference in clearance is not observed (Lou
+et al. 2009), and developmental effects (increased neonatal mortality, eye opening delays,
+and alterations in mammary gland development) have been observed at lower doses than in
+rats, indicating that mice may be a more sensitive species than rats (Abbott et al. 2007; Lau
+et al. 2006; White et al. 2007). Currently, it is not clear if the diminished sex difference and
+slower clearance of PFAA mice (and thus greater sensitivity to PFAA exposure) is related to
+renal transporters such as Oatp1a1 for PFAA (Tatum-Gibbs et al. 2011). Although the
+mouse half-life is longer than the female rat half-life and mice appear to be a more sensitive
+species based on administered dose, both half-lives are much shorter than the multi-year
+half-life estimated for humans. The chemical is most likely resorbed much more efficiently
+in humans than in the female rat or in mice, and this difference in renal reuptake and
+extended half-lives should be considered in risk assessments of PFAAs. Because the PBPK
+model described here implements renal resorption and can thus account for the differential
+half-lives across species, use of the model can improve the scientific basis of risk assessment
+for PFAAs by reducing some of the uncertainty associated with extrapolating rat or mouse
+data to humans.
+
+$watermark-text
+
+Further efforts to refine the model will require more detailed kinetic studies in pregnant and
+lactating women and infants. The sensitivity analysis identified the model parameters for
+which additional data would be most helpful. Data on plasma protein binding of PFAA and
+how that is affected by pregnancy, placental transfer kinetics, and renal resorption of PFAA
+in pregnant and lactating women, the fetus, and infant would improve model predictions.
+Also, more data on PFAA concentrations in the fetus and infant would be helpful. The
+gestation model currently includes a compartment for amniotic fluid, which was included in
+the rat gestation model because concentration data were available for the rat. Amniotic fluid
+is a matrix that can be monitored during pregnancy; however, as yet there are no data on
+PFAA levels in human amniotic fluid. Concentrations of PFAA in the infant after cessation
+of breastfeeding and intake of solid food begins would be helpful in determining how much
+exposure infants receive from breast milk vs. other foods. As the child grows and begins to
+eat other foods, exposure to PFAA will most likely come from additional sources.
+These models may help to compare doses and observed effects in animals to the human
+setting and support risk assessments. By incorporating known developmental physiology
+changes and chemical transport processes that are capable of describing the kinetics of
+PFAA, it is possible to estimate the levels of PFAA in susceptible populations where these
+data are limited or not easily measured, such as the fetus and infant. Given that these
+populations are exposed to PFAA through food intake, drinking water, etc., an approach to
+determine their internal dose and how that relates to the observed effects in animals is
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 21
+
+needed. In this work, a set of models of describing PFAA kinetics that incorporate the
+necessary physiology and processes to address a variety of species and life stages has been
+developed.
+
+Supplementary Material
+Refer to Web version on PubMed Central for supplementary material.
+
+Acknowledgments
+$watermark-text
+
+The authors would like to thank Dr. John Butenhoff at 3M Company for helpful discussions, comments, and
+revisions. We would also like to thank Dr. Sofia Salas at Diego Portales University in Chile for generously sharing
+her data on maternal plasma volume expansion.
+Funding Financial support was provided by the 3M and DuPont Companies. This research was also supported in
+part by the Intramural Research Program of the National Institutes of Health (NIH), National Institute of
+Environmental Health Sciences (NIEHS).
+
+Abbreviations used
+
+$watermark-text
+
+PFAAs
+
+collectively refers to perfluoroalkyl acid carboxylates and sulfonates
+
+PFCs
+
+perfluorinated compounds
+
+PBPK model
+
+physiologically based pharmacokinetic model
+
+PFOA
+
+perfluorooctanoate
+
+PFOS
+
+perfluorooctane sulfonate
+
+References
+
+$watermark-text
+
+Abbott BD, Wolf CJ, Schmid JE, Das KP, Zehr RD, Helfant L, Nakayama S, Lindstrom AB, Strynar
+MJ, Lau C. Perfluorooctanoic acid induced developmental toxicity in the mouse is dependent on
+expression of peroxisome proliferator activated receptor-alpha. Toxicol. Sci. 2007; 98:571–581.
+[PubMed: 17488742]
+Alcorn J, McNamara PJ. Pharmacokinetics in the newborn. Adv. Drug Deliv. Rev. 2003; 55:667–686.
+[PubMed: 12706549]
+Andersen ME, Butenhoff JL, Chang SC, Farrar DG, Kennedy GL, Lau C, Olsen GW, Seed J, Wallace
+KB. Perfluoroalkyl acids and related chemistries--toxicokinetics and modesl of action. Toxicol. Sci.
+2008; 102:3–14. [PubMed: 18003598]
+Andersen ME, Clewell HJ, Tan Y-M, Butenhoff JL, Olsen G. Pharmacokinetic modeling of saturable,
+renal absorption of perfluoroalkylacids in monkeys--probing the determinants of long plasma halflives. Toxicology. 2006; 227:156–164. [PubMed: 16978759]
+Apelberg BJ, Witter FR, Herbstman JB, Calafat AM, Halden RU, Needham LL, Goldman LR. Cord
+serum concentrations of perfluorooctane sulfonate (pfos) and perfluooctanoate (pfoa) in relation to
+weight and size at birth. Environ. Health. Persp. 2007; 115:1670.
+Bartell SM, Calafat AM, Lyu C, Kato K, Ryan PB, Steenland K. Rate of decline in serum pfoa
+concentrations after granular activated carbon filtration at two public water systems in ohio and
+west virginia. Environ. Health Persp. 2010; 118:222–228.
+Beall MH, van den Wijngaard JPHM, van Gemert MJC, Ross MG. Regulation of amniotic fluid
+volume. Placenta. 2007; 28:824–832. [PubMed: 17303237]
+Beesoon S, Webster GM, Shoeib M, Harner T, Benskin JP, Martin JW. Isomer profiles of
+perfluorochemicals in matched maternal, cord, and house dust samples: Manufacturing sources and
+transplacental transfer. Environ. Health Persp. 2011; 119:1659–1664.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 22
+
+$watermark-text
+$watermark-text
+$watermark-text
+
+Benskin JP, De Silva AO, Martin LJ, Arsenault G, McCrindle R, Riddell N, Mabury SA, Martin JW.
+Disposition of perfluorinated acid isomers in sprague-dawley rats; part 1: Single dose. Environ.
+Toxicol. Chem. 2009; 28:542–554. [PubMed: 18939892]
+Brown RP, Delp MD, Lindstedt SL, Rhomberg LR, Beliles RP. Physiological parameter values for
+physiologically based pharmacokinetic models. Toxicol. Ind. Health. 1997; 13:407–484. [PubMed:
+9249929]
+Calafat AM, Wong L-Y, Kuklenyik Z, Reidy JA, Needham LL. Polyfluoroalkyl chemicals in the u.S.
+Population: Data from the national health and nutrition examination survey (nhanes) 2003–2004
+and comparisons with nhanes 1999–2000. Environ. Health. Persp. 2007; 115:1596–1602.
+Case MT, York RG, Christian MS. Rat and rabbit oral developmental toxicology studies with two
+perfluorinated compounds. Int. J. Toxicol. 2001; 20:101–109. [PubMed: 11354466]
+CDC. Vital and Health Statistics, Series 11, Number 246. DEPARTMENT OF HEALTH AND
+HUMAN SERVICES, Centers for Disease Control and Prevention, National Center for Health
+Statistics; 2002. 2000 cdc growth charts for the united states: Methods and development.
+CDC. MMWR Morb Mortal Wkly Rep. DEPARTMENT OF HEALTH AND HUMAN SERVICES,
+Centers for Disease Control and Prevention, National Center for Health Statistics; 2004. Trends in
+intake of energy and macronutrients--united states, 1971–2000.
+Cha SH, Sekine T, Kusuhara H, Yu E, Kim JY, Kim DK, Sugiyama Y, Kanai Y, Endou H. Molecular
+cloning and characterization of multispecific organic anion transporter 4 expressed in the placenta.
+J. Biol. Chem. 2000; 275:4507–4512. [PubMed: 10660625]
+Clewell HJ, Gearhart JM, Gentry PR, Covington T, VanLandingham CB, Crump KS, Shipp A.
+Evaluation of the uncertainty in an oral reference dose for methylmercury due to interindividual
+variability in pharmacokinetics. Risk Ana. 1999; 19:547–558.
+Davies B, Morris T. Physiological parameters in laboratory animals and humans. Pharm. Re. 1993;
+10:1093–1095.
+DePierre, JW. Personal communication. 2009.
+Dewey KG, Heinig MJ, Nommsen LA, Lonnerdal B. Adequacy of energy intake among breast-fed
+infants in the darling study: Relationships to growth velocity, morbidity, and activity levels. J.
+Pedia. 1991; 119:538–547.
+Dunlop W. Renal physiology in pregnancy. Postgrad. Me. 1979; 55:329–332.
+Dunlop W. Serial changes in renal hemodynamics during normal human pregnancy. Br. J. Obstet.
+Gyneco. 1981; 88:1–9.
+Duvekot JJ, Cheriex EC, Pieters FAA, Menheere PPCA, Schouten HJA, Peeters LLH. Maternal
+volume homeostasis in early pregnancy in relation to fetal growth restriction. Obstet. Gynecol.
+1995; 85:361–367. [PubMed: 7862373]
+Ehresman DJ, Froehlich JW, Olsen GW, Chang S-C, Butenhoff JL. Comparison of human whole
+blood, plasma, and serum matrices for the determination of perfluorooctanesulfonate (pfos),
+perfluorooctanoate (pfoa), and other fluorochemicals. Environ. Res. 2007; 103:176–184.
+[PubMed: 16893538]
+Emmett EA, Shofer FS, Zhang H, Freeman D, Desai C, Shaw LM. Community exposure to
+perfluorooctanoate: Relationships between serum concentrations and exposure sources. J. Occup.
+Environ. Med. 2006; 48:759–770. [PubMed: 16902368]
+Ershow AG, Brown LM, Cantor KP. Intake of tapwater and total water by pregnant and lactating
+women. Am. J. Public Healt. 1991; 81:328–334.
+Fei C, McLaughlin JK, Tarone RE, Olsen J. Perfluorinated chemicals and fetal growth: A study within
+the danish national birth cohort. Environ. Health. Persp. 2007; 115:1677.
+Fenton SE, Reiner JL, Nakayama SF, Delinsky AD, Stanko JP, Hines EP, White SS, Lindstrom AB,
+Strynar MJ, Petropoulou S-SE. Analysis of pfoa in dosed cd-1 mice. Part 2: Disposition of pfoa in
+tissues and fluids from pregnant and lactating mice and their pups. Reprod. Toxicol. 2009;
+27:365–372. [PubMed: 19429407]
+Fiserova-Bergerova, V. Biological-mathematical modeling of chronic toxicity: Wright-Patterson Air
+Force Base. Aerospace Medical Research Laboratory; OH: 1975.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 23
+
+$watermark-text
+$watermark-text
+$watermark-text
+
+Fromme H, Mosch C, Morovitz M, Alba-Alejandre I, Boehmer S, Kiranoglu M, Faber F, Hannibal I,
+Genzel-Boroviczeny O, Koletzko B, Volkel W. Pre- and postnatal exposure to perfluorinated
+compounds (pfcs). Environ. Sci. Technol. 2010; 44:7123–7129. [PubMed: 20722423]
+Fromme H, Tittlemier SA, Volkel W, Wilhelm M, Twardella D. Perfluorinated compounds--exposure
+assessment for the general population in western countries. Int. J. Hyg. Environ. Healt. 2009;
+212:239–270.
+Gentry PR, Covington T, Andersen ME, Clewell HJ. Application of a physiologically based
+pharmacokinetic model for isopropanol in the derivation of a reference dose and reference
+concentration. Reg. Toxicol. Pharmacol. 2002; 36:51–68.
+Gentry PR, Covington T, Clewell HJ. Evaluation of the potential impact of pharmacokinetic
+differences on tissue dosimetry in offspring during pregnancy and lactation. Reg. Toxicol.
+Pharmacol. 2003; 38:1–16.
+Gortner, EG. Oral teratology study of t-2998coc in rats. Riker Laboratories, Inc.; St. Paul, Mn: 1981.
+Subsidiary of 3M
+Grasty RC, Bjork JA, Wallace KB, Lau C, Rogers JM. Effects of prenatal perfluorooctane sulfonate
+(pfos) exposure on lung maturation in the perinatal rat. Birth Defects Res. Part B. 2005; 74:405–
+416.
+Han X, Nabb DL, Russell MH, Kennedy GL, Rickard RW. Renal elimination of perfluorocarboxylates
+(pfcas). Chem. Res. Toxicol. 2012; 25:35–46. [PubMed: 21985250]
+Han X, Snow TA, Kemper RA, Jepson GW. Binding of perfluorooctanoic acid to rat and human
+plasma proteins. Chem. Res. Toxicol. 2003; 16:775–781. [PubMed: 12807361]
+Hanssen L, Rollin H, Odland JO, Moe MK, Sandanger TM. Perfluorinated compounds in maternal
+serum and cord blood from selected areas of south africa: Results of a pilot study. J. Environ.
+Monitor. 2010; 12:1355–1361.
+Harada K, Inoue K, Morikawa A, Yoshinaga T, Saito N, Koizumi A. Renal clearance of
+perfluorooctane sulfonate and perfluorooctanoate in humans and their species-specific excretion.
+Environ. Res. 2005; 99:253–261. [PubMed: 16194675]
+Haug, L. Personal communication. 2010.
+Haug L, Huber S, Becher G, Thomsen C. Characterization of human exposure pathways to
+perfluorinated compounds--comparing exposure estimates with biomarkers of exposure. Environ.
+Int. 2011; 37:687–693. [PubMed: 21334069]
+Hinderliter PM, Mylchreest E, Gannon SA, Butenhoff JL, Kennedy GL Jr. Perfluorooctanoate:
+Placental and lactational transport pharmacokinetics in rats. Toxicolog. 2005; 211:139–148.
+Holzer J, Midasch O, Rauchfuss K, Kraft M, Reupert R, Angerer J, Kleeschulte P, Marschall N,
+Wilhelm M. Biomonitoring of perfluorinated compounds in children and adults exposed to
+perfluorooctanoate-contaminated drinking water. Environ. Health Persp. 2008; 116:651–657.
+Inoue K, Okada F, Ito R, Kato S, Sasaki S, Nakajima S, Uno A, Saijo Y, Sata F, Yoshimura Y, Kishi
+R, Nakazawa H. Perfluorooctane sulfonate (pfos) and related perfluorinated compounds in human
+maternal and cord blood samples: Assessment of pfos exposure in a susceptible population during
+pregnancy. Environ. Health. Persp. 2004; 112:1204–1207.
+Johnson JD, Gibson SJ, Ober RE. Cholestyramine-enhanced fecal elimination of carbon-14 in rats
+after administration of ammonium [14c]perfluorooctanoate or potassium
+[14c]perfluorooctanesulfonate. Fund. Appl. Toxicol. 1984; 4:972–976.
+Karrman A, Ericson I, van Bavel B, Darnerud PO, Aune M, Glynn A, Lignell S, Lindstrom G.
+Exposure of perfluorinated chemicals through lactation: Levels of matched human milk and serum
+and a temporal trend, 1996-2004, in sweden. Environ. Health. Persp. 2007; 115:226–230.
+Katakura M, Kudo N, Tsuda T, Hibino Y, Mitsumoto A, Kawashima Y. Rat organic anion transporter
+3 and organic anion transporting polypeptide 1 mediate perfluorooctanoic acid transport. J. Health
+Sci. 2007; 53:77–83.
+Kato Y, Kuge K, Kusuhara H, Meier PJ, Sugiyama Y. Gender differences in the urinary excretion of
+organic anions in rats. J. Pharmacol. Exp. Ther. 2002; 302:483–489. [PubMed: 12130705]
+Kerstner-Wood, C.; Coward, L.; Gorman, G. Protein binding of perfluorobutane sulfonate,
+perfluorohexane sulfonate, perfluorooctane sulfonate, and perfluorooctanoate to plasma (human,
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 24
+
+$watermark-text
+$watermark-text
+$watermark-text
+
+rat, and monkey) and various human-derived plasma protein fractions. Southern Research
+Corporation; 2003.
+Kim S-K, Lee KT, Kang CS, Tao L, Kannan K, Kim K-R, Kim C-K, Lee JS, Park PS, Yoo YW, Ha
+JY, Shin Y-S, Lee J-H. Distribution of perfluorochemicals between sera and milk from the same
+mothers and implications for prenatal and postnatal exposures. Environ. Pollut. 2011a; 159:169–
+174. [PubMed: 20932617]
+Kim S, Choi K, Ji K, Seo J, Kho Y, Park J, Kim S, Park S, Hwang I, Jeon J, Yang H, Giesy JP. Transplacental transfer of thirteen perfluorinated compounds and relations with fetal thyroid hormones.
+Environ. Sci. Technol. 2011b; 45:7465–7472. [PubMed: 21805959]
+Krauer B, Krauer F, Hytten FE. Drug disposition and pharmacokinetics in the maternal-placental-fetal
+unit. Pharmacol. Ther. 1980; 10:301–328. [PubMed: 7413726]
+Kudo N, Katakura M, Sato Y, Kawashima Y. Sex hormone-regulated renal transport of
+perfluorooctanoic acid. Chem.-Biol. Interact. 2002; 139:310–316.
+Kudo N, Sakai A, Mitsumoto A, Hibino Y, Tsuda T, Kawashima Y. Tissue distribution and hepatic
+subcellular distribution of perfluorooctanoic acid at low doses are different from those at high
+doses. Biol. Pharm. Bull. 2007; 30:1535–1540. [PubMed: 17666816]
+Kuslikis BI, Vanden Heuvel JP, Peterson RE. Lack of evidence for perfluorodecanoyl- or
+perfluorooctanoyl-coenzyme a formation in male and female rats. J. Biochem. Toxicol. 1992;
+7:25–29. [PubMed: 1588571]
+Lau C. Perfluoroalkyl acids: Recent activities and research progress. Reprod. Toxicol. 2009; 27:209–
+211. [PubMed: 19429400]
+Lau C, Anitole K, Hodes C, Lai D, Pfahles-Hutchens A, Seed J. Perfluoroalkyl acids: A review of
+monitoring and toxicological findings. Toxicol. Sci. 2007; 99:366–394. [PubMed: 17519394]
+Lau C, Butenhoff JL, Rogers JM. The developmental toxicity of perfluoroalkyl acids and their
+derivatives. Toxicol. Appl. Pharmacol. 2004; 198:231–241. [PubMed: 15236955]
+Lau C, Thibodeaux JR, Hanson RG, Narotsky MG, Rogers JM, Lindstrom AB, Strynar MJ. Effects of
+perfluorooctanoic acid exposure during pregnancy in the mouse. Toxicol. Sc. 2006; 90:510–518.
+[PubMed: 16415327]
+Lau C, Thibodeaux JR, Hanson RG, Rogers JM, Grey BE, Stanton ME, Butenhoff JL, Stevenson LA.
+Exposure to perfluorooctane sulfonate during pregnancy in rat and mouse. 2.: Postnatal evaluation.
+Toxicol. Sci. 2003; 74:382–392. [PubMed: 12773772]
+Lindstrom AB, Strynar MJ, Libelo EL. Polyfluorinated compounds: Past, present, and future. Environ.
+Sci. Technol. 2011; 45:7954–7961. [PubMed: 21866930]
+Liu J, Li J, Liu Y, Chan HM, Zhao Y, Cai Z, Wu Y. Comparison on gestation and lactation exposure
+of perfluorinated compounds for newborns. Environ. Int. 2011; 37:1206–1212. [PubMed:
+21620474]
+Llorca M, Farre M, Pico Y, Teijon ML, Alvarez JG, Barcelo D. Infant exposure to perfluorinated
+compounds: Levels in breast milk and commercial baby food. Environ. Int. 2010; 36:584–592.
+[PubMed: 20494442]
+Loccisano AE, Campbell JL, Andersen ME, Clewell HJ. Evaluation and prediction of
+pharmacokinetics in the monkey and human using a pbpk model. Reg. Toxicol. Pharmacol. 2011;
+59:157–175.
+Loccisano AE, Campbell JL, Butenhoff JL, Andersen ME, Clewell HJ. Evaluation of placental and
+lactational pharmacokinetics of pfoa and pfos in the pregnant, lactating, fetal, and neontal rat using
+a physiologically based pharmacokinetic model. Reprod. Toxicol. 2012a; 33:468–490. [PubMed:
+21872655]
+Loccisano AE, Campbell JL, Butenhoff JL, Andersen ME, Clewell HJ. Comparison and evaluation of
+pharmacokinetics of pfoa and pfos in the adult rat using a physiologically based pharmacokinetic
+model. Reprod. Toxicol. 2012b; 33:452–467. [PubMed: 21565266]
+Lou I, Wambaugh JF, Lau C, Hanson RG, Lindstrom AB, Strynar MJ, Zehr RD, Setzer RW, Barton
+HA. Modeling single and repeated dose pharmacokinetics of pfoa in mice. Toxicol. Sci. 2009;
+107:331–341. [PubMed: 19005225]
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 25
+
+$watermark-text
+$watermark-text
+$watermark-text
+
+Luebker DJ, Case MT, York RG, Moore JA, Hansen KJ, Butenhoff JL. Two-generation reproduction
+and cross-foster studies of perfluorooctanesulfonate (pfos) in rats. Toxicology. 2005a; 215:126–
+148. [PubMed: 16146667]
+Luebker DJ, York RG, Hansen KJ, Moore JA, Butenhoff JL. Neonatal mortality from in utero
+exposure to perfluorooctanesulfonate (pfos) in sprague-dawley rats: Dose-response, and
+biochemical and pharmacokinetic parameters. Toxicology. 2005b; 215:149–169. [PubMed:
+16129535]
+Midasch O, Drexler H, Hart N, Beckmann MW, Angerer J. Transplacental exposure of neonates to
+perfluorooctanesulfonate and perfluorooctanoate: A pilot study. Int. Arch. Occup. Environ. Health.
+2007; 80:643–648. [PubMed: 17219182]
+Milman N, Bergholt T, Byg K-E, Eriksen L, Graudal N. Iron status and iron balance during pregnancy.
+A critical reappraisal of iron supplements. Acta Obstet. Gynecol. Scand. 1999; 78:749–757.
+[PubMed: 10535335]
+Monroy R, Morrison K, Teo K, Atkinson S, Kubwabo C, Stewart B, Foster WG. Serum levels of
+perfluoroalkyl compounds in human maternal and umbilical cord blood samples. Environ. Res.
+2008; 108:56–62. [PubMed: 18649879]
+Nakagawa H, Hirata T, Terada T, Jutabha P, Miura D, Harada K, Inoue K, Anzai N, Endou H, Inui K,
+Kanai Y, Koizumi A. Roles of organic anion transporters in the renal excretion of
+perfluorooctanoic acid. Basic Clin. Pharmacol. Toxicol. 2007; 103:1–8. [PubMed: 18373647]
+Nakagawa H, Terada T, Harada KH, Hitomi T, Inoue K, Inui K, Koizumi A. Human organic anion
+transporter hoat4 is a transporter of perfluorooctanoic acid. Basic Clin. Pharmacol. Toxicol. 2009;
+105:136–138. [PubMed: 19371258]
+Neville MC, Morton J. Physiology and endocrine changes underlying human lactogenesis ii. J Nutr.
+2001; 131:3005S–3008S. [PubMed: 11694636]
+Noorlander CW, van Leeuwen SPJ, t Biesebeek JD, Mengelers MJB, Zeilmaker MJ. Levels of
+perfluorinate compounds in food and dietary intake of pfos and pfoa in the netherlands. J. Agric.
+Food Chem. 2011; 59:7496–7505. [PubMed: 21591675]
+Notarianni LJ. Plasma protein binding of drugs in pregnancy and neonates. Clin. Pharmacokinet. 1990;
+18:20–36. [PubMed: 2178848]
+Olsen GW, Burris JM, Ehresman DJ, Froehlich JW, Seacat AM, Butenhoff JL, Zobel LR. Half-life of
+serum elimination of perfluorooctanesulfonate, perfluorohexanesulfonate, and perfluorooctanoate
+in retired fluorochemical production workers. Environ. Health Persp. 2007; 115:1298–1305.
+Olsen GW, Butenhoff JL, Zobel LR. Perfluoroalkyl chemicals and human fetal development: An
+epidemiologic review with clinical and toxicological perspectives. Reprod. Toxicol. 2009; 27:212–
+230. [PubMed: 19429401]
+Olsen GW, Mair DC, Church TR, Ellefson ME, Reagen WK, Boyd TM, Herron RM,
+Medhdizadehkashi Z, Nobiletti JB, Rios JA, Butenhoff JL, Zobel LR. Decline in perfluorooctane
+sulfonate and polyfluoroalkyl chemicals in american red cross adult blood donors, 2000–2006.
+Environ. Sci. Technol. 2008; 42:4989–4995. [PubMed: 18678038]
+Ophaug RH, Singer L. Metabolic handling of perfluorooctanoic acid in rats. Proc. Soc. Exp. Biol.
+Med. 1980; 163:19–23. [PubMed: 7352143]
+Otten, JJ.; Hellwig, JP.; Myers, LD., editors. Dietary reference intakes: The essential guide to nutrient
+requirements. The National Academies Press; Washington, DC: 2006.
+Paul AG, Jones KC, Sweetman AJ. A first global production, emission, and environmental inventory
+for perfluorooctane sulfonate. Environ. Sci. Technol. 2009; 15:386–392. [PubMed: 19238969]
+Perucca E, Crema A. Plasma protein binding of drugs in pregnancy. Clin. Pharmacokinet. 1982;
+7:336–352. [PubMed: 6749369]
+Post GB, Cohn PD, Cooper KR. Perfluorooctanoic acid (pfoa), an emerging drinking water
+contaminant: A critical review of recent literature. Environ. Res. 2012; 116:93–117. [PubMed:
+22560884]
+Prevedouros K, Cousins IT, Buck RC, Korzeniowski SH. Sources, fate, and transport of
+perfluorocarboxylates. Environ. Sci. Technol. 2006; 40:32–43. [PubMed: 16433330]
+Raymer JH, Michael LC, Studabaker WB, Olsen GW, Sloan CS, Wilcosky T, Walmer DK.
+Concentrations of perfluorooctane sulfonate (pfos) and perfluorooctanoate (pfoa) and their
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 26
+
+$watermark-text
+$watermark-text
+$watermark-text
+
+associations with human semen quality measurements. Reprod. Toxicol. 2012; 33:419–427.
+[PubMed: 21736937]
+Rodriguez CE, Setzer RW, Barton HA. Pharmacokinetic modeling of perfluorooctanoic acid during
+gestaiton and lactation in the mouse. Reprod. Toxicol. 2009; 27:373–386. [PubMed: 19429408]
+Salas SP, Marshall G, Gutierrez BL, Rosso P. Time course of maternal plasma volume and hormonal
+changes in women with preeclampsia or fetal growth restriction. Hypertension. 2006; 47:203–208.
+[PubMed: 16380519]
+Seacat AM, Thomford PJ, Hansen KJ, Olsen GW, Case MT, Butenhoff JL. Subchronic toxicity studies
+on perfluorooctanesulfonate potassium salt in cynomolgus monkeys. Toxicol. Sci. 2002; 68:249–
+264. [PubMed: 12075127]
+Sims EAH, Krantz KE. Serial studies of renal function during pregnancy and the puerperium in normal
+women. J. Clin. Invest. 1958; 37:1764–1774. [PubMed: 13611044]
+Sisson TRC, Lund CJ, Whalen LE, Telek A. The blood volume of infants, 1. The full-term infant in
+the first year of life. J. Pediat. 1959:163–179. [PubMed: 13673355]
+Tan Y-M, Clewell HJ, Andersen ME. Time dependencies in perfluorooctylacids disposition in rat and
+monkeys: A kinetic analysis. Toxicol. Lett. 2008; 177:38–47. [PubMed: 18242015]
+Tatum-Gibbs K, Wambaugh JF, Das KP, Zehr RD, Strynar MJ. Comparative pharmacokinetics of
+perfluorononanoic acid in rat and mouse. Toxicology. 2011; 281:48–55. [PubMed: 21237237]
+Thibodeaux JR, Hanson RG, Rogers JM, Grey BE, Barbee BD, Richards JH, Butenhoff JL, Stevenson
+LA, Lau C. Exposure to perfluorooctane sulfonate during pregnancy in rat and mouse. 1.: Maternal
+and prenatal evaluations. Toxicol. Sci. 2003; 74:369–381. [PubMed: 12773773]
+Thomsen C, Haug LS, Stigum H, Froshaug M, Broadwell SL, Becher G. Changes in concentrations of
+perfluorinated compounds, polybrominated diphenyl ethers, and polychlorinated biphenyls in
+norwegian breast-milk during twelve months of lactation. Environ. Sci. Technol. 2010; 15:9550–
+9560. [PubMed: 21090747]
+Tittlemier SA, Pepper K, Seymore C, Moisey J, Bronson R, Cao XL, Dabeka RW. Dietary exposure of
+canadians to perfluorinated carboxylates and perfluorooctane sulfonate via consumption of meat,
+fish, fast foods, and food items prepared in their packaging. J. Agric. Food Chem. 2007; 55:3203–
+3210. [PubMed: 17381114]
+Tittlemier SA, Ryan JJ, Van Oostdam J. Presence of anionic perfluorinated organic compounds in
+serum collected from northern canadian populations. Organohalogen Compounds. 2004; 66:3959–
+3964.
+Trudel D, Horowitz L, Wormuth M, Scheringer M, Cousins IT, Hungerbuhler K. Estimating consumer
+exposure to pfos and pfoa. Risk Anal. 2008; 28:251–269. [PubMed: 18419647]
+Vanden Heuvel JP, Kuslikis BI, Rafelghem MJ, Peterson RE. Tissue distribution, metabolism, and
+elimination of perfluorooctanoic acid in male and female rats. J. Biochem. Toxicol. 1991; 6:83–92.
+[PubMed: 1941903]
+Vestergren R, Cousins IT. Tracking the pathways of human exposure to perfluorocarboxylates.
+Environ. Sci. Technol. 2009; 43:5565–5575. [PubMed: 19731646]
+Vestergren R, Cousins IT, Trudel D, Wormuth M, Scheringer M. Estimating the contribution of
+precursor compounds in consumer exposure to pfos and pfoa. Chemosphere. 2008; 73:1617–
+1624. [PubMed: 18834614]
+Volkel W, Genzel-Boroviczeny O, Demmelmair H, Gebauer C, Koletzko B, Twardella D, Raab U,
+Fromme H. Perfluorooctane sulphonate (pfos) and perfluorooctanoic acid (pfoa) in human breast
+milk: Results of a pilot study. Int. J. Hyg. Environ. Health. 2008; 211:440–446. [PubMed:
+17870667]
+von Ehrenstein OS, Fenton SE, Kato K, Kuklenyik Z, Calafat AM, Hines EP. Polyfluoroalkyl
+chemicals in the serum and milk of breastfeeding women. Reprod. Toxicol. 2009; 27:239–245.
+[PubMed: 19429402]
+Washino N, Saijo Y, Sasaki S, Kato S, Ban S, Konishi K, Ito R, Nakata A, Iwasaki Y, Saito K,
+Nakazawa H, Kishi R. Correlations between prenatal exposure to perfluorinated chemicals and
+reduced fetal growth. Environ. Health. Persp. 2009; 117:660–667.
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 27
+
+$watermark-text
+
+Weaver YM, Ehresman DJ, Butenhoff JL, Hagenbuch B. Roles of rat renal organic anion transporters
+in transporting perfluorinated carboxylates with different chain lengths. Toxicol. Sci. 2009;
+113:305–314. [PubMed: 19915082]
+White SS, Calafat AM, Kuklenyik Z, Villanueva L, Zehr RD, Helfant L, Strynar MJ, Lindstrom AB,
+Thibodeaux JR, Wood C, Fenton SE. Gestational pfoa exposure of mice is associated with
+altered mammary gland development in dams and female offspring. Toxicol. Sci. 2007; 96:133–
+144. [PubMed: 17132714]
+Wosje KS, Kalkwarf HJ. Lactation, weaning, and calcium supplementation: Effects on body
+composition in postpartum women. Am. J. Clin. Nutr. 2004; 80:423–429. [PubMed: 15277165]
+Yang C-H, Glover KP, Han X. Characterization of cellular uptake of perfluoroctanoate via organic
+anion-transporting polypeptide 1a2, organic anion transporter 4, and urate transporter 1 for their
+potential roles in mediating human renl reabsorption of perfluorocarboxylates. Toxicol. Sci.
+2010; 117:294–302. [PubMed: 20639259]
+Yang C, Glover KP, Han X. Organic anion transporting polypeptide (oatp) 1a1-mediated
+perfluorooctanoate transport and evidence for a renal reabsorption mechanism of oatp1a1 in renal
+elimination of perfluorocarboxylates in rats. Toxicol. Lett. 2009; 190:163–171. [PubMed:
+19616083]
+
+$watermark-text
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 28
+
+$watermark-text
+Figure 1.
+
+$watermark-text
+
+PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in
+humans (maternal, left; fetal, right). Fetal plasma circulation is separate from the maternal
+circulation. Only the mother is exposed directly; chemical is transferred to the fetus through
+the placenta. Placental transfer is described by a simple diffusion process (ktrans1 and
+ktrans2). Q's represent blood flows to and from the tissues; only the free fraction of chemical
+in plasma is available for uptake into tissues. Because contributions to various exposure
+sources are unknown, the IV route is used as a generic input to plasma; maternal exposure
+can also be through drinking water.
+
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 29
+
+$watermark-text
+$watermark-text
+
+Figure 2.
+
+PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans
+(maternal, left; infant, right). Maternal exposure is by direct intake; the infant exposure is
+through milk. No data were available for PFOA or PFOS partitioning into mammary tissue;
+chemical in plasma was assumed to be in direct contact with the milk compartment. Transfer
+from the plasma to the milk compartment was assumed to be flow-limited. Limited data was
+available for concentrations of PFAAs in the infant; thus, the infant was treated as a single
+compartment. Only the free fraction of chemical in plasma was available for uptake into
+tissues or milk.
+
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 30
+
+$watermark-text
+Figure 3.
+
+Example of the general features/trends of the model predictions for PFOA during gestation
+and lactation (maternal exposure was 1.5e-4 ug/kg BW/day). The plots show the model
+predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant
+plasma at up to 6 months after birth. Infant exposure to PFCs was assumed to be only
+through milk and breastfeeding was assumed to last 6 months postpartum.
+
+$watermark-text
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 31
+
+$watermark-text
+Figure 4.
+
+$watermark-text
+
+Example of the general features/trends of the model predictions for PFOS during gestation
+and lactation (maternal dose was 1.35e-3 ug/kg BW/day). The plots show the model
+predictions in maternal plasma during pregnancy and lactation, fetal plasma, milk, and infant
+plasma at up to 6 months postpartum. Infant exposure to PFCs was through milk and
+breastfeeding lasted 6 months postpartum.
+
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 32
+
+$watermark-text
+$watermark-text
+
+Figure 5.
+
+Comparison of model-predicted and observed values for PFAAs in maternal and fetal
+plasma during gestation. The figure compares the predicted and observed concentrations and
+maternal:fetal plasma concentration ratios for PFOA (top) and PFOS (bottom) from several
+pregnancy studies in which there were paired maternal and fetal observations available.
+
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 33
+
+$watermark-text
+
+Figure 6.
+
+Comparison of model-predicted and observed values for PFAAs in maternal plasma and
+milk during lactation. The figure compares the predicted and observed concentrations and
+the plasma:milk concentration ratios for PFOA (top) and PFOS (bottom) from several
+lactation studies.
+
+$watermark-text
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 34
+
+$watermark-text
+
+Figure 7.
+
+Predicted PFOA concentrations in maternal, fetal, and infant plasma in Little Hocking (top)
+and Arnsberg, Germany (bottom) through pregnancy (left panel), lactation, and up to 5 years
+after birth (right panel).
+
+$watermark-text
+$watermark-text
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 35
+
+Table 1
+
+Physiological parameters for PBPK models for PFOA and PFOS in pregnant woman and fetus.
+
+$watermark-text
+
+Parameter
+
+Mother
+
+Fetus
+
+source
+
+56.9 – 70 (initial); 65.3
+– 79.6 (increasing)
+
+0 – 3.8*
+
+Clewell, et al 1999; Gentry, et al 2003
+
+Gut, VGutC
+
+0.0171
+
+-
+
+Brown, et al 1997
+
+Liver, VLivC
+
+0.026
+
+-
+
+Brown, et al 1997
+
+Kidney, VKidC
+
+0.004
+
+-
+
+Brown, et al 1997
+
+Filtrate, VFilC
+
+0.0004
+
+-
+
+10% of kidney volume
+
+Fat, VFatC (initial volume)
+
+0.214
+
+-
+
+Brown, et al 1997
+
+Mammary tissue, VMamC (initial volume)
+
+0.0062
+
+-
+
+Gentry, et al 2002
+
+-
+
+0.0428
+
+Fat, VFat
+
+14.0 – 19.5*
+
+-
+
+Gentry, et al 2002
+
+Mammary tissue, VMam
+
+0.41 – 0.79*
+
+-
+
+Gentry, et al 2002
+
+Placenta, VPIa
+
+0 – 0.63*
+
+-
+
+Gentry, et al 2002
+
+Plasma, VPIas
+
+2.7 – 3.2*
+
+-
+
+Salas, et al 2006
+
+Remaining tissues, VR
+
+34.5 – 31.9*
+
+Maternal body weight (BW; kg) and fetal weight
+(VFet; kg)
+Tissue volumes (fraction of BW or VFet)
+
+$watermark-text
+
+Fetal plasma, VPIasFC
+
+Davies & Morris, 1993
+
+Tissue volume (L, age-dependent)
+
+Amniotic fluid (L, one fetus)
+
+difference between BW and sum of other tissues
+
+-
+
+0 – 0.51*
+
+Beall, et al 2007
+
+20.0
+
+-
+
+Clewell, et al 1999
+
+Blood flows (fraction of QC)
+Cardiac output (QCC, L/h/kg0.75; initial)
+
+$watermark-text
+
+fetal cardiac output (L/h/kg blood)
+
+-
+
+54.0
+
+Clewell, et al 1999
+
+0.181
+
+-
+
+Brown, et al 1997
+
+Liver, QLivC
+
+0.25
+
+-
+
+Brown, et al 1997
+
+Skin, QSkC
+
+0.058
+
+-
+
+Brown, et al 1997
+
+0.38 – 0.367*
+
+0.5
+
+Milman, et al 1999 (maternal); Sisson, et al 1959
+(value for newborn)
+
+Cardiac output, increasing, QC
+
+295 – 355*
+
+0 – 4.8*
+
+Gentry, et al 2003
+
+Fat, QFat
+
+14.8 – 21.2*
+
+-
+
+Gentry, et al 2002
+
+Mammary tissue, QMam
+
+7.7 – 15.4*
+
+-
+
+Gentry, et al 2002
+
+Placenta, QPIa
+
+0 – 23.4*
+
+-
+
+Clewell, et al, 2002
+
+Kidney, QKid ; plasma flow
+
+24.4 – 40.3*
+
+-
+
+Sims & Krantz, 1958
+
+Filtrate, QFilC—glomular filtration rate (L/h)
+
+6.0 – 9.1*
+
+-
+
+Sims & Krantz 1958; Dunlop 1981; Duvekot 1995
+
+Remaining tissue, QR
+
+108 – 115*
+
+0 – 4.0*
+
+Gut, QGutC
+
+hematocrit, Htc
+Blood flows (L/h, age-dependent)
+
+difference between total CO and flows to other
+tissues
+
+*
+
+range of values from beginning to end of gestation
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 36
+
+Table 2
+
+Physiological parameters for PBPK models for PFOA and PFOS in lactating woman and nursing infant.
+
+$watermark-text
+
+Parameters
+
+Mother
+
+Infant
+
+source
+
+BW (kg) (changing)
+
+72 – 67.5*
+
+3.5 – 8*
+
+Wosje, et al, 2004 (maternal); CDC, 2002 (infant)
+
+Gut, VGutC
+
+0.0171
+
+-
+
+Liver, VLivC
+
+0.026
+
+Fat, VFatC
+
+0.30 – 0.285*
+
+-
+
+Wosje, et al 2004
+
+Kidney, VKidC
+
+0.004
+
+-
+
+Brown, et al 1997
+
+Filtrate, VFilC
+
+0.0004
+
+-
+
+10% of kidney volume
+
+Tissue volume (fraction of BW)
+
+Remaining tissues, VR (L)
+
+$watermark-text
+
+Residual milk volume, Vmilk (L)
+
+Brown, et al 1997
+Brown, et al 1997
+
+31.4 – 30.2*
+
+difference between BW and sum of other tissues
+
+0.25
+
+-
+
+Gentry, et al 2003
+
+Plasma, VPIas (L)
+
+3.2 – 2.4*
+
+-
+
+Salas, et al 2006 (mother)
+
+Mammary tissue (L)
+
+0.82 – 1.37*
+
+-
+
+Gentry, et al 2003
+
+Cardiac output
+Maternal (QCC; L/h/kg0.75; nonpregnant)
+Maternal (changing; L/h)
+
+20.0
+
+Gentry, et al 2003
+
+335–330*
+
+Blood flows (fraction of cardiac output)
+Gut, QGutC
+
+0.181
+
+-
+
+Brown, et al 1997
+
+$watermark-text
+
+Liver, QLivC
+
+0.25
+
+Skin, QSkC
+
+0.058
+
+-
+
+Brown, et al 1997
+
+Kidney, QKid (L/h)
+
+38.5 – 30*
+
+-
+
+GFR ~20% of renal plasma flow
+
+Filtrate, QFilC (glomerular filtration rate; L/h)
+
+7.7 – 6.0*
+
+-
+
+Sims & Krantz, 1958
+
+Fat, QFat (L/h)
+
+21.4 – 20.3*
+
+-
+
+Gentry, et al 2003
+
+Mammary, QMam (L/h)
+
+13.7 – 21.0*
+
+Remaining tissues, QR (L/h)
+
+96.7 – 96.6*
+
+Hematocrit
+Milk production rate, kmilk (L/hr)
+
+Brown, et al 1997
+
+Gentry, et al 2003
+-
+
+difference between total CO and flows to other tissues
+
+0.38
+
+-
+
+Davies & Morris 1993
+
+0.0 – 0.037*
+
+milk production
+rate = suckling rate
+
+Dewey, et al 1983
+
+*
+
+range of values from start of lactation to 6 months postpartum
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+$watermark-text
+
+$watermark-text
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+-
+
+-
+
+fetus to fluid, ktrans3C (L/h/kg0.75)
+
+fluid to fetus, ktrans4C (L/h/kg0.75)
+
+Amniotic fluid transfer (gestation only)
+
+0.46
+
+fetus to mother, ktrans2C (L/h/kg0.75)
+
+0.1
+
+mother to fetus, ktrans1C (L/h/kg0.75)
+
+Placental transfer (gestation only)
+
+urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)
+
+Uptake/Elimination Rate Constants
+
+0.038
+
+Placenta:Plasma (Ppla)
+
+Milk: plasma (PMilk; lactation only)
+
+0.28
+
+Rest of body tissues: plasma (Ptis)
+
+0.1
+
+0.12
+
+Mammary Tissue: plasma (Pmam; gestation only)
+
+0.13
+
+0.13
+
+Fat: plasma (Pfat)
+
+Mammary tissue:plasma (PMam; gestation only)
+
+0.04
+
+Kidney: plasma (Pkid)
+
+Skin: plasma (PSk)
+
+2.2
+1.05
+
+Liver:plasma (Pliv)
+
+0.05
+
+0.055
+
+10
+
+-
+
+0.02
+
+mother
+
+Gut:plasma (Pgut)
+
+Partition Coefficients
+
+affinity constant, Kt (ug/L)
+
+transporter maximum, Tmc (ug/h/kg0.75)
+
+Renal resorption Parameters
+
+Volume of distribution (Vdc; infant only, scaled to BWKid)
+
+Free fraction of chemical in plasma (Free)
+
+Parameter
+
+0.001
+
+0.008
+
+0.46
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.12
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.02
+
+fetus
+
+PFOA
+
+-
+
+-
+
+-
+
+-
+
+0.005
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.17
+
+0.02
+
+infant
+
+-
+
+-
+
+-
+
+0.46
+
+0.005
+
+0.0122
+
+0.16
+
+0.29
+
+0.41
+
+0.20
+
+0.16
+
+0.13
+
+0.8
+
+3.72
+
+0.57
+
+0.023
+
+3.5
+
+0.025
+
+mother
+
+0.001
+
+0.006
+
+1.01
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.20
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.025
+
+fetus
+
+PFOS
+
+-
+
+-
+
+-
+
+-
+
+0.001
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+-
+
+0.22
+
+0.025
+
+infant
+
+Chemical parameters for PBPK models for PFOA and PFOS in pregnant and lactating women, fetus, and infant.
+
+$watermark-text
+
+Table 3
+Loccisano et al.
+Page 37
+
+$watermark-text
+
+$watermark-text
+−0.39
+0.35
+−0.35
+−0.11
+
+rest of body:plasma PC
+
+resorption maximum (Tmc)
+
+affinity constant (Kt)
+
+free fraction in plasma
+
+−0.18
+−0.19
+−0.21
+−0.38
+−0.17
+0.16
+−0.16
+−0.38
+−0.20
+
+liver volume (fraction of BW)
+
+liver:plasma PC
+
+rest of body: plasma PC
+
+milk:plasma PC
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Free fraction in plasma
+
+resorption maximum (Tmc)
+
+affinity constant (Kt)
+
+milk production rate
+
+maternal BW (decreasing)
+
+−0.40
+
+0.56
+
+−0.04
+
+0.04
+
+−0.04
+
+0.56
+
+−0.22
+
+−0.23
+
+−0.22
+
+infant SC
+
+0.10
+
+0.10
+fat volume
+
+GFR
+
+milk production rate
+
+Affinity constant (Kt)
+
+Resorption maximum (Tmc)
+
+Free fraction in plasma
+
+milk:plasma PC
+
+rest of body: plasma PC
+
+fat:plasma PC
+
+liver:plasma PC
+
+liver volume (as fraction of BW)
+
+parameter
+
+maternal SC
+
+fat volume (fraction of BW)
+
+placental transfer rate constant (f to m)
+
+placental transfer rate constant (m to f)
+
+parameter
+
+0.11
+
+fat volume
+
+−0.19
+
+−0.98
+
+free fraction (fetus)
+
+free fraction in plasma
+
+affinity constant (Kt)
+
+resorption maximum (Tmc)
+
+rest of body: plasma PC
+
+fat:plasma PC
+
+liver:plasma PC
+
+liver volume (fraction of BW)
+
+PFOS lactation
+
+0.10
+
+GFR
+
+0.98
+
+−0.98
+
+0.88
+
+−0.35
+
+−0.35
+
+−0.39
+
+−0.39
+
+−0.37
+
+initial BW (maternal)
+
+PFOA lactation
+
+0.01
+−0.19
+
+placental transfer rate constant (f to m)
+
+−0.01
+
+placental transfer rate constant (m to f)
+
+--
+
+−0.38
+
+liver: plasma PC
+
+free fraction (fetus)
+
+−0.36
+
+liver volume (fraction of BW)
+
+−0.74
+
+fetal SC
+
+parameter
+
+−0.75
+
+maternal SC
+
+parameter
+
+initial BW (maternal)
+
+PFOS gestation
+
+PFOA gestation
+
+−0.07
+
+−0.13
+
+0.13
+
+−0.28
+
+−0.07
+
+−0.34
+
+−0.03
+
+−0.24
+
+−0.23
+
+maternal SC
+
+−0.16
+
+−0.15
+
+--
+
+--
+
+--
+
+−0.08
+
+−0.07
+
+0.07
+
+−0.32
+
+−0.12
+
+−0.34
+
+−0.34
+
+−0.79
+
+maternal SC
+
+0.77
+
+−0.03
+
+0.03
+
+−0.03
+
+0.79
+
+−0.28
+
+−0.12
+
+−0.30
+
+−0.28
+
+infant SC
+
+−0.16
+
+−0.15
+
+−0.98
+
+0.99
+
+−0.98
+
+0.92
+
+−0.07
+
+0.07
+
+−0.32
+
+−0.13
+
+−0.34
+
+−0.33
+
+−0.79
+
+fetal SC
+
+Calculated maternal, fetal, and infant sensitivity coefficients for PBPK model parameters for PFOA and PFOS models for human gestation (top) and
+lactation (bottom) with respect to plasma PFOA or PFOS AUC. For gestation, the AUC was calculated at embryonic week 39; for lactation, the AUC was
+calculated at 6 months postpartum. Only parameters that have SCs > 0.07 or <−0.07 for the mother, fetus, or infant are shown in the table.
+
+$watermark-text
+
+Table 4
+Loccisano et al.
+Page 38
+
+--
+
+free fraction in infant compartment
+−0.33
+
+--
+
+Volume of distribution in infant (Vdc)
+
+GFR
+
+--
+
+Infant elimination rate constant (keliml)
+
+−0.08
+
+−0.72
+
+−0.99
+
+−0.59
+
+GFR
+
+Volume of distribution in infant (Vdc)
+
+BW of infant
+
+maternal BW (decreasing)
+
+--
+
+BW of infant
+
+−0.98
+
+parameter
+
+infant SC
+
+maternal SC
+
+$watermark-text
+parameter
+
+$watermark-text
+PFOS lactation
+
+−0.25
+
+--
+
+--
+
+−0.61
+
+maternal SC
+
+$watermark-text
+
+PFOA lactation
+
+−0.06
+
+−0.99
+
+−0.98
+
+−0.70
+
+infant SC
+
+Loccisano et al.
+Page 39
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+Loccisano et al.
+
+Page 40
+
+Table 5
+
+$watermark-text
+
+Estimated maternal PFOA and PFOS exposures for pregnant and lactating women. The women in these
+studies were considered “general population” in that they were not known to be exposed to unusually high
+concentrations of PFOA or PFOS (i.e., not occupationally exposed or drinking water with high
+concentrations). Because contributions from various exposure sources are not known, intake for the general
+population exposure was simulated as a direct input to blood. Exposures of the women were estimated to yield
+the plasma PFAA concentration at delivery or a point during pregnancy or lactation (noted in table). The adult
+human model was run for 30 years in order to reach steady state at each estimated exposure, and the tissue
+concentrations at 30 years were used as starting concentrations in the pregnancy model. The tissue
+concentrations at the end of pregnancy were then used as starting concentrations for the lactation model.
+Women were assumed to be exposed for the entire length of pregnancy and lactation. For comparison, the
+exposures estimated for the general population from our previously developed adult human model are shown
+at the bottom of the table.
+
+$watermark-text
+
+Studies used for exposure estimation (media;
+time for which exposure was estimated)
+
+estimated PFOA exposure
+(ug/kg/day); 3.8 yr half-life
+
+estimated PFOA
+exposure (ug/kg/
+day); 2.3 yr half-life
+
+estimated PFOS exposure
+(ug/kg/day); 5.4 yr half-life
+
+gestation
+Fromme, et al 2010 (plasma; week 34)
+
+1.9E-04
+
+3.0E-04
+
+3.8E-04
+
+Apelberg, et al 2007 (plasma; delivery)
+
+1.2E-04
+
+2.0E-04
+
+5.8E-04
+
+Inoue, et al 2004 (plasma; delivery)
+
+1.15E-04
+
+1.9E-04
+
+1.2E-03
+
+Midasch, et al 2007 (plasma; delivery)
+
+2.0E-04
+
+3.4E-04
+
+1.35E-03
+
+Fei, et al 2007 (plasma; week 7)
+
+3.60E-04
+
+6.9E-04
+
+3.7E-03
+
+Washino, et al 2009 (plasma; delivery)
+
+1.25E-04
+
+2.2E-04
+
+7.4E-04
+
+Monroy, et al 2008 (plasma; week 26)
+
+1.8E-04
+
+3.0E-04
+
+2.0E-03
+
+Hanssen, et al 2010 (plasma; delivery)
+
+1.15E-04
+
+1.7E-04
+
+1.9E-04
+
+$watermark-text
+
+Kim, et al 2011 (plasma; delivery)
+
+1.3E-04
+
+2.3E-04
+
+6.9E-04
+
+Kim, et al 2011 (plasma; 3rd trimester)
+
+1.15e-04
+
+2.05E-04
+
+3.5e-04
+
+Tittlemier, et al 2004 (plasma; delivery)
+
+1.6E-04
+
+2.8E-04
+
+4.4E-03
+
+Karrman, et al 2007 (plasma; 3 weeks postpartum)
+
+2.8E-04
+
+2.3E-03
+
+von Ehrenstein, et al 2009 (plasma; 4 weeks
+postpartum)
+
+2.4E-04
+
+2.25E-03
+
+Volkel, et al 2008 (milk; 4 weeks postpartum)
+
+NA (PFOA < LOD in milk)
+
+3.5E-04
+
+Fromme, et al 2010 (plasma; 6 months postpartum)
+
+2.4e-4 (1st 6 months
+postpartum); PFOA < LOD in
+milk
+
+4.75e-4 (1st 6 months);
+3.8e-04 (after 6 months)
+
+Kim, et al 2011 (milk; 7 days postpartum)
+
+1.63e-4 (1st 6 months); 1.3e-4
+(after 6 months)
+
+8.6e-4 (1st 6 months); 6.9e-4
+(after 6 months)
+
+Kim, et al 2011 (plasma during pregnancy; milk
+collected 1 month postpartum)
+
+1.44e-04 (1st 6 months
+postpartum); 1.15e-04 (after 6
+months)
+
+4.4e-04 (1st 6 months);
+3.5e-4 (after 6 months)
+
+1.7E-04
+
+1.4E-03
+
+1.4e-4 (1st 6 months); 1.1e-4
+
+4.6e-4 (1st 6 months);
+3.7e-4(after 6 months)
+
+lactation
+
+Thomsen, et al 2010 (milk; birth)
+Liu, et al 2011 (plasma; 1 week postpartum)
+
+(after 6 months)
+
+General population (estimated using adult
+human model)
+Calafat, et al 2007 (NHANES 2003–04)
+
+2.50E-04
+
+4.20E-04
+
+1.75E-03
+
+Olsen, et al 2008 (Red Cross blood donors)
+
+2.2e-04-4.4e-04
+
+1.3e-04-2.65e-04
+
+8.5e-04-1.8e-03
+
+J Toxicol Environ Health A. Author manuscript; available in PMC 2014 January 01.
+
+
