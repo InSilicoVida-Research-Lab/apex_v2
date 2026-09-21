@@ -261,7 +261,7 @@ class SGLangExtractor:
             logger.error(f"Failed to load SGLang engine: {e}")
             self.is_loaded = False
 
-    async def extract_data(self, image, role="full_page") -> ExtractedPage:
+    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "") -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
         logger.debug(f"SGLang: Extracting data from {role} image with schema enforcement...")
         
@@ -277,6 +277,12 @@ class SGLangExtractor:
             user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values."
         elif role == "full_page":
             user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
+
+        if evidence_text and evidence_text.strip():
+            user_instruction += (
+                f"\n\nUse the following native PDF text extracted from this region as evidence hints "
+                f"to avoid hallucinating names or values:\n\n{evidence_text.strip()}"
+            )
 
         # Construct the conversation for Qwen-VL manually using its chat template
         prompt_text = (

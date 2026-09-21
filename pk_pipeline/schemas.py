@@ -19,13 +19,28 @@ class ModelClassification(BaseModel):
     model_type: str = Field(description="Must be 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'")
     evidence_quote: Optional[str] = None
 
+class Compartment(BaseModel):
+    id: str
+    label_raw: str
+    confidence: Optional[float] = None
+
 class Connection(BaseModel):
-    from_comp: str = Field(alias="from")
-    to_comp: str = Field(alias="to")
+    source: str
+    target: str
+    label_raw: Optional[str] = None
+    direction: str = Field(description="Must be 'forward', 'reverse', 'bidirectional', or 'unknown'")
+    edge_type: Optional[str] = None
+    evidence: Optional[str] = None
+    confidence: Optional[float] = None
+
+class UnresolvedTopology(BaseModel):
+    description: str
+    reason: str
 
 class Structure(BaseModel):
-    compartments: Optional[List[str]] = None
+    compartments: Optional[List[Compartment]] = None
     connections: Optional[List[Connection]] = None
+    unresolved: Optional[List[UnresolvedTopology]] = None
     source_location: Optional[str] = None
 
 # ─── Nested Parameter Sub-Models ───────────────────────────────────────────────
@@ -61,6 +76,10 @@ class BiologicalContext(BaseModel):
     )
 
 class QuantitativeData(BaseModel):
+    needs_review: bool = Field(
+        False,
+        description="Set to true if there is any ambiguity, unclear formatting, or complex structure requiring human review."
+    )
     value_text: Optional[str] = Field(
         None,
         description="The exact printed value text verbatim, preserving all original formatting (e.g., '5a', '0.008b', '<1', '~3'). "
@@ -127,6 +146,10 @@ class Provenance(BaseModel):
 # ─── Top-Level Parameter and Result ────────────────────────────────────────────
 
 class ExtractedParameter(BaseModel):
+    needs_review: bool = Field(
+        False,
+        description="Set to true if this parameter's extraction is uncertain or relies on weak evidence."
+    )
     parameter_name: Optional[str] = Field(
         None,
         description="Full descriptive name exactly as printed (e.g., 'Volume of distribution central compartment'). "

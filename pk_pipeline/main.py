@@ -2,6 +2,7 @@ import os
 import json
 import argparse
 import asyncio
+import fitz
 from pdf2image import convert_from_path
 
 from .schemas import ExtractionRequest
@@ -60,6 +61,9 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     # Keep a reference to the original images to find their indices later
     original_images = images.copy()
     
+    print("Loading native PDF layer with PyMuPDF...")
+    pdf_doc = fitz.open(pdf_path)
+    
     # Build dynamic queries
     table_query = "Pharmacokinetic parameters table"
     if target_compounds:
@@ -88,21 +92,39 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     vlm_inputs = []
     
     # 1. Add cropped table pages
-    for orig, cropped in zip(table_pages, cropped_tables):
+    for orig, (cropped, bbox) in zip(table_pages, cropped_tables):
         page_index = original_images.index(orig) + 1 # 1-indexed
-        # If the cropper returned the original image, mark it as full_page so the VLM prompt is accurate
-        role = "table_crop" if orig is not cropped else "full_page"
-        vlm_inputs.append({"img": cropped, "page_index": page_index, "role": role})
+        
+        # PyMuPDF uses 0-indexed pages
+        page = pdf_doc[page_index - 1]
+        
+        if bbox is None:
+            # Full page
+            evidence_text = page.get_text("text")
+            role = "full_page"
+        else:
+            # Map 300 DPI bbox to 72 DPI
+            scale = 72 / 300
+            x1, y1, x2, y2 = bbox
+            rect = fitz.Rect(x1 * scale, y1 * scale, x2 * scale, y2 * scale)
+            evidence_text = page.get_text("text", clip=rect)
+            role = "table_crop"
+            
+        vlm_inputs.append({"img": cropped, "page_index": page_index, "role": role, "evidence_text": evidence_text})
             
     # 2. Add diagram pages uncropped
     for orig in diagram_pages:
         page_index = original_images.index(orig) + 1
-        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page"})
+        page = pdf_doc[page_index - 1]
+        evidence_text = page.get_text("text")
+        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page", "evidence_text": evidence_text})
             
     # 3. Add narrative text pages uncropped
     for orig in text_pages:
         page_index = original_images.index(orig) + 1
-        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page"})
+        page = pdf_doc[page_index - 1]
+        evidence_text = page.get_text("text")
+        vlm_inputs.append({"img": orig, "page_index": page_index, "role": "full_page", "evidence_text": evidence_text})
         
     # Deduplicate based on (page_index, role)
     unique_inputs = {}
@@ -112,7 +134,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
             unique_inputs[key] = item
     vlm_inputs = list(unique_inputs.values())
             
-    cropped_count = sum(1 for orig, crop in zip(table_pages, cropped_tables) if crop.size != orig.size)
+    cropped_count = sum(1 for orig, (crop, bbox) in zip(table_pages, cropped_tables) if bbox is not None)
     print(f"Cropped {cropped_count}/{len(cropped_tables)} table pages.")
     
     # Save images to a debug folder for inspection
@@ -138,7 +160,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     sem = asyncio.Semaphore(2)
     async def bound_extract(item):
         async with sem:
-            return await get_extractor().extract_data(item["img"], role=item["role"])
+            return await get_extractor().extract_data(item["img"], role=item["role"], evidence_text=item.get("evidence_text", ""))
             
     tasks = [bound_extract(item) for item in vlm_inputs]
     extracted_pages = await asyncio.gather(*tasks)

@@ -35,7 +35,7 @@ class TableCropper:
             logger.error(f"Failed to load YOLO table detector: {e}")
             self.is_yolo_loaded = False
 
-    def crop_yolo(self, pil_image: Image.Image) -> Optional[Image.Image]:
+    def crop_yolo(self, pil_image: Image.Image) -> Optional[Tuple[Image.Image, Tuple[int, int, int, int]]]:
         if not self.is_yolo_loaded:
             return None
             
@@ -89,11 +89,11 @@ class TableCropper:
 
         if best_bbox:
             logger.info(f"TableCropper: YOLO detected table at bbox {best_bbox} (conf={best_conf:.2f})")
-            return pil_image.crop(best_bbox)
+            return (pil_image.crop(best_bbox), best_bbox)
             
         return None
 
-    def crop_opencv(self, pil_image: Image.Image) -> Optional[Image.Image]:
+    def crop_opencv(self, pil_image: Image.Image) -> Optional[Tuple[Image.Image, Tuple[int, int, int, int]]]:
         img_np = np.array(pil_image.convert("RGB"))
         img_bgr = img_np[:, :, ::-1].copy()
 
@@ -142,11 +142,11 @@ class TableCropper:
 
         if best_bbox and best_area > page_area * 0.08:
             logger.info(f"TableCropper: OpenCV detected table at bbox {best_bbox} (area={best_area}px²)")
-            return pil_image.crop(best_bbox)
+            return (pil_image.crop(best_bbox), best_bbox)
             
         return None
 
-    def crop(self, pil_image: Image.Image) -> Image.Image:
+    def crop(self, pil_image: Image.Image) -> Tuple[Image.Image, Optional[Tuple[int, int, int, int]]]:
         # 1. Try YOLO layout detection
         yolo_crop = self.crop_yolo(pil_image)
         if yolo_crop is not None:
@@ -159,9 +159,9 @@ class TableCropper:
             
         # 3. Fallback to original image
         logger.warning("TableCropper: Both YOLO and OpenCV failed. Returning full original image.")
-        return pil_image
+        return (pil_image, None)
 
-    def crop_all(self, images: List[Image.Image]) -> List[Image.Image]:
+    def crop_all(self, images: List[Image.Image]) -> List[Tuple[Image.Image, Optional[Tuple[int, int, int, int]]]]:
         cropped = []
         for i, img in enumerate(images):
             logger.debug(f"TableCropper: Processing page {i + 1}/{len(images)}")
