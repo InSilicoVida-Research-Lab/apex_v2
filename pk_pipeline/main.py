@@ -49,6 +49,26 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
     
+    # --- NEW: Paper Resolution ---
+    from .ingestion.pmc_fetcher import extract_doi_from_pdf, extract_title_from_pdf, resolve_paper
+    
+    print("Step 0/3: Resolving paper via PMC/Unpaywall/Semantic Scholar...")
+    doi = extract_doi_from_pdf(pdf_path)
+    title = extract_title_from_pdf(pdf_path)
+    
+    if doi or title:
+        res = resolve_paper(doi=doi, title=title)
+        
+        if res.get("xml_path"):
+            print(f"  -> XML available at {res['xml_path']} (JATS XML fast-path not yet implemented. Proceeding with PDF OCR.)")
+            
+        if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar"]:
+            print(f"  -> Switching from local PDF to Open Access PDF: {res['pdf_path']}")
+            pdf_path = res["pdf_path"]
+    else:
+        print("  -> Could not extract DOI or Title from local PDF. Proceeding with local file.")
+    # -----------------------------
+    
     # 1. Convert PDF to images
     print("Step 1/3: Converting PDF to images...")
     logger.debug("Step 1: Rasterization")

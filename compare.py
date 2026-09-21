@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-input_path = ROOT / "pk_pipeline" / "test_data" / "Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).json"
+input_path = ROOT / "pk_pipeline" / "Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).json"
 
 with open(input_path, 'r') as f:
     benchmark = json.load(f)

@@ -46,9 +46,7 @@ class TableCropper:
             
         w, h = pil_image.size
         page_area = w * h
-        best_bbox = None
-        best_conf = 0.0
-        
+        valid_bboxes = []
         for box in results[0].boxes:
             conf = float(box.conf[0])
             cls_id = int(box.cls[0])
@@ -71,24 +69,29 @@ class TableCropper:
             if box_w == 0 or box_h / box_w > 10.0:
                 continue
                 
-            if conf > best_conf:
-                best_conf = conf
-                
-                # Asymmetric padding: 5% left/right, 10% top (caption), 15% bottom (footnotes)
-                pad_x = int(w * 0.05)
-                pad_y_top = int(h * 0.10)
-                pad_y_bottom = int(h * 0.15)
-                
-                # Clamp to image boundaries
-                best_bbox = (
-                    max(0, x1 - pad_x),
-                    max(0, y1 - pad_y_top),
-                    min(w, x2 + pad_x),
-                    min(h, y2 + pad_y_bottom)
-                )
+            valid_bboxes.append((x1, y1, x2, y2, conf))
 
-        if best_bbox:
-            logger.info(f"TableCropper: YOLO detected table at bbox {best_bbox} (conf={best_conf:.2f})")
+        if valid_bboxes:
+            best_conf = max(b[4] for b in valid_bboxes)
+            x1 = min(b[0] for b in valid_bboxes)
+            y1 = min(b[1] for b in valid_bboxes)
+            x2 = max(b[2] for b in valid_bboxes)
+            y2 = max(b[3] for b in valid_bboxes)
+
+            # Asymmetric padding: 5% left/right, 10% top (caption), 15% bottom (footnotes)
+            pad_x = int(w * 0.05)
+            pad_y_top = int(h * 0.10)
+            pad_y_bottom = int(h * 0.15)
+            
+            # Clamp to image boundaries
+            best_bbox = (
+                max(0, x1 - pad_x),
+                max(0, y1 - pad_y_top),
+                min(w, x2 + pad_x),
+                min(h, y2 + pad_y_bottom)
+            )
+
+            logger.info(f"TableCropper: YOLO detected table at bbox {best_bbox} (max_conf={best_conf:.2f})")
             return (pil_image.crop(best_bbox), best_bbox)
             
         return None
@@ -111,6 +114,13 @@ class TableCropper:
         h_lines = cv2.dilate(cv2.erode(img_bin, h_kernel, iterations=3), h_kernel, iterations=3)
 
         grid_mask = cv2.addWeighted(v_lines, 0.5, h_lines, 0.5, 0.0)
+        
+        # If no vertical lines found, rely heavily on horizontal lines to cluster text blocks
+        if cv2.countNonZero(v_lines) == 0:
+            # Dilate horizontal lines vertically to connect nearby rows into a single block
+            v_connect = cv2.getStructuringElement(cv2.MORPH_RECT, (1, 50))
+            grid_mask = cv2.dilate(h_lines, v_connect, iterations=2)
+            
         grid_mask = cv2.erode(
             255 - grid_mask,
             cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2)),

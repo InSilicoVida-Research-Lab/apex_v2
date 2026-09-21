@@ -43,7 +43,7 @@ class ColQwenRetriever:
             logger.error(f"Failed to load ColQwen2.5: {e}")
             self.is_loaded = False
     
-    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 10, threshold_ratio: float = 0.85) -> List[Image.Image]:
+    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 10, threshold_ratio: float = 0.50) -> List[Image.Image]:
         logger.debug(f"ColQwen: Finding top pages for query '{query}' among {len(images)} images.")
         
         if not images:
@@ -107,9 +107,16 @@ class ColQwenRetriever:
                 
         # Sort by score descending and limit to top_k
         top_indices.sort(key=lambda i: all_scores[i][1], reverse=True)
+        
+        # Fallback: guarantee at least 4 pages (or all pages if fewer than 4) are kept for tables
+        min_pages = min(4, len(all_scores))
+        if len(top_indices) < min_pages:
+            sorted_all = sorted(range(len(all_scores)), key=lambda i: all_scores[i][1], reverse=True)
+            top_indices = sorted_all[:min_pages]
+            
         top_indices = top_indices[:top_k]
         
-        # Fallback if somehow empty (ignore penalty in this catastrophic case)
+        # Fallback if somehow empty
         if not top_indices:
             best_idx = max(range(len(all_scores)), key=lambda i: all_scores[i][2])
             top_indices = [best_idx]
@@ -274,7 +281,7 @@ class SGLangExtractor:
         
         user_instruction = "Extract parameters from this image strictly into the JSON schema."
         if role == "table_crop":
-            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values."
+            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
         elif role == "full_page":
             user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
 
@@ -299,7 +306,7 @@ class SGLangExtractor:
             sampling_params={
                 "max_new_tokens": 10240,
                 "temperature": 0.0,
-                "repetition_penalty": 1.05,
+                "repetition_penalty": 1.0,
                 "json_schema": json.dumps(ExtractedPage.model_json_schema())
             }
         )
