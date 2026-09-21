@@ -133,7 +133,7 @@ class ColQwenRetriever:
 
 from .schemas import ExtractedPage, ExtractedParameter
 
-SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are shown an image of a single page from a scientific paper. Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
+SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
 
 ## THE SINGLE MOST IMPORTANT RULE
 
@@ -164,6 +164,7 @@ The following regions must NEVER be treated as a source of parameter data, even 
 - Running headers/footers and journal name banners
 - Funding statements, conflict-of-interest statements, publisher disclaimers
 - The reference list / bibliography
+- Sensitivity Analysis, Validation, and Results tables. Extract only intrinsic Model Input Parameters.
 - Any other bibliographic or administrative metadata
 
 If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is not a pharmacokinetic parameter under any circumstances, regardless of what unit or symbol it superficially resembles.
@@ -172,7 +173,7 @@ If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is n
 
 For each PK parameter explicitly reported on the page, capture:
 
-- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). If the table only prints the symbol with no accompanying descriptive label, leave this null. Do NOT invent a name.
+- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
 - **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
 - **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
 - **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
@@ -190,7 +191,7 @@ For each PK parameter explicitly reported on the page, capture:
 - **Group headers**: a row spanning the full table width and styled differently from data rows (italic, bold, or otherwise set apart) is a group header, not a parameter — e.g., "Fractional constants" or "Elimination constants (1/min)" as its own row above several parameter rows. Never extract the group header itself as a parameter; apply any unit or context it carries down to the rows beneath it.
 - **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
 - **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
-- **Per-species or per-population columns**: extract each column as a SEPARATE parameter entry with its own species/population field. Never average, merge, or combine values across columns.
+- **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
 
 ## STEP 4 — MODEL STRUCTURE / TOPOLOGY
 
@@ -207,6 +208,7 @@ Assign confidence using these concrete criteria, not a general impression of cer
 - **HIGH**: value, unit, and symbol are all printed together, unambiguously, in a single cell or sentence, with no inheritance or inference required.
 - **MEDIUM**: part of the entry required inheriting information from elsewhere on the page (a unit from a group header, a compound from table context several rows above).
 - **LOW**: any interpretive judgment was required (degraded text, ambiguous cell boundaries, an abbreviation you are not fully certain of).
+- **needs_review**: Set this boolean to `true` if a table cell is merged, if a range is highly ambiguous, if there are multiple conflicting footnotes, or if you are unsure how to bind the value to a specific species/compartment. Otherwise, set it to `false`.
 
 Never assign HIGH to an entry that required any inference beyond direct transcription.
 
@@ -359,25 +361,28 @@ class SGLangExtractor:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
             raise
 
-    async def extract_from_text(self, text_content: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
-        """Extract PK data from raw XML text strictly enforcing Pydantic schema"""
+    async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
+        """Extract table data from text/XML strictly enforcing Pydantic schema"""
         import time
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
-        logger.info(f"SGLang: [START] Extracting data from {role} text{title_log}...")
+        logger.info(f"SGLang: [START] Extracting data from {role}{title_log}...")
         
         schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
         system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
         
-        user_instruction = "Extract parameters from this document section strictly into the JSON schema."
         if role == "table_xml":
-            user_instruction += " This is a raw HTML/XML table. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
-        elif role == "equation_xml":
-            user_instruction += " This is a mathematical equation (MathML or similar) from a PK model. Focus on extracting the model structure and compartments from the equation."
+            user_instruction = (
+                f"Extract parameters from this document section strictly into the JSON schema. "
+                f"This is a raw HTML/XML table. Focus on exact transcription of table values.\n\n"
+                f"CRITICAL INSTRUCTIONS FOR THIS TABLE:\n"
+                f"1. For STEP 0, this is a confirmed PK table. You MUST classify `model_type` as either 'pbpk' or 'simple_empirical_compartmental' based on the parameters shown. Do not use 'not_applicable'.\n"
+                f"2. If page metadata (Title, Authors, Journal) is not visible in this specific table block, output null for those fields as instructed in Step 5.\n"
+                f"3. Map the column headers to their respective parameter entries (e.g., values under 'Mother' get life_stage='Mother').\n\n"
+                f"Document Text:\n{text.strip()}"
+            )
         else:
-            user_instruction += " This is a section of narrative text. Extract any pharmacokinetic parameters you find in the text, using the surrounding text for biological context."
-
-        user_instruction += f"\n\nDocument Text:\n\n{text_content.strip()}"
+            user_instruction = f"Extract parameters from this document text strictly into the JSON schema:\n\n{text.strip()}"
 
         prompt_text = (
             f"<|im_start|>system\n{system_prompt}<|im_end|>\n"

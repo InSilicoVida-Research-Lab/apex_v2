@@ -195,11 +195,14 @@ class JatsXMLParser:
             if table_node is not None:
                 rows = []
                 for tr in table_node.find_all("tr"):
-                    # Use re.sub to compress multiple spaces inside cells
-                    row = [
-                        re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
-                        for cell in tr.find_all(["th", "td"])
-                    ]
+                    row = []
+                    for cell in tr.find_all(["th", "td"]):
+                        text = re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
+                        try:
+                            colspan = int(cell.get('colspan', 1))
+                        except (TypeError, ValueError):
+                            colspan = 1
+                        row.extend([text] * colspan)
                     if any(row):
                         rows.append(row)
                 
@@ -365,11 +368,28 @@ def parse_jats_xml(xml_path: str, filter_narrative: bool = True) -> Dict[str, An
     parser   = JatsXMLParser(xml_path)
     all_chunks = parser.extract_chunks(filter_narrative=filter_narrative)
 
-    kept    = [c for c in all_chunks if c["kept"]]
+    kept_narrative = [c for c in all_chunks if c["kept"] and c["role"] == "narrative_xml"]
+    other_kept = [c for c in all_chunks if c["kept"] and c["role"] != "narrative_xml"]
+    
+    if kept_narrative:
+        merged_text = ""
+        for c in kept_narrative:
+            title_header = f"[{c['title']}]\n" if c['title'] else ""
+            merged_text += f"{title_header}{c['content']}\n\n"
+            
+        merged_chunk = {
+            "role": "narrative_xml",
+            "content": merged_text.strip(),
+            "title": "Combined Relevant Narrative",
+            "kept": True,
+            "skip_reason": ""
+        }
+        other_kept.append(merged_chunk)
+        
     skipped = [c for c in all_chunks if not c["kept"]]
 
     return {
         "metadata": parser.extract_metadata(),
-        "chunks":   kept,
+        "chunks":   other_kept,
         "skipped":  skipped,
     }
