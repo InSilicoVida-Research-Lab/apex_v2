@@ -5,6 +5,10 @@ import asyncio
 import pymupdf
 from pdf2image import convert_from_path
 
+import sys
+# Ensure the root directory is on PYTHONPATH so pk_pipeline modules can be imported
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from pk_pipeline.schemas import ExtractionRequest
 from pk_pipeline.ml_services import SGLangExtractor
 from pk_pipeline.config import logger
