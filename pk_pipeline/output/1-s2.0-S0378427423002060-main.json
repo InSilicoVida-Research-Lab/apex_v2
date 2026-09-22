@@ -13,97 +13,213 @@
   },
   "structure": {
     "compartments": [
-      "Chemical Input",
-      "Gut",
-      "Liver",
-      "Brain",
-      "Kidney",
-      "Fat",
-      "Rest Body"
+      {
+        "id": "Chemical Input",
+        "label_raw": "Chemical Input",
+        "confidence": 100.0
+      },
+      {
+        "id": "Gut",
+        "label_raw": "Gut",
+        "confidence": 100.0
+      },
+      {
+        "id": "Liver",
+        "label_raw": "Liver",
+        "confidence": 100.0
+      },
+      {
+        "id": "Brain",
+        "label_raw": "Brain",
+        "confidence": 100.0
+      },
+      {
+        "id": "Kidney",
+        "label_raw": "Kidney",
+        "confidence": 100.0
+      },
+      {
+        "id": "Fat",
+        "label_raw": "Fat",
+        "confidence": 100.0
+      },
+      {
+        "id": "Rest Body",
+        "label_raw": "Rest Body",
+        "confidence": 100.0
+      }
     ],
     "connections": [
       {
-        "from": "Chemical Input",
-        "to": "Gut"
+        "source": "Chemical Input",
+        "target": "Gut",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Gut",
-        "to": "Liver"
+        "source": "Gut",
+        "target": "Liver",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Liver",
-        "to": "Brain"
+        "source": "Liver",
+        "target": "Brain",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Liver",
-        "to": "Kidney"
+        "source": "Liver",
+        "target": "Kidney",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Liver",
-        "to": "Fat"
+        "source": "Liver",
+        "target": "Fat",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Liver",
-        "to": "Rest Body"
+        "source": "Liver",
+        "target": "Rest Body",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Brain",
-        "to": "Kidney"
+        "source": "Gut",
+        "target": "Feces",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "from": "Brain",
-        "to": "Fat"
+        "source": "Liver",
+        "target": "Gut",
+        "direction": "reverse",
+        "edge_type": "EHR",
+        "confidence": 100.0
       },
       {
-        "from": "Brain",
-        "to": "Rest Body"
+        "source": "Liver",
+        "target": "Urine",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       },
       {
-        "from": "Kidney",
-        "to": "Fat"
+        "source": "Kidney",
+        "target": "Urine",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       },
       {
-        "from": "Kidney",
-        "to": "Rest Body"
+        "source": "Fat",
+        "target": "Plasma",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       },
       {
-        "from": "Fat",
-        "to": "Rest Body"
+        "source": "Rest Body",
+        "target": "Plasma",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       },
       {
-        "from": "Gut",
-        "to": "Feces"
+        "source": "Brain",
+        "target": "Plasma",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       },
       {
-        "from": "Liver",
-        "to": "Gut*"
+        "source": "Liver",
+        "target": "Metabolite",
+        "direction": "forward",
+        "edge_type": "Metabolite",
+        "confidence": 100.0
       },
       {
-        "from": "Liver*",
-        "to": "Feces"
+        "source": "Metabolite",
+        "target": "Gut",
+        "direction": "forward",
+        "edge_type": "EHR",
+        "confidence": 100.0
       },
       {
-        "from": "Liver*",
-        "to": "Urine"
-      },
-      {
-        "from": "Liver*",
-        "to": "Brain*"
-      },
-      {
-        "from": "Liver*",
-        "to": "Kidney*"
-      },
-      {
-        "from": "Liver*",
-        "to": "Fat*"
-      },
-      {
-        "from": "Liver*",
-        "to": "Rest Body*"
+        "source": "Metabolite",
+        "target": "Urine",
+        "direction": "forward",
+        "edge_type": "Plasma",
+        "confidence": 100.0
       }
     ],
     "source_location": "Fig. 1"
   },
-  "parameters": []
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "TDCIPP",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "40.5754",
+        "value": 40.5754,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mmol/Kg BW",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Table 2",
+        "source_quote": "The PBK model estimated a dose of 40.5754 mmol/Kg BW for TDCIPP (Li et al., 2017a).",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": null,
+      "symbol": null,
+      "context": {
+        "compound": "TCEP",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.893",
+        "value": 3.893,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mmol/Kg BW",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Table 2",
+        "source_quote": "OED was found to be 3.893 mmol/Kg BW for TCEP to get the estimated brain concentration of 200 \u00b5M respectively and cause neuronal toxicity (Ta et al., 2014).",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    }
+  ]
 }

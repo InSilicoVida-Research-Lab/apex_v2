@@ -43,7 +43,7 @@ class ColQwenRetriever:
             logger.error(f"Failed to load ColQwen2.5: {e}")
             self.is_loaded = False
     
-    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 10, threshold_ratio: float = 0.85) -> List[Image.Image]:
+    def find_top_pages(self, images: List[Image.Image], query: str = "Pharmacokinetic parameters table", top_k: int = 10, threshold_ratio: float = 0.50) -> List[Image.Image]:
         logger.debug(f"ColQwen: Finding top pages for query '{query}' among {len(images)} images.")
         
         if not images:
@@ -107,9 +107,16 @@ class ColQwenRetriever:
                 
         # Sort by score descending and limit to top_k
         top_indices.sort(key=lambda i: all_scores[i][1], reverse=True)
+        
+        # Fallback: guarantee at least 4 pages (or all pages if fewer than 4) are kept for tables
+        min_pages = min(4, len(all_scores))
+        if len(top_indices) < min_pages:
+            sorted_all = sorted(range(len(all_scores)), key=lambda i: all_scores[i][1], reverse=True)
+            top_indices = sorted_all[:min_pages]
+            
         top_indices = top_indices[:top_k]
         
-        # Fallback if somehow empty (ignore penalty in this catastrophic case)
+        # Fallback if somehow empty
         if not top_indices:
             best_idx = max(range(len(all_scores)), key=lambda i: all_scores[i][2])
             top_indices = [best_idx]
@@ -126,7 +133,7 @@ class ColQwenRetriever:
 
 from .schemas import ExtractedPage, ExtractedParameter
 
-SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are shown an image of a single page from a scientific paper. Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
+SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
 
 ## THE SINGLE MOST IMPORTANT RULE
 
@@ -157,6 +164,7 @@ The following regions must NEVER be treated as a source of parameter data, even 
 - Running headers/footers and journal name banners
 - Funding statements, conflict-of-interest statements, publisher disclaimers
 - The reference list / bibliography
+- Sensitivity Analysis, Validation, and Results tables. Extract only intrinsic Model Input Parameters.
 - Any other bibliographic or administrative metadata
 
 If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is not a pharmacokinetic parameter under any circumstances, regardless of what unit or symbol it superficially resembles.
@@ -165,7 +173,7 @@ If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is n
 
 For each PK parameter explicitly reported on the page, capture:
 
-- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). If the table only prints the symbol with no accompanying descriptive label, leave this null. Do NOT invent a name.
+- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
 - **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
 - **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
 - **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
@@ -183,7 +191,7 @@ For each PK parameter explicitly reported on the page, capture:
 - **Group headers**: a row spanning the full table width and styled differently from data rows (italic, bold, or otherwise set apart) is a group header, not a parameter — e.g., "Fractional constants" or "Elimination constants (1/min)" as its own row above several parameter rows. Never extract the group header itself as a parameter; apply any unit or context it carries down to the rows beneath it.
 - **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
 - **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
-- **Per-species or per-population columns**: extract each column as a SEPARATE parameter entry with its own species/population field. Never average, merge, or combine values across columns.
+- **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
 
 ## STEP 4 — MODEL STRUCTURE / TOPOLOGY
 
@@ -200,6 +208,7 @@ Assign confidence using these concrete criteria, not a general impression of cer
 - **HIGH**: value, unit, and symbol are all printed together, unambiguously, in a single cell or sentence, with no inheritance or inference required.
 - **MEDIUM**: part of the entry required inheriting information from elsewhere on the page (a unit from a group header, a compound from table context several rows above).
 - **LOW**: any interpretive judgment was required (degraded text, ambiguous cell boundaries, an abbreviation you are not fully certain of).
+- **needs_review**: Set this boolean to `true` if a table cell is merged, if a range is highly ambiguous, if there are multiple conflicting footnotes, or if you are unsure how to bind the value to a specific species/compartment. Otherwise, set it to `false`.
 
 Never assign HIGH to an entry that required any inference beyond direct transcription.
 
@@ -218,6 +227,22 @@ Re-read every entry you are about to return and confirm you can point to the spe
 ## OUTPUT FORMAT
 
 Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary, no explanation text before or after the JSON.
+
+{schema}
+"""
+
+DIAGRAM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) model analyzer. You are shown an image of a model structure diagram (e.g., boxes and arrows representing a PBPK or compartmental model) from a scientific paper. 
+
+Your task is strictly to extract the model structure, compartments, and connections shown in this diagram, and return them in the exact JSON schema provided below. 
+
+## INSTRUCTIONS
+1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
+2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
+3. Fill out the `structure` object with `compartments` and `connections`:
+   - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
+   - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
+4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
 {schema}
 """
@@ -261,22 +286,35 @@ class SGLangExtractor:
             logger.error(f"Failed to load SGLang engine: {e}")
             self.is_loaded = False
 
-    async def extract_data(self, image, role="full_page") -> ExtractedPage:
+    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "", chunk_title: str = "") -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
-        logger.debug(f"SGLang: Extracting data from {role} image with schema enforcement...")
+        import time
+        start_t = time.time()
+        title_log = f" ({chunk_title})" if chunk_title else ""
+        logger.info(f"SGLang: [START] Extracting data from {role} image{title_log}...")
         
         import uuid
         temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.jpg"
         image.save(temp_img_path, "JPEG")
         
         schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
-        system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        
+        if role == "figure_crop":
+            system_prompt = DIAGRAM_PROMPT_TEMPLATE.format(schema=schema_json)
+        else:
+            system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
         
         user_instruction = "Extract parameters from this image strictly into the JSON schema."
         if role == "table_crop":
-            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values."
+            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
         elif role == "full_page":
             user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
+
+        if evidence_text and evidence_text.strip():
+            user_instruction += (
+                f"\n\nUse the following native PDF text extracted from this region as evidence hints "
+                f"to avoid hallucinating names or values:\n\n{evidence_text.strip()}"
+            )
 
         # Construct the conversation for Qwen-VL manually using its chat template
         prompt_text = (
@@ -285,15 +323,26 @@ class SGLangExtractor:
             f"<|im_start|>assistant\n"
         )
         
+        # Debug: Save the exact prompt to the test folder
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "image"
+            debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
+            with open(debug_file, "w", encoding="utf-8") as f:
+                f.write(prompt_text)
+        except Exception as e:
+            logger.warning(f"Failed to save debug prompt: {e}")
+        
         # Use SGLang's async_generate with pydantic schema enforcement via sampling_params
         # We must use async_generate because this is running inside an active asyncio event loop (FastAPI)
         response = await self.engine.async_generate(
             prompt=prompt_text,
             image_data=temp_img_path,
             sampling_params={
-                "max_new_tokens": 10240,
+                "max_new_tokens": 16000,
                 "temperature": 0.0,
-                "repetition_penalty": 1.05,
+                "repetition_penalty": 1.0,
                 "json_schema": json.dumps(ExtractedPage.model_json_schema())
             }
         )
@@ -304,7 +353,72 @@ class SGLangExtractor:
         try:
             json_data = json.loads(extracted_text)
             extracted_page = ExtractedPage(**json_data)
-            logger.info(f"SGLang: Extraction complete. Found {len(extracted_page.parameters)} parameters.")
+            duration = time.time() - start_t
+            title_log = f" ({chunk_title})" if chunk_title else ""
+            logger.info(f"SGLang: [END] Image extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
+            return extracted_page
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
+            raise
+
+    async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
+        """Extract table data from text/XML strictly enforcing Pydantic schema"""
+        import time
+        start_t = time.time()
+        title_log = f" ({chunk_title})" if chunk_title else ""
+        logger.info(f"SGLang: [START] Extracting data from {role}{title_log}...")
+        
+        schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
+        system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        
+        if role == "table_xml":
+            user_instruction = (
+                f"Extract parameters from this document section strictly into the JSON schema. "
+                f"This is a raw HTML/XML table. Focus on exact transcription of table values.\n\n"
+                f"CRITICAL INSTRUCTIONS FOR THIS TABLE:\n"
+                f"1. For STEP 0, this is a confirmed PK table. You MUST classify `model_type` as either 'pbpk' or 'simple_empirical_compartmental' based on the parameters shown. Do not use 'not_applicable'.\n"
+                f"2. If page metadata (Title, Authors, Journal) is not visible in this specific table block, output null for those fields as instructed in Step 5.\n"
+                f"3. Map the column headers to their respective parameter entries (e.g., values under 'Mother' get life_stage='Mother').\n\n"
+                f"Document Text:\n{text.strip()}"
+            )
+        else:
+            user_instruction = f"Extract parameters from this document text strictly into the JSON schema:\n\n{text.strip()}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        
+        # Debug: Save the exact prompt to the test folder
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "text"
+            debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
+            with open(debug_file, "w", encoding="utf-8") as f:
+                f.write(prompt_text)
+        except Exception as e:
+            logger.warning(f"Failed to save debug prompt: {e}")
+        
+        response = await self.engine.async_generate(
+            prompt=prompt_text,
+            sampling_params={
+                "max_new_tokens": 16000,
+                "temperature": 0.0,
+                "repetition_penalty": 1.0,
+                "json_schema": json.dumps(ExtractedPage.model_json_schema())
+            }
+        )
+        
+        extracted_text = response["text"] if isinstance(response, dict) else response.text
+        
+        try:
+            json_data = json.loads(extracted_text)
+            extracted_page = ExtractedPage(**json_data)
+            duration = time.time() - start_t
+            title_log = f" ({chunk_title})" if chunk_title else ""
+            logger.info(f"SGLang: [END] Text extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
             return extracted_page
         except Exception as e:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
