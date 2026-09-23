@@ -235,92 +235,105 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         md_chunks = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)
         pdf_doc = pymupdf.open(pdf_path)
         
-        import re
-        table_pattern = re.compile(r"(?:^\|.*\|$\n)+(?:^\|[\-\s:|]+\|$\n)(?:^\|.*\|$\n?)*", re.MULTILINE)
+        import torch
+        t_processor, t_model = get_tatr()
         
         llm_payloads = []
+        
+        current_table_crops = []
+        current_table_pages = []
+        current_table_markdowns = []
+        
+        def dispatch_table_batch():
+            if not current_table_crops: return
+            
+            total_height = sum(img.height for img in current_table_crops)
+            max_width = max(img.width for img in current_table_crops)
+            
+            stitched_img = Image.new('RGB', (max_width, total_height), (255, 255, 255))
+            y_offset = 0
+            for img in current_table_crops:
+                stitched_img.paste(img, (0, y_offset))
+                y_offset += img.height
+                
+            combined_markdown = "\n\n".join(current_table_markdowns)
+            pages_str = "-".join(map(str, current_table_pages))
+            
+            print(f"  -> Dispatching stitched table from pages [{pages_str}]")
+            
+            llm_payloads.append({
+                "role": "table_xml",
+                "page": pages_str,
+                "part": 1,
+                "markdown_context": combined_markdown,
+                "full_page_img": stitched_img
+            })
+            
+            current_table_crops.clear()
+            current_table_pages.clear()
+            current_table_markdowns.clear()
+
         for i, chunk in enumerate(md_chunks):
             page_num = i + 1
             text = chunk.get("text", "")
-            has_image = len(pdf_doc[i].get_images()) > 0
-            has_table = bool(table_pattern.search(text))
+            page = pdf_doc[i]
+            has_image = len(page.get_images()) > 0
             
-            # Generate a full page screenshot if there are tables, to give Qwen visual context
-            full_page_img = None
-            if has_table:
-                page = pdf_doc[i]
-                # Keep high-res rendering
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
-                full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
-                
-                # --- NEW: TATR Cropping ---
-                print(f"  -> Table detected on page {page_num}. Running TATR to crop...")
-                import torch
-                t_processor, t_model = get_tatr()
-                inputs = t_processor(images=full_page_img, return_tensors="pt")
-                with torch.no_grad():
-                    outputs = t_model(**inputs)
-                
-                target_sizes = torch.tensor([full_page_img.size[::-1]])
-                results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
-                
-                best_box = None
-                best_score = 0
-                for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
-                    if label.item() == 0 and score.item() > best_score:  # Class 0 is 'table'
-                        best_score = score.item()
-                        best_box = [int(i) for i in box.tolist()]
-                        
-                if best_box:
-                    print(f"     - Found table with score {best_score:.3f}. Cropping...")
-                    x_min, y_min, x_max, y_max = best_box
-                    # Add generous padding (40px) to ensure no text is cut off
-                    padding = 40
-                    x_min, y_min = max(0, x_min - padding), max(0, y_min - padding)
-                    x_max, y_max = min(full_page_img.width, x_max + padding), min(full_page_img.height, y_max + padding)
-                    full_page_img = full_page_img.crop((x_min, y_min, x_max, y_max))
-                else:
-                    print("     - TATR failed to find table. Falling back to full page image.")
-                # --------------------------
+            pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
+            full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
             
-            # 1. If there's an image (diagram/figure), send the full page text as evidence for the image crop
+            # --- TATR Detection on EVERY page ---
+            inputs = t_processor(images=full_page_img, return_tensors="pt")
+            with torch.no_grad():
+                outputs = t_model(**inputs)
+                
+            target_sizes = torch.tensor([full_page_img.size[::-1]])
+            results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
+            
+            table_boxes = []
+            for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+                if label.item() == 0:
+                    table_boxes.append(box.tolist())
+                    
+            if table_boxes:
+                # Merge all bounding boxes on the page
+                x_mins = [b[0] for b in table_boxes]
+                y_mins = [b[1] for b in table_boxes]
+                x_maxs = [b[2] for b in table_boxes]
+                y_maxs = [b[3] for b in table_boxes]
+                
+                x_min, y_min = min(x_mins), min(y_mins)
+                x_max, y_max = max(x_maxs), max(y_maxs)
+                
+                padding = 40
+                x_min, y_min = max(0, x_min - padding), max(0, y_min - padding)
+                x_max, y_max = min(full_page_img.width, x_max + padding), min(full_page_img.height, y_max + padding)
+                
+                cropped_table = full_page_img.crop((int(x_min), int(y_min), int(x_max), int(y_max)))
+                current_table_crops.append(cropped_table)
+                current_table_pages.append(page_num)
+                current_table_markdowns.append(text)
+            else:
+                dispatch_table_batch()
+                
             if has_image:
-                page = pdf_doc[i]
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
-                img_obj = Image.open(io.BytesIO(pix.tobytes()))
                 llm_payloads.append({
                     "role": "figure_crop",
                     "page": page_num,
-                    "img_obj": img_obj,
+                    "img_obj": full_page_img,
                     "markdown_context": text,
                     "part": "figure"
                 })
                 
-            # 2. Split the page text into separate table and narrative chunks
-            last_end = 0
-            part_idx = 1
-            for match in table_pattern.finditer(text):
-                start, end = match.span()
-                if start > last_end:
-                    narrative = text[last_end:start].strip()
-                    if len(narrative) > 50:
-                        llm_payloads.append({"role": "narrative_xml", "page": page_num, "part": part_idx, "markdown_context": narrative})
-                        part_idx += 1
-                table = text[start:end].strip()
+            if len(text.strip()) > 50:
                 llm_payloads.append({
-                    "role": "table_xml", 
-                    "page": page_num, 
-                    "part": part_idx, 
-                    "markdown_context": table,
-                    "full_page_img": full_page_img
+                    "role": "narrative_xml",
+                    "page": page_num,
+                    "part": 1,
+                    "markdown_context": text.strip()
                 })
-                part_idx += 1
-                last_end = end
                 
-            if last_end < len(text):
-                narrative = text[last_end:].strip()
-                if len(narrative) > 50:
-                    llm_payloads.append({"role": "narrative_xml", "page": page_num, "part": part_idx, "markdown_context": narrative})
+        dispatch_table_batch()
             
         print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks (tables, figures, text). Running LLM extraction concurrently...")
         
