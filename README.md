@@ -36,12 +36,12 @@ At its core, APEX utilizes **Qwen3-VL-8B-Instruct** (hosted via SGLang) to perfo
 
 Run the main pipeline against a target PDF:
 ```bash
-PYTHONPATH=. pk_pipeline/.venv/bin/python pk_pipeline/main.py <path_to_pdf>
+PYTHONPATH= pk_pipeline/.venv/bin/python pk_pipeline/main.py <path_to_pdf>
 ```
 
 For example:
 ```bash
-PYTHONPATH=. pk_pipeline/.venv/bin/python pk_pipeline/main.py pk_pipeline/test_data/s12249-023-02680-y.pdf
+PYTHONPATH= .venv/bin/python pk_pipeline/main.py "pk_pipeline/test_data/s12249-023-02680-y.pdf"
 ```
 
 The extracted parameters will be saved as a structured JSON file in the `output/` directory alongside the original PDF.

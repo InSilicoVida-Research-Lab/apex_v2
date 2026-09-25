@@ -1,0 +1,668 @@
+<|im_start|>system
+You are a pharmacokinetic (PK) model analyzer. You are shown an image of a model structure diagram (e.g., boxes and arrows representing a PBPK or compartmental model) from a scientific paper. 
+
+Your task is strictly to extract the model structure, compartments, and connections shown in this diagram, and return them in the exact JSON schema provided below. 
+
+## INSTRUCTIONS
+1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
+2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
+3. Fill out the `structure` object with `compartments` and `connections`:
+   - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
+   - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
+4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{
+  "$defs": {
+    "BiologicalContext": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chemical or drug being studied exactly as printed (e.g., PFOS, PFOA, BPA). Isotopically labeled tracers and metabolites are distinct compounds.",
+          "title": "Compound"
+        },
+        "subject_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Animal or human subject exactly as printed (e.g., Cynomolgus monkey, Human, Rat). Only populate if explicitly stated for this parameter.",
+          "title": "Subject Species"
+        },
+        "life_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Age or life stage only if explicitly stated (e.g., Adult, Infant, Gestation Week 20).",
+          "title": "Life Stage"
+        },
+        "compartment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Biological compartment this parameter refers to, exactly as named by the authors (e.g., Liver, Plasma, Filtrate). Never substitute generic names.",
+          "title": "Compartment"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Route of administration if stated (e.g., Oral, IV, Inhalation).",
+          "title": "Route"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Named patient group or population only if explicitly stated (e.g., hepatically impaired, pediatric). Leave null otherwise.",
+          "title": "Population"
+        }
+      },
+      "title": "BiologicalContext",
+      "type": "object"
+    },
+    "Compartment": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label_raw": {
+          "title": "Label Raw",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "id",
+        "label_raw"
+      ],
+      "title": "Compartment",
+      "type": "object"
+    },
+    "Connection": {
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "label_raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label Raw"
+        },
+        "direction": {
+          "description": "Must be 'forward', 'reverse', 'bidirectional', or 'unknown'",
+          "title": "Direction",
+          "type": "string"
+        },
+        "edge_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edge Type"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "direction"
+      ],
+      "title": "Connection",
+      "type": "object"
+    },
+    "ExtractedParameter": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if this parameter's extraction is uncertain or relies on weak evidence.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "parameter_name": {
+          "description": "Full descriptive name exactly as printed (e.g., 'Volume of distribution central compartment'). This is REQUIRED. If only a symbol is printed, use the symbol here. Do not invent a name.",
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mathematical symbol exactly as printed (e.g., VCC, Tmc, k12, CL/F). Do not standardize or expand \u2014 transcribe verbatim.",
+          "title": "Symbol"
+        },
+        "context": {
+          "$ref": "#/$defs/BiologicalContext",
+          "description": "Biological and study context for this parameter."
+        },
+        "quantitative_data": {
+          "$ref": "#/$defs/QuantitativeData",
+          "description": "Numerical values, ranges, units, and qualifiers."
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "description": "Source location, supporting quote, and confidence."
+        }
+      },
+      "required": [
+        "parameter_name",
+        "context",
+        "quantitative_data",
+        "provenance"
+      ],
+      "title": "ExtractedParameter",
+      "type": "object"
+    },
+    "ModelClassification": {
+      "properties": {
+        "model_type": {
+          "description": "Must be 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'",
+          "title": "Model Type",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "ModelClassification",
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        }
+      },
+      "title": "PageMetadata",
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where this parameter was found (e.g., 'Table 1', 'Figure 2', 'Results paragraph 2').",
+          "title": "Source Location"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short, exact transcription \u2014 not a paraphrase \u2014 of the specific cell(s) or sentence this value came from. If you cannot produce a directly traceable quote, omit the parameter.",
+          "title": "Source Quote"
+        },
+        "parameter_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the parameter was obtained, exactly as described by the authors: 'Measured', 'Fitted', 'Fixed', 'Assumed', 'Scaled', or 'Literature'. Leave null if not stated.",
+          "title": "Parameter Status"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high' = value, unit, and symbol all printed together unambiguously. 'medium' = any inheritance from a group header or nearby context was required. 'low' = any interpretive judgment was needed (degraded text, ambiguous boundary, uncertain abbreviation).",
+          "title": "Confidence"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "QuantitativeData": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if there is any ambiguity, unclear formatting, or complex structure requiring human review.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The exact printed value text verbatim, preserving all original formatting (e.g., '5a', '0.008b', '<1', '~3'). This MUST ALWAYS be populated if a value exists, regardless of whether it is a valid float or contains letters.",
+          "title": "Value Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The primary numerical value as a pure float. ONLY populate this if the value can be safely parsed as a float. If the value contains text like '5a' or '<1', leave this field null.",
+          "title": "Value"
+        },
+        "range_low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower bound when the parameter is printed as a range (e.g., the '0.18' in '0.23 (0.18, 0.29)').",
+          "title": "Range Low"
+        },
+        "range_high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper bound when the parameter is printed as a range (e.g., the '0.29' in '0.23 (0.18, 0.29)').",
+          "title": "Range High"
+        },
+        "variance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standard deviation, standard error, or confidence interval numeric value.",
+          "title": "Variance"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Type of variance exactly as printed: 'SD', 'SE', '95% CI', etc.",
+          "title": "Variance Type"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit of measurement exactly as printed (e.g., mg/kg, L/h, 1/min). If the unit is inherited from a group header rather than printed inline, still record it here.",
+          "title": "Unit"
+        },
+        "unit_inherited": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True if the unit was stated once in a group/section header rather than printed inline with this value.",
+          "title": "Unit Inherited"
+        },
+        "value_qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Any qualifier printed alongside the value beyond the number itself (e.g., 'Fixed', 'assumed', 'estimated'). Never drop or fold into the numeric value.",
+          "title": "Value Qualifier"
+        }
+      },
+      "title": "QuantitativeData",
+      "type": "object"
+    },
+    "Structure": {
+      "properties": {
+        "compartments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Compartment"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compartments"
+        },
+        "connections": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Connection"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connections"
+        },
+        "unresolved": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/UnresolvedTopology"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unresolved"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Location"
+        }
+      },
+      "title": "Structure",
+      "type": "object"
+    },
+    "UnresolvedTopology": {
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "reason"
+      ],
+      "title": "UnresolvedTopology",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "page_metadata": {
+      "$ref": "#/$defs/PageMetadata"
+    },
+    "model_classification": {
+      "$ref": "#/$defs/ModelClassification"
+    },
+    "structure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Structure"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "parameters": {
+      "description": "All PK model parameters explicitly present on this page. An empty list is correct if the page contains no PK data.",
+      "items": {
+        "$ref": "#/$defs/ExtractedParameter"
+      },
+      "title": "Parameters",
+      "type": "array"
+    }
+  },
+  "required": [
+    "page_metadata",
+    "model_classification"
+  ],
+  "title": "ExtractedPage",
+  "type": "object"
+}
+<|im_end|>
+<|im_start|>user
+<|vision_start|><|image_pad|><|vision_end|>Extract parameters from this image strictly into the JSON schema.
+
+Use the following native PDF text extracted from this region as evidence hints to avoid hallucinating names or values:
+
+**219** Page 10 of 17 
+
+AAPS PharmSciTech (2023) 24:219 
+
+to be pH-dependent as it showed solubility of 12.43 mg/ml at acidic pH of 1.2 and very low solubility of 0.33 mg/ml at pH 6.8. The solubility of RLZ in FaSSGF and FaSSIF was slightly higher than pH 1.2 and pH 6.8, respectively. Hence, RLZ demonstrated higher solubility at pH 1.2 than pH 6.8. The solubility data of RLZ in different media is shown in Figure S1. 
+
+#### **_In Vitro_ Dissolution Testing** 
+
+Figure 4a and b show the dissolution profile of the marketed tablet of RLZ, i.e., Rilutor and ASD RLZ: PAA in different ratio 30:70, 20:80, and 10:90. As seen in the dissolution profile at pH 1.2 in the initial 30 min, all the ASD formulations showed 100% drug release, while Rilutor showed 68% drug release. All the ASD formulations showed their maximum release of drug, and the profile became superimposable from the initial 60 min of the dissolution except for Rilutor. Additionally, model-independent similarity factor (f2) of 35, 29, and 23, for 30:70, 20:80, and 10:90 RLZ:PAA ASD, respectively, give evidence of dissimilarity in the dissolution profile of ASD formulations with respect to Rilutor. Dissolution profile of Rilutor in FaSSGF was 75% after 60 min, and complete release was observed at 120 min of dissolution study. In FaSSGF RLZ:PAA 10:90, ASD showed complete release after 45 min, while RLZ:PAA 20:80 ASD and RLZ:PAA 30:70 ASD showed complete release after 60 min. Calculated  f2 value of 43, 38, and 33 for 30:70, 20:80, and 10:90 RLZ:PAA ASD, respectively, with respect to Rilutor, proves the difference in their dissolution profile. 
+
+### **Rat PBPK Model** 
+
+#### **Plasma and Brain Concentration for Rilutor** 
+
+Rat PBPK model was used for the simulation of the single dose of 10 mg/kg BW/day after oral administration. Figure 5 shows a simulated plasma concentration-time profile for 24 h with blue line, black line, and red line representing percentile 2.5, median, and 97.5, respectively, along with experimental data in red circle from Ravi _et al_ . [13]. It can be seen that the simulated details are quite close to the observed data at all time points. Figure 6 shows the plasma and brain profile at 10 mg/kg BW/day of our in-house data. Simulated data is within the range of 1.5–twofold of observed data points for both organs. The simulation reasonably captured the plasma and brain PK of RLZ for the available dosing scenario; however, the model needs to be further evaluated for different dosing scenarios. To the best of our knowledge, no such study in literature was found for rats at a dose other than 10 mg/kg for tablet. Nonetheless, the model provides a starting point for predicting the PK in different dosing scenarios. 
+
+#### **Plasma and Brain Concentration for ASD Formulation** 
+
+The simulated plasma and brain concentration for a single 10 mg/kg ASD formulation of RLZ is shown in Fig. 7 along with the observed data points from our in-house data. For optimization, only plasma concentration was used. The model was reasonably able to capture the brain PK as well. 
+
+
+
+**Fig. 4** _In vitro_ dissolution profile of RLZ PAA ASD in the ratio 10:90, 20:80, and 30:70 in comparison with Rilutor **a** at pH 1.2 and **b** in FaSSGF 
+
+1 3<|im_end|>
+<|im_start|>assistant

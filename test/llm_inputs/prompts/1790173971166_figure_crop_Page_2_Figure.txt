@@ -1,0 +1,666 @@
+<|im_start|>system
+You are a pharmacokinetic (PK) model analyzer. You are shown an image of a model structure diagram (e.g., boxes and arrows representing a PBPK or compartmental model) from a scientific paper. 
+
+Your task is strictly to extract the model structure, compartments, and connections shown in this diagram, and return them in the exact JSON schema provided below. 
+
+## INSTRUCTIONS
+1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
+2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
+3. Fill out the `structure` object with `compartments` and `connections`:
+   - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
+   - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
+4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{
+  "$defs": {
+    "BiologicalContext": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chemical or drug being studied exactly as printed (e.g., PFOS, PFOA, BPA). Isotopically labeled tracers and metabolites are distinct compounds.",
+          "title": "Compound"
+        },
+        "subject_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Animal or human subject exactly as printed (e.g., Cynomolgus monkey, Human, Rat). Only populate if explicitly stated for this parameter.",
+          "title": "Subject Species"
+        },
+        "life_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Age or life stage only if explicitly stated (e.g., Adult, Infant, Gestation Week 20).",
+          "title": "Life Stage"
+        },
+        "compartment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Biological compartment this parameter refers to, exactly as named by the authors (e.g., Liver, Plasma, Filtrate). Never substitute generic names.",
+          "title": "Compartment"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Route of administration if stated (e.g., Oral, IV, Inhalation).",
+          "title": "Route"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Named patient group or population only if explicitly stated (e.g., hepatically impaired, pediatric). Leave null otherwise.",
+          "title": "Population"
+        }
+      },
+      "title": "BiologicalContext",
+      "type": "object"
+    },
+    "Compartment": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label_raw": {
+          "title": "Label Raw",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "id",
+        "label_raw"
+      ],
+      "title": "Compartment",
+      "type": "object"
+    },
+    "Connection": {
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "label_raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label Raw"
+        },
+        "direction": {
+          "description": "Must be 'forward', 'reverse', 'bidirectional', or 'unknown'",
+          "title": "Direction",
+          "type": "string"
+        },
+        "edge_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edge Type"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "direction"
+      ],
+      "title": "Connection",
+      "type": "object"
+    },
+    "ExtractedParameter": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if this parameter's extraction is uncertain or relies on weak evidence.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "parameter_name": {
+          "description": "Full descriptive name exactly as printed (e.g., 'Volume of distribution central compartment'). This is REQUIRED. If only a symbol is printed, use the symbol here. Do not invent a name.",
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mathematical symbol exactly as printed (e.g., VCC, Tmc, k12, CL/F). Do not standardize or expand \u2014 transcribe verbatim.",
+          "title": "Symbol"
+        },
+        "context": {
+          "$ref": "#/$defs/BiologicalContext",
+          "description": "Biological and study context for this parameter."
+        },
+        "quantitative_data": {
+          "$ref": "#/$defs/QuantitativeData",
+          "description": "Numerical values, ranges, units, and qualifiers."
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "description": "Source location, supporting quote, and confidence."
+        }
+      },
+      "required": [
+        "parameter_name",
+        "context",
+        "quantitative_data",
+        "provenance"
+      ],
+      "title": "ExtractedParameter",
+      "type": "object"
+    },
+    "ModelClassification": {
+      "properties": {
+        "model_type": {
+          "description": "Must be 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'",
+          "title": "Model Type",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "ModelClassification",
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        }
+      },
+      "title": "PageMetadata",
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where this parameter was found (e.g., 'Table 1', 'Figure 2', 'Results paragraph 2').",
+          "title": "Source Location"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short, exact transcription \u2014 not a paraphrase \u2014 of the specific cell(s) or sentence this value came from. If you cannot produce a directly traceable quote, omit the parameter.",
+          "title": "Source Quote"
+        },
+        "parameter_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the parameter was obtained, exactly as described by the authors: 'Measured', 'Fitted', 'Fixed', 'Assumed', 'Scaled', or 'Literature'. Leave null if not stated.",
+          "title": "Parameter Status"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high' = value, unit, and symbol all printed together unambiguously. 'medium' = any inheritance from a group header or nearby context was required. 'low' = any interpretive judgment was needed (degraded text, ambiguous boundary, uncertain abbreviation).",
+          "title": "Confidence"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "QuantitativeData": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if there is any ambiguity, unclear formatting, or complex structure requiring human review.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The exact printed value text verbatim, preserving all original formatting (e.g., '5a', '0.008b', '<1', '~3'). This MUST ALWAYS be populated if a value exists, regardless of whether it is a valid float or contains letters.",
+          "title": "Value Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The primary numerical value as a pure float. ONLY populate this if the value can be safely parsed as a float. If the value contains text like '5a' or '<1', leave this field null.",
+          "title": "Value"
+        },
+        "range_low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower bound when the parameter is printed as a range (e.g., the '0.18' in '0.23 (0.18, 0.29)').",
+          "title": "Range Low"
+        },
+        "range_high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper bound when the parameter is printed as a range (e.g., the '0.29' in '0.23 (0.18, 0.29)').",
+          "title": "Range High"
+        },
+        "variance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standard deviation, standard error, or confidence interval numeric value.",
+          "title": "Variance"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Type of variance exactly as printed: 'SD', 'SE', '95% CI', etc.",
+          "title": "Variance Type"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit of measurement exactly as printed (e.g., mg/kg, L/h, 1/min). If the unit is inherited from a group header rather than printed inline, still record it here.",
+          "title": "Unit"
+        },
+        "unit_inherited": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True if the unit was stated once in a group/section header rather than printed inline with this value.",
+          "title": "Unit Inherited"
+        },
+        "value_qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Any qualifier printed alongside the value beyond the number itself (e.g., 'Fixed', 'assumed', 'estimated'). Never drop or fold into the numeric value.",
+          "title": "Value Qualifier"
+        }
+      },
+      "title": "QuantitativeData",
+      "type": "object"
+    },
+    "Structure": {
+      "properties": {
+        "compartments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Compartment"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compartments"
+        },
+        "connections": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Connection"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connections"
+        },
+        "unresolved": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/UnresolvedTopology"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unresolved"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Location"
+        }
+      },
+      "title": "Structure",
+      "type": "object"
+    },
+    "UnresolvedTopology": {
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "reason"
+      ],
+      "title": "UnresolvedTopology",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "page_metadata": {
+      "$ref": "#/$defs/PageMetadata"
+    },
+    "model_classification": {
+      "$ref": "#/$defs/ModelClassification"
+    },
+    "structure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Structure"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "parameters": {
+      "description": "All PK model parameters explicitly present on this page. An empty list is correct if the page contains no PK data.",
+      "items": {
+        "$ref": "#/$defs/ExtractedParameter"
+      },
+      "title": "Parameters",
+      "type": "array"
+    }
+  },
+  "required": [
+    "page_metadata",
+    "model_classification"
+  ],
+  "title": "ExtractedPage",
+  "type": "object"
+}
+<|im_end|>
+<|im_start|>user
+<|vision_start|><|image_pad|><|vision_end|>Extract parameters from this image strictly into the JSON schema.
+
+Use the following native PDF text extracted from this region as evidence hints to avoid hallucinating names or values:
+
+<mark>Article</mark> 
+
+#### <u>Environmental Science & Technology</u> 
+
+
+
+Figure 1. Conceptual representation and main equations of the pharmacokinetic model. Abbreviations: A = amount; BW = body weight; C = concentration; Ktrans = placental diffusion rate; P = partition coefficient; V = volume; Vd = volume of distribution. 
+
+months were on average 4.0 times (PFOA) and 1.1 times (PFOS) higher than levels measured in maternal plasma at delivery.<sup>13</sup> Studies also found a positive association between the duration of breastfeeding and children’s PFAS levels,<sup>14,15</sup> a finding that was paralleled by a decrease in maternal PFAS levels during breastfeeding.<sup>13,14,16,17</sup> These results call for epidemiological studies on the potential health effects of lactational exposure to PFASs. In addition, this route of exposure will need to be accounted for during assessment of the risk of PFASs, namely in terms of relating maternal dose to child’s dose. Tools to adequately estimate exposure and body burden in children will be instrumental to accomplish these tasks. 
+
+A physiologically based pharmacokinetic model for plasma concentration of PFOA and PFOS in infants and toddlers up to 15 months of age has been developed by Loccisano et al. (2013).<sup>18</sup> For reasons of applicability in epidemiology and risk assessment, we decided to develop a novel pharmacokinetic model for which (1) prenatal and postnatal exposure can be accommodated within the same model (these two periods are covered by two separate models in Loccisano et al. (2013));<sup>18</sup> (2) women’s lifetime exposure is simulated (simulations using the Loccisano et al. (2013)<sup>18</sup> models start at conception or delivery, and initial tissue concentrations need to be calculated using another PBPK model); (3) the maximum duration of breastfeeding is 30 months rather than 15 months; (4) levels in older children (3 years in this case) can be modeled; and (5) another compound, PFHxS, can be modeled. 
+
+Specifically, we developed a model to estimate women’s exposure to three PFASs (PFOA, PFOS, and PFHxS), placental transfer during gestation, and postnatal exposure in children through breastfeeding and other sources. These three PFASs were selected because sufficient information on pharmacokinetic parameters was available in the literature. We also set out to evaluate the model by comparing predictions to plasma 
+
+levels measured in children. Finally, we present applications in epidemiology and risk assessment. 
+
+# ■<sup>MATERIALSANDMETHODS</sup> 
+
+Pharmacokinetic Model. We developed a simple pharmacokinetic model with two compartments: one for the mother and one for the child (Figure 1). We assumed PFASs to be fully absorbed through oral ingestion because exposure through other routes like dermal absorption and inhalation are thought to be negligible in comparison.<sup>19</sup> We used volumes of distribution of 170 mL/kg of body weight for PFOA and 230 mL/kg of body weight for PFOS as estimated by Thompson et al. (2010).<sup>20</sup> These values were similar to those calculated from controlled exposures in monkeys.<sup>21,22</sup> Because the volume of distribution for PFHxS has not been estimated for humans, we used a value of 213 mL/kg of body weight derived from a monkey study.<sup>23</sup> Body-weight profiles for the mother and child were based on median growth curves from the Center for Disease Control and Prevention (CDC).<sup>24</sup> These growth curves were adjusted to fit individual-specific measured weight, e.g., for a woman with a prepregnancy body weight of 65 kg at 20 years of age (versus the median weight at that age, 54 kg), the median growth curve was shifted by a factor of 1.2. PFAS elimination from maternal and child compartments was calculated based on published arithmetic mean half-lives of 3.8 years for PFOA, 5.4 years for PFOS, and 8.5 years for PFHxS.<sup>25</sup> We assumed partition of PFAS between fetal and maternal plasma during pregnancy to reach an equilibrium rapidly, with a resulting concentration ratio equal to the average ratio from studies reviewed by Aylward et al. (2014).<sup>26</sup> We calculated mother−fetus (ktrans1) and fetus−mother (ktrans2) transfer rates (L/h) so that their ratio (ktrans1/ktrans2) is the same as measured ratios; ktrans1 was given the same value as the reported maternal/cord plasma level ratio (0.78 for PFOA, 0.45 
+
+979 
+
+DOI: 10.1021/acs.est.5b04399 Environ. Sci. Technol. 2016, 50, 978−986<|im_end|>
+<|im_start|>assistant

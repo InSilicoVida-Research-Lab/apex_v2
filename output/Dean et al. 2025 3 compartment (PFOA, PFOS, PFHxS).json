@@ -1,0 +1,1481 @@
+{
+  "page_metadata": {
+    "title": "Adapting existing toxicokinetic models to relate perfluoroalkyl and polyfluoroalkyl intake to biomarkers in humans",
+    "authors": [
+      "Kara J Dean",
+      "Régis Pouillot",
+      "Jane M Van Doren",
+      "Sofia M Santillana Farakos"
+    ],
+    "journal": "Toxicological Sciences",
+    "year": 2025
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Table 1. ... Cardiac blood output (L/h/kg 0.74 ), Volume of filtrate compartment (L/kg), Saturable resorption rate (mg/h/kg), Saturable resorption affinity (mg/L), Fraction of cardiac output to filtrate, etc. — all physiological and renal parameters consistent with PBPK structure."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "oral_dose",
+        "label_raw": "Oral Dose"
+      },
+      {
+        "id": "central_compartment",
+        "label_raw": "Central Compartment"
+      },
+      {
+        "id": "second_compartment",
+        "label_raw": "Second Compartment"
+      },
+      {
+        "id": "filtrate_compartment",
+        "label_raw": "Filtrate Compartment"
+      }
+    ],
+    "connections": [
+      {
+        "source": "oral_dose",
+        "target": "central_compartment",
+        "label_raw": "k_a",
+        "direction": "forward"
+      },
+      {
+        "source": "central_compartment",
+        "target": "second_compartment",
+        "label_raw": "Q_d = k_12 × V_c",
+        "direction": "forward"
+      },
+      {
+        "source": "second_compartment",
+        "target": "central_compartment",
+        "label_raw": "Q_d = k_12 × V_c",
+        "direction": "forward"
+      },
+      {
+        "source": "central_compartment",
+        "target": "filtrate_compartment",
+        "label_raw": "Q_fil",
+        "direction": "forward"
+      },
+      {
+        "source": "filtrate_compartment",
+        "target": "external",
+        "label_raw": "Q_fil = Q_filC × QCC × BW^0.74",
+        "direction": "forward"
+      },
+      {
+        "source": "central_compartment",
+        "target": "filtrate_compartment",
+        "label_raw": "T_m = Tmc × BW",
+        "direction": "forward"
+      },
+      {
+        "source": "central_compartment",
+        "target": "filtrate_compartment",
+        "label_raw": "K_t",
+        "direction": "forward"
+      }
+    ],
+    "source_location": "Fig. 1."
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight (kg)",
+      "symbol": "BW",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5 a",
+        "value": 5.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": "a"
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Body weight (kg) | BW | 5 a | 4.1 a | Butenhoff et al. (2004) ; Chang et al. (2012) ; Seacat et al. (2002) ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
+      "symbol": "QCC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "19.8",
+        "value": 19.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.74 ",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Cardiac blood output (L/h/kg 0.74 ) | QCC | 19.8 | 19.8 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction of cardiac output to filtrate",
+      "symbol": "QfilC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.15",
+        "value": 0.15,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Fraction of cardiac output to filtrate | QfilC | 0.15 | 0.15 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of filtrate compartment (L/kg)",
+      "symbol": "VfilC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Volume of filtrate compartment (L/kg) | VfilC | 4.00E-04 | 4.00E-04 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bioavailability",
+      "symbol": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.9",
+        "value": 0.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Bioavailability | bioAv | 0.9 | 0.32 (0.20, 0.46) | US EPA (2024a) (PFOS) Optimized (PFOA) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution central compartment (L/kg)",
+      "symbol": "VCC",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.24 (0.24, 0.25)",
+        "value": 0.24,
+        "range_low": 0.24,
+        "range_high": 0.25,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Volume of distribution central compartment (L/kg) | VCC | 0.24 (0.24, 0.25) | 0.23 (0.18, 0.29) | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption rate (mg/h/kg)",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.5 (2.31, 2.80)",
+        "value": 2.5,
+        "range_low": 2.31,
+        "range_high": 2.8,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/h/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Saturable resorption rate (mg/h/kg) | Tmc | 2.5 (2.31, 2.80) | 0.28 (0.17, 0.53) | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption affinity (mg/L)",
+      "symbol": "K t",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.004 (0.003, 0.004)",
+        "value": 0.004,
+        "range_low": 0.003,
+        "range_high": 0.004,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Saturable resorption affinity (mg/L) | K t | 0.004 (0.003, 0.004) | 0.017 (0.010, 0.041) | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Proportion of free compound in serum",
+      "symbol": "Free",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.50E-03",
+        "value": 0.0045,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Proportion of free compound in serum | Free | 4.50E-03 | 1.20E-3 | Smeltz et al. (2023) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from central to second compartment (1/h)",
+      "symbol": "k 12",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.3",
+        "value": 3.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Rate from central to second compartment (1/h) | k 12 | 3.3 | 3.3 | Andersen et al. (2006) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from second to central compartment (1/h)",
+      "symbol": "k 21",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Rate from second to central compartment (1/h) | k 21 | 3.4 | 3.4 | Andersen et al. (2006) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from gut to central compartment (1/h)",
+      "symbol": "k a",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "132",
+        "value": 132.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Rate from gut to central compartment (1/h) | k a | 132 | 230 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight (kg)",
+      "symbol": "BW",
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70",
+        "value": 70.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Body weight (kg) | BW | 70 | 70 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
+      "symbol": "QCC",
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "12.5",
+        "value": 12.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.74 ",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Cardiac blood output (L/h/kg 0.74 ) | QCC | 12.5 | 12.5 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bioavailability",
+      "symbol": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.9",
+        "value": 0.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Bioavailability | bioAv | 0.9 | 0.9 | US EPA (2024a , 2024b) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption rate (mg/h/kg)",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.07",
+        "value": 1.07,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/h/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Saturable resorption rate (mg/h/kg) | Tmc | 1.07 | 0.54 | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption affinity (mg/L)",
+      "symbol": "K t",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Saturable resorption affinity (mg/L) | K t | 0.004 | 0.008 b | Optimized (nonhuman primate) |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life (years)",
+      "symbol": "T 1/2",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Half-life (years) | T 1/2 | 3.4 | 2.7 | Li et al. (2018) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight (kg)",
+      "symbol": "BW",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5",
+        "value": 5.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Physiological | Body weight (kg) | BW | 5 | Chang (2020d)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
+      "symbol": "QCC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "19.8",
+        "value": 19.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.74",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Cardiac blood output (L/h/kg 0.74 ) | QCC | 19.8 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction of cardiac output to filtrate",
+      "symbol": "QfilC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.15",
+        "value": 0.15,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Fraction of cardiac output to filtrate | QfilC | 0.15 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of filtrate compartment (L/Kg)",
+      "symbol": "VfilC",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/Kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Volume of filtrate compartment (L/Kg) | VfilC | 4.00E-04 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "bioAv",
+      "symbol": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.9",
+        "value": 0.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Assumed (PFOS)"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Bioavailability | bioAv | 0.9 | Assumed (PFOS) |  ",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution central compartment (L/kg)",
+      "symbol": "VCC",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.17 (0.16, 0.20)",
+        "value": 0.17,
+        "range_low": 0.16,
+        "range_high": 0.2,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/kg",
+        "unit_inherited": false,
+        "value_qualifier": "Optimized"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Volume of distribution central compartment (L/kg) | VCC | 0.17 (0.16, 0.20) | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption rate (mg/h/kg)",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.21 (0.18, 0.25)",
+        "value": 0.21,
+        "range_low": 0.18,
+        "range_high": 0.25,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/h/kg",
+        "unit_inherited": false,
+        "value_qualifier": "Optimized"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Saturable resorption rate (mg/h/kg) | Tmc | 0.21 (0.18, 0.25) | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption affinity (mg/L)",
+      "symbol": "K t",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/L",
+        "unit_inherited": false,
+        "value_qualifier": "Assumed (PFOS)"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Saturable resorption affinity (mg/L) | K t | 0.004 | Assumed (PFOS) |  ",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Proportion of free compound in serum",
+      "symbol": "Free",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0009",
+        "value": 0.0009,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Proportion of free compound in serum | Free | 0.0009 | Smeltz et al. (2023) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from central to second compartment (1/h)",
+      "symbol": "k 12",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.3",
+        "value": 3.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Rate from central to second compartment (1/h) | k 12 | 3.3 | Andersen et al. (2006) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from second to central compartment (1/h)",
+      "symbol": "k 21",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Rate from second to central compartment (1/h) | k 21 | 3.4 | Andersen et al. (2006) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate from gut to central compartment (1/h)",
+      "symbol": "k a",
+      "context": {
+        "compound": null,
+        "subject_species": "Nonhuman primate",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "132",
+        "value": 132.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Nonhuman primate | Rate from gut to central compartment (1/h) | k a | 132 | Wambaugh et al. (2013) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight (kg)",
+      "symbol": "BW",
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70",
+        "value": 70.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Human | Physiological | Body weight (kg) | BW | 70 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
+      "symbol": "QCC",
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "12.5",
+        "value": 12.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.74",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Human | Cardiac blood output (L/h/kg 0.74 ) | QCC | 12.5 | Loccisano et al. (2011) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption rate (mg/h/kg)",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.47",
+        "value": 0.47,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/h/kg",
+        "unit_inherited": false,
+        "value_qualifier": "Optimized"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Human | Saturable resorption rate (mg/h/kg) | Tmc | 0.47 | Optimized |  ",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life (years)",
+      "symbol": "T 1/2",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.3",
+        "value": 5.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Human | Half-life (years) | T 1/2 | 5.3 | Li et al. (2018) |  ",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cardiac output",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "12.5 L/h/kg 0.74",
+        "value": 12.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg 0.74",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TK modeling approach: a case study with PFOS and PFOA",
+        "source_quote": "We scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg 0.74 ) following the procedure of ;",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Saturable resorption rate (Tmc)",
+      "symbol": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.47 mg/h/kg",
+        "value": 0.47,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/h/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Application to PFHxS",
+        "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4 years",
+        "value": 3.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.7 years",
+        "value": 2.7,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Clearance",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": "Human",
+        "life_stage": "Adult",
+        "compartment": null,
+        "route": null,
+        "population": "Outside of reproductive ages (male) and females of reproductive ages"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.06 mL/kg-day",
+        "value": 0.06,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mL/kg-day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Application to PFHxS",
+        "source_quote": "for doses well below saturation (<1000 mg/kg BW/day), the human model is associated with a clearance of approximately 0.06 mL/kg-day for a 70 kg adult, which falls between the clearance values applied for males and females outside of reproductive ages (0.041 mL/kg-day) and females of reproductive ages (0.072 mL/kg-day) in the EPA’s derivation of PFHxS candidate toxicity values .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bioavailability",
+      "symbol": "bioAv",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "90%",
+        "value": 90.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Inferences",
+        "source_quote": "Additionally, a parameter for bioavailability was added to the model to align with the model implemented by the , in their final reference dose level setting for PFOS and PFOA. The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion; however, for PFOA, the parameter was found to be identifiable and estimable from the data for the nonhuman primate model only.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Proportion of free compound in the serum (Free)",
+      "symbol": "Free",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_quote": "the proportion of free compound in the serum ( Free ), the rate of absorption from the gut ( k a ), and the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 ).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate of absorption from the gut (ka)",
+      "symbol": "k a",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_quote": "the proportion of free compound in the serum ( Free ), the rate of absorption from the gut ( k a ), and the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 ).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Rate to and from the second compartment (k12, k21)",
+      "symbol": "k 12 , k 21",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": null,
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_quote": "the proportion of free compound in the serum ( Free ), the rate of absorption from the gut ( k a ), and the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 ).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bodyweight",
+      "symbol": "BW",
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70 kg",
+        "value": 70.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TK modeling approach: a case study with PFOS and PFOA",
+        "source_quote": "We scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg 0.74 ) following the procedure of ;",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.3 years",
+        "value": 5.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Application to PFHxS",
+        "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg .",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published"
+}

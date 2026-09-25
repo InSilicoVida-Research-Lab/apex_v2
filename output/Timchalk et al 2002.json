@@ -1,0 +1,1329 @@
+{
+  "page_metadata": {
+    "title": "Cross-Species Translation and Target-Dependent Pharmacology of GalNAc-siRNAs Using a Multi-Parameter K-PD Framework for Biophase Kinetics, Apparent Potency, and Pharmacodynamic Turnover",
+    "authors": [
+      "Xiaofei Wu",
+      "Xuanji Peng",
+      "Ranran Jia",
+      "Jiahua Ma",
+      "Hongyun Wang",
+      "Xiaohong Han"
+    ],
+    "journal": "Drug Design, Development and Therapy",
+    "year": 2026
+  },
+  "model_classification": {
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": null
+  },
+  "structure": {
+    "compartments": [],
+    "connections": []
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.763, 16.8]",
+        "value": 0.763,
+        "range_low": 0.763,
+        "range_high": 16.8,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.913, 6.07]",
+        "value": 0.913,
+        "range_low": 0.913,
+        "range_high": 6.07,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.325, 13.5]",
+        "value": 0.325,
+        "range_low": 0.325,
+        "range_high": 13.5,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.576, 49.5]",
+        "value": 0.576,
+        "range_low": 0.576,
+        "range_high": 49.5,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[2.06, 23.4]",
+        "value": 2.06,
+        "range_low": 2.06,
+        "range_high": 23.4,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[1.83, 9.26]",
+        "value": 1.83,
+        "range_low": 1.83,
+        "range_high": 9.26,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.940, 24.0]",
+        "value": 0.94,
+        "range_low": 0.94,
+        "range_high": 24.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.08",
+        "value": 2.08,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.98",
+        "value": 1.98,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.97",
+        "value": 2.97,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "11.1",
+        "value": 11.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.59",
+        "value": 3.59,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.54",
+        "value": 8.54,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biophase Half-Life (Weeks)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.44",
+        "value": 2.44,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Weeks",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.00151, 0.155]",
+        "value": 0.00151,
+        "range_low": 0.00151,
+        "range_high": 0.155,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.00100, 0.0592]",
+        "value": 0.001,
+        "range_low": 0.001,
+        "range_high": 0.0592,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.00238, 0.279]",
+        "value": 0.00238,
+        "range_low": 0.00238,
+        "range_high": 0.279,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.000123, 0.167]",
+        "value": 0.000123,
+        "range_low": 0.000123,
+        "range_high": 0.167,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.0250, 0.710]",
+        "value": 0.025,
+        "range_low": 0.025,
+        "range_high": 0.71,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.0540, 6.900]",
+        "value": 0.054,
+        "range_low": 0.054,
+        "range_high": 6.9,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.00498, 1.07]",
+        "value": 0.00498,
+        "range_low": 0.00498,
+        "range_high": 1.07,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.00972",
+        "value": 0.00972,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0217",
+        "value": 0.0217,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0176",
+        "value": 0.0176,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.00177",
+        "value": 0.00177,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.112",
+        "value": 0.112,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.649",
+        "value": 0.649,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "IDK 50 (mg/kg/day)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.154",
+        "value": 0.154,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.483, 9.08]",
+        "value": 0.483,
+        "range_low": 0.483,
+        "range_high": 9.08,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.244, 3.47]",
+        "value": 0.244,
+        "range_low": 0.244,
+        "range_high": 3.47,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[2.75, 11.7]",
+        "value": 2.75,
+        "range_low": 2.75,
+        "range_high": 11.7,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[2.37, 29.3]",
+        "value": 2.37,
+        "range_low": 2.37,
+        "range_high": 29.3,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[1.22, 20.2]",
+        "value": 1.22,
+        "range_low": 1.22,
+        "range_high": 20.2,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[3.20, 24.5]",
+        "value": 3.2,
+        "range_low": 3.2,
+        "range_high": 24.5,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "[0.42, 1.86]",
+        "value": 0.42,
+        "range_low": 0.42,
+        "range_high": 1.86,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Mouse",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.55",
+        "value": 1.55,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mouse (n=16) | [0.763, 16.8] | 2.08 | [0.00151, 0.155] | 0.00972 | [0.483, 9.08] | 1.55",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.578",
+        "value": 0.578,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Rat (n=3) | [0.913, 6.07] | 1.98 | [0.00100, 0.0592] | 0.0217 | [0.244, 3.47] | 0.578",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Monkey",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.44",
+        "value": 5.44,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Monkey (n=14) | [0.325, 13.5] | 2.97 | [0.00238, 0.279] | 0.0176 | [2.75, 11.7] | 5.44",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "6.95",
+        "value": 6.95,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human (n=30) | [0.576, 49.5] | 11.1 | [0.000123, 0.167] | 0.00177 | [2.37, 29.3] | 6.95",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/mouse ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.68",
+        "value": 4.68,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/mouse ratio (n=16) | [2.06, 23.4] | 3.59 | [0.0250, 0.710] | 0.112 | [1.22, 20.2] | 4.68",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/rat ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.03",
+        "value": 7.03,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/rat ratio (n=3) | [1.83, 9.26] | 8.54 | [0.0540, 6.900] | 0.649 | [3.20, 24.5] | 7.03",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PD Half-Life (Days)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": "Human/monkey ratio",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.12",
+        "value": 1.12,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "Days",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Human/monkey ratio (n=14) | [0.940, 24.0] | 2.44 | [0.00498, 1.07] | 0.154 | [0.42, 1.86] | 1.12",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published"
+}
