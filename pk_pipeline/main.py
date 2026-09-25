@@ -5,6 +5,10 @@ import asyncio
 import pymupdf
 from pdf2image import convert_from_path
 
+import sys
+# Ensure the root directory is on PYTHONPATH so pk_pipeline modules can be imported
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from pk_pipeline.schemas import ExtractionRequest
 from pk_pipeline.ml_services import SGLangExtractor
 from pk_pipeline.config import logger
@@ -13,6 +17,14 @@ from pk_pipeline.config import logger
 extractor = None
 tatr_processor = None
 tatr_model = None
+tatr_sr_processor = None
+tatr_sr_model = None
+
+# Species sub-header keywords to detect in table section rows
+_SPECIES_KEYWORDS = [
+    "rat", "human", "mouse", "rabbit", "dog", "monkey",
+    "pig", "hamster", "guinea pig", "non-human primate", "nhp", "sheep"
+]
 
 # Removed ColQwenRetriever as per MinerU migration plan
 
@@ -34,6 +46,9 @@ def get_tatr():
         print("TATR loaded successfully.")
     return tatr_processor, tatr_model
 
+
+# Removed TATR-SR globals and helpers, using Header Repetition instead
+
 def convert_pdf_to_images(pdf_path: str):
     logger.debug(f"Attempting to convert PDF to images: {pdf_path}")
     if not os.path.exists(pdf_path):
@@ -48,6 +63,118 @@ def convert_pdf_to_images(pdf_path: str):
     except Exception as e:
         logger.error(f"Failed to convert PDF: {str(e)}")
         raise
+
+import copy
+import re
+
+def post_process_document(document, pdf_path):
+    print("Step 4: Running Python Post-Processing Cleanup...")
+    # 1. Clean up stubborn VLM Formulations (split ranges with comma values and multiple compounds)
+    new_params = []
+    for p in document.get("parameters", []):
+        compound = p.get("context", {}).get("compound", "")
+        # Look for multiple compounds like "Rilutor, ASD"
+        if compound and ("," in compound or " and " in compound):
+            q_data = p.get("quantitative_data", {})
+            r_low = q_data.get("range_low")
+            r_high = q_data.get("range_high")
+            val_text = q_data.get("value_text", "")
+            
+            # If the VLM mapped it to range_low and range_high but it came from comma separated values
+            if r_low is not None and r_high is not None and "," in val_text:
+                compounds = [c.strip() for c in re.split(r',| and ', compound) if c.strip()]
+                if len(compounds) == 2:
+                    p1 = copy.deepcopy(p)
+                    p1["context"]["compound"] = compounds[0]
+                    p1["quantitative_data"]["value"] = float(r_low)
+                    p1["quantitative_data"]["range_low"] = None
+                    p1["quantitative_data"]["range_high"] = None
+                    p1["quantitative_data"]["value_text"] = str(r_low)
+                    
+                    p2 = copy.deepcopy(p)
+                    p2["context"]["compound"] = compounds[1]
+                    p2["quantitative_data"]["value"] = float(r_high)
+                    p2["quantitative_data"]["range_low"] = None
+                    p2["quantitative_data"]["range_high"] = None
+                    p2["quantitative_data"]["value_text"] = str(r_high)
+                    
+                    new_params.extend([p1, p2])
+                    continue
+        new_params.append(p)
+    document["parameters"] = new_params
+    
+    # 2. Text-sweep for targeted commonly dropped parameters (e.g. ratios broken across columns)
+    try:
+        if pdf_path and os.path.exists(pdf_path):
+            doc = pymupdf.open(pdf_path)
+            text = ""
+            for page in doc:
+                text += page.get_text() + " "
+                
+            # Generic regex for "ratio [...] for [COMPOUND]"
+            if "ratio" in text.lower() or "ktrans" in text.lower() or "placental" in text.lower():
+                # Restrict compound to 2+ uppercase letters/numbers to avoid "the", "methods"
+                matches = re.finditer(r'([0-9]*\.?[0-9]+)\s+for\s+([A-Z0-9][A-Za-z0-9\-_]{1,10})', text)
+                for match in matches:
+                    val = float(match.group(1))
+                    comp = match.group(2)
+                    
+                    # Ignore common stop words that might match
+                    if comp.lower() in ["the", "methods", "example", "all", "each", "this"]:
+                        continue
+                        
+                    # check context window
+                    start = max(0, match.start() - 200)
+                    end = min(len(text), match.end() + 200)
+                    context = text[start:end].lower()
+                    
+                    if "placental" in context or "cord/mother" in context or "maternal/cord" in context or "ktrans" in context:
+                        # Check if this parameter already exists in document["parameters"]
+                        exists = False
+                        for p in document["parameters"]:
+                            c = p.get("context", {}).get("compound", "")
+                            if not c: continue
+                            n = p.get("parameter_name", "").lower()
+                            if c.lower() == comp.lower() and ("ratio" in n or "placental" in n):
+                                exists = True
+                                break
+                        if not exists:
+                            print(f"  -> Post-processing sweep found missed parameter: {comp} Placental transfer ratio = {val}")
+                            document["parameters"].append({
+                                "needs_review": True,
+                                "parameter_name": f"Placental transfer ratio for {comp}",
+                                "symbol": "ktrans",
+                                "context": {
+                                    "compound": comp,
+                                    "subject_species": None,
+                                    "life_stage": None,
+                                    "compartment": None,
+                                    "route": None,
+                                    "population": None
+                                },
+                                "quantitative_data": {
+                                    "value_text": str(val),
+                                    "value": val,
+                                    "range_low": None,
+                                    "range_high": None,
+                                    "variance": None,
+                                    "variance_type": None,
+                                    "unit": "None",
+                                    "unit_inherited": False,
+                                    "value_qualifier": None
+                                },
+                                "provenance": {
+                                    "source_location": "Regex text sweep fallback",
+                                    "source_quote": text[match.start():match.end()],
+                                    "parameter_status": "Literature",
+                                    "confidence": "medium"
+                                }
+                            })
+                            
+    except Exception as e:
+        print(f"  -> Error in post-processing text sweep: {e}")
+
+    return document
 
 async def run_pipeline(pdf_path: str, target_compounds: list = None):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
@@ -188,7 +315,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                         final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
 
             logger.info("Successfully completed XML extraction fast-path.")
-            return final_document
+            return post_process_document(final_document, pdf_path)
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
             print(f"  -> Switching from local PDF to Open Access PDF ({res['source']}): {res['pdf_path']}")
@@ -225,124 +352,84 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
         logger.debug("Falling back to PyMuPDF4LLM extraction.")
         
         import pymupdf4llm
-        from PIL import Image
+        from PIL import Image, ImageDraw
         import io
         
         md_chunks = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)
         pdf_doc = pymupdf.open(pdf_path)
         
-        import re
-        table_pattern = re.compile(r"(?:^\|.*\|$\n)+(?:^\|[\-\s:|]+\|$\n)(?:^\|.*\|$\n?)*", re.MULTILINE)
+        import torch
+        t_processor, t_model = get_tatr()
         
         llm_payloads = []
+        
         for i, chunk in enumerate(md_chunks):
             page_num = i + 1
             text = chunk.get("text", "")
-            has_image = len(pdf_doc[i].get_images()) > 0
-            has_table = bool(table_pattern.search(text))
+            page = pdf_doc[i]
+            has_image = len(page.get_images()) > 0
             
-            # Generate a full page screenshot if there are tables, to give Qwen visual context
-            full_page_img = None
-            if has_table:
-                page = pdf_doc[i]
-                # Keep high-res rendering
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
-                full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
-                
-                # --- NEW: TATR Cropping ---
-                print(f"  -> Table detected on page {page_num}. Running TATR to crop...")
-                import torch
-                t_processor, t_model = get_tatr()
-                inputs = t_processor(images=full_page_img, return_tensors="pt")
-                with torch.no_grad():
-                    outputs = t_model(**inputs)
-                
-                target_sizes = torch.tensor([full_page_img.size[::-1]])
-                results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
-                
-                best_box = None
-                best_score = 0
-                for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
-                    if label.item() == 0 and score.item() > best_score:  # Class 0 is 'table'
-                        best_score = score.item()
-                        best_box = [int(i) for i in box.tolist()]
-                        
-                if best_box:
-                    print(f"     - Found table with score {best_score:.3f}. Cropping...")
-                    x_min, y_min, x_max, y_max = best_box
-                    # Add generous padding (40px) to ensure no text is cut off
-                    padding = 40
-                    x_min, y_min = max(0, x_min - padding), max(0, y_min - padding)
-                    x_max, y_max = min(full_page_img.width, x_max + padding), min(full_page_img.height, y_max + padding)
-                    full_page_img = full_page_img.crop((x_min, y_min, x_max, y_max))
-                else:
-                    print("     - TATR failed to find table. Falling back to full page image.")
-                # --------------------------
+            pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
+            full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
             
-            # 1. If there's an image (diagram/figure), send the full page text as evidence for the image crop
-            if has_image:
-                page = pdf_doc[i]
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
-                img_obj = Image.open(io.BytesIO(pix.tobytes()))
+            # --- TATR Detection on EVERY page ---
+            inputs = t_processor(images=full_page_img, return_tensors="pt")
+            with torch.no_grad():
+                outputs = t_model(**inputs)
+                
+            target_sizes = torch.tensor([full_page_img.size[::-1]])
+            results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
+            
+            table_boxes = []
+            for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+                if label.item() == 0:
+                    table_boxes.append(box.tolist())
+                    
+            if table_boxes:
+                # Draw thick red boundaries around the detected tables on the full page image
+                draw = ImageDraw.Draw(full_page_img)
+                for box in table_boxes:
+                    x_min, y_min, x_max, y_max = box
+                    draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=6)
+                
                 llm_payloads.append({
-                    "role": "figure_crop",
+                    "role": "page_with_table",
                     "page": page_num,
-                    "img_obj": img_obj,
+                    "img_obj": full_page_img,
                     "markdown_context": text,
-                    "part": "figure"
                 })
-                
-            # 2. Split the page text into separate table and narrative chunks
-            last_end = 0
-            part_idx = 1
-            for match in table_pattern.finditer(text):
-                start, end = match.span()
-                if start > last_end:
-                    narrative = text[last_end:start].strip()
-                    if len(narrative) > 50:
-                        llm_payloads.append({"role": "narrative_xml", "page": page_num, "part": part_idx, "markdown_context": narrative})
-                        part_idx += 1
-                table = text[start:end].strip()
+            elif has_image:
                 llm_payloads.append({
-                    "role": "table_xml", 
-                    "page": page_num, 
-                    "part": part_idx, 
-                    "markdown_context": table,
-                    "full_page_img": full_page_img
+                    "role": "page_with_figure",
+                    "page": page_num,
+                    "img_obj": full_page_img,
+                    "markdown_context": text,
                 })
-                part_idx += 1
-                last_end = end
-                
-            if last_end < len(text):
-                narrative = text[last_end:].strip()
-                if len(narrative) > 50:
-                    llm_payloads.append({"role": "narrative_xml", "page": page_num, "part": part_idx, "markdown_context": narrative})
+            elif len(text.strip()) > 50:
+                llm_payloads.append({
+                    "role": "narrative_xml",
+                    "page": page_num,
+                    "markdown_context": text.strip()
+                })
             
-        print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks (tables, figures, text). Running LLM extraction concurrently...")
+        print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks. Running LLM extraction concurrently...")
         
         sem = asyncio.Semaphore(5)
         async def bound_extract(p):
             async with sem:
                 role = p.get("role")
-                if role == "figure_crop":
+                if role in ["page_with_table", "page_with_figure"]:
                     return await get_extractor().extract_data(
                         p["img_obj"],
-                        role="figure_crop",
+                        role="full_page",
                         evidence_text=p["markdown_context"],
-                        chunk_title=f"Page {p['page']} Figure"
-                    )
-                elif role == "table_xml" and p.get("full_page_img"):
-                    return await get_extractor().extract_data(
-                        p["full_page_img"],
-                        role="page_with_table",
-                        evidence_text=p["markdown_context"],
-                        chunk_title=f"Page {p['page']} Part {p.get('part', 1)}"
+                        chunk_title=f"Page {p['page']} {role.replace('page_with_', '')}"
                     )
                 else:
                     return await get_extractor().extract_from_text(
                         p["markdown_context"],
                         role=role,
-                        chunk_title=f"Page {p['page']} Part {p.get('part', 1)}"
+                        chunk_title=f"Page {p['page']} Text"
                     )
                     
         tasks = [bound_extract(p) for p in llm_payloads]
@@ -369,7 +456,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                     final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
                     
         logger.info("Successfully completed PyMuPDF fallback extraction.")
-        return final_document
+        return post_process_document(final_document, pdf_path)
         
     print(f"Found MinerU structured output: {mineru_json_path}")
     
@@ -539,7 +626,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
             final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
     
     logger.info("Successfully completed extraction pipeline.")
-    return final_document
+    return post_process_document(final_document, pdf_path)
 
 import time
 

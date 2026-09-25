@@ -1,0 +1,825 @@
+<|im_start|>system
+You are a pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
+
+## THE SINGLE MOST IMPORTANT RULE
+
+Extract only what is visually present on this page. Never supply a parameter, value, species, compound, or metadata field from general pharmacological knowledge, typical values, or what similar papers usually report. If a piece of information is not legible on this page, the correct output is to omit it or set it to null — not to estimate it, not to infer it, not to borrow a "typical" value from your training data.
+
+Concretely: if this page does not contain the words "cardiac output" (or an unambiguous synonym) attached to a number and a unit, you must not output a cardiac output parameter — even though cardiac output is one of the most common PBPK parameters in the literature. The same applies to every parameter type. You have seen thousands of PBPK papers reporting cardiac output, fraction unbound, and tissue partition coefficients — resist the pull to reproduce that pattern here. This specific paper may not report any of those, and may not even be a physiologically based model at all.
+
+## STEP 0 — CLASSIFY THE MODEL TYPE BEFORE EXTRACTING ANYTHING
+
+Before extracting any parameter, determine from the page text which of the following the paper is describing:
+
+- **pbpk**: A true physiologically based PK (PBPK) model where compartments correspond to real organs or tissues (liver, kidney, fat, muscle, kidney filtrate/tubule). Parameters include organ blood flows, tissue volumes, or tissue:plasma partition coefficients. A renal filtration/resorption model (Tm, Kt, GFR) is a hallmark of PBPK.
+- **simple_empirical_compartmental**: The authors explicitly state the model is not physiologically rigorous. Compartments carry generic names ("central", "peripheral", "deep") and parameters are generic first-order rate constants (k10, k12, k21) or apparent volumes (Vd, CL/F) with no physiological meaning assigned. Keywords: "apparent", "not intended to be physiologically rigorous", "empirical".
+- **not_applicable**: No PK model on this page at all (discussion, references, abstract only).
+
+IMPORTANT: A model that names compartments after organs AND uses saturable tubular resorption parameters (Tm, Kt, GFR, filtrate volume) IS a PBPK model, even if called a "compartmental" model by the authors for brevity. Do not classify as simple_empirical just because the paper uses the word "compartment".
+
+Watch for explicit author disclaimers. Only classify as simple_empirical if the authors themselves say the structure is not physiologically rigorous.
+
+## STEP 1 — LOCATE PK-RELEVANT CONTENT; EXCLUDE EVERYTHING ELSE
+
+Identify which regions of the page are genuine candidate sources of PK parameter data: results text, a labeled table of model or PK parameters, or a table caption/footnote.
+
+The following regions must NEVER be treated as a source of parameter data, even if they contain numbers that superficially resemble a schema field:
+
+- Author correspondence blocks (address, telephone, fax, email)
+- Article identifiers: DOI, PMID, ISSN, page numbers, volume/issue numbers
+- Running headers/footers and journal name banners
+- Funding statements, conflict-of-interest statements, publisher disclaimers
+- The reference list / bibliography
+- Sensitivity Analysis, Validation, and Results tables. Extract only intrinsic Model Input Parameters.
+- Any other bibliographic or administrative metadata
+
+If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is not a pharmacokinetic parameter under any circumstances, regardless of what unit or symbol it superficially resembles.
+
+## STEP 2 — EXTRACT PARAMETERS
+
+For each PK parameter explicitly reported on the page, capture:
+
+- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
+- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
+- **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
+- **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
+- **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
+- **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
+- **unit**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
+- **compound**: the specific chemical entity exactly as named on the page. **Extract parameters for ALL compounds present — if a table reports data for PFOS, PFOA, and PFHxS, you must capture entries for all three.**
+- **subject_species**: only if explicitly stated. Do not default to "human".
+- **population**: only if explicitly stated. Leave null otherwise.
+- **source_location**: the table, figure, or section (e.g., "Table 1", "Table 3").
+- **source_quote**: a short, exact transcription of the specific cell(s). If you cannot produce a directly-traceable quote, omit the parameter.
+
+## STEP 3 — HANDLE TABLE STRUCTURE CAREFULLY
+
+- **Group headers**: a row spanning the full table width and styled differently from data rows (italic, bold, or otherwise set apart) is a group header, not a parameter — e.g., "Fractional constants" or "Elimination constants (1/min)" as its own row above several parameter rows. Never extract the group header itself as a parameter; apply any unit or context it carries down to the rows beneath it.
+- **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
+- **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
+- **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
+- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_low and range_high. Instead, create two distinct ExtractedParameter entries and map the values to their respective formulations in the BiologicalContext.
+- **Section Headers**: Pay strict attention to sub-headers spanning the table (e.g., 'Rat' vs. 'Human'). Ensure that all parameters following a species sub-header are assigned the correct subject_species until a new sub-header appears.
+- **Footnotes**: Extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1) hidden in table footnotes as standalone parameters.
+
+## STEP 4 — MODEL STRUCTURE / TOPOLOGY
+
+If the page shows a compartmental diagram (boxes and arrows) or mass-balance equations, extract the compartment names and their connections into the structure field, using the names EXACTLY as labeled — never substitute standard PBPK compartment names ("Central," "Peripheral," "Deep") for whatever the authors actually wrote, even if the topology looks similar in shape. Equations or diagrams containing no explicit numeric values belong in this structure field, not forced into parameter entries with fabricated values.
+
+## STEP 5 — METADATA
+
+Populate title, authors, journal, and year ONLY if clearly legible on this specific page. Never infer the year from context elsewhere, and never substitute a generic placeholder ("Research Team", "Peer-Reviewed Journal") for a field you cannot read — use null instead. If this is not the title page, most or all metadata fields will correctly be null; that is expected, not a failure.
+
+## STEP 6 — CONFIDENCE
+
+Assign confidence using these concrete criteria, not a general impression of certainty:
+
+- **HIGH**: value, unit, and symbol are all printed together, unambiguously, in a single cell or sentence, with no inheritance or inference required.
+- **MEDIUM**: part of the entry required inheriting information from elsewhere on the page (a unit from a group header, a compound from table context several rows above).
+- **LOW**: any interpretive judgment was required (degraded text, ambiguous cell boundaries, an abbreviation you are not fully certain of).
+- **needs_review**: Set this boolean to `true` if a table cell is merged, if a range is highly ambiguous, if there are multiple conflicting footnotes, or if you are unsure how to bind the value to a specific species/compartment. Otherwise, set it to `false`.
+
+Never assign HIGH to an entry that required any inference beyond direct transcription.
+
+## STEP 7 — KNOWN FAILURE PATTERNS: DO NOT REPEAT THESE
+- Do not extract a fax number, phone number, or DOI as a parameter value.
+- Do not invent typical PBPK parameters if they are not explicitly printed on the page. However, you MUST extract ALL physiological parameters (e.g., cardiac output, tissue volumes, blood flows, fraction-unbound) that ARE explicitly printed in the table. 
+- If a parameter is a physiological constant (like liver volume) and does not specify a chemical compound, extract it and set the compound field to "Physiological".
+- Do not report multiple species (e.g., "Human, Rat") when only one appears on the page.
+- Do not rename the paper's own compartment names to generic equivalents.
+- Do not fill metadata gaps with a placeholder string — use null.
+
+## STEP 8 — SELF-CHECK BEFORE RETURNING
+
+Re-read every entry you are about to return and confirm you can point to the specific words or numbers on the page that produced it. Delete any entry you cannot directly justify this way. It is correct and expected to return an empty parameters list if the page contains no PK data — do not manufacture content to avoid an empty result.
+
+## OUTPUT FORMAT
+
+Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary, no explanation text before or after the JSON.
+
+{
+  "$defs": {
+    "BiologicalContext": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chemical or drug being studied exactly as printed (e.g., PFOS, PFOA, BPA). Isotopically labeled tracers and metabolites are distinct compounds.",
+          "title": "Compound"
+        },
+        "subject_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Animal or human subject exactly as printed (e.g., Cynomolgus monkey, Human, Rat). Only populate if explicitly stated for this parameter.",
+          "title": "Subject Species"
+        },
+        "life_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Age or life stage only if explicitly stated (e.g., Adult, Infant, Gestation Week 20).",
+          "title": "Life Stage"
+        },
+        "compartment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Biological compartment this parameter refers to, exactly as named by the authors (e.g., Liver, Plasma, Filtrate). Never substitute generic names.",
+          "title": "Compartment"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Route of administration if stated (e.g., Oral, IV, Inhalation).",
+          "title": "Route"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Named patient group or population only if explicitly stated (e.g., hepatically impaired, pediatric). Leave null otherwise.",
+          "title": "Population"
+        }
+      },
+      "title": "BiologicalContext",
+      "type": "object"
+    },
+    "Compartment": {
+      "properties": {
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "label_raw": {
+          "title": "Label Raw",
+          "type": "string"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "id",
+        "label_raw"
+      ],
+      "title": "Compartment",
+      "type": "object"
+    },
+    "Connection": {
+      "properties": {
+        "source": {
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "title": "Target",
+          "type": "string"
+        },
+        "label_raw": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Label Raw"
+        },
+        "direction": {
+          "description": "Must be 'forward', 'reverse', 'bidirectional', or 'unknown'",
+          "title": "Direction",
+          "type": "string"
+        },
+        "edge_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Edge Type"
+        },
+        "evidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Confidence"
+        }
+      },
+      "required": [
+        "source",
+        "target",
+        "direction"
+      ],
+      "title": "Connection",
+      "type": "object"
+    },
+    "ExtractedParameter": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if this parameter's extraction is uncertain or relies on weak evidence.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "parameter_name": {
+          "description": "Full descriptive name exactly as printed (e.g., 'Volume of distribution central compartment'). This is REQUIRED. If only a symbol is printed, use the symbol here. Do not invent a name.",
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mathematical symbol exactly as printed (e.g., VCC, Tmc, k12, CL/F). Do not standardize or expand \u2014 transcribe verbatim.",
+          "title": "Symbol"
+        },
+        "context": {
+          "$ref": "#/$defs/BiologicalContext",
+          "description": "Biological and study context for this parameter."
+        },
+        "quantitative_data": {
+          "$ref": "#/$defs/QuantitativeData",
+          "description": "Numerical values, ranges, units, and qualifiers."
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "description": "Source location, supporting quote, and confidence."
+        }
+      },
+      "required": [
+        "parameter_name",
+        "context",
+        "quantitative_data",
+        "provenance"
+      ],
+      "title": "ExtractedParameter",
+      "type": "object"
+    },
+    "ModelClassification": {
+      "properties": {
+        "model_type": {
+          "description": "Must be 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'",
+          "title": "Model Type",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "ModelClassification",
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        }
+      },
+      "title": "PageMetadata",
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Where this parameter was found (e.g., 'Table 1', 'Figure 2', 'Results paragraph 2').",
+          "title": "Source Location"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Short, exact transcription \u2014 not a paraphrase \u2014 of the specific cell(s) or sentence this value came from. If you cannot produce a directly traceable quote, omit the parameter.",
+          "title": "Source Quote"
+        },
+        "parameter_status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the parameter was obtained, exactly as described by the authors: 'Measured', 'Fitted', 'Fixed', 'Assumed', 'Scaled', or 'Literature'. Leave null if not stated.",
+          "title": "Parameter Status"
+        },
+        "confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high' = value, unit, and symbol all printed together unambiguously. 'medium' = any inheritance from a group header or nearby context was required. 'low' = any interpretive judgment was needed (degraded text, ambiguous boundary, uncertain abbreviation).",
+          "title": "Confidence"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "QuantitativeData": {
+      "properties": {
+        "needs_review": {
+          "default": false,
+          "description": "Set to true if there is any ambiguity, unclear formatting, or complex structure requiring human review.",
+          "title": "Needs Review",
+          "type": "boolean"
+        },
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The exact printed value text verbatim, preserving all original formatting (e.g., '5a', '0.008b', '<1', '~3'). This MUST ALWAYS be populated if a value exists, regardless of whether it is a valid float or contains letters.",
+          "title": "Value Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The primary numerical value as a pure float. ONLY populate this if the value can be safely parsed as a float. If the value contains text like '5a' or '<1', leave this field null.",
+          "title": "Value"
+        },
+        "range_low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower bound when the parameter is printed as a range (e.g., the '0.18' in '0.23 (0.18, 0.29)').",
+          "title": "Range Low"
+        },
+        "range_high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper bound when the parameter is printed as a range (e.g., the '0.29' in '0.23 (0.18, 0.29)').",
+          "title": "Range High"
+        },
+        "variance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standard deviation, standard error, or confidence interval numeric value.",
+          "title": "Variance"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Type of variance exactly as printed: 'SD', 'SE', '95% CI', etc.",
+          "title": "Variance Type"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit of measurement exactly as printed (e.g., mg/kg, L/h, 1/min). If the unit is inherited from a group header rather than printed inline, still record it here.",
+          "title": "Unit"
+        },
+        "unit_inherited": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "True if the unit was stated once in a group/section header rather than printed inline with this value.",
+          "title": "Unit Inherited"
+        },
+        "value_qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Any qualifier printed alongside the value beyond the number itself (e.g., 'Fixed', 'assumed', 'estimated'). Never drop or fold into the numeric value.",
+          "title": "Value Qualifier"
+        }
+      },
+      "title": "QuantitativeData",
+      "type": "object"
+    },
+    "Structure": {
+      "properties": {
+        "compartments": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Compartment"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compartments"
+        },
+        "connections": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/Connection"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Connections"
+        },
+        "unresolved": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/UnresolvedTopology"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unresolved"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Location"
+        }
+      },
+      "title": "Structure",
+      "type": "object"
+    },
+    "UnresolvedTopology": {
+      "properties": {
+        "description": {
+          "title": "Description",
+          "type": "string"
+        },
+        "reason": {
+          "title": "Reason",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "reason"
+      ],
+      "title": "UnresolvedTopology",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "page_metadata": {
+      "$ref": "#/$defs/PageMetadata"
+    },
+    "model_classification": {
+      "$ref": "#/$defs/ModelClassification"
+    },
+    "structure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Structure"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "parameters": {
+      "description": "All PK model parameters explicitly present on this page. An empty list is correct if the page contains no PK data.",
+      "items": {
+        "$ref": "#/$defs/ExtractedParameter"
+      },
+      "title": "Parameters",
+      "type": "array"
+    }
+  },
+  "required": [
+    "page_metadata",
+    "model_classification"
+  ],
+  "title": "ExtractedPage",
+  "type": "object"
+}
+<|im_end|>
+<|im_start|>user
+Extract parameters from this document text strictly into the JSON schema:
+
+[Background]
+However, their cross-species pharmacokinetic (PK) and pharmacodynamic (PD) translation remains poorly defined, particularly regarding target dependence and PD endpoint selection.
+This study aimed to develop a kinetic-pharmacodynamic (K-PD) modeling framework to characterize their long-term pharmacology, cross-species translational relationships, and target mRNA effects by quantifying biophase half-life, in vivo potency (IDK 5 0 ), and PD turnover.
+
+[Results]
+Results Human biophase half-life exceeded that in preclinical species, whereas human IDK 5 0 was lower.
+Despite consistent cross-species trends overall, K-PD parameters varied across compounds and targets.
+PD turnover half-life showed greater within-target consistency than IDK 5 0 , suggesting differential sensitivity of these endpoints to target biology.
+
+[Introduction]
+Drug response can be described by three fundamental components: the time course of the drug at the target site, the concentration-response relationship reflecting drug potency and efficacy, and the turnover of the target or drug-target complex.
+Within the K-PD framework, these are reflected in three key parameters: biophase half-life, apparent in vivo potency (defined as the drug input rate required to produce 50% of the maximum inhibitory effect, IDK 50 ), and PD half-life.
+First, the translational relationships of these parameters remain incompletely characterized.
+Although a previous K-PD analysis has explored cross-species scaling of biophase kinetics and potency for GalNAc-siRNAs, that analysis was based on a relatively limited set of 11 compounds across three species (mice, monkeys, and humans), and the translational behavior of PD half-life was not systematically characterized.
+
+[K-PD Model]
+When multiple dosing regimens were available for the same compound–species pair, global fitting was performed across the corresponding PD profiles using regimen-specific dosing inputs and a shared set of K-PD parameters.
+The biophase half-life is defined as: The drug input rate driving the PD effect is defined as: The drug inhibits the production of the PD response, and the inhibitory effect is described using a sigmoidal inhibitory E max model: where IDK 50 denotes the drug input rate required to produce 50% inhibition of synthesis, and γ is the Hill coefficient.
+The PD response is described using an inhibitory indirect response model: where R(t) represents the normalized PD response, k in is the zero-order production rate constant, and k out is the first-order elimination rate constant.
+Because the PD data were baseline-normalized and assumed to be at steady state prior to dosing, the initial condition is: Accordingly, the following constraint is applied: The PD half-life characterizes the recovery and turnover timescale of the target protein or PD biomarker, and is defined as: Model parameters were estimated for each drug, including k e , IDK 50 (normalized by body weight and dosing interval, expressed in mg/kg/day), γ and k out .
+
+[Species-Based Analysis of K-PD Parameters]
+Species-Based Analysis of K-PD Parameters The estimated K-PD parameters (biophase half-life, IDK 50 , and PD half-life) for each GalNAc-siRNA across species were used to evaluate cross-species translational relationships.
+
+[Target-Based Analysis of K-PD Parameters]
+Target-Based Analysis of K-PD Parameters To evaluate potential target dependence of K-PD parameters, subgroup analyses were performed for targets with at least two GalNAc-siRNA compounds in the dataset.
+For each target subgroup, the distributions of human biophase half-life, IDK 50 , and PD half-life were compared with the overall distribution from all 30 compounds to assess potential target‑specific consistency.
+
+[K-PD Model Fitting Results]
+Goodness-of-fit evaluation showed high R 2 values and low RMSE across species for all compounds, indicating close agreement between model predictions and observations.
+Biophase half-life, IDK 50 , and PD half-life were derived for each compound and species and were summarized in Table S2 .
+
+[Distribution of K-PD Parameters Across Species]
+Distribution of K-PD Parameters Across Species Cross-species translational relationships of K-PD parameters (biophase half-life, IDK 50 , and PD half-life) were examined across GalNAc-siRNAs.
+Table 2 presented the parameter distributions and human-to-animal ratios across species, and Figure 3 illustrated these distributions.
+Figure 3 Cross-species distribution of biophase half-life ( A ), IDK 50 ( B ), and PD half-life ( C ) for GalNAc-siRNAs in Mouse, rat, monkey, and human.
+*P<0.05, **P<0.01, ***P<0.005, ****P<0.001.
+Image A: Box plot with points for Species (Human, Mouse, Monkey, Rat) on x-axis and Biophase half-life (weeks) on y-axis, logarithmic scale (1, 10, 100).
+Significance: ***, **.
+Image C: Box plot for Species (Human, Mouse, Monkey, Rat) on x-axis and PD half-life (days) on y-axis, logarithmic scale (1.0, 10.0, 100.0).
+Legend: Species - Human, Mouse, Monkey, Rat.
+Three box plots showing GalNAc siRNAs biophase half life, IDK50 and PD half life across species.
+For biophase half-life ( Table 2 and Figure 3A ), the median value in humans was 11.1 weeks, exceeding estimates in mice (2.08 weeks), rats (1.98 weeks), and monkeys (2.97 weeks).
+IDK 50 ratios varied widely across compounds, suggesting considerable cross-species variability in this parameter.
+For PD half-life ( Table 2 and Figure 3C ), the median value in humans was 6.95 days, compared with 1.55 days in mice, 0.578 days in rats, and 5.44 days in monkeys.
+
+[Cross-Species Correlation of K-PD Parameters]
+Figure 4 Correlations of K-PD parameters between human and preclinical species.
+( A ) biophase half-life: human vs mouse; ( B ) biophase half-life: human vs monkey; ( C ) IDK 50 : human vs mouse; ( D ) IDK 50 : human vs monkey; ( E ) PD half-life: human vs mouse; ( F ) PD half-life: human vs monkey.
+IDK 50 values were transformed as −log10(IDK 50 ) before correlation and regression analyses, whereas biophase half-life and PD half-life were analyzed on their original scales.
+A set of 6 scatter plots showing correlations of human and animal K-PD parameters.
+For biophase half-life ( Figure 4A and B ), positive trends were observed between humans and both mice and monkeys, suggesting that animal values may partially reflect the relative variation in human biophase half-life.
+For IDK 50 ( Figure 4C and D ), associations between human and animal estimates were also noted; compounds with lower animal IDK 50 generally showed lower human IDK 50 , with the trend being particularly consistent between humans and monkeys.
+For PD half-life ( Figure 4E and F ), positive trends were also observed between humans and both mice and monkeys although inter-compound variability remained high, indicating limited consistency in cross-species translation of PD half-life.
+
+[Subgroup Analysis by Target]
+Figure 5 Distribution of K-PD parameters and human-to-animal ratios across all 30 GalNAc-siRNAs and within same-target subgroups.
+( A ) human biophase half-life; ( B ) human IDK 50 ; ( C ) human PD half-life; ( D ) human-to-mouse ratio of biophase half-life; ( E ) human-to-mouse ratio of IDK 50 ; ( F ) human-to-mouse ratio of PD half-life; ( G ) human-to-monkey ratio of biophase half-life; ( H ) human-to-monkey ratio of IDK 50 ; and ( I ) human-to-monkey ratio of PD half-life.
+The overall distribution of all 30 compounds was shown on the left (blue box), followed by the distributions for five target subgroups (HBsAg, ANGPTL3, Apo(a), APOC3, and TTR) on the right.
+Panel A shows biophase half-life in weeks on the y-axis, ranging from 0 to 50 weeks, with target groups on the x-axis: Overall, HBsAg, ANGPTL3, Apo(a), APOC3, TTR.
+Higher values are noted in TTR.
+Panel C illustrates PD half-life in days, ranging from 0 to 30 days, with longer durations in HBsAg.
+Panels D, E and F show human-to-mouse ratios for biophase half-life, IDK50 and PD half-life, respectively.
+Biophase half-life showed less dispersion within most target subgroups than the overall dataset, suggesting greater similarity in effect-site duration among same-target compounds.
+PD half-life exhibited the most pronounced within-target consistency; for APOC3, Apo(a), ANGPTL3, and TTR, the within-target distributions were markedly narrower than the overall distribution.
+In the APOC3 subgroup, for example, human PD half-life estimates for all three compounds clustered within approximately 3–4 days.
+Further analysis of human-to-animal parameter ratios ( Figure 5D–I ) revealed that within-target subgroups largely preserved the directional patterns observed in the overall cross-species analysis.
+For biophase half-life, human/mouse and human/monkey ratios exceeded 1 for most targets, indicating that the duration of pharmacological driving at the effect site was longer in humans than in animals.
+For IDK 50 , human-to-animal ratios were below 1 for most targets, suggesting higher potency in humans.
+For PD half-life, human-to-animal ratios also exceeded 1 for most targets, with human values approaching those in monkeys.
+
+[Subgroup Analysis by Target Action Category]
+Figure 6 Distribution of human K-PD parameters across target action category.
+( A ) Biophase half-life; ( B ) IDK 50 ; ( C ) PD half-life.
+*P<0.05, **P<0.01.
+Image A: Box plot of Biophase half-life (weeks) from 0 to 60.
+Asterisk over I and II, I and III.
+Image C: Box plot of PD half-life (days) from 3 to 30.
+A set of three box plots showing human K-PD parameter distributions across three categories.
+The distributions of human biophase half-life across the three categories were shown in Figure 6A and Table S4 .
+Median values for Category I (n = 5), Category II (n = 19), and Category III (n = 6) were 18.3, 10.5, and 19.9 weeks, respectively.
+Category II had a lower biophase half-life than Categories I and III, with a significant difference between Categories II and III (P < 0.05).
+Category I had a significantly higher IDK 50 than both Categories II and III (P < 0.05), whereas no significant difference was observed between Categories II and III.
+For PD half-life ( Figure 6C and Table S4 ), median values for Categories I, II, and III were 11.1, 5.18, and 12.5 days, respectively.
+Category II showed lower PD half-life values than both Categories I and III, with a statistically significant difference observed between Categories II and III (P < 0.01).
+
+[Discussion]
+, However, the pronounced temporal dissociation between plasma pharmacokinetics (PK) and pharmacodynamics (PD) limits the ability of conventional PK-based approaches to fully characterize long-term pharmacological behavior and constrains quantitative translation from preclinical species to humans.
+To address this, the present study systematically compiled PD time-course data from 30 GalNAc-siRNAs that have entered clinical development, applied a K-PD modeling framework to estimate biophase half-life, IDK 50 , and PD half-life, and evaluated these parameters from the cross-species translation and target-associated heterogeneity.
+Such an endosomal retention enables sustained siRNA delivery to RISC over a period of weeks to months, thereby prolonging the biophase half-life.
+In the present study, the median human biophase half-life was 11.1 weeks, longer than in mice, rats, and monkeys.
+PD half-life reflects target or PD biomarker turnover kinetics.
+Human PD half-life was longer than in mice and rats but comparable to that in monkeys, with a median human/monkey PD half-life ratio approaching 1.
+Compounds targeting the same mRNA exhibited reduced variability compared with the overall dataset, suggesting that target biology imposes constraints on pharmacodynamic behavior beyond compound-specific properties.
+When stratified by target action category, differences in IDK 50 and PD half-life were observed across categories.
+Chemical design may represent an additional source of variability in biophase kinetics and apparent potency.
+An exploratory within-target comparison of three TTR-targeting compounds ( Table 1 ) developed using different generations of Alnylam siRNA chemistry—revusiran (STC), vutrisiran (ESC), and nucresiran (IKARIA)—showed longer biophase half-lives and lower IDK50 values for vutrisiran and nucresiran than for revusiran, whereas differences in PD half-life were comparatively modest ( Table S2 ).
+From a drug development perspective, the proposed K-PD translational framework provided a practical tool for characterizing the long-term pharmacological behavior of GalNAc-siRNAs.
+By integrating biophase half-life, IDK 50 , and PD half-life derived from PD time-course data, this framework enabled quantitative translation of preclinical observations to human pharmacological effects and supports early-stage decision-making.<|im_end|>
+<|im_start|>assistant

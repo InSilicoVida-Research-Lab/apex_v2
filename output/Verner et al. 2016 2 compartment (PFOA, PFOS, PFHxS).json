@@ -1,0 +1,1101 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "We developed a pharmacokinetic model consisting of a maternal and a child compartment to simulate lifetime exposure in women and transfer to the child across the placenta and through breastfeeding."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "Mother",
+        "label_raw": "Mother",
+        "confidence": 100.0
+      },
+      {
+        "id": "Child",
+        "label_raw": "Child",
+        "confidence": 100.0
+      }
+    ],
+    "connections": [
+      {
+        "source": "Mother",
+        "target": "Child",
+        "direction": "forward",
+        "edge_type": "transfer",
+        "evidence": "transfer to the child across the placenta and through breastfeeding",
+        "confidence": 100.0
+      },
+      {
+        "source": "Child",
+        "target": "Mother",
+        "direction": "reverse",
+        "edge_type": "transfer",
+        "evidence": "transfer to the child across the placenta and through breastfeeding",
+        "confidence": 100.0
+      }
+    ],
+    "source_location": "Abstract and Figure"
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution for PFOA",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "170 mL/kg of body weight",
+        "value": 170.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mL/kg of body weight",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "We used volumes of distribution of 170 mL/kg of body weight for PFOA and 230 mL/kg of body weight for PFOS as estimated by Thompson et al. (2010).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution for PFOS",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "230 mL/kg of body weight",
+        "value": 230.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mL/kg of body weight",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "We used volumes of distribution of 170 mL/kg of body weight for PFOA and 230 mL/kg of body weight for PFOS as estimated by Thompson et al. (2010).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of distribution for PFHxS",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "213 mL/kg of body weight",
+        "value": 213.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mL/kg of body weight",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "Because the volume of distribution for PFHxS has not been estimated for humans, we used a value of 213 mL/kg of body weight derived from a monkey study.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for PFOA",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.8 years",
+        "value": 3.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "PFAS elimination from maternal and child compartments was calculated based on published arithmetic mean half-lives of 3.8 years for PFOA, 5.4 years for PFOS, and 8.5 years for PFHxS.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for PFOS",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.4 years",
+        "value": 5.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "PFAS elimination from maternal and child compartments was calculated based on published arithmetic mean half-lives of 3.8 years for PFOA, 5.4 years for PFOS, and 8.5 years for PFHxS.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for PFHxS",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.5 years",
+        "value": 8.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "PFAS elimination from maternal and child compartments was calculated based on published arithmetic mean half-lives of 3.8 years for PFOA, 5.4 years for PFOS, and 8.5 years for PFHxS.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mother-fetus transfer rate (ktrans1) for PFOA",
+      "symbol": "ktrans1",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.78",
+        "value": 0.78,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "ktrans1 was given the same value as the reported maternal/cord plasma level ratio (0.78 for PFOA, 0.45",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mother-fetus transfer rate (ktrans1) for PFHxS",
+      "symbol": "ktrans1",
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.45",
+        "value": 0.45,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "MATERIALS AND METHODS",
+        "source_quote": "ktrans1 was given the same value as the reported maternal/cord plasma level ratio (0.78 for PFOA, 0.45",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ktrans2",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.00",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "for PFOS, and 0.56 for PFHxS), and ktrans2 was given a value of 1.00.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk/plasma ratio for PFOA",
+      "symbol": "Pmilk/plasma",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.058",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk/plasma ratio for PFOS",
+      "symbol": "Pmilk/plasma",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Milk/plasma ratio for PFHxS",
+      "symbol": "Pmilk/plasma",
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer rate from maternal to fetal compartment",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "maternal compartment",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "ktrans2",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "Transfer to and from the fetus was calculated as the product between the plasma concentration and the transfer rate (Figure 1).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer through breastfeeding",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "lactation",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "product of the volume of milk, the PFAS level in the maternal compartment, and the Pmilk/plasma",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "Transfer through breastfeeding was defined as the product of the volume of milk, the PFAS level in the maternal compartment, and the Pmilk/plasma (Figure 1).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Assumed daily intake from sources other than breastfeeding",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "equal to that of the mother after 6 months of age",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text below Table 1",
+        "source_quote": "Given the lack of data on exposure to PFAS in infancy and childhood, we assumed daily intake (ng/kg/day) from sources other than breastfeeding to be equal to that of the mother after 6 months of age.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "maternal age at delivery (years)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "25<sup>a</sup> ± 6<sup>a</sup>",
+        "value": 25.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 6.0,
+        "variance_type": "SD",
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "maternal age at delivery (years) | normal | 25<sup>a</sup> ± 6<sup>a</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "maternal prepregnancy body weight (kg)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "75<sup>b</sup> ± 18<sup>b</sup>",
+        "value": 75.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 18.0,
+        "variance_type": "SD",
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "maternal prepregnancy body weight (kg) | normal | 75<sup>b</sup> ± 18<sup>b</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "child's weight (multiplier<sup>c</sup>)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.0 ± 0.12<sup>d</sup>",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.12,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "child’s weight (multiplier<sup>c</sup>) | normal | 1.0 ± 0.12<sup>d</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOA P<sub>milk/plasma</sub>",
+      "symbol": "P<sub>milk/plasma</sub>",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.058<sup>e</sup> ± 0.035<sup>f</sup>",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.035,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOA P<sub>milk/plasma</sub> | log normal | 0.058<sup>e</sup> ± 0.035<sup>f</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOS P<sub>milk/plasma</sub>",
+      "symbol": "P<sub>milk/plasma</sub>",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014<sup>g</sup> ± 0.009<sup>f</sup>",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.009,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOS P<sub>milk/plasma</sub> | log normal | 0.014<sup>g</sup> ± 0.009<sup>f</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFHxS P<sub>milk/plasma</sub>",
+      "symbol": "P<sub>milk/plasma</sub>",
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014<sup>h</sup> ± 0.006<sup>f</sup>",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.006,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFHxS P<sub>milk/plasma</sub> | log normal | 0.014<sup>h</sup> ± 0.006<sup>f</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOA Volume of distribution (mL/kg)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "170<sup>i</sup> ± 26<sup>j</sup>",
+        "value": 170.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 26.0,
+        "variance_type": "SD",
+        "unit": "mL/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOA Volume of distribution (mL/kg) | normal | 170<sup>i</sup> ± 26<sup>j</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOS Volume of distribution (mL/kg)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "230<sup>i</sup> ± 35<sup>j</sup>",
+        "value": 230.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 35.0,
+        "variance_type": "SD",
+        "unit": "mL/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOS Volume of distribution (mL/kg) | normal | 230<sup>i</sup> ± 35<sup>j</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFHxS Volume of distribution (mL/kg)",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "213<sup>k</sup> ± 32<sup>j</sup>",
+        "value": 213.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 32.0,
+        "variance_type": "SD",
+        "unit": "mL/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFHxS Volume of distribution (mL/kg) | normal | 213<sup>k</sup> ± 32<sup>j</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOA Half-life (years)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.8<sup>l</sup> ± 1.7<sup>l</sup>",
+        "value": 3.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": 1.7,
+        "variance_type": "SD",
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOA Half-life (years) | log normal | 3.8<sup>l</sup> ± 1.7<sup>l</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOS Half-life (years)",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.5<sup>l</sup> ± 3.4<sup>l</sup>",
+        "value": 5.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": 3.4,
+        "variance_type": "SD",
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOS Half-life (years) | log normal | 5.5<sup>l</sup> ± 3.4<sup>l</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFHxS Half-life (years)",
+      "symbol": null,
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.4<sup>l</sup> ± 5.2<sup>l</sup>",
+        "value": 8.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": 5.2,
+        "variance_type": "SD",
+        "unit": "years",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFHxS Half-life (years) | log normal | 8.4<sup>l</sup> ± 5.2<sup>l</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOA P<sub>cord/mother</sub>",
+      "symbol": "P<sub>cord/mother</sub>",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.78<sup>m</sup> ± 0.15<sup>n</sup>",
+        "value": 0.78,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.15,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOA P<sub>cord/mother</sub> | normal | 0.78<sup>m</sup> ± 0.15<sup>n</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFOS P<sub>cord/mother</sub>",
+      "symbol": "P<sub>cord/mother</sub>",
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.45<sup>m</sup> ± 0.13<sup>n</sup>",
+        "value": 0.45,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.13,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFOS P<sub>cord/mother</sub> | normal | 0.45<sup>m</sup> ± 0.13<sup>n</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PFHxS P<sub>cord/mother</sub>",
+      "symbol": "P<sub>cord/mother</sub>",
+      "context": {
+        "compound": "PFHxS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.56<sup>m</sup> ± 0.11<sup>n</sup>",
+        "value": 0.56,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.11,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "PFHxS P<sub>cord/mother</sub> | normal | 0.56<sup>m</sup> ± 0.11<sup>n</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "volume of breast milk (multiplier<sup>c</sup>)",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.00 ± 0.17<sup>o</sup>",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.17,
+        "variance_type": "SD",
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "volume of breast milk (multiplier<sup>c</sup>) | normal | 1.00 ± 0.17<sup>o</sup>",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "milk/plasma partition",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.038 to 0.11",
+        "value": 0.038,
+        "range_low": 0.038,
+        "range_high": 0.11,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text paragraph discussing model limitations",
+        "source_quote": "the reported values varied substantially from one study to the other, e.g., for PFOA, the milk/plasma partition varied from 0.038 to 0.11.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "R²",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "52−62",
+        "value": 52.0,
+        "range_low": 52.0,
+        "range_high": 62.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text paragraph discussing model limitations",
+        "source_quote": "Although model predictions do not fully explain variability in true children’s plasma levels (R² = 52−62),",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "precision",
+      "symbol": null,
+      "context": {
+        "compound": "PFOA, PFOS, and PFHxS",
+        "subject_species": "children",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "52%−62%",
+        "value": 52.0,
+        "range_low": 52.0,
+        "range_high": 62.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Conclusion paragraph",
+        "source_quote": "our pharmacokinetic model allows the estimation of children’s exposure and body burden of PFOA, PFOS, and PFHxS throughout the first three years with a precision ranging from 52%−62%.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ]
+}

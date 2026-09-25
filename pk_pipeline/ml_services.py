@@ -192,6 +192,9 @@ For each PK parameter explicitly reported on the page, capture:
 - **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
 - **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
 - **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
+- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_low and range_high. Instead, create two distinct ExtractedParameter entries and map the values to their respective formulations in the BiologicalContext.
+- **Section Headers**: Pay strict attention to sub-headers spanning the table (e.g., 'Rat' vs. 'Human'). Ensure that all parameters following a species sub-header are assigned the correct subject_species until a new sub-header appears.
+- **Footnotes**: Extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1) hidden in table footnotes as standalone parameters.
 
 ## STEP 4 — MODEL STRUCTURE / TOPOLOGY
 
@@ -258,6 +261,21 @@ class SGLangExtractor:
         self.use_4bit = use_4bit
         self.model_path = "Qwen/Qwen3-VL-8B-Instruct"
         
+        # Check if an external SGLang server is already running
+        try:
+            import requests
+            # Use 127.0.0.1 instead of localhost to avoid IPv6 resolution issues in requests
+            resp = requests.get("http://127.0.0.1:30000/health", timeout=2)
+            if resp.status_code == 200:
+                logger.info("Detected running SGLang server on port 30000. Will use server instead of loading embedded engine.")
+                self.use_server = True
+                self.server_url = "http://127.0.0.1:30000"
+                self.is_loaded = True
+                return
+        except Exception as e:
+            logger.info(f"External SGLang server not detected or unreachable: {e}")
+            self.use_server = False
+        
         try:
             quant_mode = "awq" if use_4bit else None
             actual_model = self.model_path
@@ -288,6 +306,9 @@ class SGLangExtractor:
 
     async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "", chunk_title: str = "") -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+            
         import time
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
@@ -307,6 +328,8 @@ class SGLangExtractor:
         user_instruction = "Extract parameters from this image strictly into the JSON schema."
         if role == "table_crop":
             user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
+        elif role == "page_with_table":
+            user_instruction += " This is a full page image containing a table. Focus ONLY on extracting the parameters that are present in the provided Markdown text snippet below. Use the image purely for visual layout context to correctly read the table rows/columns."
         elif role == "full_page":
             user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
 
@@ -334,21 +357,35 @@ class SGLangExtractor:
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
         
-        # Use SGLang's async_generate with pydantic schema enforcement via sampling_params
-        # We must use async_generate because this is running inside an active asyncio event loop (FastAPI)
-        response = await self.engine.async_generate(
-            prompt=prompt_text,
-            image_data=temp_img_path,
-            sampling_params={
-                "max_new_tokens": 16000,
-                "temperature": 0.0,
-                "repetition_penalty": 1.0,
-                "json_schema": json.dumps(ExtractedPage.model_json_schema())
-            }
-        )
-        
-        # The response text will be a guaranteed valid JSON string matching the ExtractedPage schema
-        extracted_text = response["text"] if isinstance(response, dict) else response.text
+        if getattr(self, "use_server", False):
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=3600)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                payload = {
+                    "text": prompt_text,
+                    "image_data": temp_img_path,
+                    "sampling_params": {
+                        "max_new_tokens": 16000,
+                        "temperature": 0.0,
+                        "repetition_penalty": 1.0,
+                        "json_schema": json.dumps(ExtractedPage.model_json_schema())
+                    }
+                }
+                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
+                    result = await resp.json()
+                    extracted_text = result["text"]
+        else:
+            response = await self.engine.async_generate(
+                prompt=prompt_text,
+                image_data=temp_img_path,
+                sampling_params={
+                    "max_new_tokens": 16000,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0,
+                    "json_schema": json.dumps(ExtractedPage.model_json_schema())
+                }
+            )
+            extracted_text = response["text"] if isinstance(response, dict) else response.text
         
         try:
             json_data = json.loads(extracted_text)
@@ -363,6 +400,9 @@ class SGLangExtractor:
 
     async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
         """Extract table data from text/XML strictly enforcing Pydantic schema"""
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+            
         import time
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
@@ -401,18 +441,46 @@ class SGLangExtractor:
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
         
-        response = await self.engine.async_generate(
-            prompt=prompt_text,
-            sampling_params={
-                "max_new_tokens": 16000,
-                "temperature": 0.0,
-                "repetition_penalty": 1.0,
-                "json_schema": json.dumps(ExtractedPage.model_json_schema())
-            }
-        )
+        if getattr(self, "use_server", False):
+            import aiohttp
+            # Set a 1-hour timeout to prevent long extractions (like Page 6) from hitting aiohttp's 5-min default timeout
+            timeout = aiohttp.ClientTimeout(total=3600)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                payload = {
+                    "text": prompt_text,
+                    "sampling_params": {
+                        "max_new_tokens": 16000,
+                        "temperature": 0.0,
+                        "repetition_penalty": 1.0
+                    }
+                }
+                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
+                    result = await resp.json()
+                    extracted_text = result["text"]
+        else:
+            response = await self.engine.async_generate(
+                prompt=prompt_text,
+                sampling_params={
+                    "max_new_tokens": 16000,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0
+                }
+            )
+            extracted_text = response["text"] if isinstance(response, dict) else response.text
         
-        extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
+        # 1. Strip <think> tags if present
+        if "</think>" in extracted_text:
+            extracted_text = extracted_text.split("</think>")[-1].strip()
+            
+        # 2. Extract JSON from markdown blocks if present
+        import re
+        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
+        if match:
+            extracted_text = match.group(1).strip()
+        else:
+            # Strip any trailing/leading whitespace just in case
+            extracted_text = extracted_text.strip()
+            
         try:
             json_data = json.loads(extracted_text)
             extracted_page = ExtractedPage(**json_data)

@@ -2,7 +2,7 @@ import logging
 import os
 
 # Configure application-wide logging
-LOG_LEVEL = os.getenv("LOG_LEVEL", "DEBUG")
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO")
 
 logging.basicConfig(
     level=getattr(logging, LOG_LEVEL),
@@ -11,6 +11,7 @@ logging.basicConfig(
 )
 
 logger = logging.getLogger("pk_pipeline")
+logging.getLogger("pdfminer").setLevel(logging.WARNING)
 
 # Mock configurations
 USE_MOCKS = os.getenv("USE_MOCKS", "True").lower() in ("true", "1", "yes")
