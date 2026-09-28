@@ -219,7 +219,7 @@ def post_process_document(document, pdf_path):
 
     return document
 
-async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False):
+async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False, verify: bool = True):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
     
@@ -402,7 +402,11 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             print_laya_summary(laya_stats, doc_triage_type)
 
             logger.info("Successfully completed XML extraction fast-path.")
-            return post_process_document(final_document, pdf_path)
+            processed = post_process_document(final_document, pdf_path)
+            if verify:
+                from pk_pipeline.verifier import verify_document
+                verify_document(processed)
+            return processed
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
             print(f"  -> Switching from local PDF to Open Access PDF ({res['source']}): {res['pdf_path']}")
@@ -589,7 +593,11 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         print_wevisdoc_summary(wevisdoc_stats)
 
         logger.info("Successfully completed PyMuPDF fallback extraction.")
-        return post_process_document(final_document, pdf_path)
+        processed = post_process_document(final_document, pdf_path)
+        if verify:
+            from pk_pipeline.verifier import verify_document
+            verify_document(processed)
+        return processed
         
     print(f"Found MinerU structured output: {mineru_json_path}")
     
@@ -759,101 +767,215 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
     
     logger.info("Successfully completed extraction pipeline.")
-    return post_process_document(final_document, pdf_path)
+    processed = post_process_document(final_document, pdf_path)
+    if verify:
+        from pk_pipeline.verifier import verify_document
+        verify_document(processed)
+    return processed
 
 import time
-
 import glob
+import traceback
 
 def main():
-    parser = argparse.ArgumentParser(description="Run the PK Parameter Extraction Pipeline")
-    parser.add_argument("input_paths", type=str, nargs="+", help="Path to one or more PDF files or directories of PDFs to extract")
-    parser.add_argument("--compounds", nargs="+", help="Optional: Target compounds to steer search (e.g., PFOS PFOA)")
-    parser.add_argument("--output_dir", type=str, default="output", help="Optional: Directory to save the extracted JSONs. Defaults to 'output'.")
-    parser.add_argument("--wevisdoc", action="store_true", default=True, help="Use Tencent/WeVisDoc-4B for table transcription (default: True)")
+    parser = argparse.ArgumentParser(
+        description="Run the PK Parameter Extraction Pipeline",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Single PDF
+  python -m pk_pipeline.main paper.pdf
+
+  # Multiple PDFs listed directly
+  python -m pk_pipeline.main paper1.pdf paper2.pdf paper3.pdf
+
+  # Entire directory (recursive)
+  python -m pk_pipeline.main ./test_data/
+
+  # Mix of directories and individual files
+  python -m pk_pipeline.main ./batch1/ ./batch2/ extra.pdf
+
+  # 3 documents processed concurrently (good for I/O-bound fetch steps)
+  python -m pk_pipeline.main ./test_data/ --workers 3
+
+  # With LLM verification on errors
+  python -m pk_pipeline.main ./test_data/ --llm-verify
+        """
+    )
+    parser.add_argument(
+        "input_paths", type=str, nargs="+",
+        help="PDF files, directories of PDFs, or a mix of both"
+    )
+    parser.add_argument("--compounds", nargs="+", help="Target compounds to steer search (e.g., PFOS PFOA)")
+    parser.add_argument("--output_dir", type=str, default="output", help="Directory for output JSONs (default: 'output')")
+    parser.add_argument(
+        "--workers", type=int, default=2,
+        help="Max PDFs processed concurrently (default: 2). "
+             "Higher = faster for I/O-bound steps; lower = safer for VRAM."
+    )
+    parser.add_argument("--wevisdoc", action="store_true", default=True, help="Use WeVisDoc-4B for table OCR (default: True)")
     parser.add_argument("--no-wevisdoc", dest="wevisdoc", action="store_false", help="Disable WeVisDoc OCR")
-    parser.add_argument("--force-pdf", action="store_true", default=False, help="Bypass XML resolution and force PDF parsing with TATR and WeVisDoc OCR")
-    
+    parser.add_argument("--force-pdf", action="store_true", default=False, help="Bypass XML resolution and force PDF+WeVisDoc OCR pipeline")
+    parser.add_argument("--no-verify", action="store_true", default=False, help="Disable Tier 1 rule-based verification")
+    parser.add_argument(
+        "--llm-verify", action="store_true", default=False,
+        help="Enable Tier 2 LLM critic (reviews flagged params, applies corrections in-place). Requires running SGLang server."
+    )
+    parser.add_argument(
+        "--llm-verify-warnings", action="store_true", default=False,
+        help="Also run Tier 2 critic on warning-level flags (not just errors)."
+    )
+
     args = parser.parse_args()
-    
-    # Gather all PDF files to process
+
+    # ── Gather PDFs ──────────────────────────────────────────────────────────
     pdf_files = []
     for path in args.input_paths:
         if not os.path.exists(path):
-            print(f"Warning: The path '{path}' does not exist. Skipping.")
+            print(f"Warning: '{path}' does not exist. Skipping.")
             continue
-            
         if os.path.isdir(path):
-            found_pdfs = glob.glob(os.path.join(path, "*.pdf"))
-            if not found_pdfs:
-                print(f"Warning: No PDF files found in directory '{path}'.")
-            pdf_files.extend(found_pdfs)
+            found = sorted(glob.glob(os.path.join(path, "**", "*.pdf"), recursive=True))
+            if not found:
+                print(f"Warning: No PDF files found under '{path}'.")
+            pdf_files.extend(found)
         else:
             if not path.lower().endswith(".pdf"):
-                print(f"Error: Input file '{path}' is not a PDF file. Please provide a .pdf document.")
+                print(f"Warning: '{path}' is not a .pdf file. Skipping.")
                 continue
             pdf_files.append(path)
-            
-    # Deduplicate the list to avoid processing the same file twice
-    pdf_files = list(set(pdf_files))
-            
+
+    # Deduplicate, preserve order
+    seen: set = set()
+    pdf_files = [p for p in pdf_files if not (os.path.abspath(p) in seen or seen.add(os.path.abspath(p)))]
+
     if not pdf_files:
         print("Error: No valid PDF files found to process.")
         return
-        
-    print(f"Found {len(pdf_files)} total PDFs to process...")
-        
+
+    n = len(pdf_files)
+    print(f"\nFound {n} PDF(s) to process (workers={args.workers}):")
+    for i, p in enumerate(pdf_files, 1):
+        print(f"  {i:>3}. {os.path.basename(p)}")
+    print()
+
     os.makedirs(args.output_dir, exist_ok=True)
 
-    try:
-        # Pre-load models once for the entire batch
-        print("Booting AI models into GPU memory. This is a one-time 'cold start' penalty...")
-        load_start = time.time()
-        get_extractor()
-        load_time = time.time() - load_start
-        print(f"Models successfully loaded into VRAM in {load_time:.2f} seconds.\n")
+    # ── Pre-load models once ─────────────────────────────────────────────────
+    print("Booting AI models into GPU memory. This is a one-time 'cold start' penalty...")
+    load_start = time.time()
+    get_extractor()
+    print(f"Models loaded in {time.time() - load_start:.1f}s.\n")
 
-        # Process each PDF sequentially
-        batch_start = time.time()
-        total_laya_discarded = 0
-        total_wevisdoc_transcribed = 0
-        for idx, pdf_path in enumerate(pdf_files, 1):
-            print(f"\n{'='*60}")
-            print(f"Processing Document {idx}/{len(pdf_files)}: {os.path.basename(pdf_path)}")
-            print(f"{'='*60}")
-            
+    # ── Async batch runner ────────────────────────────────────────────────────
+    results_map: dict = {}
+    lock = asyncio.Lock()   # protects completed/failed counters
+    completed_count = [0]
+    failed_count    = [0]
+
+    async def process_one(pdf_path: str, sem: asyncio.Semaphore, position: int) -> None:
+        async with sem:
+            label    = f"[{position}/{n}]"
+            basename = os.path.basename(pdf_path)
+            print(f"\n{'─'*60}")
+            print(f"  START  {label} {basename}")
+            print(f"{'─'*60}")
             doc_start = time.time()
             try:
-                result = asyncio.run(run_pipeline(pdf_path, args.compounds, use_wevisdoc=args.wevisdoc, force_pdf=args.force_pdf))
-                if isinstance(result, dict):
-                    if "laya_filter_summary" in result:
-                        total_laya_discarded += result["laya_filter_summary"].get("discarded_chunks", 0)
-                    if "wevisdoc_summary" in result:
-                        total_wevisdoc_transcribed += result["wevisdoc_summary"].get("pages_transcribed", 0)
-                
-                base_name = os.path.splitext(os.path.basename(pdf_path))[0]
+                result = await run_pipeline(
+                    pdf_path,
+                    args.compounds,
+                    use_wevisdoc=args.wevisdoc,
+                    force_pdf=args.force_pdf,
+                    verify=not args.no_verify,
+                )
+
+                # ── Save immediately ─────────────────────────────────────────
+                base_name   = os.path.splitext(basename)[0]
                 output_path = os.path.join(args.output_dir, f"{base_name}.json")
-                
                 os.makedirs(os.path.dirname(output_path), exist_ok=True)
                 with open(output_path, "w", encoding="utf-8") as f:
                     json.dump(result, f, indent=2, ensure_ascii=False)
-                    
+
                 doc_time = time.time() - doc_start
-                print(f"  Success! Saved to {output_path} (took {doc_time:.2f}s)")
-            except Exception as e:
-                print(f"  Failed to process {os.path.basename(pdf_path)}: {e}")
-                
-        batch_time = time.time() - batch_start
-        print(f"\n   Batch Processing Complete!")
-        print(f"   Processed {len(pdf_files)} documents in {batch_time:.2f} seconds.")
-        if total_laya_discarded > 0:
-            print(f"   ⚡ Laya Efficiency: Discarded {total_laya_discarded} irrelevant chunks across batch (saved ~{total_laya_discarded * 25}s VLM compute).")
-        if total_wevisdoc_transcribed > 0:
-            print(f"   ⚡ WeVisDoc-4B OCR: Transcribed {total_wevisdoc_transcribed} table pages into structured HTML/LaTeX.")
-        print(f"   Results saved to: {os.path.abspath(args.output_dir)}\n")
-        
-    except Exception as e:
-        print(f"Fatal Pipeline Error: {e}")
+                n_params = len(result.get("parameters", [])) if isinstance(result, dict) else "?"
+                print(f"  DONE   {label} {basename}  |  {n_params} params  |  {doc_time:.1f}s  ->  {output_path}")
+
+                # ── Optional Tier 2 LLM critic ───────────────────────────────
+                if args.llm_verify and isinstance(result, dict):
+                    tier1_clean = result.get("verification", {}).get("clean", True)
+                    if tier1_clean:
+                        print(f"  [T2]   {label} Tier 1 clean — LLM critic skipped.")
+                    else:
+                        err_n = result.get("verification", {}).get("error_count", 0)
+                        print(f"  [T2]   {label} Running LLM critic on {err_n} error(s)...")
+                        from pk_pipeline.verifier import verify_document_with_llm
+                        _, llm_sum = await verify_document_with_llm(
+                            result,
+                            verbose=False,
+                            include_warnings=args.llm_verify_warnings,
+                        )
+                        with open(output_path, "w", encoding="utf-8") as f:
+                            json.dump(result, f, indent=2, ensure_ascii=False)
+                        print(
+                            f"  [T2]   {label} {llm_sum.get('patched',0)} patched, "
+                            f"{llm_sum.get('rejected',0)} rejected in "
+                            f"{llm_sum.get('elapsed_s',0):.1f}s. Re-saved."
+                        )
+
+                async with lock:
+                    results_map[pdf_path] = result
+                    completed_count[0]   += 1
+
+            except Exception as exc:
+                elapsed = time.time() - doc_start
+                print(f"  FAIL   {label} {basename}  |  {elapsed:.1f}s  |  {exc}")
+                logger.debug(traceback.format_exc())
+                async with lock:
+                    results_map[pdf_path] = exc
+                    failed_count[0]      += 1
+
+    async def run_batch() -> None:
+        sem   = asyncio.Semaphore(args.workers)
+        tasks = [
+            process_one(pdf_path, sem, i)
+            for i, pdf_path in enumerate(pdf_files, 1)
+        ]
+        await asyncio.gather(*tasks)
+
+    # ── Execute ───────────────────────────────────────────────────────────────
+    batch_start = time.time()
+    try:
+        asyncio.run(run_batch())
+    except KeyboardInterrupt:
+        print("\nInterrupted by user.")
+
+    batch_time = time.time() - batch_start
+
+    # ── Summary ───────────────────────────────────────────────────────────────
+    total_params   = sum(len(r.get("parameters", [])) for r in results_map.values() if isinstance(r, dict))
+    total_laya     = sum(r.get("laya_filter_summary", {}).get("discarded_chunks", 0) for r in results_map.values() if isinstance(r, dict))
+    total_wevisdoc = sum(r.get("wevisdoc_summary", {}).get("pages_transcribed", 0) for r in results_map.values() if isinstance(r, dict))
+
+    print(f"\n{'='*60}")
+    print(f"  BATCH COMPLETE")
+    print(f"{'='*60}")
+    print(f"  PDFs:        {n}  (succeeded: {completed_count[0]}, failed: {failed_count[0]})")
+    print(f"  Total time:  {batch_time:.1f}s  (avg {batch_time/n:.1f}s/doc, workers={args.workers})")
+    print(f"  Total params extracted: {total_params}")
+    if total_laya:
+        print(f"  Laya saved:  ~{total_laya * 25}s VLM compute ({total_laya} chunks skipped)")
+    if total_wevisdoc:
+        print(f"  WeVisDoc:    {total_wevisdoc} table pages OCR'd")
+    print(f"  Output dir:  {os.path.abspath(args.output_dir)}")
+    if failed_count[0]:
+        print(f"\n  Failed documents:")
+        for p, r in results_map.items():
+            if isinstance(r, Exception):
+                print(f"    x {os.path.basename(p)}: {r}")
+    print(f"{'='*60}\n")
+
 
 if __name__ == "__main__":
     main()
+
