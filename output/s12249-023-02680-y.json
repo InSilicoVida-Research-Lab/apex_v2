@@ -7,146 +7,176 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Furthermore, a physiologically based pharmacokinetic (PBPK) model of rats for Rilutor and RLZ ASD was developed and then extrapolated to humans where physiological parameters were changed along with a biochemical parameter. The partition coefficient was kept similar in both species."
+    "evidence_quote": "a physiologically based pharmacokinetic (PBPK) model of rats for Rilutor and RLZ ASD was developed and then extrapolated to humans where physiological parameters were changed along with a biochemical parameter."
   },
   "structure": {
     "compartments": [
       {
-        "id": "stomach",
-        "label_raw": "Stomach"
+        "id": "Stomach",
+        "label_raw": "Stomach",
+        "confidence": 100.0
       },
       {
-        "id": "gut",
-        "label_raw": "Gut"
+        "id": "Gut",
+        "label_raw": "Gut",
+        "confidence": 100.0
       },
       {
-        "id": "liver",
-        "label_raw": "Liver"
+        "id": "Liver",
+        "label_raw": "Liver",
+        "confidence": 100.0
       },
       {
-        "id": "brain",
-        "label_raw": "Brain"
+        "id": "Brain",
+        "label_raw": "Brain",
+        "confidence": 100.0
       },
       {
-        "id": "kidney",
-        "label_raw": "Kidney"
+        "id": "Kidney",
+        "label_raw": "Kidney",
+        "confidence": 100.0
       },
       {
-        "id": "lung",
-        "label_raw": "Lung"
+        "id": "Lung",
+        "label_raw": "Lung",
+        "confidence": 100.0
       },
       {
-        "id": "fat",
-        "label_raw": "Fat"
+        "id": "Fat",
+        "label_raw": "Fat",
+        "confidence": 100.0
       },
       {
-        "id": "heart",
-        "label_raw": "Heart"
+        "id": "Heart",
+        "label_raw": "Heart",
+        "confidence": 100.0
       },
       {
-        "id": "rest_body",
-        "label_raw": "Rest Body"
-      },
-      {
-        "id": "plasma",
-        "label_raw": "Plasma"
+        "id": "Rest Body",
+        "label_raw": "Rest Body",
+        "confidence": 100.0
       }
     ],
     "connections": [
       {
-        "source": "riluzole_rlz",
-        "target": "stomach",
-        "direction": "forward"
+        "source": "Riluzole (RLZ)",
+        "target": "Stomach",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "stomach",
-        "target": "gut",
-        "direction": "forward"
+        "source": "Stomach",
+        "target": "Gut",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "gut",
-        "target": "liver",
-        "direction": "bidirectional"
+        "source": "Gut",
+        "target": "Liver",
+        "direction": "bidirectional",
+        "confidence": 100.0
       },
       {
-        "source": "gut",
-        "target": "feces",
-        "direction": "forward"
+        "source": "Gut",
+        "target": "Feces",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "liver",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Liver",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "brain",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Brain",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "kidney",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Kidney",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "lung",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Lung",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "fat",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Fat",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "heart",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Heart",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "rest_body",
-        "target": "plasma",
-        "direction": "forward"
+        "source": "Rest Body",
+        "target": "Plasma",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "plasma",
-        "target": "urine",
-        "direction": "forward"
+        "source": "Plasma",
+        "target": "Urine",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "liver",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Liver",
+        "target": "Riluzole-OH",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "brain",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Liver",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "kidney",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Brain",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "lung",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Kidney",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "fat",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Lung",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "heart",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Fat",
+        "direction": "forward",
+        "confidence": 100.0
       },
       {
-        "source": "rest_body",
-        "target": "riluzole_oh",
-        "direction": "forward"
+        "source": "Riluzole-OH",
+        "target": "Heart",
+        "direction": "forward",
+        "confidence": 100.0
+      },
+      {
+        "source": "Riluzole-OH",
+        "target": "Rest Body",
+        "direction": "forward",
+        "confidence": 100.0
       }
     ],
     "source_location": "Fig. 1"
@@ -158,7 +188,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -177,9 +207,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Liver|0.174|[22]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nLiver\n0.174\n[22]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -189,7 +219,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -208,9 +238,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Lung|0.021|[23]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nLung\n0.021\n[23]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -220,7 +250,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -239,9 +269,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Kidney|0.141|[24]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nKidney\n0.141\n[24]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -251,7 +281,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -270,9 +300,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Heart|0.051|[21]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nHeart\n0.051\n[21]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -282,7 +312,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -301,9 +331,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Brain|0.02|[21]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nBrain\n0.02\n[21]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -313,7 +343,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -332,9 +362,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Fat|0.07|[25]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction of cardiac output)\nFat\n0.07\n[25]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -344,7 +374,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -363,9 +393,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Liver|0.036|[24,25]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nLiver\n0.036\n[24, 25],",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -375,7 +405,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -394,9 +424,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Lung|0.006|[24]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nLung\n0.006\n[24]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -406,7 +436,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -425,9 +455,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Kidney|0.0073|[25,26]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nKidney\n0.0073\n[25, 26]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -437,7 +467,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -456,9 +486,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Heart|0.004|[26]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nHeart\n0.004\n[26]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -468,7 +498,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -487,9 +517,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Brain|0.006|[24,25]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nBrain\n0.006\n[24, 25]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -499,7 +529,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -518,9 +548,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Fat|0.07|[25]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nFat\n0.07\n[25]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -530,7 +560,7 @@
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -549,19 +579,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Plasma|0.074|[25]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction of BW)\nPlasma\n0.074\n[25]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
       "parameter_name": "Liver:plasma",
-      "symbol": null,
+      "symbol": "Liver:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -580,8 +610,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Liver:plasma|2.2|Taken from literature<sup>a</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nLiver:plasma\n2.2\nTaken from literaturea",
         "parameter_status": "Literature",
         "confidence": "high"
       }
@@ -589,10 +619,10 @@
     {
       "needs_review": false,
       "parameter_name": "Brain:plasma",
-      "symbol": null,
+      "symbol": "Brain:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -611,8 +641,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Brain:plasma|2.44|Experimental<sup>b</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nBrain:plasma\n2.44\nExperimentalb",
         "parameter_status": "Experimental",
         "confidence": "high"
       }
@@ -620,10 +650,10 @@
     {
       "needs_review": false,
       "parameter_name": "Kidney:plasma",
-      "symbol": null,
+      "symbol": "Kidney:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -642,8 +672,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Kidney:plasma|4.622509|Calculated using R&R<sup>e</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKidney:plasma\n4.622509\nCalculated using R&R^e",
         "parameter_status": "Calculated using R&R",
         "confidence": "high"
       }
@@ -651,10 +681,10 @@
     {
       "needs_review": false,
       "parameter_name": "Lung:plasma",
-      "symbol": null,
+      "symbol": "Lung:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -673,8 +703,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Lung:plasma|5.958539|Calculated using R&R<sup>e</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nLung:plasma\n5.958539\nCalculated using R&R^e",
         "parameter_status": "Calculated using R&R",
         "confidence": "high"
       }
@@ -682,10 +712,10 @@
     {
       "needs_review": false,
       "parameter_name": "Fat:plasma",
-      "symbol": null,
+      "symbol": "Fat:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -704,8 +734,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Fat:plasma|14.12276|Calculated using R&R<sup>e</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nFat:plasma\n14.12276\nCalculated using R&R^e",
         "parameter_status": "Calculated using R&R",
         "confidence": "high"
       }
@@ -713,10 +743,10 @@
     {
       "needs_review": false,
       "parameter_name": "Heart:plasma",
-      "symbol": null,
+      "symbol": "Heart:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -735,19 +765,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Heart:plasma|4.251126|Calculated using R&R<sup>e</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nHeart:plasma\n4.251126\nCalculated using R&R^e",
         "parameter_status": "Calculated using R&R",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "GE (1/h/kg<sup>0.25</sup>)",
-      "symbol": null,
+      "parameter_name": "GE (1/h/kg^0.25)",
+      "symbol": "GE (1/h/kg^0.25)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -766,19 +796,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|GE (1/h/kg<sup>0.25</sup>)|2.61|Optimized*|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nGE (1/h/kg^0.25)\n2.61\nOptimized*",
         "parameter_status": "Optimized",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Kabs (1/h/kg<sup>0.25</sup>)",
-      "symbol": null,
+      "parameter_name": "Kabs (1/h/kg^0.25)",
+      "symbol": "Kabs (1/h/kg^0.25)",
       "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "compound": "Rilutor",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -786,10 +816,10 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "0.69, 2.19",
-        "value": null,
-        "range_low": 0.69,
-        "range_high": 2.19,
+        "value_text": "0.69",
+        "value": 0.69,
+        "range_low": null,
+        "range_high": null,
         "variance": null,
         "variance_type": null,
         "unit": null,
@@ -797,8 +827,39 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Kabs (1/h/kg<sup>0.25</sup>)|0.69, 2.19|Optimized*|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKabs (1/h/kg^0.25)\n0.69, 2.19\nOptimized*",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kabs (1/h/kg^0.25)",
+      "symbol": "Kabs (1/h/kg^0.25)",
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.19",
+        "value": 2.19,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKabs (1/h/kg^0.25)\n0.69, 2.19\nOptimized*",
         "parameter_status": "Optimized",
         "confidence": "high"
       }
@@ -806,10 +867,10 @@
     {
       "needs_review": false,
       "parameter_name": "Fu (unitless)",
-      "symbol": null,
+      "symbol": "Fu (unitless)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -828,8 +889,8 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Fu (unitless)|0.04|Experimental<sup>c</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nFu (unitless)\n0.04\nExperimental^c",
         "parameter_status": "Experimental",
         "confidence": "high"
       }
@@ -837,10 +898,10 @@
     {
       "needs_review": false,
       "parameter_name": "FuM1 (unitless)",
-      "symbol": null,
+      "symbol": "FuM1 (unitless)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -859,19 +920,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|FuM1 (unitless)|0.04|Considered similar as parent compound|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nFuM1 (unitless)\n0.04\nConsidered similar as parent compound",
         "parameter_status": "Considered similar as parent compound",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "_V_max(nmol/h/kg<sup>0.75</sup>)",
-      "symbol": null,
+      "parameter_name": "Vmax (nmol/h/kg^0.75)",
+      "symbol": "Vmax (nmol/h/kg^0.75)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -890,19 +951,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|_V_max(nmol/h/kg<sup>0.75</sup>)|250,000|Optimized*|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nVmax (nmol/h/kg^0.75)\n250,000\nOptimized*",
         "parameter_status": "Optimized",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "_Km_(µmol/l)",
-      "symbol": null,
+      "parameter_name": "Km (μmol/l)",
+      "symbol": "Km (μmol/l)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -921,19 +982,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|_Km_(µmol/l)|140|Optimized*|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKm (μmol/l)\n140\nOptimized*",
         "parameter_status": "Optimized",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Clurine (µl/h/kg<sup>0.25</sup>)",
-      "symbol": null,
+      "parameter_name": "Clurine (μl/h/kg^0.25)",
+      "symbol": "Clurine (μl/h/kg^0.25)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -952,19 +1013,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Clurine (µl/h/kg<sup>0.25</sup>)|0.3771|Taken from literature<sup>d</sup>|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nClurine (μl/h/kg^0.25)\n0.3771\nTaken from literatur^d",
         "parameter_status": "Literature",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "ClM1urine (µl/h/kg<sup>0.25</sup>)",
-      "symbol": null,
+      "parameter_name": "CIM1urine (μl/h/kg^0.25)",
+      "symbol": "CIM1urine (μl/h/kg^0.25)",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -983,19 +1044,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|ClM1urine (µl/h/kg<sup>0.25</sup>)|0.3771|Considered similar as parent compound|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nCIM1urine (μl/h/kg^0.25)\n0.3771\nConsidered similar as parent compound",
         "parameter_status": "Considered similar as parent compound",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "_K_feces (1/h/kg<sup>0.25</sup>)",
-      "symbol": null,
+      "parameter_name": "Kfeces (1/h/kg^0.25)",
+      "symbol": "Kfeces (1/h/kg^0.25)",
       "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "compound": "Rilutor",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1003,10 +1064,10 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "0.013, 0.011",
-        "value": null,
-        "range_low": 0.013,
-        "range_high": 0.011,
+        "value_text": "0.013",
+        "value": 0.013,
+        "range_low": null,
+        "range_high": null,
         "variance": null,
         "variance_type": null,
         "unit": null,
@@ -1014,19 +1075,50 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|_K_feces (1/h/kg<sup>0.25</sup>)|0.013, 0.011|Optimized*|",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKfeces (1/h/kg^0.25)\n0.013, 0.011\nOptimized*",
         "parameter_status": "Optimized",
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Kfeces (1/h/kg^0.25)",
+      "symbol": "Kfeces (1/h/kg^0.25)",
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.011",
+        "value": 0.011,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKfeces (1/h/kg^0.25)\n0.013, 0.011\nOptimized*",
+        "parameter_status": "Optimized",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1045,19 +1137,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Liver|0.257|[27]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nLiver\n0.257\n[27]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1076,19 +1168,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Lung|0.034|[26]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nLung\n0.034\n[26]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1107,19 +1199,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Kidney|0.177|[27]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nKidney\n0.177\n[27]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1138,19 +1230,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Heart|0.09|[28]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nHeart\n0.09\n[28]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1169,19 +1261,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Brain|0.117|[23]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nBrain\n0.117\n[23]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Blood flow to organ (fraction of cardiac output)",
+      "parameter_name": "Blood flow to organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1200,19 +1292,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Blood flow to organ (fraction of cardiac output)|Fat|0.052|[27]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Blood flow to organ (fraction)\nFat\n0.052\n[27]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1231,19 +1323,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Liver|0.026|[24,27]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nLiver\n0.026\n[24, 27]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1262,19 +1354,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Lung|0.014|[24,29]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nLung\n0.014\n[24, 29]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1293,19 +1385,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Kidney|0.004|[24]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nKidney\n0.004\n[24]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1324,19 +1416,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Heart|0.012|[28]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nHeart\n0.012\n[28]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1355,19 +1447,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Brain|0.021|[24,26]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nBrain\n0.021\n[24, 26]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1386,19 +1478,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Fat|0.187|[24]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nFat\n0.187\n[24]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Volume of organ (fraction of BW)",
+      "parameter_name": "Volume of organ (fraction)",
       "symbol": null,
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1417,19 +1509,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Volume of organ (fraction of BW)|Plasma|0.03976|[23]|",
-        "parameter_status": "Literature",
+        "source_location": "Table 1",
+        "source_quote": "Volume of organ (fraction)\nPlasma\n0.03976\n[23]",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
       "parameter_name": "Liver:plasma",
-      "symbol": null,
+      "symbol": "Liver:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1448,19 +1540,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Liver:plasma|2.2|Similar to rat|",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nLiver:plasma\n2.2\nSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
       "parameter_name": "Brain:plasma",
-      "symbol": null,
+      "symbol": "Brain:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1479,19 +1571,19 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Brain:plasma|2.44|Similar to rat|",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nBrain:plasma\n2.44\nSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
       "parameter_name": "Kidney:plasma",
-      "symbol": null,
+      "symbol": "Kidney:plasma",
       "context": {
         "compound": "Rilutor, ASD",
-        "subject_species": "Rat",
+        "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
         "route": null,
@@ -1510,9 +1602,9 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Biochemical parameters|Kidney:plasma|4.622509|Similar to rat|",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table 1",
+        "source_quote": "Biochemical parameters\nKidney:plasma\n4.622509\nSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -1537,13 +1629,13 @@
         "variance": null,
         "variance_type": null,
         "unit": null,
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Lung:plasma|5.958539|Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Lung:plasma\t5.958539\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -1568,13 +1660,13 @@
         "variance": null,
         "variance_type": null,
         "unit": null,
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Fat:plasma|14.12276|Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Fat:plasma\t14.12276\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -1599,385 +1691,13 @@
         "variance": null,
         "variance_type": null,
         "unit": null,
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Heart:plasma|4.251126|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "GE (1/h/kg<sup>0.25</sup>)",
-      "symbol": "GE",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "2.61",
-        "value": 2.61,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/h/kg<sup>0.25</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized*"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "GE (1/h/kg<sup>0.25</sup>)|2.61|Optimized*",
-        "parameter_status": "Optimized",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Kabs (1/h/kg<sup>0.25</sup>)",
-      "symbol": "Kabs",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.69, 2.19",
-        "value": null,
-        "range_low": 0.69,
-        "range_high": 2.19,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/h/kg<sup>0.25</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Kabs (1/h/kg<sup>0.25</sup>)|0.69, 2.19|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fu (unitless)",
-      "symbol": "Fu",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.04",
-        "value": 0.04,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "unitless",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Fu (unitless)|0.04|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "FuM1 (unitless)",
-      "symbol": "FuM1",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.04",
-        "value": 0.04,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "unitless",
-        "unit_inherited": false,
-        "value_qualifier": "Considered similar as parent compound"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "FuM1 (unitless)|0.04|Considered similar as parent compound",
-        "parameter_status": "Considered similar as parent compound",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "_V_max(nmol/h/kg<sup>0.75</sup>)",
-      "symbol": "_V_max",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "250,000",
-        "value": 250000.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "nmol/h/kg<sup>0.75</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "_V_max(nmol/h/kg<sup>0.75</sup>)|250,000|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "_Km_(µmol/l)",
-      "symbol": "_Km",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "140",
-        "value": 140.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "µmol/l",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "_Km_(µmol/l)|140|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Clurine (µl/h/kg<sup>0.25</sup>)",
-      "symbol": "Clurine",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.3771",
-        "value": 0.3771,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "µl/h/kg<sup>0.25</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Clurine (µl/h/kg<sup>0.25</sup>)|0.3771|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "ClM1urine (µl/h/kg<sup>0.25</sup>)",
-      "symbol": "ClM1urine",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.3771",
-        "value": 0.3771,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "µl/h/kg<sup>0.25</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Considered similar as parent compound"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "ClM1urine (µl/h/kg<sup>0.25</sup>)|0.3771|Considered similar as parent compound",
-        "parameter_status": "Considered similar as parent compound",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "_K_feces (1/h/kg<sup>0.25</sup>)",
-      "symbol": "_K_feces",
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.013, 0.011",
-        "value": null,
-        "range_low": 0.013,
-        "range_high": 0.011,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/h/kg<sup>0.25</sup>",
-        "unit_inherited": false,
-        "value_qualifier": "Similar to rat"
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "_K_feces (1/h/kg<sup>0.25</sup>)|0.013, 0.011|Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Lung:plasma",
-      "symbol": null,
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "5.958539",
-        "value": 5.958539,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Lung:plasma 5.958539 Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fat:plasma",
-      "symbol": null,
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "14.12276",
-        "value": 14.12276,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Fat:plasma 14.12276 Similar to rat",
-        "parameter_status": "Similar to rat",
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Heart:plasma",
-      "symbol": null,
-      "context": {
-        "compound": "Rilutor, ASD",
-        "subject_species": "rat",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "4.251126",
-        "value": 4.251126,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Heart:plasma 4.251126 Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Heart:plasma\t4.251126\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -2002,13 +1722,13 @@
         "variance": null,
         "variance_type": null,
         "unit": "1/h/kg^0.25",
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": "Optimized*"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "GE (1/h/kg^0.25) 2.61 Optimized*",
-        "parameter_status": "Optimized*",
+        "source_location": "Table I (continued)",
+        "source_quote": "GE (1/h/kg^0.25)\t2.61\tOptimized*",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -2017,7 +1737,7 @@
       "parameter_name": "Kabs (1/h/kg^0.25)",
       "symbol": "Kabs",
       "context": {
-        "compound": "Rilutor, ASD",
+        "compound": "Rilutor",
         "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
@@ -2026,20 +1746,51 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "0.69, 2.19",
-        "value": null,
-        "range_low": 0.69,
-        "range_high": 2.19,
+        "value_text": "0.69",
+        "value": 0.69,
+        "range_low": null,
+        "range_high": null,
         "variance": null,
         "variance_type": null,
         "unit": "1/h/kg^0.25",
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Kabs (1/h/kg^0.25) 0.69, 2.19 Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Kabs (1/h/kg^0.25)\t0.69, 2.19\tSimilar to rat",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kabs (1/h/kg^0.25)",
+      "symbol": "Kabs",
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.19",
+        "value": 2.19,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h/kg^0.25",
+        "unit_inherited": null,
+        "value_qualifier": "Similar to rat"
+      },
+      "provenance": {
+        "source_location": "Table I (continued)",
+        "source_quote": "Kabs (1/h/kg^0.25)\t0.69, 2.19\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -2064,13 +1815,13 @@
         "variance": null,
         "variance_type": null,
         "unit": "unitless",
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Fu (unitless) 0.04 Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Fu (unitless)\t0.04\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
@@ -2095,20 +1846,20 @@
         "variance": null,
         "variance_type": null,
         "unit": "unitless",
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": "Considered similar as parent compound"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "FuM1 (unitless) 0.04 Considered similar as parent compound",
-        "parameter_status": "Considered similar as parent compound",
+        "source_location": "Table I (continued)",
+        "source_quote": "FuM1 (unitless)\t0.04\tConsidered similar as parent compound",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "V_max (nmol/h/kg^0.75)",
-      "symbol": "V_max",
+      "parameter_name": "Vmax (nmol/h/kg^0.75)",
+      "symbol": "Vmax",
       "context": {
         "compound": "Rilutor, ASD",
         "subject_species": "rat",
@@ -2126,20 +1877,20 @@
         "variance": null,
         "variance_type": null,
         "unit": "nmol/h/kg^0.75",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized*"
+        "unit_inherited": null,
+        "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "V_max (nmol/h/kg^0.75) 250,000 Optimized*",
-        "parameter_status": "Optimized*",
+        "source_location": "Table I (continued)",
+        "source_quote": "Vmax (nmol/h/kg^0.75)\t250,000\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "K_m (µmol/l)",
-      "symbol": "K_m",
+      "parameter_name": "Km (μmol/l)",
+      "symbol": "Km",
       "context": {
         "compound": "Rilutor, ASD",
         "subject_species": "rat",
@@ -2156,20 +1907,20 @@
         "range_high": null,
         "variance": null,
         "variance_type": null,
-        "unit": "µmol/l",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized*"
+        "unit": "μmol/l",
+        "unit_inherited": null,
+        "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "K_m (µmol/l) 140 Optimized*",
-        "parameter_status": "Optimized*",
+        "source_location": "Table I (continued)",
+        "source_quote": "Km (μmol/l)\t140\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Clurine (µl/h/kg^0.25)",
+      "parameter_name": "Clurine (μl/h/kg^0.25)",
       "symbol": "Clurine",
       "context": {
         "compound": "Rilutor, ASD",
@@ -2187,20 +1938,20 @@
         "range_high": null,
         "variance": null,
         "variance_type": null,
-        "unit": "µl/h/kg^0.25",
-        "unit_inherited": false,
+        "unit": "μl/h/kg^0.25",
+        "unit_inherited": null,
         "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "Clurine (µl/h/kg^0.25) 0.3771 Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Clurine (μl/h/kg^0.25)\t0.3771\tSimilar to rat",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "ClM1urine (µl/h/kg^0.25)",
+      "parameter_name": "ClM1urine (μl/h/kg^0.25)",
       "symbol": "ClM1urine",
       "context": {
         "compound": "Rilutor, ASD",
@@ -2218,23 +1969,23 @@
         "range_high": null,
         "variance": null,
         "variance_type": null,
-        "unit": "µl/h/kg^0.25",
-        "unit_inherited": false,
+        "unit": "μl/h/kg^0.25",
+        "unit_inherited": null,
         "value_qualifier": "Considered similar as parent compound"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "ClM1urine (µl/h/kg^0.25) 0.3771 Considered similar as parent compound",
-        "parameter_status": "Considered similar as parent compound",
+        "source_location": "Table I (continued)",
+        "source_quote": "ClM1urine (μl/h/kg^0.25)\t0.3771\tConsidered similar as parent compound",
+        "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "K_feces (1/h/kg^0.25)",
-      "symbol": "K_feces",
+      "parameter_name": "Kfeces (1/h/kg^0.25)",
+      "symbol": "Kfeces",
       "context": {
-        "compound": "Rilutor, ASD",
+        "compound": "Rilutor",
         "subject_species": "rat",
         "life_stage": null,
         "compartment": null,
@@ -2243,22 +1994,590 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "0.013, 0.011",
-        "value": null,
-        "range_low": 0.013,
-        "range_high": 0.011,
+        "value_text": "0.013",
+        "value": 0.013,
+        "range_low": null,
+        "range_high": null,
         "variance": null,
         "variance_type": null,
         "unit": "1/h/kg^0.25",
-        "unit_inherited": false,
+        "unit_inherited": null,
         "value_qualifier": "Similar to rat"
       },
       "provenance": {
-        "source_location": "Table I",
-        "source_quote": "K_feces (1/h/kg^0.25) 0.013, 0.011 Similar to rat",
-        "parameter_status": "Similar to rat",
+        "source_location": "Table I (continued)",
+        "source_quote": "Kfeces (1/h/kg^0.25)\t0.013, 0.011\tSimilar to rat",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kfeces (1/h/kg^0.25)",
+      "symbol": "Kfeces",
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.011",
+        "value": 0.011,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/h/kg^0.25",
+        "unit_inherited": null,
+        "value_qualifier": "Similar to rat"
+      },
+      "provenance": {
+        "source_location": "Table I (continued)",
+        "source_quote": "Kfeces (1/h/kg^0.25)\t0.013, 0.011\tSimilar to rat",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver:plasma partition coefficient",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ riluzole",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.2",
+        "value": 2.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Footnote a",
+        "source_quote": "Longo et al. reported liver:blood partition coefficient of 2.0, with RLZ blood to plasma ratio of 1.1. Hence, liver:plasma partition was considered 2.2[17]",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Renal clearance",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ riluzole",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Calculated using AUC brain from mice study at 10 mg/kg",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Footnote b",
+        "source_quote": "Calculated using AUC brain from mice study at 10 mg/kg[30]",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Gastric emptying",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ riluzole",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Optimized based on experimental data from Ravi et al. [13] in Rilutor and for ASD using our in-house data for rat. For human, data from Liboux et al. [15] was used to optimize gastric emptying",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Footnote *",
+        "source_quote": "*Optimized based on experimental data from Ravi et al. [13] in Rilutor and for ASD using our in-house data for rat. For human, data from Liboux et al. [15] was used to optimize gastric emptying",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "dissociation constant",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.47",
+        "value": 3.47,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text under 'Saturation Solubility Study' section",
+        "source_quote": "RLZ is a fluorine containing weakly basic compound with a dissociation constant of 3.47.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Dose",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10 mg/kg BW/day",
+        "value": 10.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg BW/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Rat PBPK Model > Plasma and Brain Concentration for Rilutor",
+        "source_quote": "Rat PBPK model was used for the simulation of the single dose of 10 mg/kg BW/day after oral administration.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Dose",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10 mg/kg",
+        "value": 10.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Rat PBPK Model > Plasma and Brain Concentration for ASD Formulation",
+        "source_quote": "The simulated plasma and brain concentration for a single 10 mg/kg ASD formulation of RLZ is shown in Fig. 7",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Simulated data range relative to observed data",
+      "symbol": null,
+      "context": {
+        "compound": "RLZ",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.5–twofold",
+        "value": null,
+        "range_low": 1.5,
+        "range_high": 2.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Rat PBPK Model > Plasma and Brain Concentration for Rilutor",
+        "source_quote": "Simulated data is within the range of 1.5–twofold of observed data points for both organs.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Simulated Cmax in brain for ASD",
+      "symbol": null,
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5965.075",
+        "value": 5965.075,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/g",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Observed Cmax in brain for ASD",
+      "symbol": null,
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7050 ng/g",
+        "value": 7050.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/g",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Simulated Cmax in brain for Rilutor",
+      "symbol": null,
+      "context": {
+        "compound": "Rilutor",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3072.61",
+        "value": 3072.61,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/g",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Observed Cmax in brain for Rilutor",
+      "symbol": null,
+      "context": {
+        "compound": "Rilutor",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4050 ng/g",
+        "value": 4050.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/g",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Simulated AUC in brain for ASD",
+      "symbol": null,
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "26,532.5",
+        "value": 26532.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml * h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g). AUC was also higher for ASD formulation (simulated brain: 26,532.5, observed brain: 31,700.72 ng/ml * h) compared to Rilutor (simulated brain: 40,044.3, observed brain: 55,093.55 ng/ml * h) in both plasma (Table S2) and brain pointing towards increased efficacy of the formulation.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Observed AUC in brain for ASD",
+      "symbol": null,
+      "context": {
+        "compound": "ASD",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "31,700.72 ng/ml * h",
+        "value": 31700.72,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml * h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g). AUC was also higher for ASD formulation (simulated brain: 26,532.5, observed brain: 31,700.72 ng/ml * h) compared to Rilutor (simulated brain: 40,044.3, observed brain: 55,093.55 ng/ml * h) in both plasma (Table S2) and brain pointing towards increased efficacy of the formulation.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Simulated AUC in brain for Rilutor",
+      "symbol": null,
+      "context": {
+        "compound": "Rilutor",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "40,044.3",
+        "value": 40044.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml * h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g). AUC was also higher for ASD formulation (simulated brain: 26,532.5, observed brain: 31,700.72 ng/ml * h) compared to Rilutor (simulated brain: 40,044.3, observed brain: 55,093.55 ng/ml * h) in both plasma (Table S2) and brain pointing towards increased efficacy of the formulation.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Observed AUC in brain for Rilutor",
+      "symbol": null,
+      "context": {
+        "compound": "Rilutor",
+        "subject_species": "rat",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "55,093.55 ng/ml * h",
+        "value": 55093.55,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml * h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text below Fig. 7",
+        "source_quote": "Notably, the simulated and observed Cmax in brain for ASD (simulated: 5965.075, observed: 7050 ng/g) was 2–3 times higher than Rilutor (Simulated: 3072.61, Observed: 4050 ng/g). AUC was also higher for ASD formulation (simulated brain: 26,532.5, observed brain: 31,700.72 ng/ml * h) compared to Rilutor (simulated brain: 40,044.3, observed brain: 55,093.55 ng/ml * h) in both plasma (Table S2) and brain pointing towards increased efficacy of the formulation.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Cmax for ASD",
+      "symbol": "C_max",
+      "context": {
+        "compound": "ASD",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": "tablet",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "about 2–2.5 times higher compared to the tablet",
+        "value": null,
+        "range_low": 2.0,
+        "range_high": 2.5,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "about"
+      },
+      "provenance": {
+        "source_location": "Text under 'Human PBPK Model' section",
+        "source_quote": "As expected, C_max for ASD was about 2–2.5 times higher compared to the tablet, and for the brain AUC as well, a similar trend was observed.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain AUC for ASD",
+      "symbol": null,
+      "context": {
+        "compound": "ASD",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": "brain",
+        "route": "tablet",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "a similar trend was observed",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "a similar trend was observed"
+      },
+      "provenance": {
+        "source_location": "Text under 'Human PBPK Model' section",
+        "source_quote": "As expected, C_max for ASD was about 2–2.5 times higher compared to the tablet, and for the brain AUC as well, a similar trend was observed.",
+        "parameter_status": null,
         "confidence": "high"
       }
     }
-  ]
+  ],
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 11,
+    "discarded_chunks": 2,
+    "retained_chunks": 9
+  },
+  "wevisdoc_summary": {
+    "enabled": true,
+    "pages_transcribed": 6
+  }
 }

@@ -491,3 +491,212 @@ class SGLangExtractor:
         except Exception as e:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
             raise
+
+
+class LayaFilter:
+    """
+    Fast System-1 decision model (convaiinnovations/laya) for triage,
+    narrative chunk filtering, and document routing.
+    Runs non-autoregressively in ~20-30ms.
+    """
+    def __init__(self, device: str = None, threshold: float = 0.25):
+        self.threshold = threshold
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        try:
+            from laya import Router
+            logger.info("Initializing LayaFilter router...")
+            self.router = Router(preload=False, device=self.device)
+            self.is_loaded = True
+            logger.info("LayaFilter initialized successfully.")
+        except Exception as e:
+            logger.warning(f"Could not initialize LayaFilter: {e}")
+            self.is_loaded = False
+
+    def is_pk_relevant(self, text: str) -> tuple[bool, float, str]:
+        """
+        Evaluates whether a text excerpt contains numerical PK model parameters,
+        rate constants, partition coefficients, or physiological parameters.
+        Returns: (keep_boolean, confidence_score, model_type_choice)
+        """
+        if not self.is_loaded or len(text.strip()) < 50:
+            return True, 1.0, "unknown"
+
+        questions = {
+            "has_pk_parameters": {
+                "type": "noul",
+                "instructions": (
+                    "Does this specific text excerpt contain numerical pharmacokinetic parameter values, "
+                    "equations, rate constants, partition coefficients, half-lives, clearance values, "
+                    "or physiological blood flows and volumes?"
+                )
+            },
+            "model_type": {
+                "type": "choice",
+                "instructions": "What type of pharmacokinetic modeling or data is described?",
+                "criteria": {
+                    "pbpk": "physiologically based pharmacokinetic model with multiple organ compartments and blood flows",
+                    "compartmental": "classical 1, 2, or 3 empirical compartment PK model",
+                    "nca": "non-compartmental analysis (AUC, Cmax, Tmax only)",
+                    "not_applicable": "no pharmacokinetic modeling or parameter estimation"
+                }
+            }
+        }
+        try:
+            # truncate to 3500 chars to avoid exceeding token limit
+            truncated_text = text[:3500]
+            res = self.router.predict(truncated_text, questions)
+            score = float(res["answers"]["has_pk_parameters"]["noul"])
+            choice = res["answers"]["model_type"]["choice"]
+
+            # Keep only if probability meets threshold
+            keep = (score >= self.threshold)
+            return keep, score, choice
+        except Exception as e:
+            logger.warning(f"Laya filter error: {e}. Defaulting to keep chunk.")
+            return True, 1.0, "unknown"
+
+    def classify_model_type(self, text: str) -> str:
+        """
+        Quickly classifies paper or section into: 'pbpk', 'compartmental', 'nca', or 'not_applicable'.
+        """
+        if not self.is_loaded:
+            return "not_applicable"
+
+        questions = {
+            "model_type": {
+                "type": "choice",
+                "instructions": "What type of pharmacokinetic modeling or study is this?",
+                "criteria": {
+                    "pbpk": "physiologically based pharmacokinetic model with multiple organ compartments",
+                    "compartmental": "empirical 1, 2, or 3 compartment PK model",
+                    "nca": "non-compartmental analysis (AUC, Cmax only)",
+                    "not_applicable": "no pharmacokinetic modeling data"
+                }
+            }
+        }
+        try:
+            truncated = text[:3500]
+            res = self.router.predict(truncated, questions)
+            return res["answers"]["model_type"]["choice"]
+        except Exception as e:
+            logger.warning(f"Laya classification error: {e}")
+            return "not_applicable"
+
+
+class WeVisDocParser:
+    """
+    Tencent/WeVisDoc-4B Vision-to-Markdown Document Parser.
+    Fine-tuned from Qwen3-VL to convert PDF document/table images into structured Markdown
+    with LaTeX math formulas and standard HTML tables (preserving rowspan, colspan, hierarchical headers).
+    Reference: https://huggingface.co/tencent/WeVisDoc-4B
+    """
+    DEFAULT_SYSTEM_PROMPT = (
+        "You are an AI assistant specialized in converting PDF images to Markdown format. "
+        "Please follow these instructions for the conversion:\n\n"
+        "1. Text Processing:\n"
+        "- Accurately recognize all text content in the PDF image without guessing or inferring.\n"
+        "- Convert the recognized text into Markdown format.\n"
+        "- Maintain the original document structure, including headings, paragraphs, lists, etc.\n\n"
+        "2. Mathematical Formula Processing:\n"
+        "- Convert all mathematical formulas to LaTeX format.\n"
+        "- Enclose inline formulas with \\( \\). For example: \\( E = mc^2 \\)\n"
+        "- Enclose block formulas with \\[ \\]. For example: \\[ \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\]\n\n"
+        "3. Table Processing:\n"
+        "- Convert all tables to standard HTML format using <table>, <thead>, <tbody>, <tr>, <th>, <td>.\n"
+        "- Use rowspan and colspan appropriately for merged headers or cells.\n"
+        "- Preserve exact numerical and textual values in table cells."
+    )
+
+    DEFAULT_USER_PROMPT = "Please transcribe this page image into clean Markdown following the system instructions."
+
+    def __init__(self, model_id: str = "Tencent/WeVisDoc-4B", device: str = None):
+        self.model_id = model_id
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.processor = None
+        self.model = None
+        self.is_loaded = False
+
+    def load(self):
+        """Loads processor and model weights into VRAM lazily."""
+        if self.is_loaded:
+            return
+
+        logger.info(f"Loading WeVisDocParser ({self.model_id}) on {self.device}...")
+        dtype = torch.bfloat16 if (self.device and "cuda" in self.device) else torch.float32
+
+        from transformers import AutoProcessor
+        self.processor = AutoProcessor.from_pretrained(self.model_id, trust_remote_code=True)
+
+        device_map = {"": self.device} if (self.device and self.device != "cpu") else None
+        try:
+            from transformers import Qwen3VLForConditionalGeneration
+            self.model = Qwen3VLForConditionalGeneration.from_pretrained(
+                self.model_id,
+                torch_dtype=dtype,
+                device_map=device_map,
+                trust_remote_code=True
+            ).eval()
+        except Exception as e:
+            logger.warning(f"WeVisDoc Qwen3VL direct load note ({e}), falling back to AutoModelForVision2Seq...")
+            from transformers import AutoModelForVision2Seq
+            self.model = AutoModelForVision2Seq.from_pretrained(
+                self.model_id,
+                torch_dtype=dtype,
+                device_map=device_map,
+                trust_remote_code=True
+            ).eval()
+
+        self.is_loaded = True
+        logger.info("WeVisDocParser loaded successfully into VRAM.")
+
+    def parse_image(
+        self,
+        image: Image.Image,
+        max_new_tokens: int = 4096,
+        user_prompt: str = None,
+        system_prompt: str = None
+    ) -> str:
+        """
+        Transcribes a PIL Image into structured Markdown with HTML tables and LaTeX math.
+        """
+        self.load()
+        sys_prompt = system_prompt or self.DEFAULT_SYSTEM_PROMPT
+        u_prompt = user_prompt or self.DEFAULT_USER_PROMPT
+
+        messages = [
+            {"role": "system", "content": sys_prompt},
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image": image},
+                    {"type": "text", "text": u_prompt}
+                ]
+            }
+        ]
+
+        prompt_text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = self.processor(
+            text=[prompt_text],
+            images=[image],
+            padding=True,
+            return_tensors="pt"
+        ).to(self.model.device)
+
+        with torch.no_grad():
+            generated_ids = self.model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False
+            )
+
+        generated_ids_trimmed = [
+            out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+        ]
+        output_text = self.processor.batch_decode(
+            generated_ids_trimmed,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False
+        )[0]
+        return output_text.strip()
+
+

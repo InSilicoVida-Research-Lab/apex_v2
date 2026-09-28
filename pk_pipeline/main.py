@@ -46,6 +46,49 @@ def get_tatr():
         print("TATR loaded successfully.")
     return tatr_processor, tatr_model
 
+laya_filter = None
+
+def get_laya():
+    global laya_filter
+    if laya_filter is None:
+        print("Loading System-1 Decision Model: Laya (convaiinnovations/laya)...")
+        from pk_pipeline.ml_services import LayaFilter
+        laya_filter = LayaFilter()
+    return laya_filter
+
+wevisdoc_parser = None
+
+def get_wevisdoc():
+    global wevisdoc_parser
+    if wevisdoc_parser is None:
+        print("Loading WeVisDoc Document OCR: Tencent/WeVisDoc-4B...")
+        from pk_pipeline.ml_services import WeVisDocParser
+        wevisdoc_parser = WeVisDocParser()
+    return wevisdoc_parser
+
+def print_laya_summary(stats: dict, triage_type: str):
+    print(f"\n{'='*65}")
+    print(f" LAYA TRIAGE & FILTER SUMMARY")
+    print(f"{'='*65}")
+    print(f"  • Pre-flight Document Classification: {triage_type}")
+    print(f"  • Candidate Chunks Evaluated:         {stats.get('evaluated', 0)}")
+    print(f"  • Chunks Retained for Extraction:     {stats.get('retained', 0)}")
+    print(f"  • Chunks Discarded by Laya:           {stats.get('discarded', 0)}")
+    if stats.get('discarded', 0) > 0:
+        est_saved = stats['discarded'] * 25
+        print(f"  • Estimated VLM Compute Saved:        ~{est_saved}s ({stats['discarded']} calls skipped)")
+    print(f"{'='*65}\n")
+
+def print_wevisdoc_summary(stats: dict):
+    if stats.get("pages_transcribed", 0) > 0:
+        print(f"\n{'='*65}")
+        print(f" WEVISDOC-4B OCR TABLE TRANSCRIPTION SUMMARY")
+        print(f"{'='*65}")
+        print(f"  • Model:                Tencent/WeVisDoc-4B")
+        print(f"  • Table Pages Parsed:   {stats.get('pages_transcribed', 0)}")
+        print(f"  • Output Format:        Structured HTML Tables & LaTeX Formulas")
+        print(f"{'='*65}\n")
+
 
 # Removed TATR-SR globals and helpers, using Header Repetition instead
 
@@ -176,19 +219,37 @@ def post_process_document(document, pdf_path):
 
     return document
 
-async def run_pipeline(pdf_path: str, target_compounds: list = None):
+async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
+    
+    wevisdoc_stats = {"pages_transcribed": 0}
+
+    # --- Fast Document Triage via Laya ---
+    doc_triage_type = "unknown"
+    laya_stats = {"evaluated": 0, "discarded": 0, "retained": 0}
+    try:
+        if pdf_path and os.path.exists(pdf_path):
+            with pymupdf.open(pdf_path) as _pdoc:
+                if len(_pdoc) > 0:
+                    _first_page_text = _pdoc[0].get_text()[:3000]
+                    if _first_page_text:
+                        doc_triage_type = get_laya().classify_model_type(_first_page_text)
+                        print(f"  -> [Laya Pre-flight Triage] Document classified as: '{doc_triage_type}'")
+    except Exception as e:
+        logger.debug(f"Laya pre-flight triage skipped: {e}")
     
     # --- NEW: Paper Resolution ---
     from pk_pipeline.ingestion.pmc_fetcher import extract_doi_from_pdf, extract_title_from_pdf, resolve_paper
     
-    print("Step 0/3: Resolving paper via PMC/EuropePMC/Unpaywall/Semantic Scholar...")
     doi = extract_doi_from_pdf(pdf_path)
     title = extract_title_from_pdf(pdf_path, doi=doi)
 
     res = {"xml_path": None, "pdf_path": None, "source": None, "source_type": "published"}
-    if doi or title:
+    if force_pdf:
+        print("Step 0/3: --force-pdf enabled: Bypassing publisher XML resolution to force PDF & WeVisDoc OCR pipeline.")
+    elif doi or title:
+        print("Step 0/3: Resolving paper via PMC/EuropePMC/Unpaywall/Semantic Scholar...")
         res = resolve_paper(doi=doi, title=title, pdf_path=pdf_path)
 
         if res.get("xml_path"):
@@ -212,6 +273,20 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
             # Separate figure chunks — they may need image download + visual dispatch
             figure_chunks  = [c for c in chunks if c["role"] == "figure_xml"]
             text_chunks    = [c for c in chunks if c["role"] != "figure_xml"]
+
+            # Filter narrative text chunks using Laya to avoid wasting LLM compute on empty text
+            filtered_text_chunks = []
+            for c in text_chunks:
+                if c.get("role") == "narrative_xml":
+                    laya_stats["evaluated"] += 1
+                    keep, prob, mtype = get_laya().is_pk_relevant(c.get("content", ""))
+                    if not keep:
+                        laya_stats["discarded"] += 1
+                        print(f"  -> [Laya Filter] Skipped narrative chunk '{c.get('title', 'narrative')}' (no PK data, p={prob:.2f})")
+                        continue
+                    laya_stats["retained"] += 1
+                filtered_text_chunks.append(c)
+            text_chunks = filtered_text_chunks
 
             diagram_chunks = [c for c in figure_chunks if c.get("is_diagram")]
             caption_chunks = [c for c in figure_chunks if not c.get("is_diagram")]
@@ -314,6 +389,18 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                     if extracted_page.parameters:
                         final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
 
+            if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
+                final_document["model_classification"]["model_type"] = doc_triage_type
+                final_document["model_classification"]["evidence_quote"] = "Classified via Laya System-1 triage."
+
+            final_document["laya_filter_summary"] = {
+                "model_type_triage": doc_triage_type,
+                "evaluated_chunks": laya_stats["evaluated"],
+                "discarded_chunks": laya_stats["discarded"],
+                "retained_chunks": laya_stats["retained"]
+            }
+            print_laya_summary(laya_stats, doc_triage_type)
+
             logger.info("Successfully completed XML extraction fast-path.")
             return post_process_document(final_document, pdf_path)
 
@@ -386,6 +473,20 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                     table_boxes.append(box.tolist())
                     
             if table_boxes:
+                table_context = text
+                if use_wevisdoc:
+                    try:
+                        print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} table structure to HTML & LaTeX...")
+                        clean_pix = page.get_pixmap(matrix=pymupdf.Matrix(200/72, 200/72))
+                        clean_img = Image.open(io.BytesIO(clean_pix.tobytes())).convert("RGB")
+                        wevisdoc_md = get_wevisdoc().parse_image(clean_img)
+                        table_context = wevisdoc_md
+                        wevisdoc_stats["pages_transcribed"] += 1
+                        print(f"  -> [WeVisDoc-4B] Page {page_num} table transcribed successfully ({len(wevisdoc_md)} chars).")
+                    except Exception as e:
+                        print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
+                        table_context = text
+
                 # Draw thick red boundaries around the detected tables on the full page image
                 draw = ImageDraw.Draw(full_page_img)
                 for box in table_boxes:
@@ -396,21 +497,35 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                     "role": "page_with_table",
                     "page": page_num,
                     "img_obj": full_page_img,
-                    "markdown_context": text,
+                    "markdown_context": table_context,
                 })
             elif has_image:
-                llm_payloads.append({
-                    "role": "page_with_figure",
-                    "page": page_num,
-                    "img_obj": full_page_img,
-                    "markdown_context": text,
-                })
+                laya_stats["evaluated"] += 1
+                keep, prob, mtype = get_laya().is_pk_relevant(text)
+                if keep:
+                    laya_stats["retained"] += 1
+                    llm_payloads.append({
+                        "role": "page_with_figure",
+                        "page": page_num,
+                        "img_obj": full_page_img,
+                        "markdown_context": text,
+                    })
+                else:
+                    laya_stats["discarded"] += 1
+                    print(f"  -> [Laya Filter] Page {page_num} figure skipped (no PK model or parameters, p={prob:.2f})")
             elif len(text.strip()) > 50:
-                llm_payloads.append({
-                    "role": "narrative_xml",
-                    "page": page_num,
-                    "markdown_context": text.strip()
-                })
+                laya_stats["evaluated"] += 1
+                keep, prob, mtype = get_laya().is_pk_relevant(text)
+                if keep:
+                    laya_stats["retained"] += 1
+                    llm_payloads.append({
+                        "role": "narrative_xml",
+                        "page": page_num,
+                        "markdown_context": text.strip()
+                    })
+                else:
+                    laya_stats["discarded"] += 1
+                    print(f"  -> [Laya Filter] Page {page_num} narrative skipped (no PK parameters detected, p={prob:.2f})")
             
         print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks. Running LLM extraction concurrently...")
         
@@ -455,6 +570,24 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None):
                 if extracted_page and extracted_page.parameters:
                     final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
                     
+        if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
+            final_document["model_classification"]["model_type"] = doc_triage_type
+            final_document["model_classification"]["evidence_quote"] = "Classified via Laya System-1 triage."
+            
+        final_document["laya_filter_summary"] = {
+            "model_type_triage": doc_triage_type,
+            "evaluated_chunks": laya_stats["evaluated"],
+            "discarded_chunks": laya_stats["discarded"],
+            "retained_chunks": laya_stats["retained"]
+        }
+        print_laya_summary(laya_stats, doc_triage_type)
+
+        final_document["wevisdoc_summary"] = {
+            "enabled": use_wevisdoc,
+            "pages_transcribed": wevisdoc_stats["pages_transcribed"]
+        }
+        print_wevisdoc_summary(wevisdoc_stats)
+
         logger.info("Successfully completed PyMuPDF fallback extraction.")
         return post_process_document(final_document, pdf_path)
         
@@ -637,6 +770,9 @@ def main():
     parser.add_argument("input_paths", type=str, nargs="+", help="Path to one or more PDF files or directories of PDFs to extract")
     parser.add_argument("--compounds", nargs="+", help="Optional: Target compounds to steer search (e.g., PFOS PFOA)")
     parser.add_argument("--output_dir", type=str, default="output", help="Optional: Directory to save the extracted JSONs. Defaults to 'output'.")
+    parser.add_argument("--wevisdoc", action="store_true", default=True, help="Use Tencent/WeVisDoc-4B for table transcription (default: True)")
+    parser.add_argument("--no-wevisdoc", dest="wevisdoc", action="store_false", help="Disable WeVisDoc OCR")
+    parser.add_argument("--force-pdf", action="store_true", default=False, help="Bypass XML resolution and force PDF parsing with TATR and WeVisDoc OCR")
     
     args = parser.parse_args()
     
@@ -654,7 +790,8 @@ def main():
             pdf_files.extend(found_pdfs)
         else:
             if not path.lower().endswith(".pdf"):
-                print(f"Warning: Input file '{path}' does not have a .pdf extension.")
+                print(f"Error: Input file '{path}' is not a PDF file. Please provide a .pdf document.")
+                continue
             pdf_files.append(path)
             
     # Deduplicate the list to avoid processing the same file twice
@@ -678,6 +815,8 @@ def main():
 
         # Process each PDF sequentially
         batch_start = time.time()
+        total_laya_discarded = 0
+        total_wevisdoc_transcribed = 0
         for idx, pdf_path in enumerate(pdf_files, 1):
             print(f"\n{'='*60}")
             print(f"Processing Document {idx}/{len(pdf_files)}: {os.path.basename(pdf_path)}")
@@ -685,7 +824,12 @@ def main():
             
             doc_start = time.time()
             try:
-                result = asyncio.run(run_pipeline(pdf_path, args.compounds))
+                result = asyncio.run(run_pipeline(pdf_path, args.compounds, use_wevisdoc=args.wevisdoc, force_pdf=args.force_pdf))
+                if isinstance(result, dict):
+                    if "laya_filter_summary" in result:
+                        total_laya_discarded += result["laya_filter_summary"].get("discarded_chunks", 0)
+                    if "wevisdoc_summary" in result:
+                        total_wevisdoc_transcribed += result["wevisdoc_summary"].get("pages_transcribed", 0)
                 
                 base_name = os.path.splitext(os.path.basename(pdf_path))[0]
                 output_path = os.path.join(args.output_dir, f"{base_name}.json")
@@ -700,9 +844,13 @@ def main():
                 print(f"  Failed to process {os.path.basename(pdf_path)}: {e}")
                 
         batch_time = time.time() - batch_start
-        print(f"   Batch Processing Complete!")
+        print(f"\n   Batch Processing Complete!")
         print(f"   Processed {len(pdf_files)} documents in {batch_time:.2f} seconds.")
-        print(f"   Results saved to: {os.path.abspath(args.output_dir)}")
+        if total_laya_discarded > 0:
+            print(f"   ⚡ Laya Efficiency: Discarded {total_laya_discarded} irrelevant chunks across batch (saved ~{total_laya_discarded * 25}s VLM compute).")
+        if total_wevisdoc_transcribed > 0:
+            print(f"   ⚡ WeVisDoc-4B OCR: Transcribed {total_wevisdoc_transcribed} table pages into structured HTML/LaTeX.")
+        print(f"   Results saved to: {os.path.abspath(args.output_dir)}\n")
         
     except Exception as e:
         print(f"Fatal Pipeline Error: {e}")

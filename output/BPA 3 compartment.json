@@ -12,7 +12,7 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Table 2. contains compartmental mass balances for Stomach, Blood, and Bladder with explicit physiological parameters (K1, K2, F1, F2) and mass transfer equations, indicating a physiologically based model."
+    "evidence_quote": "Table 2. contains mass balance equations for compartments (Stomach, Blood, Bladder) with explicit physiological parameters (K1, K2, F1, F2) and compartmental transfers, indicating a physiologically based model."
   },
   "structure": {
     "compartments": [
@@ -36,17 +36,17 @@
       {
         "source": "Stomach",
         "target": "Blood",
-        "label_raw": "F1 * M S,t\u22121 * (1\u2212EXP(\u2212 K 1*\u0394 t ))",
+        "label_raw": "F1* M S,t−1 *(1−EXP(− K 1*Δ t ))",
         "direction": "forward",
-        "evidence": "Table 2. equation for Blood compartment incoming mass",
+        "evidence": "Table 2. equation for Blood compartment: + ( F 1* M S,t−1 )*(1−EXP(− K 1*Δ t ))",
         "confidence": 100.0
       },
       {
         "source": "Blood",
         "target": "Bladder",
-        "label_raw": "F2 * M B,t\u22121 * (1\u2212EXP(\u2212 K 2*\u0394 t ))",
+        "label_raw": "F2* M B,t−1 *(1−EXP(− K 2*Δ t ))",
         "direction": "forward",
-        "evidence": "Table 2. equation for Bladder compartment incoming mass",
+        "evidence": "Table 2. equation for Bladder compartment: + ( F 2* M B,t−1 )*(1−EXP(− K 2*Δ t ))",
         "confidence": 100.0
       }
     ],
@@ -79,7 +79,7 @@
       },
       "provenance": {
         "source_location": "Table 3",
-        "source_quote": "Apparent blood volume of distribution (l/kg) | B | 0.15",
+        "source_quote": "| Apparent blood volume of distribution (l/kg) | B | 0.15 |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -110,7 +110,7 @@
       },
       "provenance": {
         "source_location": "Table 3",
-        "source_quote": "Fraction d 16 -BPA from stomach to blood | F1 | 1.0 (Fixed)",
+        "source_quote": "| Fraction d 16 -BPA from stomach to blood | F1 | 1.0 (Fixed) |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -141,7 +141,7 @@
       },
       "provenance": {
         "source_location": "Table 3",
-        "source_quote": "Fraction d 16 -BPA from blood to bladder | F2 | 1.0 (Fixed)",
+        "source_quote": "| Fraction d 16 -BPA from blood to bladder | F2 | 1.0 (Fixed) |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -172,7 +172,7 @@
       },
       "provenance": {
         "source_location": "Table 3",
-        "source_quote": "Elimination of d 16 -BPA from stomach to blood | K1 | 0.9",
+        "source_quote": "| Elimination of d 16 -BPA from stomach to blood | K1 | 0.9 |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -203,7 +203,7 @@
       },
       "provenance": {
         "source_location": "Table 3",
-        "source_quote": "Elimination of d 16 -BPA from blood to bladder | K2 | 0.9",
+        "source_quote": "| Elimination of d 16 -BPA from blood to bladder | K2 | 0.9 |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -234,9 +234,9 @@
       },
       "provenance": {
         "source_location": "Stage 1: Model Fitting",
-        "source_quote": "The calibrated parameter for apparent blood volume of distribution is not physiologically equivalent to a volume of blood circulating at any given time; rather it is a \u201cmixing volume.\u201d Previous modeling studies of DEHP , and perchlorate, for example, reported blood volumes of distribution to be about 0.1 and 0.34 l/kg, respectively.",
+        "source_quote": "The calibrated parameter for apparent blood volume of distribution is not physiologically equivalent to a volume of blood circulating at any given time; rather it is a “mixing volume.” Previous modeling studies of DEHP , and perchlorate, for example, reported blood volumes of distribution to be about 0.1 and 0.34 l/kg, respectively.",
         "parameter_status": null,
-        "confidence": "high"
+        "confidence": "medium"
       }
     },
     {
@@ -267,7 +267,7 @@
         "source_location": "Stage 1: Model Fitting",
         "source_quote": "The five parameters that describe this first-order mass balance model are: apparent blood volume of distribution ( B , l/kg), two fractional constants representing the fraction of d 16 -BPA available to transfer from stomach/liver to blood ( F 1) and from blood to bladder ( F 2), and two transfer rate constants representing transfer of d 16 -BPA from stomach/liver into blood ( K 1, 1/min) and from blood to bladder ( K 2, 1/min).",
         "parameter_status": null,
-        "confidence": "high"
+        "confidence": "medium"
       }
     },
     {
@@ -298,12 +298,12 @@
         "source_location": "Stage 1: Model Fitting",
         "source_quote": "The five parameters that describe this first-order mass balance model are: apparent blood volume of distribution ( B , l/kg), two fractional constants representing the fraction of d 16 -BPA available to transfer from stomach/liver to blood ( F 1) and from blood to bladder ( F 2), and two transfer rate constants representing transfer of d 16 -BPA from stomach/liver into blood ( K 1, 1/min) and from blood to bladder ( K 2, 1/min).",
         "parameter_status": null,
-        "confidence": "high"
+        "confidence": "medium"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "transfer rate constant from stomach/liver into blood",
+      "parameter_name": "transfer rate constant of d 16 -BPA from stomach/liver into blood",
       "symbol": "K 1",
       "context": {
         "compound": "d 16 -BPA",
@@ -315,7 +315,7 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "\u22650.011/min",
+        "value_text": "≥0.011/min",
         "value": null,
         "range_low": 0.011,
         "range_high": null,
@@ -323,18 +323,18 @@
         "variance_type": null,
         "unit": "1/min",
         "unit_inherited": false,
-        "value_qualifier": null
+        "value_qualifier": "≥"
       },
       "provenance": {
         "source_location": "Stage 1: Model Fitting",
-        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value \u22650.011/min.",
+        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value ≥0.011/min.",
         "parameter_status": null,
-        "confidence": "high"
+        "confidence": "medium"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "transfer rate constant from blood to bladder",
+      "parameter_name": "transfer rate constant of d 16 -BPA from blood to bladder",
       "symbol": "K 2",
       "context": {
         "compound": "d 16 -BPA",
@@ -346,7 +346,7 @@
       },
       "quantitative_data": {
         "needs_review": false,
-        "value_text": "\u22650.011/min",
+        "value_text": "≥0.011/min",
         "value": null,
         "range_low": 0.011,
         "range_high": null,
@@ -354,13 +354,13 @@
         "variance_type": null,
         "unit": "1/min",
         "unit_inherited": false,
-        "value_qualifier": null
+        "value_qualifier": "≥"
       },
       "provenance": {
         "source_location": "Stage 1: Model Fitting",
-        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value \u22650.011/min.",
+        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value ≥0.011/min.",
         "parameter_status": null,
-        "confidence": "high"
+        "confidence": "medium"
       }
     }
   ],

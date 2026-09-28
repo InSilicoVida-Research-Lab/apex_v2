@@ -4,21 +4,23 @@ This pipeline automatically extracts structured pharmacokinetic (PK) parameters 
 
 ## Pipeline Architecture
 
-1. **MinerU Fast-Path Extraction (Primary)**
-   - Attempts to read pre-processed structured layout JSON from `MinerU`.
-   - If found, it rapidly processes text chunks and image chunks using the VLM.
+1. **Document Triage & Filtering (Laya)**
+   - Pre-flight model classification (`pbpk`, `compartmental`, `nca`) in ~20ms using `convaiinnovations/laya`.
+   - Filters out irrelevant narrative pages, saving VLM compute.
 
-2. **PyMuPDF + TATR Fallback (Secondary)**
-   - If no MinerU layout is found, the pipeline falls back to extracting markdown using `pymupdf4llm`.
-   - Uses Table Transformer (`TATR`) to perform object detection on every page.
-   - For any page containing a table, a bright red bounding box is drawn over the table to guide the vision model.
-   - The full-page image (with drawn boundaries) and text are passed to the Vision Model.
+2. **WeVisDoc-4B High-Fidelity Table Transcription**
+   - Uses `Tencent/WeVisDoc-4B` to transcribe candidate table pages into structured Markdown with native HTML tables (`<table>`, `<tr>`, `<td>`, `rowspan`, `colspan`) and LaTeX formulas.
+   - Provides clean, structured HTML evidence to the extraction model, resolving column merges and scientific notation.
 
-3. **VLM Extraction (SGLang + Qwen3-VL-8B)**
+3. **PyMuPDF + TATR Fallback & Boundary Guidance**
+   - Uses Table Transformer (`TATR`) to perform object detection on pages.
+   - Draws bounding box guidance and coordinates page imagery with extracted table context.
+
+4. **VLM Extraction (SGLang + Qwen3-VL-8B)**
    - Extracts data strictly according to a predefined Pydantic schema using FSM-constrained decoding.
    - Identifies PK parameters (e.g. clearance, volume of distribution, half-life) alongside biological context (e.g. compound, subject species).
 
-4. **Post-Processing**
+5. **Post-Processing**
    - Automatically handles comma-separated compound formulations (e.g., splitting "Compound A, Compound B").
    - Performs a regex-based sweep over the raw text to recover parameters commonly missed in dense text (e.g., specific transfer ratios).
 

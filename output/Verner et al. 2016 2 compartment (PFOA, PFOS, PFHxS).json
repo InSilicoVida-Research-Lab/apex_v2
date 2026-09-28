@@ -6,8 +6,8 @@
     "year": null
   },
   "model_classification": {
-    "model_type": "simple_empirical_compartmental",
-    "evidence_quote": "We developed a pharmacokinetic model consisting of a maternal and a child compartment to simulate lifetime exposure in women and transfer to the child across the placenta and through breastfeeding."
+    "model_type": "pbpk",
+    "evidence_quote": "We developed a simple pharmacokinetic model with two compartments: one for the mother and one for the child (Figure 1)."
   },
   "structure": {
     "compartments": [
@@ -26,21 +26,37 @@
       {
         "source": "Mother",
         "target": "Child",
+        "label_raw": "Placental transfer",
         "direction": "forward",
-        "edge_type": "transfer",
-        "evidence": "transfer to the child across the placenta and through breastfeeding",
+        "evidence": "Placental transfer mother→fetus",
         "confidence": 100.0
       },
       {
         "source": "Child",
         "target": "Mother",
-        "direction": "reverse",
-        "edge_type": "transfer",
-        "evidence": "transfer to the child across the placenta and through breastfeeding",
+        "label_raw": "Placental transfer",
+        "direction": "forward",
+        "evidence": "Placental transfer fetus→mother",
+        "confidence": 100.0
+      },
+      {
+        "source": "Mother",
+        "target": "Child",
+        "label_raw": "Breastfeeding",
+        "direction": "forward",
+        "evidence": "Breastfeeding",
+        "confidence": 100.0
+      },
+      {
+        "source": "Child",
+        "target": "Mother",
+        "label_raw": "Breastfeeding",
+        "direction": "forward",
+        "evidence": "Breastfeeding",
         "confidence": 100.0
       }
     ],
-    "source_location": "Abstract and Figure"
+    "source_location": "Figure 1"
   },
   "parameters": [
     {
@@ -316,7 +332,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "for PFOS, and 0.56 for PFHxS), and ktrans2 was given a value of 1.00.",
         "parameter_status": null,
         "confidence": "high"
@@ -347,7 +363,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
         "parameter_status": null,
         "confidence": "high"
@@ -378,7 +394,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
         "parameter_status": null,
         "confidence": "high"
@@ -409,7 +425,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "The ratios were 0.058 for PFOA, 0.014 for PFOS, and 0.014 for PFHxS.",
         "parameter_status": null,
         "confidence": "high"
@@ -417,13 +433,13 @@
     },
     {
       "needs_review": false,
-      "parameter_name": "Transfer rate from maternal to fetal compartment",
+      "parameter_name": "Transfer rate from maternal compartment to fetus",
       "symbol": null,
       "context": {
         "compound": null,
         "subject_species": null,
         "life_stage": null,
-        "compartment": "maternal compartment",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -440,7 +456,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "Transfer to and from the fetus was calculated as the product between the plasma concentration and the transfer rate (Figure 1).",
         "parameter_status": null,
         "confidence": "high"
@@ -455,7 +471,7 @@
         "subject_species": null,
         "life_stage": null,
         "compartment": null,
-        "route": "lactation",
+        "route": null,
         "population": null
       },
       "quantitative_data": {
@@ -471,7 +487,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "Transfer through breastfeeding was defined as the product of the volume of milk, the PFAS level in the maternal compartment, and the Pmilk/plasma (Figure 1).",
         "parameter_status": null,
         "confidence": "high"
@@ -502,7 +518,7 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "text below Table 1",
+        "source_location": "Text below Table 1",
         "source_quote": "Given the lack of data on exposure to PFAS in infancy and childhood, we assumed daily intake (ng/kg/day) from sources other than breastfeeding to be equal to that of the mother after 6 months of age.",
         "parameter_status": null,
         "confidence": "high"
@@ -1029,7 +1045,69 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Text paragraph discussing model limitations",
+        "source_location": "text",
+        "source_quote": "for PFOA, the milk/plasma partition varied from 0.038 to 0.11.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "milk/plasma partition",
+      "symbol": null,
+      "context": {
+        "compound": "PFAS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "varied substantially",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text",
+        "source_quote": "the reported values varied substantially from one study to the other, e.g., for PFOA, the milk/plasma partition varied from 0.038 to 0.11.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "milk/plasma partition",
+      "symbol": null,
+      "context": {
+        "compound": "PFAS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "varied substantially",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text",
         "source_quote": "the reported values varied substantially from one study to the other, e.g., for PFOA, the milk/plasma partition varied from 0.038 to 0.11.",
         "parameter_status": null,
         "confidence": "high"
@@ -1050,7 +1128,7 @@
       "quantitative_data": {
         "needs_review": false,
         "value_text": "52−62",
-        "value": 52.0,
+        "value": null,
         "range_low": 52.0,
         "range_high": 62.0,
         "variance": null,
@@ -1060,8 +1138,39 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Text paragraph discussing model limitations",
+        "source_location": "text",
         "source_quote": "Although model predictions do not fully explain variability in true children’s plasma levels (R² = 52−62),",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "R²",
+      "symbol": null,
+      "context": {
+        "compound": "PCB-153",
+        "subject_species": "Slovak cohort",
+        "life_stage": "6 months",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "59%",
+        "value": 59.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "text",
+        "source_quote": "a pharmacokinetic model explaining 59% of the variability in measured plasma PCB-153 at 6 months in a Slovak cohort enabled the identification of a time-dependent association between PCB-153 levels at 6 months and a decrease in BCG-specific antibody levels.",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -1073,7 +1182,7 @@
       "context": {
         "compound": "PFOA, PFOS, and PFHxS",
         "subject_species": "children",
-        "life_stage": null,
+        "life_stage": "first three years",
         "compartment": null,
         "route": null,
         "population": null
@@ -1081,7 +1190,7 @@
       "quantitative_data": {
         "needs_review": false,
         "value_text": "52%−62%",
-        "value": 52.0,
+        "value": null,
         "range_low": 52.0,
         "range_high": 62.0,
         "variance": null,
@@ -1091,11 +1200,17 @@
         "value_qualifier": null
       },
       "provenance": {
-        "source_location": "Conclusion paragraph",
+        "source_location": "text",
         "source_quote": "our pharmacokinetic model allows the estimation of children’s exposure and body burden of PFOA, PFOS, and PFHxS throughout the first three years with a precision ranging from 52%−62%.",
         "parameter_status": null,
         "confidence": "high"
       }
     }
-  ]
+  ],
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 7,
+    "discarded_chunks": 2,
+    "retained_chunks": 5
+  }
 }
