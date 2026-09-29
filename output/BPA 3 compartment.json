@@ -11,359 +11,65 @@
     "year": 2013
   },
   "model_classification": {
-    "model_type": "pbpk",
-    "evidence_quote": "Table 2. contains mass balance equations for compartments (Stomach, Blood, Bladder) with explicit physiological parameters (K1, K2, F1, F2) and compartmental transfers, indicating a physiologically based model."
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "Three compartment pharmacokinetic model for d16-bisphenol A (BPA)."
   },
   "structure": {
     "compartments": [
       {
-        "id": "Stomach",
-        "label_raw": "Stomach",
-        "confidence": 100.0
+        "id": "ingested",
+        "label_raw": "Ingested d16-BPA"
       },
       {
-        "id": "Blood",
-        "label_raw": "Blood",
-        "confidence": 100.0
+        "id": "stomach_liver",
+        "label_raw": "Stomach/Liver"
       },
       {
-        "id": "Bladder",
-        "label_raw": "Bladder",
-        "confidence": 100.0
+        "id": "blood",
+        "label_raw": "Blood"
+      },
+      {
+        "id": "bladder",
+        "label_raw": "Bladder"
       }
     ],
     "connections": [
       {
-        "source": "Stomach",
-        "target": "Blood",
-        "label_raw": "F1* M S,t−1 *(1−EXP(− K 1*Δ t ))",
-        "direction": "forward",
-        "evidence": "Table 2. equation for Blood compartment: + ( F 1* M S,t−1 )*(1−EXP(− K 1*Δ t ))",
-        "confidence": 100.0
+        "source": "ingested",
+        "target": "stomach_liver",
+        "direction": "forward"
       },
       {
-        "source": "Blood",
-        "target": "Bladder",
-        "label_raw": "F2* M B,t−1 *(1−EXP(− K 2*Δ t ))",
-        "direction": "forward",
-        "evidence": "Table 2. equation for Bladder compartment: + ( F 2* M B,t−1 )*(1−EXP(− K 2*Δ t ))",
-        "confidence": 100.0
+        "source": "stomach_liver",
+        "target": "blood",
+        "direction": "forward"
+      },
+      {
+        "source": "blood",
+        "target": "bladder",
+        "direction": "forward"
       }
     ],
-    "source_location": "Table 2."
+    "source_location": "Figure 1"
   },
-  "parameters": [
-    {
-      "needs_review": false,
-      "parameter_name": "Apparent blood volume of distribution (l/kg)",
-      "symbol": "B",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.15",
-        "value": 0.15,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "l/kg",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "| Apparent blood volume of distribution (l/kg) | B | 0.15 |",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction d 16 -BPA from stomach to blood",
-      "symbol": "F1",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "1.0 (Fixed)",
-        "value": 1.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": "Fixed"
-      },
-      "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "| Fraction d 16 -BPA from stomach to blood | F1 | 1.0 (Fixed) |",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction d 16 -BPA from blood to bladder",
-      "symbol": "F2",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "1.0 (Fixed)",
-        "value": 1.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": "Fixed"
-      },
-      "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "| Fraction d 16 -BPA from blood to bladder | F2 | 1.0 (Fixed) |",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Elimination of d 16 -BPA from stomach to blood",
-      "symbol": "K1",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.9",
-        "value": 0.9,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/min",
-        "unit_inherited": true,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "| Elimination of d 16 -BPA from stomach to blood | K1 | 0.9 |",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Elimination of d 16 -BPA from blood to bladder",
-      "symbol": "K2",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.9",
-        "value": 0.9,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/min",
-        "unit_inherited": true,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "| Elimination of d 16 -BPA from blood to bladder | K2 | 0.9 |",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "apparent blood volume of distribution",
-      "symbol": "B",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.1 to 1.0 l/kg",
-        "value": null,
-        "range_low": 0.1,
-        "range_high": 1.0,
-        "variance": null,
-        "variance_type": null,
-        "unit": "l/kg",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Stage 1: Model Fitting",
-        "source_quote": "The calibrated parameter for apparent blood volume of distribution is not physiologically equivalent to a volume of blood circulating at any given time; rather it is a “mixing volume.” Previous modeling studies of DEHP , and perchlorate, for example, reported blood volumes of distribution to be about 0.1 and 0.34 l/kg, respectively.",
-        "parameter_status": null,
-        "confidence": "medium"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "fraction of d 16 -BPA available to transfer from stomach/liver to blood",
-      "symbol": "F 1",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": null,
-        "value": null,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Stage 1: Model Fitting",
-        "source_quote": "The five parameters that describe this first-order mass balance model are: apparent blood volume of distribution ( B , l/kg), two fractional constants representing the fraction of d 16 -BPA available to transfer from stomach/liver to blood ( F 1) and from blood to bladder ( F 2), and two transfer rate constants representing transfer of d 16 -BPA from stomach/liver into blood ( K 1, 1/min) and from blood to bladder ( K 2, 1/min).",
-        "parameter_status": null,
-        "confidence": "medium"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "fraction of d 16 -BPA available to transfer from blood to bladder",
-      "symbol": "F 2",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": null,
-        "value": null,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Stage 1: Model Fitting",
-        "source_quote": "The five parameters that describe this first-order mass balance model are: apparent blood volume of distribution ( B , l/kg), two fractional constants representing the fraction of d 16 -BPA available to transfer from stomach/liver to blood ( F 1) and from blood to bladder ( F 2), and two transfer rate constants representing transfer of d 16 -BPA from stomach/liver into blood ( K 1, 1/min) and from blood to bladder ( K 2, 1/min).",
-        "parameter_status": null,
-        "confidence": "medium"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "transfer rate constant of d 16 -BPA from stomach/liver into blood",
-      "symbol": "K 1",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "≥0.011/min",
-        "value": null,
-        "range_low": 0.011,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/min",
-        "unit_inherited": false,
-        "value_qualifier": "≥"
-      },
-      "provenance": {
-        "source_location": "Stage 1: Model Fitting",
-        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value ≥0.011/min.",
-        "parameter_status": null,
-        "confidence": "medium"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "transfer rate constant of d 16 -BPA from blood to bladder",
-      "symbol": "K 2",
-      "context": {
-        "compound": "d 16 -BPA",
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "≥0.011/min",
-        "value": null,
-        "range_low": 0.011,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "1/min",
-        "unit_inherited": false,
-        "value_qualifier": "≥"
-      },
-      "provenance": {
-        "source_location": "Stage 1: Model Fitting",
-        "source_quote": "In using Excel Solver and then adjusting manually, we constrained the parameters as follows: apparent blood volume of distribution, B , could range from 0.1 to 1.0 l/kg, and K 1 and K 2 could take any value ≥0.011/min.",
-        "parameter_status": null,
-        "confidence": "medium"
-      }
-    }
-  ],
+  "parameters": [],
   "ingestion_source": "pmc_xml",
-  "ingestion_source_type": "published"
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.0,
+    "total_parameters": 0,
+    "flagged_count": 0,
+    "error_count": 0,
+    "warning_count": 0,
+    "clean": true,
+    "summary": "All 0 parameters passed Tier 1 verification.",
+    "flags": []
+  }
 }

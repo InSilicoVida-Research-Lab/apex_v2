@@ -161,7 +161,13 @@ class Tier1Verifier:
 
             # Rule 3: Missing unit when value exists
             unit = qdata.get("unit")
-            value = qdata.get("value")
+            value_raw = qdata.get("value")
+            value = None
+            if value_raw is not None:
+                try:
+                    value = float(value_raw)
+                except (ValueError, TypeError):
+                    pass
             value_text = qdata.get("value_text")
             if value_text and not unit:
                 flags.append(ParameterFlag(
@@ -228,8 +234,12 @@ class Tier1Verifier:
                     ))
 
             # Rule 7: Inverted range (range_low > range_high)
-            r_lo = qdata.get("range_low")
-            r_hi = qdata.get("range_high")
+            try:
+                r_lo = float(qdata.get("range_low")) if qdata.get("range_low") is not None else None
+                r_hi = float(qdata.get("range_high")) if qdata.get("range_high") is not None else None
+            except (ValueError, TypeError):
+                r_lo, r_hi = None, None
+
             if r_lo is not None and r_hi is not None and r_lo > r_hi:
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
@@ -270,7 +280,14 @@ class Tier1Verifier:
                 name2 = p2.get("parameter_name", "")
                 ctx2 = p2.get("context", {}) or {}
                 compound2 = ctx2.get("compound", "")
-                val2 = (p2.get("quantitative_data", {}) or {}).get("value")
+                val2_raw = (p2.get("quantitative_data", {}) or {}).get("value")
+                val2 = None
+                if val2_raw is not None:
+                    try:
+                        val2 = float(val2_raw)
+                    except (ValueError, TypeError):
+                        pass
+
                 if (
                     name.lower() == name2.lower()
                     and compound

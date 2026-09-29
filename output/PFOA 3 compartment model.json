@@ -1,0 +1,682 @@
+{
+  "page_metadata": {
+    "title": "Physiologically based pharmacokinetic modeling of human exposure to perfluorooctanoic acid suggests historical non drinking-water exposures are important for predicting current serum concentrations",
+    "authors": [
+      "Rachel Rogers Worley",
+      "Xiaoxia Yang",
+      "Jeffrey Fisher"
+    ],
+    "journal": "Toxicology and applied pharmacology",
+    "year": 2017
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "The table includes physiological parameters such as body weight (BW), glomerular filtration rate (GFRC), and tissue volumes (VLC, VfilC), as well as chemical-specific parameters involving saturable transport (Vmax_apical, Km_apical) and renal handling (KbileC, KurineC), indicating a physiologically based pharmacokinetic (PBPK) model."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "central",
+        "label_raw": "Central"
+      },
+      {
+        "id": "peripheral",
+        "label_raw": "Peripheral"
+      }
+    ],
+    "connections": [
+      {
+        "source": "central",
+        "target": "peripheral",
+        "direction": "bidirectional"
+      },
+      {
+        "source": "central",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "excretion"
+      }
+    ],
+    "source_location": "Fig. 2"
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight",
+      "symbol": "BW",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.36",
+        "value": 4.36,
+        "range_low": 3.747,
+        "range_high": 4.973,
+        "variance": 0.313,
+        "variance_type": "SD",
+        "unit": "Kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "BW | Kg | 4.36 | 0.313 | 3.747 | 4.973 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Glomerular filtration rate",
+      "symbol": "GFRC",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.14",
+        "value": 3.14,
+        "range_low": 2.564,
+        "range_high": 3.716,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "L/h/kg kidney",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "GFRC | L/h/kg kidney | 3.14 | 0.294 | 2.564 | 3.716 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Protein concentration in proximal tubule cell",
+      "symbol": "Protein",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.000002",
+        "value": 2e-06,
+        "range_low": 8.24e-07,
+        "range_high": 3.18e-06,
+        "variance": 6e-07,
+        "variance_type": "SD",
+        "unit": "mg protein/proximal tubule cell",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Protein | mg protein/proximal tubule cell | 0.000002 | 0.0000006 | 0.000000824 | 0.00000318 | Normal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of liver cells",
+      "symbol": "VLC",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_low": 0.0107,
+        "range_high": 0.0413,
+        "variance": 0.0078,
+        "variance_type": "SD",
+        "unit": "L/kg BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "VLC | L/kg BW | 0.026 | 0.0078 | 0.0107 | 0.0413 | Normal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of filtrate",
+      "symbol": "VfilC",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_low": 0.000165,
+        "range_high": 0.000635,
+        "variance": 0.00012,
+        "variance_type": "SD",
+        "unit": "L/kg BW",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "VfilC | L/kg BW | 0.0004 | 0.00012 | 0.000165 | 0.000635 | Normal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Plasma protein binding",
+      "symbol": "PL",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.01",
+        "value": 0.01,
+        "range_low": -0.378,
+        "range_high": 0.398,
+        "variance": 0.198,
+        "variance_type": "SD",
+        "unit": "Unitless",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "PL | Unitless | 0.01 | 0.198 | −0.378 | 0.398 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Apical Vmax (in vitro)",
+      "symbol": "Vmax_apical_invitro",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "10.48",
+        "value": 10.48,
+        "range_low": 9.843,
+        "range_high": 11.117,
+        "variance": 0.325,
+        "variance_type": "SD",
+        "unit": "pmol/mg protein/min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax_apical_invitro | pmol/mg protein/min | 10.48 | 0.325 | 9.843 | 11.117 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Apical Km",
+      "symbol": "Km_apical",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "11.25",
+        "value": 11.25,
+        "range_low": 10.929,
+        "range_high": 11.561,
+        "variance": 0.161,
+        "variance_type": "SD",
+        "unit": "μg/Ml",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km_apical | μg/Ml | 11.25 | 0.161 | 10.929 | 11.561 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Renal apical resorption factor",
+      "symbol": "RAFapi",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-7.31",
+        "value": -7.31,
+        "range_low": -7.886,
+        "range_high": -6.734,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "Unitless",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "RAFapi | Unitless | −7.31 | 0.294 | −7.886 | −6.734 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Free fraction",
+      "symbol": "Free",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-3.96",
+        "value": -3.96,
+        "range_low": -4.536,
+        "range_high": -3.384,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "Unitless",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Free | Unitless | −3.96 | 0.294 | −4.536 | −3.384 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Exposed drinking water concentration",
+      "symbol": "ExposedDW",
+      "context": {
+        "compound": "Mid-Ohio River Valley exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.22",
+        "value": 1.22,
+        "range_low": 0.648,
+        "range_high": 1.8,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "μg/L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "ExposedDW | μg/L | 1.22 | 0.294 | 0.648 | 1.800 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Total drinking water intake",
+      "symbol": "DWtotal",
+      "context": {
+        "compound": "Mid-Ohio River Valley exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": -0.805,
+        "range_high": 1.167,
+        "variance": 0.503,
+        "variance_type": "SD",
+        "unit": "L/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "DWtotal | L/day | 0.181 | 0.503 | −0.805 | 1.167 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Ingestion rate",
+      "symbol": "Ingest",
+      "context": {
+        "compound": "Mid-Ohio River Valley exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-4.65",
+        "value": -4.65,
+        "range_low": -5.226,
+        "range_high": -4.074,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "μg/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Ingest | μg/h | −4.65 | 0.294 | −5.226 | −4.074 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Exposed drinking water concentration",
+      "symbol": "ExposedDW",
+      "context": {
+        "compound": "Decatur exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-3.26",
+        "value": -3.26,
+        "range_low": -3.836,
+        "range_high": -2.684,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "μg/L",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "ExposedDW | μg/L | −3.26 | 0.294 | −3.836 | −2.684 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Total drinking water intake",
+      "symbol": "DWtotal",
+      "context": {
+        "compound": "Decatur exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": -0.805,
+        "range_high": 1.167,
+        "variance": 0.503,
+        "variance_type": "SD",
+        "unit": "L/day",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "DWtotal | L/day | 0.181 | 0.503 | −0.805 | 1.167 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Past ingestion rate",
+      "symbol": "ingest_past",
+      "context": {
+        "compound": "Decatur exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-3.69",
+        "value": -3.69,
+        "range_low": -5.57,
+        "range_high": -3.27,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "μg/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "ingest_past | μg/h | −3.69 | 0.294 | −5.570 | −3.270 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Current ingestion rate",
+      "symbol": "ingest_current",
+      "context": {
+        "compound": "Decatur exposure parameters",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "-4.65",
+        "value": -4.65,
+        "range_low": -5.226,
+        "range_high": -4.074,
+        "variance": 0.294,
+        "variance_type": "SD",
+        "unit": "μg/h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "ingest_current | μg/h | −4.65 | 0.294 | −5.226 | −4.074 | Lognormal",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Drinking water concentration",
+      "symbol": "C_water",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": "Adult",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.04",
+        "value": 0.04,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μg/L",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2 caption",
+        "source_quote": "Drinking water concentration = 0.04 μg/L",
+        "parameter_status": "Measured",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Non-drinking water ingestion rate",
+      "symbol": "IR_non_drink",
+      "context": {
+        "compound": "PFOA",
+        "subject_species": "Human",
+        "life_stage": "Adult",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.01",
+        "value": 0.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μg/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2 caption",
+        "source_quote": "Non-drinking water ingestion rate = 0.01 μg/h.",
+        "parameter_status": "Measured",
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.39,
+    "total_parameters": 19,
+    "flagged_count": 1,
+    "error_count": 0,
+    "warning_count": 1,
+    "clean": false,
+    "summary": "1/19 parameters flagged: 1 warning(s). Elapsed: 0.4ms.",
+    "flags": [
+      {
+        "param_index": 4,
+        "param_name": "Volume of filtrate",
+        "severity": "warning",
+        "rule": "IMPLAUSIBLE_VALUE",
+        "message": "value=0.0004 L/kg BW is outside the expected plausible range [0.001, 500.0] for 'Volume of filtrate'.",
+        "suggested_fix": "Verify unit conversion or check for a magnitude error (e.g. mL vs L)."
+      }
+    ],
+    "note": "Re-run after Tier 2 LLM patching."
+  },
+  "llm_verification": {
+    "reviewed": 2,
+    "patched": 0,
+    "rejected": 2,
+    "elapsed_s": 106.47,
+    "verdicts": [
+      {
+        "param_index": 9,
+        "verdict": "reject",
+        "reasoning": "The parameter 'Biliary clearance' must be positive, but the value is negative (-9.25). This violates a fundamental biological constraint, and the unit '/h/kg −0.25' is invalid and likely a transcription error. The parameter cannot be salvaged.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 10,
+        "verdict": "reject",
+        "reasoning": "Renal clearance cannot be negative; the value -2.81 is physiologically implausible. The parameter is invalid and cannot be salvaged.",
+        "status": "reviewed"
+      }
+    ]
+  }
+}

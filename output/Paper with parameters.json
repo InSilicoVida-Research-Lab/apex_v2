@@ -1,0 +1,4814 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "The minimal PBPK model with one or two tissue compartments extended with the SCM of hepatic elimination is shown in Fig. 1."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "liver_subcompartment_1",
+        "label_raw": "liver subcompartment 1"
+      },
+      {
+        "id": "liver_subcompartment_2",
+        "label_raw": "liver subcompartment 2"
+      },
+      {
+        "id": "liver_subcompartment_n",
+        "label_raw": "liver subcompartment n"
+      },
+      {
+        "id": "central_compartment",
+        "label_raw": "central compartment"
+      }
+    ],
+    "connections": [
+      {
+        "source": "central_compartment",
+        "target": "liver_subcompartment_1",
+        "label_raw": "hepatic blood flow (Qh)",
+        "direction": "forward",
+        "edge_type": "flow",
+        "evidence": "The liver is divided into n well stirred subcompartments connected by hepatic blood flow (Qh)"
+      },
+      {
+        "source": "liver_subcompartment_1",
+        "target": "liver_subcompartment_2",
+        "label_raw": "outflow from subcompartment 1",
+        "direction": "forward",
+        "edge_type": "flow",
+        "evidence": "The outflow blood concentration from the liver subcompartment i (Couti, i = 1, 2, 3 ... n) is the input concentration for the subsequent subcompartment i+1"
+      },
+      {
+        "source": "liver_subcompartment_2",
+        "target": "liver_subcompartment_3",
+        "label_raw": "outflow from subcompartment 2",
+        "direction": "forward",
+        "edge_type": "flow",
+        "evidence": "The outflow blood concentration from the liver subcompartment i (Couti, i = 1, 2, 3 ... n) is the input concentration for the subsequent subcompartment i+1"
+      },
+      {
+        "source": "liver_subcompartment_n",
+        "target": "central_compartment",
+        "label_raw": "outflow from subcompartment n",
+        "direction": "forward",
+        "edge_type": "flow",
+        "evidence": "The outflow blood concentration from the liver subcompartment i (Couti, i = 1, 2, 3 ... n) is the input concentration for the subsequent subcompartment i+1"
+      }
+    ],
+    "source_location": "Methods section, Figure 1"
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Volume of liver subcompartment i",
+      "symbol": "Vhi",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver subcompartment i",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Vh / n",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (1)",
+        "source_quote": "Vhi = Vh / n",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Availability of liver subcompartment i",
+      "symbol": "Fi",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver subcompartment i",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "(1 - ER)^(1/n)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (2)",
+        "source_quote": "Fi = (1 - ER)^(1/n)",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Extraction ratio of liver subcompartment i",
+      "symbol": "ERi",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver subcompartment i",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1 - Fi",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (3)",
+        "source_quote": "ERi = 1 - Fi",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intrinsic clearance of liver subcompartment i",
+      "symbol": "CLint,i",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver subcompartment i",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "(Qh * ERi) / (1 - ERi)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (4)",
+        "source_quote": "fub CLint,i = (Qh * ERi) / (1 - ERi)",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Total intrinsic clearance of liver",
+      "symbol": "CLint",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "n * fub * CLint,i",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (5)",
+        "source_quote": "fub CLint = n * fub CLint,i",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic blood flow",
+      "symbol": "Qh",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Qh",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (1) and text",
+        "source_quote": "hepatic blood flow (Qh)",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Unbound fraction in blood",
+      "symbol": "fub",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Blood",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "fub",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (4) and text",
+        "source_quote": "fub is the unbound fraction in blood",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver-to-plasma concentration ratio for subcompartment i",
+      "symbol": "Kphi",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver subcompartment i",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "(Rb * Chi) / Couti",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (7)",
+        "source_quote": "Kphi = (Rb * Chi) / Couti",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood-to-plasma ratio",
+      "symbol": "Rb",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Blood",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Rb",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "the blood-to-plasma ratio (Rb) (Supplemental Table 3)",
+        "parameter_status": "Literature",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Binding capacity of the liver",
+      "symbol": "Bmax",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Bmax",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (8)",
+        "source_quote": "Bmax is the binding capacity of the liver",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Equilibrium dissociation constant",
+      "symbol": "Kd",
+      "context": {
+        "compound": "Physiological",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Kd",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (8)",
+        "source_quote": "Kd is the equilibrium dissociation constant",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "TB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.027/1.72/0.156",
+        "value": 0.027,
+        "range_low": 1.72,
+        "range_high": 0.156,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "TB ER/fubCLint/Kph 0.027/1.72/0.156",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "TB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.027/1.71/0.155",
+        "value": 0.027,
+        "range_low": 1.71,
+        "range_high": 0.155,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "TB ER/fubCLint/Kph 0.027/1.71/0.155",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "TB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.027/1.70/0.154",
+        "value": 0.027,
+        "range_low": 1.7,
+        "range_high": 0.154,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "TB ER/fubCLint/Kph 0.027/1.70/0.154",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "CQ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.065/4.20/12670/5.40",
+        "value": 0.065,
+        "range_low": 4.2,
+        "range_high": 12670.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CQ ER/fubCLint/Bmax/Kd 0.065/4.20/12670/5.40",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "CQ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.065/4.13/12650/5.47",
+        "value": 0.065,
+        "range_low": 4.13,
+        "range_high": 12650.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CQ ER/fubCLint/Bmax/Kd 0.065/4.13/12650/5.47",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "CQ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.065/4.09/12640/5.50",
+        "value": 0.065,
+        "range_low": 4.09,
+        "range_high": 12640.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CQ ER/fubCLint/Bmax/Kd 0.065/4.09/12640/5.50",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "CyA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.081/5.37/15.00",
+        "value": 0.081,
+        "range_low": 5.37,
+        "range_high": 15.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CyA ER/fubCLint/Kph 0.081/5.37/15.00",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "CyA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.081/5.23/14.56",
+        "value": 0.081,
+        "range_low": 5.23,
+        "range_high": 14.56,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CyA ER/fubCLint/Kph 0.081/5.23/14.56",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "CyA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.079/5.03/13.63",
+        "value": 0.079,
+        "range_low": 5.03,
+        "range_high": 13.63,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "CyA ER/fubCLint/Kph 0.079/5.03/13.63",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "EB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.084/5.55/1.32",
+        "value": 0.084,
+        "range_low": 5.55,
+        "range_high": 1.32,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "EB ER/fubCLint/Kph 0.084/5.55/1.32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "EB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.082/5.45/1.30",
+        "value": 0.082,
+        "range_low": 5.45,
+        "range_high": 1.3,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "EB ER/fubCLint/Kph 0.082/5.45/1.30",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "EB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.081/5.38/1.29",
+        "value": 0.081,
+        "range_low": 5.38,
+        "range_high": 1.29,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "EB ER/fubCLint/Kph 0.081/5.38/1.29",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "FTY720",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.155/11.18/59.14",
+        "value": 0.155,
+        "range_low": 11.18,
+        "range_high": 59.14,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "FTY720 ER/fubCLint/Kph 0.155/11.18/59.14",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "FTY720",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.145/10.28/53.53",
+        "value": 0.145,
+        "range_low": 10.28,
+        "range_high": 53.53,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "FTY720 ER/fubCLint/Kph 0.145/10.28/53.53",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "FTY720",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.134/9.42/48.35",
+        "value": 0.134,
+        "range_low": 9.42,
+        "range_high": 48.35,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "FTY720 ER/fubCLint/Kph 0.134/9.42/48.35",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PTZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.236/18.77/0.381",
+        "value": 0.236,
+        "range_low": 18.77,
+        "range_high": 0.381,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PTZ ER/fubCLint/Kph 0.236/18.77/0.381",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PTZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.236/17.53/0.356",
+        "value": 0.236,
+        "range_low": 17.53,
+        "range_high": 0.356,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PTZ ER/fubCLint/Kph 0.236/17.53/0.356",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PTZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.236/16.84/0.342",
+        "value": 0.236,
+        "range_low": 16.84,
+        "range_high": 0.342,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PTZ ER/fubCLint/Kph 0.236/16.84/0.342",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "HB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.399/40.37/1.14",
+        "value": 0.399,
+        "range_low": 40.37,
+        "range_high": 1.14,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "HB ER/fubCLint/Kph 0.399/40.37/1.14",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "HB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.382/33.09/0.927",
+        "value": 0.382,
+        "range_low": 33.09,
+        "range_high": 0.927,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "HB ER/fubCLint/Kph 0.382/33.09/0.927",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "HB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.382/30.71/0.867",
+        "value": 0.382,
+        "range_low": 30.71,
+        "range_high": 0.867,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "HB ER/fubCLint/Kph 0.382/30.71/0.867",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.456/51.02/2.51",
+        "value": 0.456,
+        "range_low": 51.02,
+        "range_high": 2.51,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DPH ER/fubCLint/Kph 0.456/51.02/2.51",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.457/43.47/2.19",
+        "value": 0.457,
+        "range_low": 43.47,
+        "range_high": 2.19,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DPH ER/fubCLint/Kph 0.457/43.47/2.19",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.458/39.60/2.05",
+        "value": 0.458,
+        "range_low": 39.6,
+        "range_high": 2.05,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DPH ER/fubCLint/Kph 0.458/39.60/2.05",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "NIC",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.532/69.04/13.82",
+        "value": 0.532,
+        "range_low": 69.04,
+        "range_high": 13.82,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "NIC ER/fubCLint/Kph 0.532/69.04/13.82",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "NIC",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.534/56.58/11.57",
+        "value": 0.534,
+        "range_low": 56.58,
+        "range_high": 11.57,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "NIC ER/fubCLint/Kph 0.534/56.58/11.57",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "NIC",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.519/47.98/9.81",
+        "value": 0.519,
+        "range_low": 47.98,
+        "range_high": 9.81,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "NIC ER/fubCLint/Kph 0.519/47.98/9.81",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "QD",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.562/77.97/34040/11.16",
+        "value": 0.562,
+        "range_low": 77.97,
+        "range_high": 34040.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "QD ER/fubCLint/Bmax/Kd 0.562/77.97/34040/11.16",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "QD",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.563/62.26/33940/13.15",
+        "value": 0.563,
+        "range_low": 62.26,
+        "range_high": 33940.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "QD ER/fubCLint/Bmax/Kd 0.563/62.26/33940/13.15",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Bmax/Kd",
+      "symbol": "ER/fubCLint/Bmax/Kd",
+      "context": {
+        "compound": "QD",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.563/54.76/33870/14.53",
+        "value": 0.563,
+        "range_low": 54.76,
+        "range_high": 33870.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "QD ER/fubCLint/Bmax/Kd 0.563/54.76/33870/14.53",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "VEM",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.690/135/22.19",
+        "value": 0.69,
+        "range_low": 135.0,
+        "range_high": 22.19,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "VEM ER/fubCLint/Kph 0.690/135/22.19",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "VEM",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.684/94.74/15.76",
+        "value": 0.684,
+        "range_low": 94.74,
+        "range_high": 15.76,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "VEM ER/fubCLint/Kph 0.684/94.74/15.76",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "VEM",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.671/75.79/12.66",
+        "value": 0.671,
+        "range_low": 75.79,
+        "range_high": 12.66,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "VEM ER/fubCLint/Kph 0.671/75.79/12.66",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PPN",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.762/195/2.45",
+        "value": 0.762,
+        "range_low": 195.0,
+        "range_high": 2.45,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PPN ER/fubCLint/Kph 0.762/195/2.45",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PPN",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.765/130/1.62",
+        "value": 0.765,
+        "range_low": 130.0,
+        "range_high": 1.62,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PPN ER/fubCLint/Kph 0.765/130/1.62",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "PPN",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.769/104/1.29",
+        "value": 0.769,
+        "range_low": 104.0,
+        "range_high": 1.29,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "PPN ER/fubCLint/Kph 0.769/104/1.29",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.838/315/20.61",
+        "value": 0.838,
+        "range_low": 315.0,
+        "range_high": 20.61,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DLZ ER/fubCLint/Kph 0.838/315/20.61",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.840/182/12.25",
+        "value": 0.84,
+        "range_low": 182.0,
+        "range_high": 12.25,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DLZ ER/fubCLint/Kph 0.840/182/12.25",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.837/133/9.29",
+        "value": 0.837,
+        "range_low": 133.0,
+        "range_high": 9.29,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DLZ ER/fubCLint/Kph 0.837/133/9.29",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.875/424/38.60",
+        "value": 0.875,
+        "range_low": 424.0,
+        "range_high": 38.6,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP ER/fubCLint/Kph 0.875/424/38.60",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.875/223/20.63",
+        "value": 0.875,
+        "range_low": 223.0,
+        "range_high": 20.63,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP ER/fubCLint/Kph 0.875/223/20.63",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.830/129/12.40",
+        "value": 0.83,
+        "range_low": 129.0,
+        "range_high": 12.4,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP ER/fubCLint/Kph 0.830/129/12.40",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP (Two-Tissue)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.689/135/6.76",
+        "value": 0.689,
+        "range_low": 135.0,
+        "range_high": 6.76,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP (Two-Tissue) ER/fubCLint/Kph 0.689/135/6.76",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP (Two-Tissue)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.610/95.19/4.80",
+        "value": 0.61,
+        "range_low": 95.19,
+        "range_high": 4.8,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP (Two-Tissue) ER/fubCLint/Kph 0.610/95.19/4.80",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "ER/fubCLint/Kph",
+      "symbol": "ER/fubCLint/Kph",
+      "context": {
+        "compound": "DZP (Two-Tissue)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.563/78.26/3.97",
+        "value": 0.563,
+        "range_low": 78.26,
+        "range_high": 3.97,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 2",
+        "source_quote": "DZP (Two-Tissue) ER/fubCLint/Kph 0.563/78.26/3.97",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Vmax",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70,560",
+        "value": 70560.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/min/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "which generated a Vmax of 70,560 ng/min/kg",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Km",
+      "symbol": "Km",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "504",
+        "value": 504.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "and a Km of 504 ng/ml",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction of dose reaching systemic circulation",
+      "symbol": "f_d",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "i.v.",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.351",
+        "value": 0.351,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TABLE 3",
+        "source_quote": "f_d\t0.351\t21.95",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic plasma clearance",
+      "symbol": "Kpt",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "i.v.",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.460",
+        "value": 1.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TABLE 3",
+        "source_quote": "Kpt\t1.460\t8.52",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic permeability-surface area product",
+      "symbol": "Kph",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "i.v.",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.462",
+        "value": 1.462,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TABLE 3",
+        "source_quote": "Kph\t1.462\t21.13",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Maximum metabolic rate",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "i.v.",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "86630",
+        "value": 86630.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/min/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TABLE 3",
+        "source_quote": "Vmax (ng/min/kg)\t86630\t7.84",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Michaelis-Menten constant",
+      "symbol": "Km",
+      "context": {
+        "compound": "DPH",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "i.v.",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "91.68",
+        "value": 91.68,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/ml",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "TABLE 3",
+        "source_quote": "Km (ng/ml)\t91.68\t37.72",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant",
+      "symbol": "ka",
+      "context": {
+        "compound": "FTY720",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0007 minutes^-1",
+        "value": 0.0007,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "minutes^-1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The oral absorption of all selected compounds except for CyA and PTZ was well described by a first-order process with the estimated absorption rate constant (ka) ranging from 0.0007 minutes^-1 for FTY720 to 0.149 minutes^-1 for HB.",
+        "parameter_status": "Fitted",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant",
+      "symbol": "ka",
+      "context": {
+        "compound": "HB",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.149 minutes^-1",
+        "value": 0.149,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "minutes^-1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The oral absorption of all selected compounds except for CyA and PTZ was well described by a first-order process with the estimated absorption rate constant (ka) ranging from 0.0007 minutes^-1 for FTY720 to 0.149 minutes^-1 for HB.",
+        "parameter_status": "Fitted",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transit rate constant",
+      "symbol": "ktr",
+      "context": {
+        "compound": "CyA",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.019 minutes^-1",
+        "value": 0.019,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "minutes^-1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The oral absorption delays for CyA and PTZ were reasonably captured by incorporating the three-compartment transit model yielding first-order transit rate constants (ktr) of 0.019 and 0.089 minutes^-1.",
+        "parameter_status": "Fitted",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transit rate constant",
+      "symbol": "ktr",
+      "context": {
+        "compound": "PTZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.089 minutes^-1",
+        "value": 0.089,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "minutes^-1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The oral absorption delays for CyA and PTZ were reasonably captured by incorporating the three-compartment transit model yielding first-order transit rate constants (ktr) of 0.019 and 0.089 minutes^-1.",
+        "parameter_status": "Fitted",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Prehepatic bioavailability",
+      "symbol": "Fg",
+      "context": {
+        "compound": "TB",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Fixed"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "For TB, NIC, and DLZ, the prehepatic bioavailability (Fg) was fixed to 1 as the initial estimate exceeded 1, indicating that the prehepatic loss of the oral formulations for these compounds is negligible.",
+        "parameter_status": "Fixed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Prehepatic bioavailability",
+      "symbol": "Fg",
+      "context": {
+        "compound": "NIC",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Fixed"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "For TB, NIC, and DLZ, the prehepatic bioavailability (Fg) was fixed to 1 as the initial estimate exceeded 1, indicating that the prehepatic loss of the oral formulations for these compounds is negligible.",
+        "parameter_status": "Fixed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Prehepatic bioavailability",
+      "symbol": "Fg",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Fixed"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "For TB, NIC, and DLZ, the prehepatic bioavailability (Fg) was fixed to 1 as the initial estimate exceeded 1, indicating that the prehepatic loss of the oral formulations for these compounds is negligible.",
+        "parameter_status": "Fixed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Prehepatic bioavailability",
+      "symbol": "Fg",
+      "context": {
+        "compound": "HB",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.11",
+        "value": 0.11,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "In contrast, the oral dosage forms of the remaining compounds exhibit varying degrees of prehepatic loss, with the estimated Fg being the lowest for HB (~0.11)",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Prehepatic bioavailability",
+      "symbol": "Fg",
+      "context": {
+        "compound": "PPN",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.59",
+        "value": 0.59,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "In contrast, the oral dosage forms of the remaining compounds exhibit varying degrees of prehepatic loss, with the estimated Fg being the highest for PPN (~0.59).",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Oral bioavailability",
+      "symbol": "Fpo",
+      "context": {
+        "compound": "QD",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.311",
+        "value": 0.311,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The differing absorption and bioavailability of QD after oral doses as a solution or powder in hydroxypropyl methylcellulose (HPMC) capsule were well discerned by the model by assigning dosage form-specific k_a (0.033 vs. 0.023 minutes⁻¹) and F_g (0.311 vs. 0.405) values.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Oral bioavailability",
+      "symbol": "Fpo",
+      "context": {
+        "compound": "QD",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.405",
+        "value": 0.405,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The differing absorption and bioavailability of QD after oral doses as a solution or powder in hydroxypropyl methylcellulose (HPMC) capsule were well discerned by the model by assigning dosage form-specific k_a (0.033 vs. 0.023 minutes⁻¹) and F_g (0.311 vs. 0.405) values.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction unbound in plasma",
+      "symbol": "fup",
+      "context": {
+        "compound": "CyA",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.07",
+        "value": 0.07,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "This is comparable with the Fpo values for CyA (7% and 14.5%) estimated in the current work.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction unbound in plasma",
+      "symbol": "fup",
+      "context": {
+        "compound": "CyA",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.145",
+        "value": 0.145,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "This is comparable with the Fpo values for CyA (7% and 14.5%) estimated in the current work.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant",
+      "symbol": "k_a",
+      "context": {
+        "compound": "QD",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.033",
+        "value": 0.033,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/min",
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The differing absorption and bioavailability of QD after oral doses as a solution or powder in hydroxypropyl methylcellulose (HPMC) capsule were well discerned by the model by assigning dosage form-specific k_a (0.033 vs. 0.023 minutes⁻¹) and F_g (0.311 vs. 0.405) values.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant",
+      "symbol": "k_a",
+      "context": {
+        "compound": "QD",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.023",
+        "value": 0.023,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "1/min",
+        "unit_inherited": false,
+        "value_qualifier": "Estimated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The differing absorption and bioavailability of QD after oral doses as a solution or powder in hydroxypropyl methylcellulose (HPMC) capsule were well discerned by the model by assigning dosage form-specific k_a (0.033 vs. 0.023 minutes⁻¹) and F_g (0.311 vs. 0.405) values.",
+        "parameter_status": "Estimated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Oral bioavailability",
+      "symbol": "Fpo",
+      "context": {
+        "compound": "QD",
+        "subject_species": "Rat",
+        "life_stage": null,
+        "compartment": "Gastrointestinal tract",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "31%~36%",
+        "value": null,
+        "range_low": 0.31,
+        "range_high": 0.36,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": "Calculated"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "The oral bioavailability (Fpo) for the QD powder calculated according to eq. 25 was 31%~36% higher than that for the solution and comparable to that reported (36%) (Mori et al., 2012).",
+        "parameter_status": "Calculated",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kph",
+      "symbol": "Kph",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "17.87",
+        "value": 17.87,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "for SCM1"
+      },
+      "provenance": {
+        "source_location": "Fig. 9 caption",
+        "source_quote": "Color coded lines represent model simulations with Kph (17.87 for SCM1 and 8.09 for SCM5, black)",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Kph",
+      "symbol": "Kph",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.09",
+        "value": 8.09,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "for SCM5"
+      },
+      "provenance": {
+        "source_location": "Fig. 9 caption",
+        "source_quote": "Color coded lines represent model simulations with Kph (17.87 for SCM1 and 8.09 for SCM5, black)",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.75 min",
+        "value": 7.75,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Blood (oral) 7.75 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.55 min",
+        "value": 8.55,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Blood (oral) 8.55 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.74 min",
+        "value": 3.74,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Liver (oral) 3.74 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.47 min",
+        "value": 3.47,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Liver (oral) 3.47 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.53 min",
+        "value": 0.53,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Liver (i.v.) 0.53 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.80 min",
+        "value": 0.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "min",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Liver (i.v.) 0.80 min",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1291 ng/mL",
+        "value": 1291.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 1291 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1364 ng/mL",
+        "value": 1364.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 1364 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "89696 ng/mL",
+        "value": 89696.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 89696 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "102279 ng/mL",
+        "value": 102279.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 102279 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "19450 ng/mL",
+        "value": 19450.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 19450 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "20315 ng/mL",
+        "value": 20315.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in Cmax 20315 ng/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70274 ng·min/mL",
+        "value": 70274.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 70274 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "68886 ng·min/mL",
+        "value": 68886.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 68886 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1350252 ng·min/mL",
+        "value": 1350252.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 1350252 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (oral)",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1360964 ng·min/mL",
+        "value": 1360964.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 1360964 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "336953 ng·min/mL",
+        "value": 336953.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 336953 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold Change in AUCinf",
+      "symbol": "Fold Change in AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver (i.v.)",
+        "route": "Intravenous",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "339647 ng·min/mL",
+        "value": 339647.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng·min/mL",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Fig. 10",
+        "source_quote": "Fold Change in AUCinf 339647 ng·min/mL",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant",
+      "symbol": "k_a",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.125",
+        "value": 0.125,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "minutes^-1",
+        "unit_inherited": false,
+        "value_qualifier": "Fixed"
+      },
+      "provenance": {
+        "source_location": "Figure 11 caption",
+        "source_quote": "Color coded lines indicate model simulations with ka (0.125 minutes^-1, black), -2-fold ka (green), +2-fold ka (orange), -5-fold ka (red), and +5-fold ka (blue).",
+        "parameter_status": "Fixed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood & Liver",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.55",
+        "value": 8.55,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Blood & Liver: 8.55",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood & Liver",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.47",
+        "value": 3.47,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Blood & Liver: 3.47",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood & Liver",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1364",
+        "value": 1364.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Blood & Liver: 1364",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Blood & Liver",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "102279",
+        "value": 102279.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Blood & Liver: 102279",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.87",
+        "value": 1.87,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 1.87",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.94",
+        "value": 2.94,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 2.94",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.01",
+        "value": 4.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 4.01",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.81",
+        "value": 4.81,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 4.81",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Fold Change in Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.88",
+        "value": 5.88,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 5.88",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "214741",
+        "value": 214741.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 214741",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "141542",
+        "value": 141542.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 141542",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "95258",
+        "value": 95258.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 95258",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "64702",
+        "value": 64702.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 64702",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Fold Change in Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver Sub-Compartments",
+        "route": "Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "44209",
+        "value": 44209.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": "Nominal"
+      },
+      "provenance": {
+        "source_location": "Figure 12",
+        "source_quote": "Liver Sub-Compartments: 44209",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Tmax",
+      "symbol": "Tmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Blood (Cb)",
+        "route": "Intravenous, Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Fold change",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Figure 14",
+        "source_quote": "Fold changes in Tmax, AUCinf, and Cmax computed from the simulated PK profiles for DLZ in blood (Cb), liver (Ch), and each of the liver subcompartments (Ch1 through Ch5) after intravenous (solid bars) and oral (open bars) administration with hepatic enzyme zonation [lower PP CLint (green) or lower PV CLint (orange)] compared with those obtained with uniform enzyme distribution (black).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in AUCinf",
+      "symbol": "AUCinf",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Blood (Cb)",
+        "route": "Intravenous, Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Fold change",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Figure 14",
+        "source_quote": "Fold changes in Tmax, AUCinf, and Cmax computed from the simulated PK profiles for DLZ in blood (Cb), liver (Ch), and each of the liver subcompartments (Ch1 through Ch5) after intravenous (solid bars) and oral (open bars) administration with hepatic enzyme zonation [lower PP CLint (green) or lower PV CLint (orange)] compared with those obtained with uniform enzyme distribution (black).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fold change in Cmax",
+      "symbol": "Cmax",
+      "context": {
+        "compound": "DLZ",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Blood (Cb)",
+        "route": "Intravenous, Oral",
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Fold change",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Figure 14",
+        "source_quote": "Fold changes in Tmax, AUCinf, and Cmax computed from the simulated PK profiles for DLZ in blood (Cb), liver (Ch), and each of the liver subcompartments (Ch1 through Ch5) after intravenous (solid bars) and oral (open bars) administration with hepatic enzyme zonation [lower PP CLint (green) or lower PV CLint (orange)] compared with those obtained with uniform enzyme distribution (black).",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 6,
+    "discarded_chunks": 0,
+    "retained_chunks": 6
+  },
+  "wevisdoc_summary": {
+    "enabled": true,
+    "pages_transcribed": 10
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 2.0,
+    "total_parameters": 117,
+    "flagged_count": 137,
+    "error_count": 33,
+    "warning_count": 104,
+    "clean": false,
+    "summary": "137/117 parameters flagged: 33 error(s), 104 warning(s). Elapsed: 2.0ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "Volume of liver subcompartment i",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Vh / n' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 1,
+        "param_name": "Availability of liver subcompartment i",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='(1 - ER)^(1/n)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 2,
+        "param_name": "Extraction ratio of liver subcompartment i",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1 - Fi' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 3,
+        "param_name": "Intrinsic clearance of liver subcompartment i",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='(Qh * ERi) / (1 - ERi)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 4,
+        "param_name": "Total intrinsic clearance of liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='n * fub * CLint,i' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Hepatic blood flow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Qh' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 6,
+        "param_name": "Unbound fraction in blood",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='fub' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 7,
+        "param_name": "Liver-to-plasma concentration ratio for subcompartment i",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='(Rb * Chi) / Couti' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 8,
+        "param_name": "Blood-to-plasma ratio",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Rb' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 9,
+        "param_name": "Binding capacity of the liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Bmax' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 10,
+        "param_name": "Equilibrium dissociation constant",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Kd' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 11,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.027/1.72/0.156' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 11,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=1.72 > range_high=0.156.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 11,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 12 (same name, compound='TB', value=0.027).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 11,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 13 (same name, compound='TB', value=0.027).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 12,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.027/1.71/0.155' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 12,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=1.71 > range_high=0.155.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 12,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 13 (same name, compound='TB', value=0.027).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 13,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.027/1.70/0.154' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 13,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=1.7 > range_high=0.154.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 14,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.065/4.20/12670/5.40' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 14,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 15 (same name, compound='CQ', value=0.065).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 14,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 16 (same name, compound='CQ', value=0.065).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 15,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.065/4.13/12650/5.47' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 15,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 16 (same name, compound='CQ', value=0.065).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 16,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.065/4.09/12640/5.50' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 17,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.081/5.37/15.00' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 17,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 18 (same name, compound='CyA', value=0.081).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 18,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.081/5.23/14.56' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 19,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.079/5.03/13.63' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 20,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.084/5.55/1.32' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 20,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=5.55 > range_high=1.32.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 21,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.082/5.45/1.30' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 21,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=5.45 > range_high=1.3.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 22,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.081/5.38/1.29' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 22,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=5.38 > range_high=1.29.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 23,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.155/11.18/59.14' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 24,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.145/10.28/53.53' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 25,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.134/9.42/48.35' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 26,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.236/18.77/0.381' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 26,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=18.77 > range_high=0.381.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 26,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 27 (same name, compound='PTZ', value=0.236).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 26,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 28 (same name, compound='PTZ', value=0.236).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 27,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.236/17.53/0.356' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 27,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=17.53 > range_high=0.356.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 27,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 28 (same name, compound='PTZ', value=0.236).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 28,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.236/16.84/0.342' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 28,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=16.84 > range_high=0.342.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 29,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.399/40.37/1.14' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 29,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=40.37 > range_high=1.14.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 30,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.382/33.09/0.927' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 30,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=33.09 > range_high=0.927.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 30,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 31 (same name, compound='HB', value=0.382).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 31,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.382/30.71/0.867' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 31,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=30.71 > range_high=0.867.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 32,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.456/51.02/2.51' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 32,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=51.02 > range_high=2.51.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 33,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.457/43.47/2.19' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 33,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=43.47 > range_high=2.19.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 34,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.458/39.60/2.05' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 34,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=39.6 > range_high=2.05.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 35,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.532/69.04/13.82' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 35,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=69.04 > range_high=13.82.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 36,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.534/56.58/11.57' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 36,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=56.58 > range_high=11.57.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 37,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.519/47.98/9.81' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 37,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=47.98 > range_high=9.81.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 38,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.562/77.97/34040/11.16' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.563/62.26/33940/13.15' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 40 (same name, compound='QD', value=0.563).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 40,
+        "param_name": "ER/fubCLint/Bmax/Kd",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.563/54.76/33870/14.53' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 41,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.690/135/22.19' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 41,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=135.0 > range_high=22.19.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 42,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.684/94.74/15.76' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 42,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=94.74 > range_high=15.76.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 43,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.671/75.79/12.66' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 43,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=75.79 > range_high=12.66.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 44,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.762/195/2.45' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 44,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=195.0 > range_high=2.45.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 45,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.765/130/1.62' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 45,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=130.0 > range_high=1.62.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 46,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.769/104/1.29' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 46,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=104.0 > range_high=1.29.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 47,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.838/315/20.61' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 47,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=315.0 > range_high=20.61.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 48,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.840/182/12.25' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 48,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=182.0 > range_high=12.25.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 49,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.837/133/9.29' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 49,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=133.0 > range_high=9.29.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 50,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.875/424/38.60' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 50,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=424.0 > range_high=38.6.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 50,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 51 (same name, compound='DZP', value=0.875).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 51,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.875/223/20.63' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 51,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=223.0 > range_high=20.63.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 52,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.830/129/12.40' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 52,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=129.0 > range_high=12.4.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 53,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.689/135/6.76' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 53,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=135.0 > range_high=6.76.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 54,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.610/95.19/4.80' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 54,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=95.19 > range_high=4.8.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 55,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.563/78.26/3.97' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 55,
+        "param_name": "ER/fubCLint/Kph",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=78.26 > range_high=3.97.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 58,
+        "param_name": "Fraction of dose reaching systemic circulation",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.351' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 59,
+        "param_name": "Hepatic plasma clearance",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.460' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 60,
+        "param_name": "Hepatic permeability-surface area product",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.462' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 67,
+        "param_name": "Prehepatic bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 68,
+        "param_name": "Prehepatic bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 69,
+        "param_name": "Prehepatic bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 70,
+        "param_name": "Prehepatic bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.11' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 71,
+        "param_name": "Prehepatic bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.59' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 72,
+        "param_name": "Oral bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.311' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 73,
+        "param_name": "Oral bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.405' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 74,
+        "param_name": "Fraction unbound in plasma",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.07' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 75,
+        "param_name": "Fraction unbound in plasma",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.145' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 79,
+        "param_name": "Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='17.87' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 80,
+        "param_name": "Kph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='8.09' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 82,
+        "param_name": "Fold Change in Tmax",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 100 (same name, compound='DLZ', value=8.55).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 84,
+        "param_name": "Fold Change in Tmax",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 101 (same name, compound='DLZ', value=3.47).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 88,
+        "param_name": "Fold Change in Cmax",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 102 (same name, compound='DLZ', value=1364.0).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 90,
+        "param_name": "Fold Change in Cmax",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 103 (same name, compound='DLZ', value=102279.0).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 100,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='8.55' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 101,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.47' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 102,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1364' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 103,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='102279' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 104,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.87' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 105,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.94' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 106,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='4.01' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 107,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='4.81' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 108,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.88' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 109,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='214741' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 110,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='141542' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 111,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='95258' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 112,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='64702' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 113,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='44209' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 114,
+        "param_name": "Fold change in Tmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Fold change' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 115,
+        "param_name": "Fold change in AUCinf",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Fold change' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 116,
+        "param_name": "Fold change in Cmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Fold change' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  }
+}

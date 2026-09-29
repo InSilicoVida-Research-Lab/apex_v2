@@ -1,0 +1,906 @@
+{
+  "page_metadata": {
+    "title": "Development, Testing, Parameterization, and Calibration of a Human Physiologically Based Pharmacokinetic Model for the Plasticizer, Hexamoll®Diisononyl-Cyclohexane-1, 2-Dicarboxylate UsingIn Silico,In Vitro, and Human Biomonitoring Data",
+    "authors": [
+      "Kevin McNally",
+      "Craig Sams",
+      "George Loizou"
+    ],
+    "journal": "Frontiers in Pharmacology",
+    "year": 2019
+  },
+  "model_classification": {
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "The table contains parameters such as 'Fraction Metabolised' and 'FracMetab to cx_MINCH', which are not physiologically defined compartments or flows, and the model is not described as physiologically based."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "liver",
+        "label_raw": "Liver"
+      },
+      {
+        "id": "plasma",
+        "label_raw": "Plasma"
+      },
+      {
+        "id": "gut",
+        "label_raw": "Gut"
+      },
+      {
+        "id": "fat",
+        "label_raw": "Fat"
+      },
+      {
+        "id": "slowly_perfused",
+        "label_raw": "Slowly perfused"
+      }
+    ],
+    "connections": [
+      {
+        "source": "liver",
+        "target": "plasma",
+        "direction": "bidirectional",
+        "edge_type": "perfusion"
+      },
+      {
+        "source": "plasma",
+        "target": "gut",
+        "direction": "forward",
+        "edge_type": "perfusion"
+      },
+      {
+        "source": "plasma",
+        "target": "fat",
+        "direction": "forward",
+        "edge_type": "perfusion"
+      },
+      {
+        "source": "plasma",
+        "target": "slowly_perfused",
+        "direction": "forward",
+        "edge_type": "perfusion"
+      },
+      {
+        "source": "liver",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "excretion"
+      },
+      {
+        "source": "gut",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "excretion"
+      }
+    ],
+    "source_location": "Figure 1"
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "89",
+        "value": 89.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Body weight (kg) | 89",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "90",
+        "value": 90.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Body weight (kg) | 90",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Body weight",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "82",
+        "value": 82.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Body weight (kg) | 82",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Dose",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.558",
+        "value": 0.558,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg kg -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Dose (mg kg -1 ) | 0.558",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Dose",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.552",
+        "value": 0.552,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg kg -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Dose (mg kg -1 ) | 0.552",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Dose",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.606",
+        "value": 0.606,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg kg -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Dose (mg kg -1 ) | 0.606",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean rate of urine production",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.104 (0.053)",
+        "value": 0.104,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.053,
+        "variance_type": "sd",
+        "unit": "L h -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.104 (0.053)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean rate of urine production",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.158 (0.086)",
+        "value": 0.158,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.086,
+        "variance_type": "sd",
+        "unit": "L h -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.158 (0.086)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean rate of urine production",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.190 (0.242)",
+        "value": 0.19,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.242,
+        "variance_type": "sd",
+        "unit": "L h -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.190 (0.242)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean creatinine concentration",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.278 (0.605)",
+        "value": 1.278,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.605,
+        "variance_type": "sd",
+        "unit": "g L -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 1.278 (0.605)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean creatinine concentration",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.962 (0.672)",
+        "value": 0.962,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.672,
+        "variance_type": "sd",
+        "unit": "g L -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 0.962 (0.672)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Mean creatinine concentration",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.278 (0.831)",
+        "value": 1.278,
+        "range_low": null,
+        "range_high": null,
+        "variance": 0.831,
+        "variance_type": "sd",
+        "unit": "g L -1",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 1.278 (0.831)",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to cx_MINCH",
+      "symbol": "FracMetab to cx_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.045",
+        "value": 0.045,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to cx_MINCH | 0.045",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to cx_MINCH",
+      "symbol": "FracMetab to cx_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.048",
+        "value": 0.048,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to cx_MINCH | 0.048",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to cx_MINCH",
+      "symbol": "FracMetab to cx_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.049",
+        "value": 0.049,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to cx_MINCH | 0.049",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to OH_MINCH",
+      "symbol": "FracMetab to OH_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.250",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to OH_MINCH | 0.250",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to OH_MINCH",
+      "symbol": "FracMetab to OH_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.238",
+        "value": 0.238,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to OH_MINCH | 0.238",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction Metabolised to OH_MINCH",
+      "symbol": "FracMetab to OH_MINCH",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": "Volunteer",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.202",
+        "value": 0.202,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 2",
+        "source_quote": "FracMetab to OH_MINCH | 0.202",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction unbound",
+      "symbol": "fu",
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1 / (10^x + 1)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation 6",
+        "source_quote": "Equation 6: <disp-formula><label>(6)</label><mml:math id=\"M6\"><mml:mrow><mml:mi mathvariant=\"italic\">fu</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mn>1</mml:mn><mml:mrow><mml:msup><mml:mrow><mml:mn>10</mml:mn></mml:mrow><mml:mi>x</mml:mi></mml:msup><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:mfrac></mml:mrow></mml:math></disp-formula>",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.12,
+    "total_parameters": 19,
+    "flagged_count": 26,
+    "error_count": 0,
+    "warning_count": 26,
+    "clean": false,
+    "summary": "26/19 parameters flagged: 26 warning(s). Elapsed: 0.1ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "Body weight",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 1,
+        "param_name": "Body weight",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 2,
+        "param_name": "Body weight",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 3,
+        "param_name": "Dose",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 4,
+        "param_name": "Dose",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Dose",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 6,
+        "param_name": "Mean rate of urine production",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 7,
+        "param_name": "Mean rate of urine production",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 8,
+        "param_name": "Mean rate of urine production",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 9,
+        "param_name": "Mean creatinine concentration",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 10,
+        "param_name": "Mean creatinine concentration",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 11,
+        "param_name": "Mean creatinine concentration",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 12,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 12,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.045' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 13,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 13,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.048' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 14,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 14,
+        "param_name": "Fraction Metabolised to cx_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.049' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 15,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 15,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.250' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 16,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 16,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.238' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 17,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 17,
+        "param_name": "Fraction Metabolised to OH_MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.202' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 18,
+        "param_name": "Fraction unbound",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 18,
+        "param_name": "Fraction unbound",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1 / (10^x + 1)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": [],
+    "skipped_reason": "No error-level flags from Tier 1."
+  }
+}

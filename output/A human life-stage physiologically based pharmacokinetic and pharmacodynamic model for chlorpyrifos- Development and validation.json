@@ -1,0 +1,5264 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "A life-stage physiologically based pharmacokinetic and pharmacodynamic (PBPK/PD) model was developed to predict disposition of chlorpyrifos and its metabolites, chlorpyrifos-oxon (the ultimate toxicant) and 3,5,6-trichloro-2-pyridinol (TCPy), as well as B-esterase inhibition by chlorpyrifos-oxon in humans."
+  },
+  "structure": null,
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Oral dose threshold for age-dependent response",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Children, Adults"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "≥0.6 mg/kg",
+        "value": 0.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg",
+        "unit_inherited": null,
+        "value_qualifier": "threshold"
+      },
+      "provenance": {
+        "source_location": "Abstract",
+        "source_quote": "At oral doses ≥0.6 mg/kg of chlorpyrifos (100- to 1000-fold higher than environmental exposure levels), 6 months old children are predicted to have higher levels of chlorpyrifos-oxon in blood and higher levels of red blood cell cholinesterase inhibition compared to adults from equivalent doses.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "30.6",
+        "value": 30.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Brain\t30.6\tPrice et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "50.4",
+        "value": 50.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Liver\t50.4\tPrice et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.45",
+        "value": 1.45,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Fat\t1.45\tLuecke et al. (2007), Cowles et al. (1971) and Price et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Rapidly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "61.8",
+        "value": 61.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Rapidly perfused\t61.8\tAdrenal/Spleen mean: Price et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Slowly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.8",
+        "value": 1.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Slowly perfused\t1.8\tBone marrow: Price et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood flow (L/h/kg tissue)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "85.2",
+        "value": 85.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "L/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Diaphragm\t85.2\tLuecke et al. (2007)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "16.5",
+        "value": 16.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Brain\t16.5\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "12.8",
+        "value": 12.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Liver\t12.8\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "250",
+        "value": 250.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Fat\t250\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Rapidly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "16.5",
+        "value": 16.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Rapidly perfused\t16.5\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Slowly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.85",
+        "value": 3.85,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Slowly perfused\t3.85\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.85",
+        "value": 3.85,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Diaphragm\t3.85\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.6",
+        "value": 5.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Brain\t5.6\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.5",
+        "value": 4.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Liver\t4.5\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "75",
+        "value": 75.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Fat\t75\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Rapidly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.6",
+        "value": 5.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Rapidly perfused\t5.6\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Slowly perfused",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.8",
+        "value": 1.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Slowly perfused\t1.8\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficients (tissue:blood)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.8",
+        "value": 1.8,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "tissue:blood",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Diaphragm\t1.8\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic dearylation Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1360",
+        "value": 1360.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t1360\tSmith et al. (2010) and Wilson et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic dearylation Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "21",
+        "value": 21.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t21\tSmith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic desulfuration Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "630",
+        "value": 630.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t630\tSmith et al. (2010) and Wilson et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic desulfuration Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "33.2",
+        "value": 33.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t33.2\tSmith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic CPF-oxon hydrolysis Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.29 × 10^5",
+        "value": 129000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t1.29 × 10^5\tSmith et al. (2010) and Wilson et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic CPF-oxon hydrolysis Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "192",
+        "value": 192.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t192\tSmith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood CPF-oxon hydrolysis Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Logistic Fit (see text)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": "Logistic Fit (see text)"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\tLogistic Fit (see text)\tSmith et al. (2010)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood CPF-oxon hydrolysis Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "192",
+        "value": 192.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t192\tSmith et al. (2010)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal dearylation Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "53",
+        "value": 53.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t53\tPoet et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal dearylation Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "21",
+        "value": 21.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t21\tMeasured in liver Smith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal CPF-oxon hydrolysis Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "82",
+        "value": 82.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t82\tPoet et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal CPF-oxon hydrolysis Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "192",
+        "value": 192.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t192\tMeasured in liver Smith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal desulfuration Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "28",
+        "value": 28.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t28\tPoet et al. (2003)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Intestinal desulfuration Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "33.2",
+        "value": 33.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t33.2\tMeasured in liver Smith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain dearylation Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.85",
+        "value": 3.85,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": "Extrapolated (see text)"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t3.85\tExtrapolated (see text)",
+        "parameter_status": "Extrapolated",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain dearylation Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "21",
+        "value": 21.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t21\tMeasured in liver Smith et al. (2010), Poulin and Haddad (2011) and Poulin et al. (2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain desulfuration Vmax (μmol/h/kg tissue)",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.91",
+        "value": 0.91,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/h/kg tissue",
+        "unit_inherited": null,
+        "value_qualifier": "Extrapolated (see text)"
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Vmax (μmol/h/kg tissue)\t0.91\tExtrapolated (see text)",
+        "parameter_status": "Extrapolated",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain desulfuration Km (μM)",
+      "symbol": "Km",
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "33.2",
+        "value": 33.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Km (μM)\t33.2\tMeasured in liver Smith et al. (2010)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Stomach to intestine",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.31/0.086",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "CPF stomach to intestine\t0.31/0.086\tFit to Nolan et al. (1984)/Kisicki et al. (1999)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Intestinal absorption to liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.1",
+        "value": 3.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "CPF\t3.1\tFit to Nolan et al. (1984)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Intestinal absorption to liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.9",
+        "value": 3.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "CPF-oxon\t3.9\tFit to rat data Marty et al. (2012)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transfer rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "TCPy",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Intestinal absorption to liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "8.5",
+        "value": 8.5,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "TCPy\t8.5\tFit to rat data Timchalk et al. (2007a) and Busby-Hjerpe et al. (2010)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Plasma protein binding (%)",
+      "symbol": null,
+      "context": {
+        "compound": "CPF",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "99",
+        "value": 99.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "CPF\t99\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Plasma protein binding (%)",
+      "symbol": null,
+      "context": {
+        "compound": "Oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "99",
+        "value": 99.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Oxon\t99\tLowe et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "TCPy compartmental model Ke (/h)",
+      "symbol": "Ke",
+      "context": {
+        "compound": "TCPy",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.024",
+        "value": 0.024,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Ke (/h)\t0.024\tNolan et al. (1984)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "TCPy compartmental model Volume of distribution constant A",
+      "symbol": null,
+      "context": {
+        "compound": "TCPy",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.176",
+        "value": 0.176,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Volume of distribution constant A\t0.176\tFit to Schmitt et al. (2008)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "TCPy compartmental model Volume of distribution constant B",
+      "symbol": null,
+      "context": {
+        "compound": "TCPy",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.01",
+        "value": 1.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": null,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 3",
+        "source_quote": "Volume of distribution constant B\t1.01\tFit to Schmitt et al. (2008)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.4 × 10^5",
+        "value": 440000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Brain, 4.4 × 10^5, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "NA",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Plasma, NA, Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.02 × 10^4",
+        "value": 10200.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Liver, 1.02 × 10^4, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Red blood cells",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.27 × 10^5",
+        "value": 427000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Red blood cells, 4.27 × 10^5, Albers et al. (2009)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.74 × 10^4",
+        "value": 77400.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Diaphragm, 7.74 × 10^4, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.68 × 10^4",
+        "value": 46800.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Brain, 4.68 × 10^4, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.63 × 10^5",
+        "value": 263000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Plasma, 2.63 × 10^5, Sidell and Kaminskis (1975)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.0 × 10^4",
+        "value": 30000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Liver, 3.0 × 10^4, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.64 × 10^4",
+        "value": 26400.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Diaphragm, 2.64 × 10^4, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.88 × 10^5",
+        "value": 288000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Brain, 2.88 × 10^5, Hojring et al. (1976)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "NA",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Plasma, NA, Li et al. (2005)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.27 × 10^6",
+        "value": 1270000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Liver, 1.27 × 10^6, Pope et al. (2005)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme activity (μmol/kg/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Diaphragm",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.18 × 10^5",
+        "value": 318000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μmol/kg/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Diaphragm, 3.18 × 10^5, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Degradation rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "AChE",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.01",
+        "value": 0.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "AChE, 0.01, Timchalk et al. (2002) and Gearhart et al. (1990)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Degradation rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "BuChE",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0024",
+        "value": 0.0024,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "BuChE, 0.0024, Fit to Nolan et al. (1984)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Degradation rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Carboxylesterase",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.001",
+        "value": 0.001,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Carboxylesterase, 0.001, Timchalk et al. (2002); Fit to Chanda et al. (1997)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Degradation rates (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "7.54 × 10^-4",
+        "value": 0.000754,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Brain, 7.54 × 10^-4, Timchalk et al. (2002); Fit to Chanda et al. (1997)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme reactivation rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Acetyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Acetyl, 0.014, Carr and Chambers (1996) and Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme reactivation rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Butyryl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0014",
+        "value": 0.0014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Butyryl, 0.0014, Carr and Chambers (1996); Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme reactivation rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Carboxyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.014",
+        "value": 0.014,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Carboxyl, 0.014, Carr and Chambers (1996); Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme Aging Rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Acetyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.0113",
+        "value": 0.0113,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Enzyme Aging Rate (/h), 0.0113, Carr and Chambers (1996); Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme turnover rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Acetyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.17 × 10^7",
+        "value": 11700000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Acetyl, 1.17 × 10^7, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme turnover rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Butyryl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.66 × 10^6",
+        "value": 3660000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Butyryl, 3.66 × 10^6, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Enzyme turnover rate (/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Carboxyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.086 × 10^5",
+        "value": 108600.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Carboxyl, 1.086 × 10^5, Maxwell et al. (1987)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bimolecular inhibition rate (μM/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Acetyl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "220",
+        "value": 220.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Acetyl, 220, Kousba et al. (2004) and Kousba et al. (2007)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bimolecular inhibition rate (μM/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Red blood cells",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "100",
+        "value": 100.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Red blood cells, 100, Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bimolecular inhibition rate (μM/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Butyryl",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2000",
+        "value": 2000.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Butyryl, 2000, Timchalk et al. (2002)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Bimolecular inhibition rate (μM/h)",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Carboxylesterase",
+        "route": null,
+        "population": "Life-stage model"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "20",
+        "value": 20.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM/h",
+        "unit_inherited": true,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 4",
+        "source_quote": "Carboxylesterase, 20, Timchalk et al. (2002); Fit to Chanda et al. (1997)",
+        "parameter_status": "Fitted",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Vmax",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "Chlorpyrifos",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "Human"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "A / (1 + e^(B-age/C))",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Equation (8)",
+        "source_quote": "Vmax = A / (1 + e^(B-age/C))",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos (CPF)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos (CPF)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "21",
+        "value": 21.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.01",
+        "value": 0.01,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.9",
+        "value": 3.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "645",
+        "value": 645.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Infant (0.5 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "31",
+        "value": 31.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "0.5, 3.4, 21, 0.01, 3.9, 645, 31",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos (CPF)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.76",
+        "value": 3.76,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos (CPF)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "29",
+        "value": 29.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.008",
+        "value": 0.008,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.9",
+        "value": 3.9,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "643",
+        "value": 643.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Child (3 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "32",
+        "value": 32.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "3, 3.76, 29, 0.008, 3.9, 643, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos (CPF)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.31",
+        "value": 5.31,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos (CPF)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "42",
+        "value": 42.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.007",
+        "value": 0.007,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for chlorpyrifos-oxon (CPF-oxon)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "Chlorpyrifos-oxon (CPF-oxon)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.6",
+        "value": 3.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Area under the curve (AUC) for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "AUC (0,168)",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "632",
+        "value": 632.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "μM × h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life for 3,5,6-trichloro-2-pyridinol (TCPy)",
+      "symbol": "T1/2",
+      "context": {
+        "compound": "3,5,6-trichloro-2-pyridinol (TCPy)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": "Adult (30 yr)"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "32",
+        "value": 32.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 5",
+        "source_quote": "30, 5.31, 42, 0.007, 3.6, 632, 32",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic dearylation",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic dearylation, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic dearylation",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic dearylation, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic desulfuration",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic desulfuration, High, High, Med, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic desulfuration",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic desulfuration, High, High, Med, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic CPF-oxon hydrolysis",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic CPF-oxon hydrolysis, Low, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Hepatic CPF-oxon hydrolysis",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Hepatic CPF-oxon hydrolysis, Low, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood CPF-oxon hydrolysis",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Blood",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Blood CPF-oxon hydrolysis, Low, High, Low, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Blood CPF-oxon hydrolysis",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Blood",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Blood CPF-oxon hydrolysis, Low, High, Low, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain dearylation",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain dearylation, Low, Low, Med, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain dearylation",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain dearylation, Low, Low, Med, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain desulfuration",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain desulfuration, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain desulfuration",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain desulfuration, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fat compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver compartment volume",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain blood flow",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain blood flow",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver blood flow",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, High, High, Med, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver blood flow",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, High, High, Med, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Red blood cell AChE enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Red blood cell",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Red blood cell AChE, High, High, Low, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Red blood cell AChE enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Red blood cell",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Red blood cell AChE, High, High, Low, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain AChE enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain AChE, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain AChE enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain AChE, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver carboxylesterase enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver carboxylesterase, High, Med, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Liver carboxylesterase enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Med",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver carboxylesterase, High, Med, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain carboxylesterase enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain carboxylesterase, High, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Brain carboxylesterase enzyme level",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain carboxylesterase, High, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction bound in plasma for CPF",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "CPF, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction bound in plasma for CPF",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "CPF, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction bound in plasma for CPF-oxon",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "CPF-oxon, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction bound in plasma for CPF-oxon",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "CPF-oxon, High, High, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Brain",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Brain",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Liver",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Liver",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, Low, Low, High, High",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Fat",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF in Fat",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos (CPF)",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Med",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Brain",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Brain",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Brain",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Brain, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Liver",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, High, High, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Liver",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Liver",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "High",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Liver, High, High, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Fat",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "6 months"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Partition coefficient for CPF-oxon in Fat",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Fat",
+        "route": null,
+        "population": "30 yr"
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "Low",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Table 6",
+        "source_quote": "Fat, Low, Low, Low, Low",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Adult Vmax for chlorpyrifos-oxon hydrolysis in plasma",
+      "symbol": "Vmax",
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4–9 µmol/(min × mL)",
+        "value": null,
+        "range_low": 4.0,
+        "range_high": 9.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "µmol/(min × mL)",
+        "unit_inherited": false,
+        "value_qualifier": "Adult"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "Adult Vmax values for chlorpyrifos-oxon hydrolysis in plasma used to parameterize the life-stage PBPK model were 4–9 µmol/(min × mL) (Smith et al., 2011)",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Chlorpyrifos-oxon hydrolysis in plasma under physiological conditions",
+      "symbol": null,
+      "context": {
+        "compound": "Chlorpyrifos-oxon",
+        "subject_species": "Human",
+        "life_stage": null,
+        "compartment": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3 to 10 µmol/(min × mL)",
+        "value": null,
+        "range_low": 3.0,
+        "range_high": 10.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "µmol/(min × mL)",
+        "unit_inherited": false,
+        "value_qualifier": "under physiological conditions"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "Additionally, chlorpyrifos-oxon hydrolysis in plasma was measured under physiological conditions, and activities levels ranged from 3 to 10 µmol/(min × mL) (Richter et al., 2009).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "logKow",
+      "symbol": "logKow",
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "4.82",
+        "value": 4.82,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "Adults have more fat content than children, and since chlorpyrifos is lipophilic (logKow 4.82; McCall et al., 1980), fat can act as a chlorpyrifos depot.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life of chlorpyrifos in blood",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "nearly double",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "Lower overall chlorpyrifos metabolism and, at a lesser extent, altered distribution increases the half-life of chlorpyrifos in blood to nearly double in adults compared to 6 months old neonates (Table 5).",
+        "parameter_status": "Measured",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fraction of dose in fat depots",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "~2-fold",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "Following an oral dose of chlorpyrifos, adults have a larger fraction of the dose in fat depots compared to 6 months infants (~2-fold), which alters the distribution of chlorpyrifos.",
+        "parameter_status": "Measured",
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Median CPF exposure for children",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "11 (2.7–47)",
+        "value": 11.0,
+        "range_low": 2.7,
+        "range_high": 47.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg/d",
+        "unit_inherited": false,
+        "value_qualifier": "median (95% confidence intervals)"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "CARES predicted 11 (2.7–47) and 3.4 (0.8–15) ng/kg/d median (95% confidence intervals) CPF exposure for children and adults, respectively; while LifeLine predicted 20 (4.7–67) and 5.7 (1.2–24) ng/kg/d for children and adults (Price et al., 2011).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Median CPF exposure for adults",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "3.4 (0.8–15)",
+        "value": 3.4,
+        "range_low": 0.8,
+        "range_high": 15.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg/d",
+        "unit_inherited": false,
+        "value_qualifier": "median (95% confidence intervals)"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "CARES predicted 11 (2.7–47) and 3.4 (0.8–15) ng/kg/d median (95% confidence intervals) CPF exposure for children and adults, respectively; while LifeLine predicted 20 (4.7–67) and 5.7 (1.2–24) ng/kg/d for children and adults (Price et al., 2011).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Median CPF exposure for children (LifeLine)",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "20 (4.7–67)",
+        "value": 20.0,
+        "range_low": 4.7,
+        "range_high": 67.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg/d",
+        "unit_inherited": false,
+        "value_qualifier": "median (95% confidence intervals)"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "CARES predicted 11 (2.7–47) and 3.4 (0.8–15) ng/kg/d median (95% confidence intervals) CPF exposure for children and adults, respectively; while LifeLine predicted 20 (4.7–67) and 5.7 (1.2–24) ng/kg/d for children and adults (Price et al., 2011).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Median CPF exposure for adults (LifeLine)",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5.7 (1.2–24)",
+        "value": 5.7,
+        "range_low": 1.2,
+        "range_high": 24.0,
+        "variance": null,
+        "variance_type": null,
+        "unit": "ng/kg/d",
+        "unit_inherited": false,
+        "value_qualifier": "median (95% confidence intervals)"
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "CARES predicted 11 (2.7–47) and 3.4 (0.8–15) ng/kg/d median (95% confidence intervals) CPF exposure for children and adults, respectively; while LifeLine predicted 20 (4.7–67) and 5.7 (1.2–24) ng/kg/d for children and adults (Price et al., 2011).",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Threshold dose for sensitivity prediction",
+      "symbol": null,
+      "context": {
+        "compound": "chlorpyrifos",
+        "subject_species": "human",
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.6 mg/kg",
+        "value": 0.6,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "mg/kg",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Text",
+        "source_quote": "These levels are well below the threshold (0.6 mg/kg) where the life-stage model predicts children to be more sensitive than adults to chlorpyrifos from equivalent oral doses.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    }
+  ],
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 10,
+    "discarded_chunks": 0,
+    "retained_chunks": 10
+  },
+  "wevisdoc_summary": {
+    "enabled": true,
+    "pages_transcribed": 8
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 3.23,
+    "total_parameters": 149,
+    "flagged_count": 75,
+    "error_count": 0,
+    "warning_count": 75,
+    "clean": false,
+    "summary": "75/149 parameters flagged: 75 warning(s). Elapsed: 3.2ms.",
+    "flags": [
+      {
+        "param_index": 7,
+        "param_name": "Partition coefficients (tissue:blood)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 10 (same name, compound='CPF', value=16.5).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 11,
+        "param_name": "Partition coefficients (tissue:blood)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 12 (same name, compound='CPF', value=3.85).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 13,
+        "param_name": "Partition coefficients (tissue:blood)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 16 (same name, compound='CPF-oxon', value=5.6).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 17,
+        "param_name": "Partition coefficients (tissue:blood)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 18 (same name, compound='CPF-oxon', value=1.8).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 23,
+        "param_name": "Hepatic CPF-oxon hydrolysis Vmax (μmol/h/kg tissue)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=129000.0 does not match parsed value_text='1.29 × 10^5' (1.29).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 44,
+        "param_name": "TCPy compartmental model Volume of distribution constant A",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.176' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 45,
+        "param_name": "TCPy compartmental model Volume of distribution constant B",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.01' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 46,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=440000.0 does not match parsed value_text='4.4 × 10^5' (4.4).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 48,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=10200.0 does not match parsed value_text='1.02 × 10^4' (1.02).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 49,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=427000.0 does not match parsed value_text='4.27 × 10^5' (4.27).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 50,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=77400.0 does not match parsed value_text='7.74 × 10^4' (7.74).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 51,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=46800.0 does not match parsed value_text='4.68 × 10^4' (4.68).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 52,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=263000.0 does not match parsed value_text='2.63 × 10^5' (2.63).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 53,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=30000.0 does not match parsed value_text='3.0 × 10^4' (3.0).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 54,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=26400.0 does not match parsed value_text='2.64 × 10^4' (2.64).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 55,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=288000.0 does not match parsed value_text='2.88 × 10^5' (2.88).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 57,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=1270000.0 does not match parsed value_text='1.27 × 10^6' (1.27).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 58,
+        "param_name": "Enzyme activity (μmol/kg/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=318000.0 does not match parsed value_text='3.18 × 10^5' (3.18).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 62,
+        "param_name": "Degradation rates (/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=0.000754 does not match parsed value_text='7.54 × 10^-4' (7.54).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 63,
+        "param_name": "Enzyme reactivation rate (/h)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 65 (same name, compound='Chlorpyrifos-oxon (CPF-oxon)', value=0.014).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 67,
+        "param_name": "Enzyme turnover rate (/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=11700000.0 does not match parsed value_text='1.17 × 10^7' (1.17).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 68,
+        "param_name": "Enzyme turnover rate (/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=3660000.0 does not match parsed value_text='3.66 × 10^6' (3.66).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 69,
+        "param_name": "Enzyme turnover rate (/h)",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=108600.0 does not match parsed value_text='1.086 × 10^5' (1.086).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 74,
+        "param_name": "Vmax",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='A / (1 + e^(B-age/C))' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 78,
+        "param_name": "Half-life for chlorpyrifos-oxon (CPF-oxon)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 84 (same name, compound='Chlorpyrifos-oxon (CPF-oxon)', value=3.9).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 86,
+        "param_name": "Half-life for 3,5,6-trichloro-2-pyridinol (TCPy)",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 92 (same name, compound='3,5,6-trichloro-2-pyridinol (TCPy)', value=32.0).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 93,
+        "param_name": "Hepatic dearylation",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 94,
+        "param_name": "Hepatic dearylation",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 95,
+        "param_name": "Hepatic desulfuration",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 96,
+        "param_name": "Hepatic desulfuration",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 97,
+        "param_name": "Hepatic CPF-oxon hydrolysis",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 98,
+        "param_name": "Hepatic CPF-oxon hydrolysis",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 99,
+        "param_name": "Blood CPF-oxon hydrolysis",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 100,
+        "param_name": "Blood CPF-oxon hydrolysis",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 101,
+        "param_name": "Brain dearylation",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 102,
+        "param_name": "Brain dearylation",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 103,
+        "param_name": "Brain desulfuration",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 104,
+        "param_name": "Brain desulfuration",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 105,
+        "param_name": "Brain compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 106,
+        "param_name": "Brain compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 107,
+        "param_name": "Fat compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 108,
+        "param_name": "Fat compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 109,
+        "param_name": "Liver compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 110,
+        "param_name": "Liver compartment volume",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 111,
+        "param_name": "Brain blood flow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 112,
+        "param_name": "Brain blood flow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 113,
+        "param_name": "Liver blood flow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 114,
+        "param_name": "Liver blood flow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 115,
+        "param_name": "Red blood cell AChE enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 116,
+        "param_name": "Red blood cell AChE enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 117,
+        "param_name": "Brain AChE enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 118,
+        "param_name": "Brain AChE enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 119,
+        "param_name": "Liver carboxylesterase enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 120,
+        "param_name": "Liver carboxylesterase enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Med' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 121,
+        "param_name": "Brain carboxylesterase enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 122,
+        "param_name": "Brain carboxylesterase enzyme level",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 123,
+        "param_name": "Fraction bound in plasma for CPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 124,
+        "param_name": "Fraction bound in plasma for CPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 125,
+        "param_name": "Fraction bound in plasma for CPF-oxon",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 126,
+        "param_name": "Fraction bound in plasma for CPF-oxon",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 127,
+        "param_name": "Partition coefficient for CPF in Brain",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 128,
+        "param_name": "Partition coefficient for CPF in Brain",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 129,
+        "param_name": "Partition coefficient for CPF in Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 130,
+        "param_name": "Partition coefficient for CPF in Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 131,
+        "param_name": "Partition coefficient for CPF in Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 132,
+        "param_name": "Partition coefficient for CPF in Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 133,
+        "param_name": "Partition coefficient for CPF-oxon in Brain",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 134,
+        "param_name": "Partition coefficient for CPF-oxon in Brain",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 135,
+        "param_name": "Partition coefficient for CPF-oxon in Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 136,
+        "param_name": "Partition coefficient for CPF-oxon in Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='High' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 137,
+        "param_name": "Partition coefficient for CPF-oxon in Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 138,
+        "param_name": "Partition coefficient for CPF-oxon in Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='Low' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 141,
+        "param_name": "logKow",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='4.82' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 142,
+        "param_name": "Half-life of chlorpyrifos in blood",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='nearly double' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 143,
+        "param_name": "Fraction of dose in fat depots",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='~2-fold' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": [],
+    "skipped_reason": "No error-level flags from Tier 1."
+  }
+}

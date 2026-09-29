@@ -1,0 +1,918 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Fig. 3. Hierarchical classification of PBPK model types under the A) central class physiologically based pharmacokinetic model (PBPKO:00003). Subclasses include organ-specific models (gut, lung, kidney, brain), population and life-stage-specific models (population, pregnant, lactational), structural model types (whole body, one-compartment), mechanistic approaches (perfusion-limited, permeability-limited), and parameterization strategies (top-down, bottom-up)."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "entity",
+        "label_raw": "entity",
+        "confidence": 1.0
+      },
+      {
+        "id": "generically_dependent_continuant",
+        "label_raw": "generically dependent continuant",
+        "confidence": 1.0
+      },
+      {
+        "id": "continuant",
+        "label_raw": "continuant",
+        "confidence": 1.0
+      },
+      {
+        "id": "occurent",
+        "label_raw": "occurent",
+        "confidence": 1.0
+      },
+      {
+        "id": "information_content_entity",
+        "label_raw": "information content entity",
+        "confidence": 1.0
+      },
+      {
+        "id": "material_entity",
+        "label_raw": "material entity",
+        "confidence": 1.0
+      },
+      {
+        "id": "data_item",
+        "label_raw": "data item",
+        "confidence": 1.0
+      },
+      {
+        "id": "directive_information_entity",
+        "label_raw": "directive information entity",
+        "confidence": 1.0
+      },
+      {
+        "id": "data_representational_model",
+        "label_raw": "data representational model",
+        "confidence": 1.0
+      },
+      {
+        "id": "parameter",
+        "label_raw": "parameter",
+        "confidence": 1.0
+      },
+      {
+        "id": "physiological_parameter",
+        "label_raw": "physiological parameter",
+        "confidence": 1.0
+      },
+      {
+        "id": "physicochemical_parameter",
+        "label_raw": "physicochemical parameter",
+        "confidence": 1.0
+      },
+      {
+        "id": "biochemical_parameter",
+        "label_raw": "biochemical parameter",
+        "confidence": 1.0
+      },
+      {
+        "id": "route_of_exposure",
+        "label_raw": "route of exposure",
+        "confidence": 1.0
+      },
+      {
+        "id": "compartment",
+        "label_raw": "compartment",
+        "confidence": 1.0
+      },
+      {
+        "id": "PBPK_model",
+        "label_raw": "PBPK model",
+        "confidence": 1.0
+      },
+      {
+        "id": "transporter",
+        "label_raw": "transporter",
+        "confidence": 1.0
+      },
+      {
+        "id": "biological_process",
+        "label_raw": "biological process (GO)",
+        "confidence": 1.0
+      },
+      {
+        "id": "absorption",
+        "label_raw": "absorption",
+        "confidence": 1.0
+      },
+      {
+        "id": "distribution_process",
+        "label_raw": "distribution process",
+        "confidence": 1.0
+      },
+      {
+        "id": "elimination",
+        "label_raw": "elimination",
+        "confidence": 1.0
+      },
+      {
+        "id": "excretion_GO",
+        "label_raw": "excretion (GO)",
+        "confidence": 1.0
+      },
+      {
+        "id": "enterohepatic_recirculation",
+        "label_raw": "enterohepatic recirculation",
+        "confidence": 1.0
+      },
+      {
+        "id": "metabolic_process_GO",
+        "label_raw": "metabolic process (GO)",
+        "confidence": 1.0
+      }
+    ],
+    "connections": [
+      {
+        "source": "entity",
+        "target": "generically_dependent_continuant",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "entity",
+        "target": "continuant",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "entity",
+        "target": "occurent",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "generically_dependent_continuant",
+        "target": "information_content_entity",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "continuant",
+        "target": "material_entity",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "information_content_entity",
+        "target": "data_item",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "information_content_entity",
+        "target": "directive_information_entity",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "material_entity",
+        "target": "transporter",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "material_entity",
+        "target": "biological_process",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "data_item",
+        "target": "parameter",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "directive_information_entity",
+        "target": "data_representational_model",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "parameter",
+        "target": "physiological_parameter",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "parameter",
+        "target": "physicochemical_parameter",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "parameter",
+        "target": "biochemical_parameter",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "parameter",
+        "target": "route_of_exposure",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "parameter",
+        "target": "compartment",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "data_representational_model",
+        "target": "PBPK_model",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "PBPK_model",
+        "target": "parameter",
+        "label_raw": "has parameter",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters",
+        "confidence": 1.0
+      },
+      {
+        "source": "PBPK_model",
+        "target": "compartment",
+        "label_raw": "has compartment",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "PBPK_model",
+        "target": "biological_process",
+        "label_raw": "has biological process",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "PBPK_model",
+        "target": "route_of_exposure",
+        "label_raw": "has route of exposure",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "PBPK_model",
+        "target": "transporter",
+        "label_raw": "has transporter",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "physiological_parameter",
+        "target": "has physiological parameter",
+        "label_raw": "has physiological parameter",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "physicochemical_parameter",
+        "target": "has physicochemical parameter",
+        "label_raw": "has physicochemical parameter",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "biochemical_parameter",
+        "target": "has biochemical parameter",
+        "label_raw": "has biochemical parameter",
+        "direction": "forward",
+        "edge_type": "object property",
+        "evidence": "Dashed arrows represent object properties, linking the central PBPK model class to its parameters, compartments, biological processes, routes of exposure, and transporters",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "absorption",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "distribution_process",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "elimination",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "excretion_GO",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "enterohepatic_recirculation",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      },
+      {
+        "source": "biological_process",
+        "target": "metabolic_process_GO",
+        "label_raw": "is-a",
+        "direction": "forward",
+        "edge_type": "subclass",
+        "evidence": "Solid arrows indicate subclass (is-a) relationships",
+        "confidence": 1.0
+      }
+    ],
+    "source_location": "Fig. 2"
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Physiological parameter",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "blood flow and volume of different organs or tissues in the body",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.4",
+        "source_quote": "Physiological parameters refer to known physiology and correspond to blood flow and volume of different organs or tissues in the body.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Physicochemical parameter",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "lipophilicity, water solubility, distribution coefficients, molecular weight, hydrogen-bond acceptor and donor counts, etc.",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.4",
+        "source_quote": "Physicochemical parameters are lipophilicity, water solubility, distribution coefficients, molecular weight, hydrogen-bond acceptor and donor counts, etc. primarily describing the structure of the compound.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Biochemical parameter",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "absorption, distribution, elimination, metabolism and excretion",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.4",
+        "source_quote": "Biological process in PBPKO refers to the core PK processes like absorption, distribution, elimination, metabolism and excretion which are mostly compound-specific inputs (Fig. 3C). Some of these ADME processes are also included as biochemical parameters since they have specific values for a specific compound.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Route of exposure",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "dermal, inhalation, intraarterial, intrathecal, intravenous bolus, intravenous infusion, nasal, ocular, oral, subcutaneous and transdermal exposure",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.4",
+        "source_quote": "Additionally, we have included the route of exposure, PBPK model simulation time and some output generated from the PBPK model in parameter class. In general, there is a fixed value for exposure, like dermal, inhalation, intraarterial, intrathecal, intravenous bolus, intravenous infusion, nasal, ocular, oral, subcutaneous and transdermal exposure, so it was included in parameters.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "PBPK model output",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "area under curve, maximum plasma or organ concentration (Cmax), mean residence time (MRT)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.4",
+        "source_quote": "In PBPK, output mostly includes area under curve, maximum plasma or organ concentration (Cmax), mean residence time (MRT), and many more which are fixed values or value ranges and hence can be included in parameter.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Transporter",
+      "symbol": null,
+      "context": {
+        "compound": null,
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "ABCC2, ABCC3 and OATP",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.1.5",
+        "source_quote": "Transporter refers to membrane transport proteins which are mostly involved in compound disposition and distribution affecting the ADME profile [37]. There are hundreds of transporters involved in this phenomenon but here we include only three major transporters ABCC2, ABCC3 and OATP.",
+        "parameter_status": null,
+        "confidence": "medium"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of compartments in pregnancy BPA model",
+      "symbol": null,
+      "context": {
+        "compound": "BPA",
+        "subject_species": "Human",
+        "life_stage": "Pregnancy",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5",
+        "value": 5.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "compartments",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "The pregnancy BPA model comprised five compartments and 51 parameters, of which 49 (96.1%) were successfully annotated with PBPKO terms; only hematocrit (Hct) and the absorption rate constant (Kabs) lacked suitable matches.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of parameters in pregnancy BPA model",
+      "symbol": null,
+      "context": {
+        "compound": "BPA",
+        "subject_species": "Human",
+        "life_stage": "Pregnancy",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "51",
+        "value": 51.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "parameters",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "The pregnancy BPA model comprised five compartments and 51 parameters, of which 49 (96.1%) were successfully annotated with PBPKO terms; only hematocrit (Hct) and the absorption rate constant (Kabs) lacked suitable matches.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of compartments in pediatric BPA model",
+      "symbol": null,
+      "context": {
+        "compound": "BPA",
+        "subject_species": "Human",
+        "life_stage": "Pediatric",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5",
+        "value": 5.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "compartments",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "The pediatric BPA model similarly comprised five compartments and 41 parameters, of which 40 (97.6%) were annotated, with Kabs again remaining unmapped.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of parameters in pediatric BPA model",
+      "symbol": null,
+      "context": {
+        "compound": "BPA",
+        "subject_species": "Human",
+        "life_stage": "Pediatric",
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "41",
+        "value": 41.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "parameters",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "The pediatric BPA model similarly comprised five compartments and 41 parameters, of which 40 (97.6%) were annotated, with Kabs again remaining unmapped.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of compartments in PFOS model",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "5",
+        "value": 5.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "compartments",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "The pregnancy BPA model comprised five compartments and 51 parameters, of which 49 (96.1%) were successfully annotated with PBPKO terms; only hematocrit (Hct) and the absorption rate constant (Kabs) lacked suitable matches. The pediatric BPA model similarly comprised five compartments and 41 parameters, of which 40 (97.6%) were annotated, with Kabs again remaining unmapped. The complete list of annotated terms for both models is provided in Supplementary Files . All the annotated model are available in supplementary.",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Number of parameters in PFOS model",
+      "symbol": null,
+      "context": {
+        "compound": "PFOS",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "99",
+        "value": 99.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "parameters",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 3.3.1",
+        "source_quote": "For the PFOS model [11], 86 out of 99 model parameters such as",
+        "parameter_status": null,
+        "confidence": "high"
+      }
+    }
+  ],
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 5,
+    "discarded_chunks": 3,
+    "retained_chunks": 2
+  },
+  "wevisdoc_summary": {
+    "enabled": true,
+    "pages_transcribed": 4
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.12,
+    "total_parameters": 12,
+    "flagged_count": 12,
+    "error_count": 0,
+    "warning_count": 12,
+    "clean": false,
+    "summary": "12/12 parameters flagged: 12 warning(s). Elapsed: 0.1ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "Physiological parameter",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 0,
+        "param_name": "Physiological parameter",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='blood flow and volume of different organs or tissues in the body' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 1,
+        "param_name": "Physicochemical parameter",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 1,
+        "param_name": "Physicochemical parameter",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='lipophilicity, water solubility, distribution coefficients, molecular weight, hydrogen-bond acceptor and donor counts, etc.' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 2,
+        "param_name": "Biochemical parameter",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 2,
+        "param_name": "Biochemical parameter",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='absorption, distribution, elimination, metabolism and excretion' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 3,
+        "param_name": "Route of exposure",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 3,
+        "param_name": "Route of exposure",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='dermal, inhalation, intraarterial, intrathecal, intravenous bolus, intravenous infusion, nasal, ocular, oral, subcutaneous and transdermal exposure' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 4,
+        "param_name": "PBPK model output",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 4,
+        "param_name": "PBPK model output",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='area under curve, maximum plasma or organ concentration (Cmax), mean residence time (MRT)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Transporter",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Transporter",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='ABCC2, ABCC3 and OATP' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": [],
+    "skipped_reason": "No error-level flags from Tier 1."
+  }
+}

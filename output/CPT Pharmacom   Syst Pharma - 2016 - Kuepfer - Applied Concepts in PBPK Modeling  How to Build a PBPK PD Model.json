@@ -1,0 +1,158 @@
+{
+  "page_metadata": {
+    "title": "Applied Concepts in PBPK Modeling: How to Build a PBPK/PD Model",
+    "authors": [
+      "L Kuepfer",
+      "C Niederalt",
+      "T Wendl",
+      "J‐F Schlender",
+      "S Willmann",
+      "J Lippert",
+      "M Block",
+      "T Eissing",
+      "D Teutonico"
+    ],
+    "journal": "CPT: Pharmacometrics & Systems Pharmacology",
+    "year": 2016
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "PBPK model, the distribution, metabolism, and excretion of CIP is structurally represented. The standard distribution of PK-Sim was identified as the most accurate distribution model, and the associated model parameters are quantified."
+  },
+  "structure": {
+    "compartments": [
+      {
+        "id": "liver",
+        "label_raw": "Liver"
+      },
+      {
+        "id": "kidney",
+        "label_raw": "Kidney"
+      },
+      {
+        "id": "gut",
+        "label_raw": "Gut"
+      },
+      {
+        "id": "plasma",
+        "label_raw": "Plasma"
+      },
+      {
+        "id": "fat",
+        "label_raw": "Fat"
+      },
+      {
+        "id": "muscle",
+        "label_raw": "Muscle"
+      },
+      {
+        "id": "slowly_perfused",
+        "label_raw": "Slowly perfused"
+      },
+      {
+        "id": "rapidly_perfused",
+        "label_raw": "Rapidly perfused"
+      }
+    ],
+    "connections": [
+      {
+        "source": "plasma",
+        "target": "liver",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text states CIP is metabolized in the liver and secreted into bile ducts, indicating a bidirectional flow between plasma and liver."
+      },
+      {
+        "source": "plasma",
+        "target": "kidney",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text states CIP is subject to significant renal elimination, indicating a bidirectional flow between plasma and kidney."
+      },
+      {
+        "source": "plasma",
+        "target": "gut",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text discusses oral administration and absorption in the GI tract, indicating a bidirectional flow between plasma and gut."
+      },
+      {
+        "source": "plasma",
+        "target": "fat",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text mentions a PBPK model with a fat compartment, implying a bidirectional flow."
+      },
+      {
+        "source": "plasma",
+        "target": "muscle",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text mentions a PBPK model with a muscle compartment, implying a bidirectional flow."
+      },
+      {
+        "source": "plasma",
+        "target": "slowly_perfused",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text mentions a PBPK model with a slowly perfused compartment, implying a bidirectional flow."
+      },
+      {
+        "source": "plasma",
+        "target": "rapidly_perfused",
+        "direction": "bidirectional",
+        "edge_type": "flow",
+        "evidence": "The text mentions a PBPK model with a rapidly perfused compartment, implying a bidirectional flow."
+      },
+      {
+        "source": "liver",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "metabolism",
+        "evidence": "The text states CIP is metabolized via CYP1A2 in the liver."
+      },
+      {
+        "source": "liver",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "excretion",
+        "evidence": "The text states CIP is secreted into bile ducts in the liver."
+      },
+      {
+        "source": "kidney",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "excretion",
+        "evidence": "The text states CIP is subject to significant renal elimination."
+      },
+      {
+        "source": "gut",
+        "target": "external",
+        "direction": "forward",
+        "edge_type": "absorption",
+        "evidence": "The text discusses oral administration and absorption in the GI tract."
+      }
+    ],
+    "source_location": "Figure 1a"
+  },
+  "parameters": [],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.0,
+    "total_parameters": 0,
+    "flagged_count": 0,
+    "error_count": 0,
+    "warning_count": 0,
+    "clean": true,
+    "summary": "All 0 parameters passed Tier 1 verification.",
+    "flags": []
+  }
+}

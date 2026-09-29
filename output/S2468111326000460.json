@@ -1,0 +1,36 @@
+{
+  "page_metadata": {
+    "title": "Conceptualizing the use of the term financial risk by non-academics and academics using twitter messages and ScienceDirect paper abstracts",
+    "authors": [
+      "Eun Jin Kwak",
+      "John E. Grable"
+    ],
+    "journal": "Social Network Analysis and Mining",
+    "year": 2021
+  },
+  "model_classification": {
+    "model_type": "not_applicable",
+    "evidence_quote": null
+  },
+  "structure": null,
+  "parameters": [],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "not_applicable",
+    "evaluated_chunks": 0,
+    "discarded_chunks": 0,
+    "retained_chunks": 0
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.01,
+    "total_parameters": 0,
+    "flagged_count": 0,
+    "error_count": 0,
+    "warning_count": 0,
+    "clean": true,
+    "summary": "All 0 parameters passed Tier 1 verification.",
+    "flags": []
+  }
+}

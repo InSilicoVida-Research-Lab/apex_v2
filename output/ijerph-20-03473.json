@@ -1,0 +1,38 @@
+{
+  "page_metadata": {
+    "title": "The Role of “Physiologically Based Pharmacokinetic Model (PBPK)” New Approach Methodology (NAM) in Pharmaceuticals and Environmental Chemical Risk Assessment",
+    "authors": [
+      "Deepika Deepika",
+      "Vikas Kumar"
+    ],
+    "journal": "International Journal of Environmental Research and Public Health",
+    "year": 2023
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Figure 1. Conceptual diagram for PBPK model representing physiological and biochemical parameters and extrapolation of the model for human health risk assessment."
+  },
+  "structure": {
+    "source_location": "Equation 3"
+  },
+  "parameters": [],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.0,
+    "total_parameters": 0,
+    "flagged_count": 0,
+    "error_count": 0,
+    "warning_count": 0,
+    "clean": true,
+    "summary": "All 0 parameters passed Tier 1 verification.",
+    "flags": []
+  }
+}
