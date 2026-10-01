@@ -492,6 +492,80 @@ class SGLangExtractor:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
             raise
 
+    async def extract_dosing_from_text(self, text: str) -> "DosingExtraction":
+        """Extract dosing events from methods section strictly enforcing Pydantic schema"""
+        from pk_pipeline.schemas import DosingExtraction
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+            
+        import time
+        start_t = time.time()
+        logger.info(f"SGLang: [START] Extracting dosing from Methods text...")
+        
+        schema_json = json.dumps(DosingExtraction.model_json_schema(), indent=2)
+        system_prompt = (
+            "You are an expert pharmacokinetic data extractor. Your task is to extract the dosing administration details "
+            "from the provided Methods section text into a strict JSON format.\n"
+            "Extract every distinct dosing event mentioned (e.g., if there are multiple doses, routes, or compounds).\n"
+            f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
+            "Output ONLY the JSON object, with no markdown formatting or extra text."
+        )
+        
+        user_instruction = f"Extract dosing parameters from this document text strictly into the JSON schema:\n\n{text.strip()}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        
+        if getattr(self, "use_server", False):
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=3600)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                payload = {
+                    "text": prompt_text,
+                    "sampling_params": {
+                        "max_new_tokens": 8000,
+                        "temperature": 0.0,
+                        "repetition_penalty": 1.0
+                    }
+                }
+                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
+                    result = await resp.json()
+                    extracted_text = result["text"]
+        else:
+            response = await self.engine.async_generate(
+                prompt=prompt_text,
+                sampling_params={
+                    "max_new_tokens": 8000,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0
+                }
+            )
+            extracted_text = response["text"] if isinstance(response, dict) else response.text
+        
+        if "</think>" in extracted_text:
+            extracted_text = extracted_text.split("</think>")[-1].strip()
+            
+        import re
+        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
+        if match:
+            extracted_text = match.group(1).strip()
+        else:
+            extracted_text = extracted_text.strip()
+            
+        try:
+            json_data = json.loads(extracted_text)
+            dosing_data = DosingExtraction(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Dosing extraction complete in {duration:.2f}s. Found {len(dosing_data.dosing)} events.")
+            return dosing_data
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang dosing output: {e}\nRaw Output: {extracted_text}")
+            raise
+
+
 
 class LayaFilter:
     """

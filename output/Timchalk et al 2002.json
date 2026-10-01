@@ -1,22 +1,463 @@
 {
   "page_metadata": {
-    "title": "Prior-informed population pharmacokinetic-pharmacodynamic modeling of dexamethasone in horses",
-    "authors": [
-      "Ruihong Yu",
-      "Pierre-Louis Toutain",
-      "Carl Ekstrand",
-      "William J. Jusko"
-    ],
-    "journal": "Journal of Pharmacokinetics and Pharmacodynamics",
+    "title": "A Physiologically Based Pharmacokinetic and Pharmacodynamic (PBPK/PD) Model of Dapagliflozin in Type 2 Diabetes Mellitus: The Effect of Dosing, Hepatorenal Impairment, and Food",
+    "authors": [],
+    "journal": "Pharmaceutics",
     "year": 2026
   },
   "model_classification": {
-    "model_type": "pbpk",
-    "evidence_quote": "Classified via Laya System-1 triage."
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "Renal filtration and tubular glucose reabsorption were not modelled explicitly. Renal elimination of dapagliflozin (DAP) and its metabolite D3G was instead described using first-order processes, depending on kidney volume, renal function (glomerular filtration rate), and compound-specific excretion rate constants."
   },
-  "structure": null,
-  "parameters": [],
-  "ingestion_source": "pmc_xml",
+  "structure": {
+    "compartments": [
+      {
+        "id": "liver",
+        "label_raw": "Liver"
+      },
+      {
+        "id": "kidney",
+        "label_raw": "Kidney"
+      },
+      {
+        "id": "gut",
+        "label_raw": "GI tract"
+      }
+    ],
+    "connections": [
+      {
+        "source": "gut",
+        "target": "liver",
+        "direction": "forward"
+      },
+      {
+        "source": "liver",
+        "target": "kidney",
+        "direction": "forward"
+      },
+      {
+        "source": "gut",
+        "target": "kidney",
+        "direction": "forward"
+      },
+      {
+        "source": "liver",
+        "target": "external",
+        "direction": "forward"
+      },
+      {
+        "source": "kidney",
+        "target": "external",
+        "direction": "forward"
+      }
+    ]
+  },
+  "parameters": [
+    {
+      "needs_review": false,
+      "parameter_name": "Fractional organ volume for gut",
+      "symbol": "F V gu",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.71 %",
+        "value": 1.71,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Fractional organ volumes and blood flows were taken from literature sources. The fractional compartment volumes were set to F V gu = 1.71 % for the gut, F V ki = 0.44 % for the kidneys, F V li = 2.10 % for the liver, and F V lu = 0.76 % for the lungs.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fractional organ volume for kidneys",
+      "symbol": "F V ki",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.44 %",
+        "value": 0.44,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Fractional organ volumes and blood flows were taken from literature sources. The fractional compartment volumes were set to F V gu = 1.71 % for the gut, F V ki = 0.44 % for the kidneys, F V li = 2.10 % for the liver, and F V lu = 0.76 % for the lungs.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fractional organ volume for liver",
+      "symbol": "F V li",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "2.10 %",
+        "value": 2.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Fractional organ volumes and blood flows were taken from literature sources. The fractional compartment volumes were set to F V gu = 1.71 % for the gut, F V ki = 0.44 % for the kidneys, F V li = 2.10 % for the liver, and F V lu = 0.76 % for the lungs.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Fractional organ volume for lungs",
+      "symbol": "F V lu",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.76 %",
+        "value": 0.76,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Fractional organ volumes and blood flows were taken from literature sources. The fractional compartment volumes were set to F V gu = 1.71 % for the gut, F V ki = 0.44 % for the kidneys, F V li = 2.10 % for the liver, and F V lu = 0.76 % for the lungs.",
+        "parameter_status": "Literature",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Scaling factor for renal function (f renal)",
+      "symbol": "f renal",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.00",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Several key factors influencing pharmacokinetic and pharmacodynamic variability were implemented as scaling parameters. Renal impairment was modeled as a progressive decline in renal function using the factor f renal , which was applied to glomerular filtration rate (GFR) and renal clearance of dapagliflozin and D3G. Scaling values were mapped from KDIGO categories: normal (eGFR ≥ 90 mL/min, f renal = 1.00 ), mild (GFR 50–89 mL/min, f renal = 0.69 ), moderate (GFR 30–49 mL/min, f renal = 0.32 ), severe (GFR ≤30 mL/min, f renal = 0.19 ), derived from KDIGO guidelines and related modeling studies [ , ].",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Scaling factor for renal function (f renal)",
+      "symbol": "f renal",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.69",
+        "value": 0.69,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Several key factors influencing pharmacokinetic and pharmacodynamic variability were implemented as scaling parameters. Renal impairment was modeled as a progressive decline in renal function using the factor f renal , which was applied to glomerular filtration rate (GFR) and renal clearance of dapagliflozin and D3G. Scaling values were mapped from KDIGO categories: normal (eGFR ≥ 90 mL/min, f renal = 1.00 ), mild (GFR 50–89 mL/min, f renal = 0.69 ), moderate (GFR 30–49 mL/min, f renal = 0.32 ), severe (GFR ≤30 mL/min, f renal = 0.19 ), derived from KDIGO guidelines and related modeling studies [ , ].",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Scaling factor for renal function (f renal)",
+      "symbol": "f renal",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.32",
+        "value": 0.32,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Several key factors influencing pharmacokinetic and pharmacodynamic variability were implemented as scaling parameters. Renal impairment was modeled as a progressive decline in renal function using the factor f renal , which was applied to glomerular filtration rate (GFR) and renal clearance of dapagliflozin and D3G. Scaling values were mapped from KDIGO categories: normal (eGFR ≥ 90 mL/min, f renal = 1.00 ), mild (GFR 50–89 mL/min, f renal = 0.69 ), moderate (GFR 30–49 mL/min, f renal = 0.32 ), severe (GFR ≤30 mL/min, f renal = 0.19 ), derived from KDIGO guidelines and related modeling studies [ , ].",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Scaling factor for renal function (f renal)",
+      "symbol": "f renal",
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.19",
+        "value": 0.19,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.2. Computational Model",
+        "source_quote": "Several key factors influencing pharmacokinetic and pharmacodynamic variability were implemented as scaling parameters. Renal impairment was modeled as a progressive decline in renal function using the factor f renal , which was applied to glomerular filtration rate (GFR) and renal clearance of dapagliflozin and D3G. Scaling values were mapped from KDIGO categories: normal (eGFR ≥ 90 mL/min, f renal = 1.00 ), mild (GFR 50–89 mL/min, f renal = 0.69 ), moderate (GFR 30–49 mL/min, f renal = 0.32 ), severe (GFR ≤30 mL/min, f renal = 0.19 ), derived from KDIGO guidelines and related modeling studies [ , ].",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Reduction in absorption rate constant in fed state",
+      "symbol": null,
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "70%",
+        "value": 70.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.3. Model Assumptions",
+        "source_quote": "Food effects were incorporated by assuming a reduction in the absorption rate constant in the fed state. Specifically, the absorption rate was reduced by 70% relative to the fasted state (from 1.0 to 0.3).",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant in fasted state",
+      "symbol": null,
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "1.0",
+        "value": 1.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.3. Model Assumptions",
+        "source_quote": "Food effects were incorporated by assuming a reduction in the absorption rate constant in the fed state. Specifically, the absorption rate was reduced by 70% relative to the fasted state (from 1.0 to 0.3).",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Absorption rate constant in fed state",
+      "symbol": null,
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "0.3",
+        "value": 0.3,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": null,
+        "unit_inherited": false,
+        "value_qualifier": null
+      },
+      "provenance": {
+        "source_location": "Section 2.3. Model Assumptions",
+        "source_quote": "Food effects were incorporated by assuming a reduction in the absorption rate constant in the fed state. Specifically, the absorption rate was reduced by 70% relative to the fasted state (from 1.0 to 0.3).",
+        "parameter_status": "Assumed",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Half-life of dapagliflozin",
+      "symbol": null,
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "approximately 13 h",
+        "value": 13.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "h",
+        "unit_inherited": false,
+        "value_qualifier": "approximately"
+      },
+      "provenance": {
+        "source_location": "Section 1. Introduction",
+        "source_quote": "The pharmacokinetics (PK) of dapagliflozin are well characterized. It is rapidly absorbed, reaching peak plasma concentrations within 2 h, has a half-life of approximately 13 h, and an oral bioavailability of about 78%.",
+        "parameter_status": "Measured",
+        "confidence": "high"
+      }
+    },
+    {
+      "needs_review": false,
+      "parameter_name": "Oral bioavailability of dapagliflozin",
+      "symbol": null,
+      "context": {
+        "compound": "dapagliflozin",
+        "subject_species": null,
+        "life_stage": null,
+        "compartment": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "needs_review": false,
+        "value_text": "about 78%",
+        "value": 78.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit": "%",
+        "unit_inherited": false,
+        "value_qualifier": "about"
+      },
+      "provenance": {
+        "source_location": "Section 1. Introduction",
+        "source_quote": "The pharmacokinetics (PK) of dapagliflozin are well characterized. It is rapidly absorbed, reaching peak plasma concentrations within 2 h, has a half-life of approximately 13 h, and an oral bioavailability of about 78%.",
+        "parameter_status": "Measured",
+        "confidence": "high"
+      }
+    }
+  ],
+  "ingestion_source": "europe_pmc",
   "ingestion_source_type": "published",
   "laya_filter_summary": {
     "model_type_triage": "pbpk",
@@ -26,13 +467,62 @@
   },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.01,
-    "total_parameters": 0,
-    "flagged_count": 0,
+    "elapsed_ms": 0.16,
+    "total_parameters": 13,
+    "flagged_count": 6,
     "error_count": 0,
-    "warning_count": 0,
-    "clean": true,
-    "summary": "All 0 parameters passed Tier 1 verification.",
-    "flags": []
+    "warning_count": 6,
+    "clean": false,
+    "summary": "6/13 parameters flagged: 6 warning(s). Elapsed: 0.2ms.",
+    "flags": [
+      {
+        "param_index": 4,
+        "param_name": "Scaling factor for renal function (f renal)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.00' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Scaling factor for renal function (f renal)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.69' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 6,
+        "param_name": "Scaling factor for renal function (f renal)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.32' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 7,
+        "param_name": "Scaling factor for renal function (f renal)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.19' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 9,
+        "param_name": "Absorption rate constant in fasted state",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 10,
+        "param_name": "Absorption rate constant in fed state",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.3' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
   }
 }

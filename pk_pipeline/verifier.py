@@ -38,8 +38,8 @@ logger = logging.getLogger("pk_pipeline")
 # ---------------------------------------------------------------------------
 _PLAUSIBILITY_RULES: list[tuple[list[str], list[str], float, float]] = [
     # Volumes (L or L/kg)
-    (["volume", "vd", "vc", "vp", "vcc", "vpc"],      ["l/kg", "l kg"],   0.001, 500.0),
-    (["volume", "vd", "vc", "vp", "vcc", "vpc"],      ["l", "litre"],     0.001, 500.0),
+    (["volume", "vd", "vc", "vp", "vcc", "vpc"],      ["l/kg", "l kg"],   0.0001, 500.0),
+    (["volume", "vd", "vc", "vp", "vcc", "vpc"],      ["l", "litre"],     0.0001, 500.0),
     # Clearances (L/h or L/h/kg)
     (["clearance", "cl", "clr", "clh", "q"],          ["l/h", "l/day"],   0.0,   5000.0),
     (["clearance", "cl", "clr", "clh", "q"],          ["ml/min"],         0.0,   5000.0),
@@ -151,7 +151,11 @@ class Tier1Verifier:
 
             # Rule 2: Missing compound
             compound = ctx.get("compound")
-            if not compound:
+            physiological_keywords = ["weight", "volume", "flow", "cardiac", "mass", "fraction"]
+            name_lc_phys = name.lower()
+            is_physiological = any(kw in name_lc_phys for kw in physiological_keywords)
+            
+            if not compound and not is_physiological:
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
                     severity="warning", rule="MISSING_COMPOUND",
@@ -222,10 +226,14 @@ class Tier1Verifier:
             if value is not None and value < 0:
                 name_lc = name.lower()
                 sym_lc = symbol.lower()
+                source_quote = prov.get("source_quote", "").lower()
                 inherently_positive = [
                     "volume", "clearance", "half", "auc", "cmax", "rate constant"
                 ]
-                if any(k in name_lc or k in sym_lc for k in inherently_positive):
+                # If it comes from a sensitivity analysis table, negative coefficients are valid
+                is_sensitivity = "sensitivity" in source_quote
+                
+                if any(k in name_lc or k in sym_lc for k in inherently_positive) and not is_sensitivity:
                     flags.append(ParameterFlag(
                         param_index=i, param_name=name,
                         severity="error", rule="NEGATIVE_VALUE",

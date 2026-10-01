@@ -24,7 +24,7 @@
   },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.01,
+    "elapsed_ms": 0.0,
     "total_parameters": 0,
     "flagged_count": 0,
     "error_count": 0,

@@ -145,6 +145,22 @@ class Provenance(BaseModel):
 
 # ─── Top-Level Parameter and Result ────────────────────────────────────────────
 
+class DoseEvent(BaseModel):
+    dose: float = Field(..., description="Amount of dose administered")
+    dose_unit: str = Field(..., description="Unit of dose (e.g., 'mg/kg', 'mg', 'μg/kg')")
+    route: str = Field(..., description="Route of administration (e.g., 'Oral', 'IV', 'Inhalation', 'Dermal')")
+    schedule: str = Field(..., description="Dosing schedule (e.g., 'single', 'repeated', 'continuous')")
+    interval_h: Optional[float] = Field(None, description="Hours between doses (if repeated)")
+    n_doses: Optional[int] = Field(None, description="Number of doses (if repeated)")
+    body_weight: Optional[float] = Field(None, description="Body weight in kg (if stated in Methods)")
+    duration_h: Optional[float] = Field(None, description="Total simulation duration in hours (if stated)")
+    source_quote: Optional[str] = Field(None, description="Verbatim quote from Methods section")
+
+class DosingExtraction(BaseModel):
+    dosing: List[DoseEvent] = Field(default_factory=list, description="All dosing events described in the text.")
+
+
+
 class ExtractedParameter(BaseModel):
     needs_review: bool = Field(
         False,
@@ -172,4 +188,8 @@ class ExtractedPage(BaseModel):
         default_factory=list,
         description="All PK model parameters explicitly present on this page. "
                     "An empty list is correct if the page contains no PK data."
+    )
+    dosing: Optional[List[DoseEvent]] = Field(
+        default=None,
+        description="Dosing events extracted from the methods section."
     )

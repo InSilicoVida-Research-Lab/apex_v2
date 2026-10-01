@@ -263,6 +263,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
                 "structure": None,
                 "parameters": [],
+                "dosing": [],
                 "ingestion_source": res.get("source"),
                 "ingestion_source_type": res.get("source_type", "published"),
             }
@@ -400,6 +401,18 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 "retained_chunks": laya_stats["retained"]
             }
             print_laya_summary(laya_stats, doc_triage_type)
+
+            print("Step: Extracting Dosing Events from Methods...")
+            try:
+                doc = pymupdf.open(pdf_path)
+                methods_text = ""
+                for i in range(min(15, len(doc))):
+                    methods_text += doc[i].get_text() + "\n"
+                dosing_data = await get_extractor().extract_dosing_from_text(methods_text)
+                if dosing_data and dosing_data.dosing:
+                    final_document["dosing"] = [d.model_dump() for d in dosing_data.dosing]
+            except Exception as e:
+                print(f"  -> Failed to extract dosing: {e}")
 
             logger.info("Successfully completed XML extraction fast-path.")
             processed = post_process_document(final_document, pdf_path)
@@ -728,7 +741,8 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
         "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
         "structure": None,
-        "parameters": []
+        "parameters": [],
+        "dosing": []
     }
     # Use a Semaphore to limit concurrency to 2 pages at a time to prevent GPU OOM deadlocks
     sem = asyncio.Semaphore(2)
@@ -765,6 +779,18 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         # Aggregate all parameters
         if extracted_page.parameters:
             final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
+            
+    print("Step: Extracting Dosing Events from Methods...")
+    try:
+        doc = pymupdf.open(pdf_path)
+        methods_text = ""
+        for i in range(min(15, len(doc))):
+            methods_text += doc[i].get_text() + "\n"
+        dosing_data = await get_extractor().extract_dosing_from_text(methods_text)
+        if dosing_data and dosing_data.dosing:
+            final_document["dosing"] = [d.model_dump() for d in dosing_data.dosing]
+    except Exception as e:
+        print(f"  -> Failed to extract dosing: {e}")
     
     logger.info("Successfully completed extraction pipeline.")
     processed = post_process_document(final_document, pdf_path)
