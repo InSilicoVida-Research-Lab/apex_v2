@@ -24,9 +24,12 @@ def run_replication(pdf_path, compound=None):
     with open(json_path, "r") as f:
         data = json.load(f)
         
-    params = data.get("parameters", [])
+    sys_params = data.get("system_specific_parameters", [])
+    cmpd_params = data.get("compound_specific_parameters", [])
+    params = sys_params + cmpd_params
+    
     if compound:
-        # Filter for Physiological parameters (compound=None or 'Physiological') and the specific compound
+        # Filter for Physiological parameters or the specific compound
         filtered_params = []
         for p in params:
             c = p.get("context", {}).get("compound")

@@ -133,109 +133,42 @@ class ColQwenRetriever:
 
 from .schemas import ExtractedPage, ExtractedParameter
 
-SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
+SYSTEM_PROMPT_TEMPLATE = """You are an OECD GD 331 compliant pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below.
 
-## THE SINGLE MOST IMPORTANT RULE
-
-Extract only what is visually present on this page. Never supply a parameter, value, species, compound, or metadata field from general pharmacological knowledge, typical values, or what similar papers usually report. If a piece of information is not legible on this page, the correct output is to omit it or set it to null — not to estimate it, not to infer it, not to borrow a "typical" value from your training data.
-
-Concretely: if this page does not contain the words "cardiac output" (or an unambiguous synonym) attached to a number and a unit, you must not output a cardiac output parameter — even though cardiac output is one of the most common PBPK parameters in the literature. The same applies to every parameter type. You have seen thousands of PBPK papers reporting cardiac output, fraction unbound, and tissue partition coefficients — resist the pull to reproduce that pattern here. This specific paper may not report any of those, and may not even be a physiologically based model at all.
+## THE SINGLE MOST IMPORTANT RULE (NULL POLICY)
+Extract only what is visually present on this page. Never supply a parameter, value, species, compound, or metadata field from general pharmacological knowledge. If a piece of information is not legible or not explicitly stated on this page, you MUST use 'not_reported', 'unclear', or 'not_applicable'. Do not leave it null if a string is expected, and do not invent a placeholder.
 
 ## STEP 0 — CLASSIFY THE MODEL TYPE BEFORE EXTRACTING ANYTHING
-
 Before extracting any parameter, determine from the page text which of the following the paper is describing:
-
-- **pbpk**: A true physiologically based PK (PBPK) model where compartments correspond to real organs or tissues (liver, kidney, fat, muscle, kidney filtrate/tubule). Parameters include organ blood flows, tissue volumes, or tissue:plasma partition coefficients. A renal filtration/resorption model (Tm, Kt, GFR) is a hallmark of PBPK.
-- **simple_empirical_compartmental**: The authors explicitly state the model is not physiologically rigorous. Compartments carry generic names ("central", "peripheral", "deep") and parameters are generic first-order rate constants (k10, k12, k21) or apparent volumes (Vd, CL/F) with no physiological meaning assigned. Keywords: "apparent", "not intended to be physiologically rigorous", "empirical".
+- **pbpk**: A true physiologically based PK (PBPK) model where compartments correspond to real organs or tissues.
+- **simple_empirical_compartmental**: The authors explicitly state the model is not physiologically rigorous (e.g. 1, 2, or 3 compartment models).
 - **not_applicable**: No PK model on this page at all (discussion, references, abstract only).
 
-IMPORTANT: A model that names compartments after organs AND uses saturable tubular resorption parameters (Tm, Kt, GFR, filtrate volume) IS a PBPK model, even if called a "compartmental" model by the authors for brevity. Do not classify as simple_empirical just because the paper uses the word "compartment".
-
-Watch for explicit author disclaimers. Only classify as simple_empirical if the authors themselves say the structure is not physiologically rigorous.
-
-## STEP 1 — LOCATE PK-RELEVANT CONTENT; EXCLUDE EVERYTHING ELSE
-
-Identify which regions of the page are genuine candidate sources of PK parameter data: results text, a labeled table of model or PK parameters, or a table caption/footnote.
-
-The following regions must NEVER be treated as a source of parameter data, even if they contain numbers that superficially resemble a schema field:
-
-- Author correspondence blocks (address, telephone, fax, email)
-- Article identifiers: DOI, PMID, ISSN, page numbers, volume/issue numbers
-- Running headers/footers and journal name banners
-- Funding statements, conflict-of-interest statements, publisher disclaimers
-- The reference list / bibliography
-- Sensitivity Analysis, Validation, and Results tables. Extract only intrinsic Model Input Parameters.
-- Any other bibliographic or administrative metadata
-
-If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is not a pharmacokinetic parameter under any circumstances, regardless of what unit or symbol it superficially resembles.
+## STEP 1 — EXTRACT BIOLOGICAL BASIS AND MODEL STRUCTURE
+If the text describes the model structure, extract the following:
+- **Model Context:** Origin (new, adapted, reused), purpose, and dose metric.
+- **Biological Basis:** Extract explicit quotes for any stated assumptions (e.g., 'well-stirred compartment').
+- **Model Structure:** List all compartment names. Specify if ODEs/equations are provided in the text or SI. Extract explicit allometric scaling rules (e.g., 'QC = QCC * BW^0.75').
+- **Metabolic Pathways:** Identify the parent compound, enzyme (e.g., CYP1A2), location, and kinetics type (clearance_based, michaelis_menten, etc.).
 
 ## STEP 2 — EXTRACT PARAMETERS
-
 For each PK parameter explicitly reported on the page, capture:
-
-- **parameter_name_original**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
-- **symbol_original**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
-- **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
-- **value / range_start / range_end**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null. Use `range_start` and `range_end` to capture ranges exactly as they appear (e.g. '34.5 to 31.9' means range_start=34.5, range_end=31.9).
-- **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
-- **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
-- **unit_original**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
-- **compound**: the specific chemical entity exactly as named on the page. **Extract parameters for ALL compounds present — if a table reports data for PFOS, PFOA, and PFHxS, you must capture entries for all three.**
-- **subject_species**: ONLY use actual species names like 'human', 'rat', 'mouse'. Do NOT put 'Mother', 'Fetus', or 'Infant' here!
-- **life_stage** or **population**: Use this for 'Mother', 'Fetus', 'Infant', 'Pregnant', 'Lactating', etc.
-- **source_location**: the table, figure, or section (e.g., "Table 1", "Table 3").
-- **source_quote**: a short, exact transcription of the specific cell(s). If you cannot produce a directly-traceable quote, omit the parameter.
+- **parameter_name_original**: The full descriptive name exactly as printed.
+- **symbol_original**: transcribed exactly as printed.
+- **value_text**: The exact printed text of the value, verbatim.
+- **value / range_start / range_end**: The primary numeric value and bounds.
+- **unit_original**: exactly as printed.
+- **compound**: the specific chemical entity exactly as named on the page.
+- **subject_species**: ONLY use actual species names like 'human', 'rat', 'mouse'.
+- **provenance.status**: MUST be one of 'measured_here', 'literature', 'in_vitro_ivive', 'predicted_qsar', 'fitted', 'assumed_default', or 'not_reported'.
 
 ## STEP 3 — HANDLE TABLE STRUCTURE CAREFULLY
-
-- **Group headers and Nested Rows**: Many tables use a super-header (e.g., "Blood flow to organ (fraction)") followed by indented rows (e.g., "Liver", "Kidney"). NEVER extract the super-header as an empty parameter. Instead, prepend the super-header to the row name to create a fully contextualized `parameter_name` (e.g., "Blood flow to organ (fraction) - Liver"). This ensures units and context are not lost.
-- **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
-- **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
-- **Per-species, Per-population, or Per-compound Grids**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'PFOA' vs 'PFOS'), you MUST extract a SEPARATE record for EVERY populated cell in the grid. DO NOT just extract the first column and ignore the rest! Map the column header to the appropriate `compound`, `life_stage`, or `population` field. Never average or merge values across columns.
-- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_start and range_end. Instead, create two distinct ExtractedParameter entries.
-- **Implied Species Transitions & Table Grouping**: You must group parameters into `parameter_blocks`. Pay strict attention to implied species changes! If physiological parameters begin repeating with new values, it indicates a transition to a new species (e.g., from Rat to Human). Look for sub-headers and create a new `ParameterBlock` with the updated `implied_species`.
-- **Inherited Units**: If a table header specifies a unit (e.g. "Volume (L)"), set `implied_unit` on the block so that all rows inherit it, rather than attaching the unit to the row name.
-- **Footnotes**: You MUST extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1, tissue-to-plasma partition coefficients) hidden in table footnotes as standalone parameters. These are critical model inputs.
-
-## STEP 4 — MODEL STRUCTURE / TOPOLOGY
-
-If the page shows a compartmental diagram (boxes and arrows) or mass-balance equations, extract the compartment names and their connections into the structure field. Use the names EXACTLY as labeled. NEVER omit a compartment (like 'plasma' or 'central') just to make the `listed_compartment_count` match the `reported_compartment_count`. If the author claims "9 compartments" but lists 10 (including plasma), list all 10 and set `count_consistency` to `inconsistent_in_source`. Extract absorption, metabolism, and elimination details into their dedicated sub-models with exact quotes as evidence.
-
-## STEP 4.5 — NON-PBPK DATA ROUTING
-- **Formulation Characterization**: Any physical, non-PK measurements of a drug formulation (e.g. contact angle, particle size, dissolution rate) MUST go into the `formulation_characterization` array, NOT `model_parameters`.
-- **Sensitivity Analysis**: Sensitivity coefficients (dimensionless outputs from a sensitivity analysis, often tables with negative values) MUST go into the `sensitivity_analysis` array! They are NOT model inputs.
-- **Mentions Without Values**: Any parameters that are named in the text (or where qualitative statements are made, like "Cmax was 2.5x higher") but lack absolute numeric values MUST go into `parameter_mentions_without_values` or `qualitative_findings`, NOT `model_parameters`.
-
-## STEP 5 — METADATA
-
-Populate title, authors, journal, and year ONLY if clearly legible on this specific page. Never infer the year from context elsewhere, and never substitute a generic placeholder ("Research Team", "Peer-Reviewed Journal") for a field you cannot read — use null instead. If this is not the title page, most or all metadata fields will correctly be null; that is expected, not a failure.
-
-## STEP 6 — CONFIDENCE
-
-Assign confidence using these concrete criteria, not a general impression of certainty:
-
-- **HIGH**: value, unit, and symbol are all printed together, unambiguously, in a single cell or sentence, with no inheritance or inference required.
-- **MEDIUM**: part of the entry required inheriting information from elsewhere on the page (a unit from a group header, a compound from table context several rows above).
-- **LOW**: any interpretive judgment was required (degraded text, ambiguous cell boundaries, an abbreviation you are not fully certain of).
-- **needs_review**: Set this boolean to `true` if a table cell is merged, if a range is highly ambiguous, if there are multiple conflicting footnotes, or if you are unsure how to bind the value to a specific species/compartment. Otherwise, set it to `false`.
-
-Never assign HIGH to an entry that required any inference beyond direct transcription.
-
-## STEP 7 — KNOWN FAILURE PATTERNS: DO NOT REPEAT THESE
-- Do not extract a fax number, phone number, or DOI as a parameter value.
-- Do not invent typical PBPK parameters if they are not explicitly printed on the page. However, you MUST extract ALL physiological parameters (e.g., cardiac output, tissue volumes, blood flows, fraction-unbound) that ARE explicitly printed in the table. 
-- If a parameter is a physiological constant (like liver volume) and does not specify a chemical compound, extract it and set the compound field to "Physiological".
-- Do not report multiple species (e.g., "Human, Rat") when only one appears on the page.
-- Do not rename the paper's own compartment names to generic equivalents.
-- Do not fill metadata gaps with a placeholder string — use null.
-
-## STEP 8 — SELF-CHECK BEFORE RETURNING
-
-Re-read every entry you are about to return and confirm you can point to the specific words or numbers on the page that produced it. Delete any entry you cannot directly justify this way. It is correct and expected to return an empty parameter_blocks list if the page contains no PK data — do not manufacture content to avoid an empty result.
+- **Group headers and Nested Rows**: Prepend super-headers to row names (e.g., "Blood flow to organ (fraction) - Liver").
+- **Per-species/Per-compound Grids**: Extract a SEPARATE record for EVERY populated cell in the grid.
+- **Implied Species Transitions**: Group parameters into `parameter_blocks` by species/context.
 
 ## OUTPUT FORMAT
-
-Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary, no explanation text before or after the JSON.
+Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
 {schema}
 """
@@ -571,6 +504,79 @@ class SGLangExtractor:
             return dosing_data
         except Exception as e:
             logger.error(f"Failed to parse SGLang dosing output: {e}\nRaw Output: {extracted_text}")
+            raise
+
+    async def evaluate_extracted_model(self, full_document_json: str) -> "EvaluatorJudgments":
+        """Tier 2 Pass: Evaluates the extracted JSON to derive regulatory judgments."""
+        from pk_pipeline.schemas import EvaluatorJudgments
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+            
+        import time
+        start_t = time.time()
+        logger.info(f"SGLang: [START] Running Tier 2 Evaluation Pass...")
+        
+        schema_json = json.dumps(EvaluatorJudgments.model_json_schema(), indent=2)
+        system_prompt = (
+            "You are an expert pharmacokinetic (PK) model evaluator working for a regulatory agency (like the FDA or EPA). "
+            "Your task is to evaluate the provided extracted PBPK model data (JSON format) and derive expert judgments "
+            "about the model's quality, assumptions, limitations, and reproducibility based on the OECD GD 331 framework.\n"
+            f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
+            "Output ONLY the JSON object, with no markdown formatting or extra text."
+        )
+        
+        user_instruction = f"Evaluate the following extracted PBPK model data strictly into the EvaluatorJudgments JSON schema:\n\n{full_document_json}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        
+        if getattr(self, "use_server", False):
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=3600)
+            async with aiohttp.ClientSession(timeout=timeout) as session:
+                payload = {
+                    "text": prompt_text,
+                    "sampling_params": {
+                        "max_new_tokens": 8000,
+                        "temperature": 0.0,
+                        "repetition_penalty": 1.0
+                    }
+                }
+                async with session.post("http://127.0.0.1:30001/generate", json=payload) as resp:
+                    result = await resp.json()
+                    extracted_text = result["text"]
+        else:
+            response = await self.engine.async_generate(
+                prompt=prompt_text,
+                sampling_params={
+                    "max_new_tokens": 8000,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0
+                }
+            )
+            extracted_text = response["text"] if isinstance(response, dict) else response.text
+        
+        if "</think>" in extracted_text:
+            extracted_text = extracted_text.split("</think>")[-1].strip()
+            
+        import re
+        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
+        if match:
+            extracted_text = match.group(1).strip()
+        else:
+            extracted_text = extracted_text.strip()
+            
+        try:
+            json_data = json.loads(extracted_text)
+            judgments = EvaluatorJudgments(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Tier 2 Evaluation complete in {duration:.2f}s.")
+            return judgments
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
             raise
 
 

@@ -415,15 +415,26 @@ def post_process_document(document, pdf_path):
 
     # 3. Classify each parameter using the 3-class taxonomy
     print("  -> Classifying parameters into physiological / biochemical / compound_specific...")
+    system_params = []
+    compound_params = []
+    
     for p in document.get("model_parameters", []):
         # Only override if not already set by VLM or block propagation
-        if not p.get("parameter_class"):
-            p["parameter_class"] = _classify_parameter_category(p)
+        cls = p.get("parameter_class") or _classify_parameter_category(p)
+        p["parameter_class"] = cls
+        if cls == "physiological":
+            system_params.append(p)
+        else: # biochemical or compound_specific
+            compound_params.append(p)
+            
+    document["system_specific_parameters"] = system_params
+    document["compound_specific_parameters"] = compound_params
+    
+    print(f"     physiological: {len(system_params)}  |  compound/biochemical: {len(compound_params)}")
 
-    n_phys  = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "physiological")
-    n_bio   = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "biochemical")
-    n_cmpd  = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "compound_specific")
-    print(f"     physiological: {n_phys}  |  biochemical: {n_bio}  |  compound_specific: {n_cmpd}")
+    # Remove the old flat list so the final JSON is cleanly split
+    if "model_parameters" in document:
+        del document["model_parameters"]
 
     return document
 
@@ -469,7 +480,10 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             final_document = {
                 "page_metadata": xml_data.get("metadata", {"title": None, "authors": None, "journal": None, "year": None}),
                 "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
+                "model_context": None,
+                "biological_basis": None,
                 "model_structure": None,
+                "metabolic_pathways": [],
                 "model_parameters": [],
                 "observed_data": [],
                 "simulated_data": [],
@@ -597,8 +611,14 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         if final_document["model_classification"]["model_type"] == "not_applicable":
                             final_document["model_classification"] = extracted_page.model_classification.model_dump()
 
+                    if extracted_page and extracted_page.model_context and not final_document["model_context"]:
+                        final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.biological_basis and not final_document["biological_basis"]:
+                        final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
                     if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
                         final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.metabolic_pathways:
+                        final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
 
                     if extracted_page.parameter_blocks:
                         for block in extracted_page.parameter_blocks:
@@ -817,7 +837,10 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         final_document = {
             "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
             "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-            "model_structure": None,
+            "model_context": None,
+                "biological_basis": None,
+                "model_structure": None,
+                "metabolic_pathways": [],
             "model_parameters": [],
             "observed_data": [],
             "simulated_data": [],
@@ -834,8 +857,14 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 if extracted_page and extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
                     if final_document["model_classification"]["model_type"] == "not_applicable":
                         final_document["model_classification"] = extracted_page.model_classification.model_dump()
-                if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
+                if extracted_page and extracted_page.model_context and not final_document["model_context"]:
+                        final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.biological_basis and not final_document["biological_basis"]:
+                        final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
                     final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.metabolic_pathways:
+                        final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
                 if extracted_page and extracted_page.parameter_blocks:
                     for block in extracted_page.parameter_blocks:
                         for p in block.parameters:
@@ -1010,7 +1039,10 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
     final_document = {
         "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
         "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-        "model_structure": None,
+        "model_context": None,
+                "biological_basis": None,
+                "model_structure": None,
+                "metabolic_pathways": [],
         "model_parameters": [],
         "observed_data": [],
         "simulated_data": [],
@@ -1047,9 +1079,16 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             if final_document["model_classification"]["model_type"] == "not_applicable":
                 final_document["model_classification"] = extracted_page.model_classification.model_dump()
         
+        # Merge model_context, biological_basis, structure, pathways
+        if extracted_page.model_context and not final_document["model_context"]:
+            final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
+        if extracted_page.biological_basis and not final_document["biological_basis"]:
+            final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
         # Merge structure (take the first one we find)
         if extracted_page.model_structure and not final_document["model_structure"]:
             final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+        if extracted_page.metabolic_pathways:
+            final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
             
         # Aggregate all parameters
         if extracted_page.parameter_blocks:
@@ -1090,6 +1129,14 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
     if verify:
         from pk_pipeline.verifier import verify_document
         verify_document(processed)
+        
+    print("Step: Running Tier 2 Evaluation Pass...")
+    try:
+        judgments = await get_extractor().evaluate_extracted_model(json.dumps(processed))
+        processed["evaluator_judgments"] = judgments.model_dump()
+    except Exception as e:
+        print(f"  -> Failed to run Tier 2 evaluation: {e}")
+        
     return processed
 
 import time

@@ -1,5 +1,6 @@
 from pydantic import BaseModel, Field
-from typing import List, Optional, Union
+from typing import List, Optional, Union, Literal
+from enum import Enum
 
 # ─── Request Schema ────────────────────────────────────────────────────────────
 
@@ -87,6 +88,7 @@ class QuantitativeData(BaseModel):
     range_end: Optional[float] = Field(None, description="End of a range. Preserves direction (e.g. '31.9').")
     variance: Optional[float] = Field(None, description="Variance/uncertainty numeric value from +/- notation.")
     variance_type: Optional[str] = Field(None, description="Type of variance as printed: 'SD', 'SE', '95% CI', '+/-'.")
+    value_qualifier: Optional[str] = Field(None, description="Qualifiers like 'Fixed', 'Assumed', 'Optimized', '<', '~'.")
     unit_original: Optional[str] = Field(None, description="Unit exactly as printed in the source (e.g., '1/h/kg^0.25'). NEVER convert or interpret.")
     unit_standardized: Optional[str] = Field(None, description="Standardized/normalized unit (e.g., 'h^-1 kg^-0.25'). MUST STRICTLY PRESERVE all SI prefixes (e.g. 'nmol' stays 'nmol', 'μL' stays 'μL', NEVER convert to 'mol' or 'L'). Null if not normalized.")
     normalization_basis: Optional[str] = Field(None, description="E.g., 'cardiac_output', 'body_weight', 'tissue_plasma_ratio'.")
@@ -120,6 +122,59 @@ class ConfidenceScores(BaseModel):
     formulation_confidence: Optional[str] = Field(None, description="'high', 'medium', 'low'")
     parameter_class_confidence: Optional[str] = Field(None, description="'high', 'medium', 'low'")
     provenance_confidence: Optional[str] = Field(None, description="'high', 'medium', 'low'")
+
+
+# ─── OECD GD 331 Context & Evaluation Classes ───────────────────────────────────
+
+class ProvenanceEnum(str, Enum):
+    MEASURED_HERE = "measured_here"
+    LITERATURE = "literature"
+    IN_VITRO_IVIVE = "in_vitro_ivive"
+    PREDICTED_QSAR = "predicted_qsar"
+    FITTED = "fitted"
+    ASSUMED_DEFAULT = "assumed_default"
+    NOT_REPORTED = "not_reported"
+
+class ModelContext(BaseModel):
+    model_origin: str = Field(description="Is this 'new', 'adapted from [cite]', or 'reused unchanged'? Use 'not_reported' if unclear.")
+    stated_purpose: str = Field(description="The authors' stated context of use (e.g., risk assessment). Use 'not_reported' if unclear.")
+    dose_metric: str = Field(description="What metric links to toxicity? (e.g., liver AUC of metabolite). Use 'not_reported' if unclear.")
+    
+class Assumption(BaseModel):
+    description: str = Field(description="The stated assumption (e.g., 'well-stirred compartment', 'flow-limited kinetics')")
+    evidence_quote: str = Field(description="Direct verbatim quote from the text where the assumption is stated.")
+    source_location: str = Field(description="Page or section where this assumption is located.")
+
+class BiologicalBasis(BaseModel):
+    adme_determinants: List[str] = Field(description="Physiological/physicochemical factors driving kinetics.")
+    stated_assumptions: List[Assumption] = Field(description="Explicit list of assumptions stated by the authors with direct quotes.")
+    specialized_mechanisms: List[str] = Field(description="e.g., renal reabsorption, enterohepatic recirculation. Or 'not_applicable'.")
+
+class ModelStructure(BaseModel):
+    reported_compartment_count: Union[int, str] = Field(description="Integer count, or 'not_reported'.")
+    compartments: List[str] = Field(description="List of all specific compartments modeled.")
+    equations_provided: Literal["text", "supplementary_info", "code_repo", "none"] = Field(
+        description="Where are the ODEs/equations provided?"
+    )
+    allometric_scaling_rules: List[str] = Field(description="Explicit scaling rules stated (e.g., 'QC = QCC * BW^0.75'). Empty list if none.")
+
+class MetabolicPathway(BaseModel):
+    parent_compound: str = Field(description="The chemical being metabolized.")
+    metabolite_produced: str = Field(description="The specific downstream metabolite. Use 'sink' if not explicitly tracked.")
+    enzyme: str = Field(description="Enzyme/pathway responsible (e.g., 'CYP1A2', 'glucuronidation'). Use 'unclear' if not stated.")
+    location: str = Field(description="Tissue/compartment where metabolism occurs (e.g., 'Liver', 'Gut').")
+    kinetics_type: Literal["clearance_based", "michaelis_menten", "michaelis_menten_with_inhibition", "hill", "mixed", "not_reported"] = Field(
+        description="The mathematical form of the metabolic kinetics."
+    )
+    ivive_used: bool = Field(description="True if In Vitro to In Vivo Extrapolation was used for this pathway.")
+
+class EvaluatorJudgments(BaseModel):
+    author_stated_limitations: List[str] = Field(description="Limitations explicitly noted by authors with quotes.")
+    missing_standard_assumptions: List[str] = Field(description="Standard assumptions that should be present but are missing from the text.")
+    data_independence_assessment: str = Field(description="Were the evaluation datasets truly independent of the calibration data? Provide rationale.")
+    overall_confidence: Literal["high", "medium", "low"] = Field(description="Overall confidence in the reproducibility of this model.")
+
+
 
 # ─── Extracted Parameter ───────────────────────────────────────────────────────
 
@@ -236,7 +291,10 @@ class ParameterBlock(BaseModel):
 class ExtractedPage(BaseModel):
     page_metadata: PageMetadata
     model_classification: ModelClassification
-    model_structure: Optional[Structure] = Field(None, description="Compartmental model structure.")
+    model_context: Optional[ModelContext] = None
+    biological_basis: Optional[BiologicalBasis] = None
+    model_structure: Optional[ModelStructure] = Field(None, description="Compartmental model structure.")
+    metabolic_pathways: List[MetabolicPathway] = Field(default_factory=list)
     parameter_blocks: List[ParameterBlock] = Field(default_factory=list, description="Parameters grouped by table blocks/sections. PBPK input parameters ONLY.")
     observed_data: List[ValidationResult] = Field(default_factory=list, description="Observed PK metrics (e.g., observed Cmax, AUC).")
     simulated_data: List[ValidationResult] = Field(default_factory=list, description="Simulated PK metrics (e.g., simulated Cmax, AUC).")
