@@ -173,32 +173,38 @@ If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is n
 
 For each PK parameter explicitly reported on the page, capture:
 
-- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
-- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
+- **parameter_name_original**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
+- **symbol_original**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
 - **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
-- **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
+- **value / range_start / range_end**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null. Use `range_start` and `range_end` to capture ranges exactly as they appear (e.g. '34.5 to 31.9' means range_start=34.5, range_end=31.9).
 - **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
 - **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
-- **unit**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
+- **unit_original**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
 - **compound**: the specific chemical entity exactly as named on the page. **Extract parameters for ALL compounds present — if a table reports data for PFOS, PFOA, and PFHxS, you must capture entries for all three.**
-- **subject_species**: only if explicitly stated. Do not default to "human".
-- **population**: only if explicitly stated. Leave null otherwise.
+- **subject_species**: ONLY use actual species names like 'human', 'rat', 'mouse'. Do NOT put 'Mother', 'Fetus', or 'Infant' here!
+- **life_stage** or **population**: Use this for 'Mother', 'Fetus', 'Infant', 'Pregnant', 'Lactating', etc.
 - **source_location**: the table, figure, or section (e.g., "Table 1", "Table 3").
 - **source_quote**: a short, exact transcription of the specific cell(s). If you cannot produce a directly-traceable quote, omit the parameter.
 
 ## STEP 3 — HANDLE TABLE STRUCTURE CAREFULLY
 
-- **Group headers**: a row spanning the full table width and styled differently from data rows (italic, bold, or otherwise set apart) is a group header, not a parameter — e.g., "Fractional constants" or "Elimination constants (1/min)" as its own row above several parameter rows. Never extract the group header itself as a parameter; apply any unit or context it carries down to the rows beneath it.
+- **Group headers and Nested Rows**: Many tables use a super-header (e.g., "Blood flow to organ (fraction)") followed by indented rows (e.g., "Liver", "Kidney"). NEVER extract the super-header as an empty parameter. Instead, prepend the super-header to the row name to create a fully contextualized `parameter_name` (e.g., "Blood flow to organ (fraction) - Liver"). This ensures units and context are not lost.
 - **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
 - **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
-- **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
-- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_low and range_high. Instead, create two distinct ExtractedParameter entries and map the values to their respective formulations in the BiologicalContext.
-- **Section Headers**: Pay strict attention to sub-headers spanning the table (e.g., 'Rat' vs. 'Human'). Ensure that all parameters following a species sub-header are assigned the correct subject_species until a new sub-header appears.
-- **Footnotes**: Extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1) hidden in table footnotes as standalone parameters.
+- **Per-species, Per-population, or Per-compound Grids**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'PFOA' vs 'PFOS'), you MUST extract a SEPARATE record for EVERY populated cell in the grid. DO NOT just extract the first column and ignore the rest! Map the column header to the appropriate `compound`, `life_stage`, or `population` field. Never average or merge values across columns.
+- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_start and range_end. Instead, create two distinct ExtractedParameter entries.
+- **Implied Species Transitions & Table Grouping**: You must group parameters into `parameter_blocks`. Pay strict attention to implied species changes! If physiological parameters begin repeating with new values, it indicates a transition to a new species (e.g., from Rat to Human). Look for sub-headers and create a new `ParameterBlock` with the updated `implied_species`.
+- **Inherited Units**: If a table header specifies a unit (e.g. "Volume (L)"), set `implied_unit` on the block so that all rows inherit it, rather than attaching the unit to the row name.
+- **Footnotes**: You MUST extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1, tissue-to-plasma partition coefficients) hidden in table footnotes as standalone parameters. These are critical model inputs.
 
 ## STEP 4 — MODEL STRUCTURE / TOPOLOGY
 
-If the page shows a compartmental diagram (boxes and arrows) or mass-balance equations, extract the compartment names and their connections into the structure field, using the names EXACTLY as labeled — never substitute standard PBPK compartment names ("Central," "Peripheral," "Deep") for whatever the authors actually wrote, even if the topology looks similar in shape. Equations or diagrams containing no explicit numeric values belong in this structure field, not forced into parameter entries with fabricated values.
+If the page shows a compartmental diagram (boxes and arrows) or mass-balance equations, extract the compartment names and their connections into the structure field. Use the names EXACTLY as labeled. NEVER omit a compartment (like 'plasma' or 'central') just to make the `listed_compartment_count` match the `reported_compartment_count`. If the author claims "9 compartments" but lists 10 (including plasma), list all 10 and set `count_consistency` to `inconsistent_in_source`. Extract absorption, metabolism, and elimination details into their dedicated sub-models with exact quotes as evidence.
+
+## STEP 4.5 — NON-PBPK DATA ROUTING
+- **Formulation Characterization**: Any physical, non-PK measurements of a drug formulation (e.g. contact angle, particle size, dissolution rate) MUST go into the `formulation_characterization` array, NOT `model_parameters`.
+- **Sensitivity Analysis**: Sensitivity coefficients (dimensionless outputs from a sensitivity analysis, often tables with negative values) MUST go into the `sensitivity_analysis` array! They are NOT model inputs.
+- **Mentions Without Values**: Any parameters that are named in the text (or where qualitative statements are made, like "Cmax was 2.5x higher") but lack absolute numeric values MUST go into `parameter_mentions_without_values` or `qualitative_findings`, NOT `model_parameters`.
 
 ## STEP 5 — METADATA
 
@@ -225,7 +231,7 @@ Never assign HIGH to an entry that required any inference beyond direct transcri
 
 ## STEP 8 — SELF-CHECK BEFORE RETURNING
 
-Re-read every entry you are about to return and confirm you can point to the specific words or numbers on the page that produced it. Delete any entry you cannot directly justify this way. It is correct and expected to return an empty parameters list if the page contains no PK data — do not manufacture content to avoid an empty result.
+Re-read every entry you are about to return and confirm you can point to the specific words or numbers on the page that produced it. Delete any entry you cannot directly justify this way. It is correct and expected to return an empty parameter_blocks list if the page contains no PK data — do not manufacture content to avoid an empty result.
 
 ## OUTPUT FORMAT
 
@@ -244,7 +250,7 @@ Your task is strictly to extract the model structure, compartments, and connecti
 3. Fill out the `structure` object with `compartments` and `connections`:
    - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
    - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
-4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+4. Return an EMPTY `parameter_blocks` array (`"parameter_blocks": []`). Your only goal is to fill out the `model_structure` field and `model_classification`.
 5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
 {schema}
@@ -392,7 +398,8 @@ class SGLangExtractor:
             extracted_page = ExtractedPage(**json_data)
             duration = time.time() - start_t
             title_log = f" ({chunk_title})" if chunk_title else ""
-            logger.info(f"SGLang: [END] Image extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
+            n_params = sum(len(b.parameters) for b in extracted_page.parameter_blocks) if extracted_page.parameter_blocks else 0
+            logger.info(f"SGLang: [END] Image extraction{title_log} complete in {duration:.2f}s. Found {n_params} parameters.")
             return extracted_page
         except Exception as e:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
@@ -486,7 +493,8 @@ class SGLangExtractor:
             extracted_page = ExtractedPage(**json_data)
             duration = time.time() - start_t
             title_log = f" ({chunk_title})" if chunk_title else ""
-            logger.info(f"SGLang: [END] Text extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
+            n_params = sum(len(b.parameters) for b in extracted_page.parameter_blocks) if extracted_page.parameter_blocks else 0
+            logger.info(f"SGLang: [END] Text extraction{title_log} complete in {duration:.2f}s. Found {n_params} parameters.")
             return extracted_page
         except Exception as e:
             logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")

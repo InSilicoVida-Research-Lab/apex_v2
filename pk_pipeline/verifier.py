@@ -87,19 +87,26 @@ class VerificationReport:
     tier: int                              # 1 = rule-based only, 2 = +LLM critic
     elapsed_ms: float = 0.0
     total_parameters: int = 0
-    flagged_count: int = 0
+    parameters_with_flags: int = 0        # distinct parameters that have at least one flag
+    total_flags: int = 0                  # total number of individual flag instances
     error_count: int = 0
     warning_count: int = 0
     flags: list = field(default_factory=list)
     summary: str = ""
     clean: bool = True                    # True if no errors/warnings found
 
+    # Keep flagged_count as a property for backward compat
+    @property
+    def flagged_count(self) -> int:
+        return self.total_flags
+
     def to_dict(self) -> dict:
         return {
             "tier": self.tier,
             "elapsed_ms": round(self.elapsed_ms, 2),
             "total_parameters": self.total_parameters,
-            "flagged_count": self.flagged_count,
+            "parameters_with_flags": self.parameters_with_flags,
+            "total_flags": self.total_flags,
             "error_count": self.error_count,
             "warning_count": self.warning_count,
             "clean": self.clean,
@@ -130,12 +137,31 @@ class Tier1Verifier:
 
     def verify(self, document: dict) -> VerificationReport:
         t0 = time.monotonic()
-        params: list[dict] = document.get("parameters", [])
+        params: list[dict] = document.get("model_parameters", [])
         flags: list[ParameterFlag] = []
+        
+        def get_composite_key(p_dict: dict) -> tuple:
+            ctx = p_dict.get("context", {})
+            species = (ctx.get("species") or "").lower()
+            organ = (ctx.get("organ") or "").lower()
+            formulations = tuple(sorted(ctx.get("formulation") or []))
+            compound = (ctx.get("compound") or "").lower()
+            life_stage = (ctx.get("life_stage") or "").lower()
+            population = (ctx.get("population") or "").lower()
+            
+            p_class = (p_dict.get("parameter_class") or "").lower()
+            p_subclass = (p_dict.get("parameter_subclass") or "").lower()
+            p_name = (p_dict.get("parameter_name_standardized") or p_dict.get("parameter_name_original") or "").lower()
+            
+            return (compound, species, life_stage, population, formulations, p_class, p_subclass, organ, p_name)
+
+        seen_keys = {}
 
         for i, p in enumerate(params):
-            name = p.get("parameter_name", "")
-            symbol = p.get("symbol", "") or ""
+            name_orig = p.get("parameter_name_original", "")
+            name_std = p.get("parameter_name_standardized", "")
+            name = name_std or name_orig or ""
+            symbol = p.get("symbol_original", "") or p.get("symbol_standardized", "") or ""
             ctx = p.get("context", {}) or {}
             qdata = p.get("quantitative_data", {}) or {}
             prov = p.get("provenance", {}) or {}
@@ -145,26 +171,25 @@ class Tier1Verifier:
                 flags.append(ParameterFlag(
                     param_index=i, param_name="<UNNAMED>",
                     severity="error", rule="MISSING_NAME",
-                    message="parameter_name is empty or null.",
+                    message="parameter_name_original is empty or null.",
                     suggested_fix="Provide a descriptive name or the printed symbol."
                 ))
 
             # Rule 2: Missing compound
             compound = ctx.get("compound")
-            physiological_keywords = ["weight", "volume", "flow", "cardiac", "mass", "fraction"]
-            name_lc_phys = name.lower()
-            is_physiological = any(kw in name_lc_phys for kw in physiological_keywords)
+            p_class = (p.get("parameter_class") or "").lower()
+            is_physiological = "physiological" in p_class
             
             if not compound and not is_physiological:
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
                     severity="warning", rule="MISSING_COMPOUND",
-                    message="context.compound is null; cannot attribute this parameter to a chemical.",
+                    message="context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
                     suggested_fix="Infer from paper title/abstract or mark as unknown."
                 ))
 
             # Rule 3: Missing unit when value exists
-            unit = qdata.get("unit")
+            unit = qdata.get("unit_standardized") or qdata.get("unit_original")
             value_raw = qdata.get("value")
             value = None
             if value_raw is not None:
@@ -184,9 +209,10 @@ class Tier1Verifier:
             # Rule 4: value vs value_text mismatch (>5% relative error)
             if value is not None and value_text:
                 try:
-                    # Strip any trailing letter-footnotes like '5a' -> '5'
-                    cleaned = re.sub(r"[^0-9.\-eE+]", "", str(value_text).split()[0])
-                    if cleaned:
+                    # Handle unicode minus sign and strip trailing letter-footnotes
+                    text_normalized = str(value_text).replace("−", "-").split()[0]
+                    cleaned = re.sub(r"[^0-9.\-eE+]", "", text_normalized)
+                    if cleaned and cleaned != "-":
                         parsed = float(cleaned)
                         if abs(parsed - value) > abs(parsed) * 0.05 + 1e-9:
                             flags.append(ParameterFlag(
@@ -222,6 +248,32 @@ class Tier1Verifier:
                             ))
                         break
 
+            # Rule 5.5: Deterministic Unit Validation based on subclass
+            p_subclass = (p.get("parameter_subclass") or "").lower()
+            unit_lc = (unit or "").lower()
+            
+            unit_dictionary = {
+                "blood_flow_fraction": ["dimensionless", "fraction", "ratio", "none", ""],
+                "organ_volume_fraction": ["dimensionless", "fraction", "ratio", "none", ""],
+                "partition_coefficient": ["dimensionless", "fraction", "ratio", "none", ""],
+                "fraction_unbound": ["dimensionless", "fraction", "ratio", "none", ""],
+                "clearance": ["l/h", "ml/min", "μl/h/kg^0.25", "ml/min/kg", "l/h/kg"],
+                "rate_constant": ["1/h", "1/min", "h-1", "min-1", "1/h/kg^0.25"],
+                "vmax": ["nmol/h/kg^0.75", "pmol/min/mg", "nmol/min/mg", "mg/h"],
+                "km": ["μmol/l", "umol/l", "mg/l", "ng/ml", "μm"]
+            }
+            
+            for required_subclass, allowed_units in unit_dictionary.items():
+                if required_subclass in p_subclass:
+                    if unit_lc and not any(allowed in unit_lc for allowed in allowed_units):
+                        flags.append(ParameterFlag(
+                            param_index=i, param_name=name,
+                            severity="error", rule="INVALID_UNIT_DIMENSION",
+                            message=f"Subclass '{p_subclass}' expects dimensional signature like {allowed_units}, but VLM assigned '{unit}'.",
+                            suggested_fix="Strip hallucinated unit or force standard dimensional unit."
+                        ))
+                    break
+
             # Rule 6: Negative value for inherently positive parameters
             if value is not None and value < 0:
                 name_lc = name.lower()
@@ -241,19 +293,19 @@ class Tier1Verifier:
                         suggested_fix="Check for sign errors or inverted table row."
                     ))
 
-            # Rule 7: Inverted range (range_low > range_high)
+            # Rule 7: Missing range bound
             try:
-                r_lo = float(qdata.get("range_low")) if qdata.get("range_low") is not None else None
-                r_hi = float(qdata.get("range_high")) if qdata.get("range_high") is not None else None
+                r_start = float(qdata.get("range_start")) if qdata.get("range_start") is not None else None
+                r_end = float(qdata.get("range_end")) if qdata.get("range_end") is not None else None
             except (ValueError, TypeError):
-                r_lo, r_hi = None, None
+                r_start, r_end = None, None
 
-            if r_lo is not None and r_hi is not None and r_lo > r_hi:
+            if (r_start is not None and r_end is None) or (r_start is None and r_end is not None):
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
-                    severity="error", rule="INVERTED_RANGE",
-                    message=f"range_low={r_lo} > range_high={r_hi}.",
-                    suggested_fix="Swap low and high values."
+                    severity="warning", rule="INCOMPLETE_RANGE",
+                    message="One range bound is populated but the other is null.",
+                    suggested_fix="Check if the source has a complete range or if this is a single value."
                 ))
 
             # Rule 8: Placeholder compound strings
@@ -282,50 +334,39 @@ class Tier1Verifier:
                     suggested_fix="Add verbatim text from the source cell or sentence."
                 ))
 
-            # Rule 10: Exact duplicate detection
-            for j in range(i + 1, len(params)):
-                p2 = params[j]
-                name2 = p2.get("parameter_name", "")
-                ctx2 = p2.get("context", {}) or {}
-                compound2 = ctx2.get("compound", "")
-                val2_raw = (p2.get("quantitative_data", {}) or {}).get("value")
-                val2 = None
-                if val2_raw is not None:
-                    try:
-                        val2 = float(val2_raw)
-                    except (ValueError, TypeError):
-                        pass
-
-                if (
-                    name.lower() == name2.lower()
-                    and compound
-                    and compound == compound2
-                    and value is not None
-                    and val2 is not None
-                    and abs(value - val2) < 1e-9
-                ):
+            # Rule 10: Semantic composite key duplicate/conflict detection
+            comp_key = get_composite_key(p)
+            if comp_key in seen_keys:
+                j, val_prev = seen_keys[comp_key]
+                if value is not None and val_prev is not None and abs(value - val_prev) < 1e-9:
                     flags.append(ParameterFlag(
                         param_index=i, param_name=name,
                         severity="warning", rule="DUPLICATE_ENTRY",
-                        message=(
-                            f"Exact duplicate of parameter at index {j} "
-                            f"(same name, compound='{compound}', value={value})."
-                        ),
-                        suggested_fix=(
-                            "Deduplicate; keep only the entry with higher provenance confidence."
-                        )
+                        message=f"Exact semantic duplicate of parameter at index {j} (key: {comp_key}, value={value}).",
+                        suggested_fix="Deduplicate; keep only the entry with higher provenance confidence."
                     ))
+                else:
+                    flags.append(ParameterFlag(
+                        param_index=i, param_name=name,
+                        severity="error", rule="CONFLICTING_ENTRY",
+                        message=f"Semantic conflict with parameter at index {j}. Same context key: {comp_key}, but values differ ({value} vs {val_prev}).",
+                        suggested_fix="Check if context (e.g. formulation or species) is missing, causing them to collide."
+                    ))
+            else:
+                seen_keys[comp_key] = (i, value)
 
         # Build report
         errors   = [f for f in flags if f.severity == "error"]
         warnings = [f for f in flags if f.severity == "warning"]
         elapsed  = (time.monotonic() - t0) * 1000
+        flagged_indices = {f.param_index for f in flags}
 
         report = VerificationReport(
             tier=1,
             elapsed_ms=elapsed,
             total_parameters=len(params),
-            flagged_count=len(flags),
+            parameters_with_flags=len(flagged_indices),
+            total_flags=len(flags),
             error_count=len(errors),
             warning_count=len(warnings),
             flags=flags,
@@ -397,7 +438,7 @@ Rules:
 - verdict="reject" → The parameter is hallucinated, has no traceable source, or is
                      so corrupted it cannot be salvaged.
 - corrected_fields keys use dot notation: "context.compound", "quantitative_data.value",
-  "quantitative_data.unit", "provenance.source_quote", etc.
+  "quantitative_data.unit_original", "quantitative_data.unit_standardized", "provenance.source_quote", etc.
 - Keep reasoning under 80 words.
 - NEVER invent data. If you cannot determine the correct value, use verdict="ok"
   (leave the needs_review flag) rather than guessing.
@@ -430,7 +471,27 @@ def _apply_corrected_fields(param: dict, corrected_fields: dict) -> dict:
     """
     import copy
     result = copy.deepcopy(param)
+    
+    # Common schema mappings in case LLM forgets the prefix
+    key_mappings = {
+        "unit": "quantitative_data.unit_original",
+        "unit_original": "quantitative_data.unit_original",
+        "unit_standardized": "quantitative_data.unit_standardized",
+        "value": "quantitative_data.value",
+        "value_text": "quantitative_data.value_text",
+        "range_start": "quantitative_data.range_start",
+        "range_end": "quantitative_data.range_end",
+        "compound": "context.compound",
+        "species": "context.species",
+        "formulation": "context.formulation",
+        "parameter_name": "parameter_name_original",
+        "symbol": "symbol_original",
+    }
+    
     for dotkey, val in corrected_fields.items():
+        if dotkey in key_mappings:
+            dotkey = key_mappings[dotkey]
+            
         parts = dotkey.split(".")
         obj = result
         for part in parts[:-1]:
@@ -514,7 +575,7 @@ class Tier2LLMCritic:
         import time as _time
 
         t0 = _time.monotonic()
-        params = document.get("parameters", [])
+        params = document.get("model_parameters", [])
 
         # Build a map: param_index -> [flags]
         target_severities = {"error"}

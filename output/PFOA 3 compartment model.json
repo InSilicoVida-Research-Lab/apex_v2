@@ -11,623 +11,2393 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "The table includes physiological parameters such as body weight (BW), glomerular filtration rate (GFRC), and tissue volumes (VLC, VfilC), as well as chemical-specific parameters involving saturable transport (Vmax_apical, Km_apical) and renal handling (KbileC, KurineC), indicating a physiologically based pharmacokinetic (PBPK) model."
+    "evidence_quote": null
   },
-  "structure": {
-    "compartments": [
-      {
-        "id": "central",
-        "label_raw": "Central"
-      },
-      {
-        "id": "peripheral",
-        "label_raw": "Peripheral"
-      }
-    ],
-    "connections": [
-      {
-        "source": "central",
-        "target": "peripheral",
-        "direction": "bidirectional"
-      },
-      {
-        "source": "central",
-        "target": "external",
-        "direction": "forward",
-        "edge_type": "excretion"
-      }
-    ],
-    "source_location": "Fig. 2"
+  "model_structure": {
+    "compartments": [],
+    "connections": [],
+    "source_location": "Fig. 2 caption"
   },
-  "parameters": [
+  "model_parameters": [
     {
-      "needs_review": false,
-      "parameter_name": "Body weight",
-      "symbol": "BW",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "QCC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "4.36",
-        "value": 4.36,
-        "range_low": 3.747,
-        "range_high": 4.973,
-        "variance": 0.313,
-        "variance_type": "SD",
-        "unit": "Kg",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value_text": "12.5",
+        "value": 12.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "BW | Kg | 4.36 | 0.313 | 3.747 | 4.973 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "QCC | Cardiac output | L/h/kg 0.75 | 12.5 | Forsyth et al., 1968",
+        "reference": "Forsyth et al., 1968",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Glomerular filtration rate",
-      "symbol": "GFRC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "QLC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QLC",
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "3.14",
-        "value": 3.14,
-        "range_low": 2.564,
-        "range_high": 3.716,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "L/h/kg kidney",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "GFRC | L/h/kg kidney | 3.14 | 0.294 | 2.564 | 3.716 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "QLC | Fraction blood flow to liver | Unitless | 0.25 | Brown et al., 1997",
+        "reference": "Brown et al., 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Protein concentration in proximal tubule cell",
-      "symbol": "Protein",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "QKC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QKC",
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.000002",
-        "value": 2e-06,
-        "range_low": 8.24e-07,
-        "range_high": 3.18e-06,
-        "variance": 6e-07,
-        "variance_type": "SD",
-        "unit": "mg protein/proximal tubule cell",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value_text": "0.175",
+        "value": 0.175,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Protein | mg protein/proximal tubule cell | 0.000002 | 0.0000006 | 0.000000824 | 0.00000318 | Normal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "QKC | Fraction blood flow to kidney | Unitless | 0.175 | Brown et al., 1997",
+        "reference": "Brown et al., 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Volume of liver cells",
-      "symbol": "VLC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "hematocrit",
+      "parameter_name_original": "Htc",
+      "parameter_name_standardized": null,
+      "symbol_original": "Htc",
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
+        "value_text": "0.44",
+        "value": 0.44,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Htc | Hematocrit | Unitless | 0.44 | Davies and Morris (1993) and Brown et al. (1997)",
+        "reference": "Davies and Morris (1993) and Brown et al. (1997)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "VplasC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VplasC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0428",
+        "value": 0.0428,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "VplasC | Fraction volume of plasma | L/kg BW | 0.0428 | Davies and Morris, 1993",
+        "reference": "Davies and Morris, 1993",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "VLC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VLC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
         "value_text": "0.026",
         "value": 0.026,
-        "range_low": 0.0107,
-        "range_high": 0.0413,
-        "variance": 0.0078,
-        "variance_type": "SD",
-        "unit": "L/kg BW",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "VLC | L/kg BW | 0.026 | 0.0078 | 0.0107 | 0.0413 | Normal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "VLC | Fraction volume of liver | L/kg BW | 0.026 | Brown et al., 1997",
+        "reference": "Brown et al., 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Volume of filtrate",
-      "symbol": "VfilC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "VKC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VKC",
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "VKC | Fraction volume of kidney | L/kg BW | 0.004 | Brown et al., 1997",
+        "reference": "Brown et al., 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "VfilC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VfilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
         "value_text": "0.0004",
         "value": 0.0004,
-        "range_low": 0.000165,
-        "range_high": 0.000635,
-        "variance": 0.00012,
-        "variance_type": "SD",
-        "unit": "L/kg BW",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "VfilC | Fraction volume of filtrate | L/kg BW | 0.0004 | 10% kidney volume, Loccisano et al., 2011",
+        "reference": "10% kidney volume, Loccisano et al., 2011",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "VPTCC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VPTCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.35 × 10 −4",
+        "value": 0.000135,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/g kidney",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "VPTCC | Fraction volume of proximal tubule cells (PTC) | L/g kidney | 1.35 × 10 −4 | calculated based on 60 million PTC/g kidney ( Hsu et al., 2014 ), 1 PTC = 2250 um 3 ( Milo et al., 2010 )",
+        "reference": "calculated based on 60 million PTC/g kidney ( Hsu et al., 2014 ), 1 PTC = 2250 um 3 ( Milo et al., 2010 )",
+        "status": "calculated",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Protein",
+      "parameter_name_standardized": null,
+      "symbol_original": "Protein",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.0 × 10 −6",
+        "value": 2e-06,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg protein/PTC",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Protein | Amount of protein in proximal tubule cells | mg protein/PTC | 2.0 × 10 −6 | Addis et al., 1936",
+        "reference": "Addis et al., 1936",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "GFRC",
+      "parameter_name_standardized": null,
+      "symbol_original": "GFRC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "24.19",
+        "value": 24.19,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg kidney",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "GFRC | Glomerular filtration rate | L/h/kg kidney | 24.19 | Corley et al., 2005",
+        "reference": "Corley et al., 2005",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free",
+      "parameter_name_standardized": null,
+      "symbol_original": "Free",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.02",
+        "value": 0.02,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Free | Free fraction of PFOA in plasma | Unitless | 0.02 | Loccisano et al., 2011",
+        "reference": "Loccisano et al., 2011",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax_baso_invitro",
+      "parameter_name_standardized": null,
+      "symbol_original": "Vmax_baso_invitro",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "OAT1 and OAT3",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "439.2",
+        "value": 439.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "pmol/mg Protein/min",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Vmax_baso_invitro | Vmax of basolateral transporters measured in in vitro studies (average of OAT1 and OAT3) | pmol/mg Protein/min | 439.2 | Calculated from Nakagawa et al., 2007",
+        "reference": "Nakagawa et al., 2007",
+        "status": "calculated",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km_baso",
+      "parameter_name_standardized": null,
+      "symbol_original": "Km_baso",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "OAT1",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "20.1",
+        "value": 20.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Km_baso | Km of basolateral transporters (OAT1 and OAT3) | μg/L | 20.1 | Nakagawa et al., 2007",
+        "reference": "Nakagawa et al., 2007",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax_apical_invitro",
+      "parameter_name_standardized": null,
+      "symbol_original": "Vmax_apical_invitro",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "OAT4",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "37,400.0",
+        "value": 37400.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "pmol/mg protein/min",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Vmax_apical_invitro | Vmax of apical transporters measured in in vitro studies (OAT4) | pmol/mg protein/min | 37,400.0 | Calculated from Yang et al., 2010",
+        "reference": "Yang et al., 2010",
+        "status": "calculated",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km_apical",
+      "parameter_name_standardized": null,
+      "symbol_original": "Km_apical",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "OAT4 and URAT1",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "77.5",
+        "value": 77.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Km_apical | Km of apical transporters (OAT4 and URAT1) | μg/L | 77.5 | Calculated from Yang et al., 2010",
+        "reference": "Yang et al., 2010",
+        "status": "calculated",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "RAFapi",
+      "parameter_name_standardized": null,
+      "symbol_original": "RAFapi",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0007",
+        "value": 0.0007,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "RAFapi | Relative activity factor of apical transporters | Unitless | 0.0007 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "RAFbaso",
+      "parameter_name_standardized": null,
+      "symbol_original": "RAFbaso",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "basolateral transporters",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1",
+        "value": 1.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "RAFbaso | Relative activity factor of basolateral transporters | Unitless | 1 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "PL",
+      "parameter_name_standardized": null,
+      "symbol_original": "PL",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.03",
+        "value": 1.03,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "PL | Liver:blood partition coefficient | Unitless | 1.03 | Fabrega et al., 2014 and Perez et al., 2013",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "PK",
+      "parameter_name_standardized": null,
+      "symbol_original": "PK",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.17",
+        "value": 1.17,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "PK | Kidney:blood partition coefficient | Unitless | 1.17 | Fabrega et al., 2014 and Perez et al., 2013",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "PR",
+      "parameter_name_standardized": null,
+      "symbol_original": "PR",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "rest of body",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.11",
+        "value": 0.11,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "PR | Rest of body:blood partition coefficient | Unitless | 0.11 | Kudo et al., 2007",
+        "reference": "Kudo et al., 2007",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "k0c",
+      "parameter_name_standardized": null,
+      "symbol_original": "k0c",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.0",
+        "value": 1.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "k0c | Rate of absorption of PFOA in stomach | /h/kg −0.25 | 1.0 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "kabsc",
+      "parameter_name_standardized": null,
+      "symbol_original": "kabsc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.12",
+        "value": 2.12,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "kabsc | Rate of absorption of PFOA in small intestines | /h/kg −0.25 | 2.12 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fecal_elimination_rate_constant",
+      "parameter_name_original": "kunabsc",
+      "parameter_name_standardized": null,
+      "symbol_original": "kunabsc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.06 × 10 −5",
+        "value": 7.06e-05,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": "1/h/kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "kunabsc | Rate of unabsorbed dose to appear in feces | /h/kg −0.25 | 7.06 × 10 −5 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "clearance_rate_constant",
+      "parameter_name_original": "keffluxc",
+      "parameter_name_standardized": null,
+      "symbol_original": "keffluxc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "keffluxc | Rate of clearance of PFOA from proximal tubule cells into blood | /h/kg −0.25 | 0.1 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "biliary_elimination_rate_constant",
+      "parameter_name_original": "kbilec",
+      "parameter_name_standardized": null,
+      "symbol_original": "kbilec",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0001",
+        "value": 0.0001,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "kbilec | Biliary elimination rate | /h/kg −0.25 | 0.0001 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "urinary_elimination_rate_constant",
+      "parameter_name_original": "kurinec",
+      "parameter_name_standardized": null,
+      "symbol_original": "kurinec",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.062",
+        "value": 0.062,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "kurinec | Urinary elimination rate | /h/kg −0.25 | 0.062 | Fit to ATSDR, 2016a",
+        "reference": "ATSDR, 2016a",
+        "status": "optimized",
+        "derivation": {
+          "method": null,
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "BW",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.36",
+        "value": 4.36,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "BW | Kg | 4.36 | 0.313 | 3.747 | 4.973 | Lognormal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "GFRC",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.14",
+        "value": 3.14,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg kidney",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "GFRC | L/h/kg kidney | 3.14 | 0.294 | 2.564 | 3.716 | Lognormal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "Protein",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "proximal tubule",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.000002",
+        "value": 2e-06,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg protein/proximal tubule cell",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Protein | mg protein/proximal tubule cell | 0.000002 | 0.0000006 | 0.000000824 | 0.00000318 | Normal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "VLC",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "VLC | L/kg BW | 0.026 | 0.0078 | 0.0107 | 0.0413 | Normal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "VfilC",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "VfilC | L/kg BW | 0.0004 | 0.00012 | 0.000165 | 0.000635 | Normal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Plasma protein binding",
-      "symbol": "PL",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "PL",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.01",
         "value": 0.01,
-        "range_low": -0.378,
-        "range_high": 0.398,
-        "variance": 0.198,
-        "variance_type": "SD",
-        "unit": "Unitless",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "PL | Unitless | 0.01 | 0.198 | −0.378 | 0.398 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Apical Vmax (in vitro)",
-      "symbol": "Vmax_apical_invitro",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax_apical_invitro",
+      "parameter_name_standardized": "Vmax_apical_invitro",
+      "symbol_original": null,
+      "symbol_standardized": "Vmax_apical_invitro",
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": "compound_name",
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "10.48",
         "value": 10.48,
-        "range_low": 9.843,
-        "range_high": 11.117,
-        "variance": 0.325,
-        "variance_type": "SD",
-        "unit": "pmol/mg protein/min",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "pmol/mg protein/min",
+        "unit_standardized": "pmol/mg protein/min",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "Vmax_apical_invitro | pmol/mg protein/min | 10.48 | 0.325 | 9.843 | 11.117 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Apical Km",
-      "symbol": "Km_apical",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km_apical",
+      "parameter_name_standardized": "Km_apical",
+      "symbol_original": null,
+      "symbol_standardized": "Km_apical",
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": "unknown",
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "11.25",
-        "value": 11.25,
-        "range_low": 10.929,
-        "range_high": 11.561,
-        "variance": 0.161,
-        "variance_type": "SD",
-        "unit": "μg/Ml",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value": 77.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/Ml",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "Km_apical | μg/Ml | 11.25 | 0.161 | 10.929 | 11.561 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Renal apical resorption factor",
-      "symbol": "RAFapi",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "RAFapi",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-7.31",
+        "value_text": "−7.31",
         "value": -7.31,
-        "range_low": -7.886,
-        "range_high": -6.734,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "Unitless",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "RAFapi | Unitless | −7.31 | 0.294 | −7.886 | −6.734 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Free fraction",
-      "symbol": "Free",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "KbileC",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Physiological",
-        "subject_species": null,
+        "compound": "CompoundNamePlaceholder",
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-3.96",
-        "value": -3.96,
-        "range_low": -4.536,
-        "range_high": -3.384,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "Unitless",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value_text": "−9.25",
+        "value": -9.25,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg −0.25",
+        "unit_standardized": "μl/h/kg^0.25",
+        "normalization_basis": "body_weight"
       },
       "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "KbileC | /h/kg −0.25 | −9.25 | 0.294 | −9.826 | −8.674 | Lognormal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "KurineC",
+      "parameter_name_standardized": "clearance",
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "−2.81",
+        "value": -2.81,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "ml/min/kg",
+        "unit_standardized": "ml/min/kg",
+        "normalization_basis": "body_weight"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "KurineC | /h/kg −0.25 | −2.81 | 0.294 | −3.386 | −2.234 | Lognormal",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "−3.96",
+        "value": -3.96,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "Unitless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "Free | Unitless | −3.96 | 0.294 | −4.536 | −3.384 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Exposed drinking water concentration",
-      "symbol": "ExposedDW",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "ExposedDW",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Mid-Ohio River Valley exposure parameters",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "1.22",
         "value": 1.22,
-        "range_low": 0.648,
-        "range_high": 1.8,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "μg/L",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/L",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "ExposedDW | μg/L | 1.22 | 0.294 | 0.648 | 1.800 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Total drinking water intake",
-      "symbol": "DWtotal",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "DWtotal",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Mid-Ohio River Valley exposure parameters",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.181",
         "value": 0.181,
-        "range_low": -0.805,
-        "range_high": 1.167,
-        "variance": 0.503,
-        "variance_type": "SD",
-        "unit": "L/day",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/day",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "DWtotal | L/day | 0.181 | 0.503 | −0.805 | 1.167 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Ingestion rate",
-      "symbol": "Ingest",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "Ingest",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Mid-Ohio River Valley exposure parameters",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-4.65",
+        "value_text": "−4.65",
         "value": -4.65,
-        "range_low": -5.226,
-        "range_high": -4.074,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "μg/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/h",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "Ingest | μg/h | −4.65 | 0.294 | −5.226 | −4.074 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Exposed drinking water concentration",
-      "symbol": "ExposedDW",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "ExposedDW",
+      "parameter_name_standardized": "ExposedDW",
+      "symbol_original": null,
+      "symbol_standardized": "ExDW",
       "context": {
-        "compound": "Decatur exposure parameters",
-        "subject_species": null,
+        "compound": "Doxorubicin",
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-3.26",
-        "value": -3.26,
-        "range_low": -3.836,
-        "range_high": -2.684,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "μg/L",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "value_text": "−3.26",
+        "value": 1.22,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/L",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "ExposedDW | μg/L | −3.26 | 0.294 | −3.836 | −2.684 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Total drinking water intake",
-      "symbol": "DWtotal",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "DWtotal",
+      "parameter_name_standardized": "DWtotal",
+      "symbol_original": null,
+      "symbol_standardized": "DWtotal",
       "context": {
-        "compound": "Decatur exposure parameters",
-        "subject_species": null,
+        "compound": "DWtotal",
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.181",
         "value": 0.181,
-        "range_low": -0.805,
-        "range_high": 1.167,
-        "variance": 0.503,
-        "variance_type": "SD",
-        "unit": "L/day",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/day",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "DWtotal | L/day | 0.181 | 0.503 | −0.805 | 1.167 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Past ingestion rate",
-      "symbol": "ingest_past",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "ingest_past",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Decatur exposure parameters",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-3.69",
+        "value_text": "−3.69",
         "value": -3.69,
-        "range_low": -5.57,
-        "range_high": -3.27,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "μg/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/h",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "ingest_past | μg/h | −3.69 | 0.294 | −5.570 | −3.270 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Current ingestion rate",
-      "symbol": "ingest_current",
+      "parameter_id": null,
+      "parameter_class": "compound_specific",
+      "parameter_subclass": null,
+      "parameter_name_original": "ingest_current",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": "Decatur exposure parameters",
-        "subject_species": null,
+        "compound": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "-4.65",
+        "value_text": "−4.65",
         "value": -4.65,
-        "range_low": -5.226,
-        "range_high": -4.074,
-        "variance": 0.294,
-        "variance_type": "SD",
-        "unit": "μg/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "μg/h",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
         "source_quote": "ingest_current | μg/h | −4.65 | 0.294 | −5.226 | −4.074 | Lognormal",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "low",
+        "formulation_confidence": "low",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Drinking water concentration",
-      "symbol": "C_water",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free Fraction",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
         "compound": "PFOA",
-        "subject_species": "Human",
-        "life_stage": "Adult",
-        "compartment": null,
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.04",
-        "value": 0.04,
-        "range_low": null,
-        "range_high": null,
+        "value_text": ">90%",
+        "value": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "μg/L",
-        "unit_inherited": null,
-        "value_qualifier": null
+        "unit_original": "%",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Fig. 2 caption",
-        "source_quote": "Drinking water concentration = 0.04 μg/L",
-        "parameter_status": "Measured",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "2.8. Free Fraction",
+        "source_quote": "Free Fraction PFOA is highly bound (>90%) to human serum albumin .",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "dosing": [
+    {
+      "compound": "PFOA",
+      "dose": 0.01,
+      "dose_unit": "μg/h",
+      "route": "Ingestion",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Non-drinking water ingestion was set to 0.01 μg/h, equivalent to the background PFOA exposures estimated for the general population of western countries (Fromme et al., 2009)."
     },
     {
-      "needs_review": false,
-      "parameter_name": "Non-drinking water ingestion rate",
-      "symbol": "IR_non_drink",
-      "context": {
-        "compound": "PFOA",
-        "subject_species": "Human",
-        "life_stage": "Adult",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.01",
-        "value": 0.01,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "μg/h",
-        "unit_inherited": null,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Fig. 2 caption",
-        "source_quote": "Non-drinking water ingestion rate = 0.01 μg/h.",
-        "parameter_status": "Measured",
-        "confidence": "high"
-      }
+      "compound": "PFOA",
+      "dose": 0.04,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "The average PFOA concentration in finished water samples collected between 2010 and 2016 as a part of the EPA’s Third Unregulated Contaminant Monitoring Rule (UCMR3) and through regular monitoring by the Alabama Department of Environmental Management was 0.04 μg/L (USEPA, 2016)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 1.9,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Pre-filtration water samples from the Little Hocking Water Association had PFOA concentrations ranging from 1.9 to 4.9 μg/L during the study period, while post-filtration concentrations were all nonquantifiable or nondetectable (<0.016 μg/L)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 4.9,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Pre-filtration water samples from the Little Hocking Water Association had PFOA concentrations ranging from 1.9 to 4.9 μg/L during the study period, while post-filtration concentrations were all nonquantifiable or nondetectable (<0.016 μg/L)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 0.41,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Pre-filtration water samples from the Lubeck Public Service district had PFOA concentrations ranging from 0.41–1.0 μg/L, while post-filtration water concentrations were all below the quantification limit (Bartell et al., 2010)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 1.0,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Pre-filtration water samples from the Lubeck Public Service district had PFOA concentrations ranging from 0.41–1.0 μg/L, while post-filtration water concentrations were all below the quantification limit (Bartell et al., 2010)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 3.55,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Emmett et al. (2006) reported concentrations of PFOA in drinking water ranging from 1.5 μg/L to 7.2 μg/L, with a mean concentration of 3.55 μg/L. All blood samples were collected prior to implementation of granular activated carbon at the Little Hocking Water Association."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 1.5,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Emmett et al. (2006) reported concentrations of PFOA in drinking water ranging from 1.5 μg/L to 7.2 μg/L, with a mean concentration of 3.55 μg/L. All blood samples were collected prior to implementation of granular activated carbon at the Little Hocking Water Association."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 7.2,
+      "dose_unit": "μg/L",
+      "route": "Drinking Water",
+      "schedule": "continuous",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Emmett et al. (2006) reported concentrations of PFOA in drinking water ranging from 1.5 μg/L to 7.2 μg/L, with a mean concentration of 3.55 μg/L. All blood samples were collected prior to implementation of granular activated carbon at the Little Hocking Water Association."
     }
   ],
   "ingestion_source": "pmc_xml",
@@ -640,41 +2410,328 @@
   },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.39,
-    "total_parameters": 19,
-    "flagged_count": 1,
-    "error_count": 0,
-    "warning_count": 1,
+    "elapsed_ms": 0.83,
+    "total_parameters": 47,
+    "parameters_with_flags": 25,
+    "total_flags": 27,
+    "error_count": 6,
+    "warning_count": 21,
     "clean": false,
-    "summary": "1/19 parameters flagged: 1 warning(s). Elapsed: 0.4ms.",
+    "summary": "27/47 parameters flagged: 6 error(s), 21 warning(s). Elapsed: 0.8ms.",
     "flags": [
       {
-        "param_index": 4,
-        "param_name": "Volume of filtrate",
+        "param_index": 8,
+        "param_name": "VPTCC",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=0.000135 does not match parsed value_text='1.35 × 10 −4' (1.35).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 9,
+        "param_name": "Protein",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=2e-06 does not match parsed value_text='2.0 × 10 −6' (2.0).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 16,
+        "param_name": "RAFapi",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 18,
+        "param_name": "PL",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 19,
+        "param_name": "PK",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 20,
+        "param_name": "PR",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 21,
+        "param_name": "k0c",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned '/h/kg −0.25'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 22,
+        "param_name": "kabsc",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned '/h/kg −0.25'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 23,
+        "param_name": "kunabsc",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=7.06e-05 does not match parsed value_text='7.06 × 10 −5' (7.06).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 24,
+        "param_name": "keffluxc",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'clearance_rate_constant' expects dimensional signature like ['l/h', 'ml/min', 'μl/h/kg^0.25', 'ml/min/kg', 'l/h/kg'], but VLM assigned '/h/kg −0.25'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 25,
+        "param_name": "kbilec",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'biliary_elimination_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned '/h/kg −0.25'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 26,
+        "param_name": "kurinec",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'urinary_elimination_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned '/h/kg −0.25'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 32,
+        "param_name": "PL",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 33,
+        "param_name": "Vmax_apical_invitro",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='compound_name' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 34,
+        "param_name": "Km_apical",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=77.5 does not match parsed value_text='11.25' (11.25).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 35,
+        "param_name": "RAFapi",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 36,
+        "param_name": "KbileC",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='CompoundNamePlaceholder' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 37,
+        "param_name": "clearance",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 37,
+        "param_name": "clearance",
         "severity": "warning",
         "rule": "IMPLAUSIBLE_VALUE",
-        "message": "value=0.0004 L/kg BW is outside the expected plausible range [0.001, 500.0] for 'Volume of filtrate'.",
+        "message": "value=-2.81 ml/min/kg is outside the expected plausible range [0.0, 5000.0] for 'clearance'.",
         "suggested_fix": "Verify unit conversion or check for a magnitude error (e.g. mL vs L)."
+      },
+      {
+        "param_index": 37,
+        "param_name": "clearance",
+        "severity": "error",
+        "rule": "NEGATIVE_VALUE",
+        "message": "value=-2.81 is negative for a parameter that must be positive.",
+        "suggested_fix": "Check for sign errors or inverted table row."
+      },
+      {
+        "param_index": 38,
+        "param_name": "Free",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 39,
+        "param_name": "ExposedDW",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 40,
+        "param_name": "DWtotal",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 41,
+        "param_name": "Ingest",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 42,
+        "param_name": "ExposedDW",
+        "severity": "warning",
+        "rule": "VALUE_MISMATCH",
+        "message": "value=1.22 does not match parsed value_text='−3.26' (-3.26).",
+        "suggested_fix": "Re-check the source cell."
+      },
+      {
+        "param_index": 44,
+        "param_name": "ingest_past",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 45,
+        "param_name": "ingest_current",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
       }
     ],
     "note": "Re-run after Tier 2 LLM patching."
   },
   "llm_verification": {
-    "reviewed": 2,
-    "patched": 0,
-    "rejected": 2,
-    "elapsed_s": 106.47,
+    "reviewed": 15,
+    "patched": 12,
+    "rejected": 0,
+    "elapsed_s": 27.99,
     "verdicts": [
       {
-        "param_index": 9,
-        "verdict": "reject",
-        "reasoning": "The parameter 'Biliary clearance' must be positive, but the value is negative (-9.25). This violates a fundamental biological constraint, and the unit '/h/kg −0.25' is invalid and likely a transcription error. The parameter cannot be salvaged.",
+        "param_index": 23,
+        "verdict": "fix",
+        "reasoning": "Unit '/h/kg −0.25' is syntactically invalid; should be '1/h/kg^0.25'. Value_text and value are consistent.",
         "status": "reviewed"
       },
       {
-        "param_index": 10,
-        "verdict": "reject",
-        "reasoning": "Renal clearance cannot be negative; the value -2.81 is physiologically implausible. The parameter is invalid and cannot be salvaged.",
+        "param_index": 33,
+        "verdict": "fix",
+        "reasoning": "Parameter conflicts with another entry for same context. Must resolve duplication. Compound is missing but required for biochemical parameter.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 34,
+        "verdict": "fix",
+        "reasoning": "Parameter conflicts with another entry for same context. Must resolve duplication. Compound is missing but required for biochemical parameter.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 36,
+        "verdict": "fix",
+        "reasoning": "Unit '/h/kg −0.25' is invalid for metabolic clearance. Standardized unit should reflect correct dimensionality (e.g., 'μl/h/kg^0.25'). Compound context must be provided for biochemical parameters.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 37,
+        "verdict": "fix",
+        "reasoning": "Unit '/h/kg −0.25' is invalid for metabolic clearance. Standard units are 'l/h', 'ml/min/kg', etc. The parameter name 'KurineC' suggests a non-standard unit; fix unit to match expected dimension.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 42,
+        "verdict": "fix",
+        "reasoning": "Parameter conflicts with another entry for same context. Must resolve discrepancy. Also, compound context is missing, which is required for compound-specific parameters.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 43,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context (required for non-physiological parameters) and is a duplicate. Fix compound and ensure uniqueness.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 8,
+        "verdict": "fix",
+        "reasoning": "value_text '1.35 × 10⁻⁴' equals 0.000135, so no mismatch. The value is correct. No fields need correction.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 9,
+        "verdict": "ok",
+        "reasoning": "The value 2e-06 matches 2.0 × 10⁻⁶ numerically. The discrepancy is due to scientific notation parsing, not a data error. No correction needed.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 12,
+        "verdict": "fix",
+        "reasoning": "Parameter is non-physiological (maximal_velocity) and lacks compound context, which is required for attribution. Must specify compound to be valid.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 13,
+        "verdict": "fix",
+        "reasoning": "Parameter refers to basolateral transporters (OAT1/OAT3), so compound must be specified as 'OAT1' or 'OAT3'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 14,
+        "verdict": "fix",
+        "reasoning": "Parameter is non-physiological (maximal_velocity) but lacks compound context. Must specify compound to attribute value.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 15,
+        "verdict": "fix",
+        "reasoning": "Parameter 'Km_apical' refers to apical transporters (OAT4, URAT1), which are specific to compounds. Context.compound must be specified to attribute this biochemical parameter correctly.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 16,
+        "verdict": "fix",
+        "reasoning": "Parameter 'RAFapi' is a relative activity factor, which is non-physiological and does not require a compound context. The null compound is a false positive.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 17,
+        "verdict": "fix",
+        "reasoning": "Parameter 'RAFbaso' is a non-physiological relative activity factor; compound context is required for attribution. Tier 1 flag is valid.",
         "status": "reviewed"
       }
     ]

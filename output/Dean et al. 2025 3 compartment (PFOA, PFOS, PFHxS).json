@@ -1,882 +1,2249 @@
 {
   "page_metadata": {
-    "title": null,
-    "authors": null,
-    "journal": null,
-    "year": null
+    "title": "Adapting existing toxicokinetic models to relate perfluoroalkyl and polyfluoroalkyl intake to biomarkers in humans",
+    "authors": [
+      "Kara J Dean",
+      "Régis Pouillot",
+      "Jane M Van Doren",
+      "Sofia M Santillana Farakos"
+    ],
+    "journal": "Toxicological Sciences",
+    "year": 2025
   },
   "model_classification": {
-    "model_type": "simple_empirical_compartmental",
-    "evidence_quote": "Compartmental models are considered the simplest form of TK model in which a system is represented by one or few compartments, and modified compartment models have extensions that can also describe the toxicokinetics during pregnancy and lactation."
+    "model_type": "pbpk",
+    "evidence_quote": null
   },
-  "structure": {
+  "model_structure": {
+    "reported_compartment_count": 3,
+    "listed_compartment_count": 3,
+    "count_consistency": "consistent",
     "compartments": [
       {
         "id": "central compartment",
-        "label_raw": "central compartment",
-        "confidence": 100.0
+        "label_raw": "central compartment"
       },
       {
-        "id": "deep compartment",
-        "label_raw": "deep compartment",
-        "confidence": 100.0
+        "id": "second (deep) compartment",
+        "label_raw": "second (deep) compartment"
       },
       {
         "id": "filtrate compartment",
-        "label_raw": "filtrate compartment",
-        "confidence": 100.0
+        "label_raw": "filtrate compartment"
       }
     ],
     "connections": [
       {
         "source": "filtrate compartment",
         "target": "central compartment",
-        "label_raw": "saturable process with a Michaelis–Menten kinetics",
+        "label_raw": "saturable process with Michaelis–Menten kinetics",
         "direction": "forward",
-        "evidence": "Fig. 1",
-        "confidence": 100.0
+        "evidence": "where a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment"
       }
-    ],
-    "source_location": "Materials and methods / Selected model"
+    ]
   },
-  "parameters": [
+  "model_parameters": [
     {
-      "needs_review": false,
-      "parameter_name": "bodyweight",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "BW",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "70 kg",
-        "value": 70.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / TK modeling approach: a case study with PFOS and PFOA",
-        "source_quote": "scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg<sup>0.74</sup> ) following the procedure of Loccisano et al. (2011);",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "cardiac output",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "12.5 L/h/kg<sup>0.74</sup>",
-        "value": 12.5,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "L/h/kg<sup>0.74</sup>",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / TK modeling approach: a case study with PFOS and PFOA",
-        "source_quote": "scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg<sup>0.74</sup> ) following the procedure of Loccisano et al. (2011);",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "maximum rate of the saturable resorption parameter",
-      "symbol": "Tm",
-      "context": {
-        "compound": "PFOS",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": null,
-        "value": null,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / TK modeling approach: a case study with PFOS and PFOA",
-        "source_quote": "iii) We then adjusted the maximum rate of the saturable resorption parameter ( _Tm_ , mg/h) to match the half-life estimated in humans from an exposure study deemed to be representative of the general population (Li et al. 2018).",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "bioavailability",
-      "symbol": null,
-      "context": {
-        "compound": "PFOS",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": "oral",
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "90%",
-        "value": 90.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / TK modeling approach: a case study with PFOS and PFOA",
-        "source_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion;",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "bioavailability",
-      "symbol": null,
-      "context": {
-        "compound": "PFOA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": "oral",
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "90%",
-        "value": 90.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / TK modeling approach: a case study with PFOS and PFOA",
-        "source_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion;",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "proportion of free compound in the central compartment",
-      "symbol": "Free",
-      "context": {
-        "compound": "PFOS",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": "central compartment",
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": null,
-        "value": null,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / Inferences",
-        "source_quote": "The values for _Free_ , the proportion of free compound in the central compartment, were updated to reflect the most current assessment of the fraction of unbound compound in human plasma (Smeltz et al. 2023).",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "proportion of free compound in the central compartment",
-      "symbol": "Free",
-      "context": {
-        "compound": "PFOA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": "central compartment",
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": null,
-        "value": null,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Materials and methods / Inferences",
-        "source_quote": "The values for _Free_ , the proportion of free compound in the central compartment, were updated to reflect the most current assessment of the fraction of unbound compound in human plasma (Smeltz et al. 2023).",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Body weight (kg)",
-      "symbol": "BW",
-      "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "5",
+        "value_text": "5a",
         "value": 5.0,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nPhysiological\nBody weight (kg)\nBW\n5\nChang (2020d)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | BW | 5 a | 4.1 a | Butenhoff et al. (2004) ; Chang et al. (2012) ; Seacat et al. (2002) ",
+        "reference": "Butenhoff et al. (2004) ; Chang et al. (2012) ; Seacat et al. (2002)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Cardiac blood output (L/h/kg^0.74)",
-      "symbol": "QCC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_blood_output",
+      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Nonhuman primate",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "19.8",
         "value": 19.8,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "L/h/kg^0.74",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "L/h/kg 0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nPhysiological\nCardiac blood output (L/h/kg^0.74)\nQCC\n19.8\nWambaugh et al. (2013)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | QCC | 19.8 | 19.8 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Fraction of cardiac output to filtrate",
-      "symbol": "QfILC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_of_cardiac_output_to_filtrate",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": null,
+      "symbol_original": "QfilC",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Nonhuman primate",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.15",
         "value": 0.15,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nPhysiological\nFraction of cardiac output to filtrate\nQfILC\n0.15\nWambaugh et al. (2013)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | QfilC | 0.15 | 0.15 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Volume of filtrate compartment (L/Kg)",
-      "symbol": "VfILC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "volume_of_filtrate_compartment",
+      "parameter_name_original": "Volume of filtrate compartment (L/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VfilC",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Nonhuman primate",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "4.00E-04",
         "value": 0.0004,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "L/Kg",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nPhysiological\nVolume of filtrate compartment (L/Kg)\nVfILC\n4.00E-04\nLoccisano et al. (2011)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | VfilC | 4.00E-04 | 4.00E-04 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Bioavailability",
-      "symbol": "bioAv",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": null,
+      "symbol_original": "bioAv",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.9",
         "value": 0.9,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": "Assumed (PFOS)"
+        "unit_original": "dimensionless",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nBioavailability\nbioAv\n0.9\nAssumed (PFOS)",
-        "parameter_status": "Assumed",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | bioAv | 0.9 | 0.32 (0.20, 0.46) | US EPA (2024a) (PFOS) Optimized (PFOA) |  ",
+        "reference": "US EPA (2024a) (PFOS) Optimized (PFOA)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Volume of distribution central compartment (L/kg)",
-      "symbol": "VCC",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "volume_of_distribution_central_compartment",
+      "parameter_name_original": "Volume of distribution central compartment (L/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VCC",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.17 (0.16, 0.20)",
-        "value": 0.17,
-        "range_low": 0.16,
-        "range_high": 0.2,
+        "value_text": "0.24 (0.24, 0.25)",
+        "value": 0.24,
+        "range_start": 0.24,
+        "range_end": 0.25,
         "variance": null,
         "variance_type": null,
-        "unit": "L/kg",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized"
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nVolume of distribution central compartment (L/kg)\nVCC\n0.17 (0.16, 0.20)\nOptimized",
-        "parameter_status": "Optimized",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | VCC | 0.24 (0.24, 0.25) | 0.23 (0.18, 0.29) | Optimized |  ",
+        "reference": "Optimized",
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Saturable resorption rate (mg/h/kg)",
-      "symbol": "Tmc",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "saturable_resorption_rate",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.21 (0.18, 0.25)",
-        "value": 0.21,
-        "range_low": 0.18,
-        "range_high": 0.25,
+        "value_text": "2.5 (2.31, 2.80)",
+        "value": 2.5,
+        "range_start": 2.31,
+        "range_end": 2.8,
         "variance": null,
         "variance_type": null,
-        "unit": "mg/h/kg",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized"
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nSaturable resorption rate (mg/h/kg)\nTmc\n0.21 (0.18, 0.25)\nOptimized",
-        "parameter_status": "Optimized",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | Tmc | 2.5 (2.31, 2.80) | 0.28 (0.17, 0.53) | Optimized |  ",
+        "reference": "Optimized",
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Saturable resorption affinity (mg/L)",
-      "symbol": "K_t",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "saturable_resorption_affinity",
+      "parameter_name_original": "Saturable resorption affinity (mg/L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "K t",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.004",
+        "value_text": "0.004 (0.003, 0.004)",
         "value": 0.004,
-        "range_low": null,
-        "range_high": null,
+        "range_start": 0.003,
+        "range_end": 0.004,
         "variance": null,
         "variance_type": null,
-        "unit": "mg/L",
-        "unit_inherited": false,
-        "value_qualifier": "Assumed (PFOS)"
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nSaturable resorption affinity (mg/L)\nK_t\n0.004\nAssumed (PFOS)",
-        "parameter_status": "Assumed",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | K t | 0.004 (0.003, 0.004) | 0.017 (0.010, 0.041) | Optimized |  ",
+        "reference": "Optimized",
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Proportion of free compound in serum",
-      "symbol": "Free",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": null,
+      "symbol_original": "Free",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.0009",
-        "value": 0.0009,
-        "range_low": null,
-        "range_high": null,
+        "value_text": "4.50E-03",
+        "value": 0.0045,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "dimensionless",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nProportion of free compound in serum\nFree\n0.0009\nSmeltz et al. (2023)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | Free | 4.50E-03 | 1.20E-3 | Smeltz et al. (2023) |  ",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Rate from central to second compartment (1/h)",
-      "symbol": "k_{12}",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "rate_constant",
+      "parameter_name_original": "Rate from central to second compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k 12",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "3.3",
         "value": 3.3,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "1/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "1/h",
+        "unit_standardized": "1/h",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nRate from central to second compartment (1/h)\nk_{12}\n3.3\nAndersen et al. (2006)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | k 12 | 3.3 | 3.3 | Andersen et al. (2006) |  ",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Rate from second to central compartment (1/h)",
-      "symbol": "k_{21}",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "rate_constant",
+      "parameter_name_original": "Rate from second to central compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k 21",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "3.4",
         "value": 3.4,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "1/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nRate from second to central compartment (1/h)\nk_{21}\n3.4\nAndersen et al. (2006)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | k 21 | 3.4 | 3.4 | Andersen et al. (2006) |  ",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Rate from gut to central compartment (1/h)",
-      "symbol": "k_a",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k a",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Nonhuman primate",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "132",
         "value": 132.0,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "1/h",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Nonhuman primate\nChemical-specific\nRate from gut to central compartment (1/h)\nk_a\n132\nWambaugh et al. (2013)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | k a | 132 | 230 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Body weight (kg)",
-      "symbol": "BW",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "BW",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Human",
+        "formulation": null,
+        "species": "Human",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "70",
         "value": 70.0,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Human\nPhysiological\nBody weight (kg)\nBW\n70\nLoccisano et al. (2011)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | BW | 70 | 70 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Cardiac blood output (L/h/kg^0.74)",
-      "symbol": "QCC",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_blood_output",
+      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Human",
+        "formulation": null,
+        "species": "Human",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "12.5",
         "value": 12.5,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "L/h/kg^0.74",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "L/h/kg 0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Table 3",
-        "source_quote": "Human\nPhysiological\nCardiac blood output (L/h/kg^0.74)\nQCC\n12.5\nLoccisano et al. (2011)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | QCC | 12.5 | 12.5 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Saturable resorption rate (mg/h/kg)",
-      "symbol": "Tmc",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": null,
+      "symbol_original": "bioAv",
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": "Human",
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Human",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
+        "value_text": "0.9",
+        "value": 0.9,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | bioAv | 0.9 | 0.9 | US EPA (2024a , 2024b) |  ",
+        "reference": "US EPA (2024a , 2024b)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "saturable_resorption_rate",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.07",
+        "value": 1.07,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | Tmc | 1.07 | 0.54 | Optimized |  ",
+        "reference": "Optimized",
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "saturable_resorption_affinity",
+      "parameter_name_original": "Saturable resorption affinity (mg/L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "K t",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | K t | 0.004 | 0.008 b | Optimized (nonhuman primate) |  ",
+        "reference": "Optimized (nonhuman primate)",
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "half_life",
+      "parameter_name_original": "Half-life (years)",
+      "parameter_name_standardized": null,
+      "symbol_original": "T 1/2",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mean (95% CI) | T 1/2 | 3.4 | 2.7 | Li et al. (2018) |  ",
+        "reference": "Li et al. (2018)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": null,
+      "symbol_original": "QfilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "dimensionless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "QfilC | 0.15 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.74 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "QCC | 19.8 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment (L/Kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VfilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/Kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "VfilC | 4.00E-04 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "BW",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "BW | 5 | Chang (2020d) |  ",
+        "reference": "Chang (2020d)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.74 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "QCC | 12.5 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "BW",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "BW | 70 | Loccisano et al. (2011) |  ",
+        "reference": "Loccisano et al. (2011)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": null,
+      "symbol_original": "Free",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0045",
+        "value": 0.0045,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "dimensionless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Free | 0.0009 | Smeltz et al. (2023) |  ",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Saturable resorption affinity (mg/L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "K t",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg/L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "K t | 0.004 | Assumed (PFOS) |  ",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k a",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "Compound name (e.g., drug X)",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 1.32,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "k a | 132 | Wambaugh et al. (2013) |  ",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from central to second compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k 12",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "1/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "k 12 | 3.3 | Andersen et al. (2006) |  ",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from second to central compartment (1/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "k 21",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "1/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "k 21 | 3.4 | Andersen et al. (2006) |  ",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": null,
+      "symbol_original": "bioAv",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "dimensionless",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "bioAv | 0.9 | Assumed (PFOS) |  ",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.21 (0.18, 0.25)",
+        "value": 0.21,
+        "range_start": 0.18,
+        "range_end": 0.25,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "ml/min/kg",
+        "unit_standardized": "ml/min/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Tmc | 0.21 (0.18, 0.25) | Optimized |  ",
+        "reference": null,
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "volume_of_distribution",
+      "parameter_name_original": "Volume of distribution central compartment (L/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.17 (0.16, 0.20)",
+        "value": 0.17,
+        "range_start": 0.16,
+        "range_end": 0.2,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "VCC | 0.17 (0.16, 0.20) | Optimized |  ",
+        "reference": null,
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "Compound not specified, but required for non-physiological parameter",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
         "value_text": "0.47",
         "value": 0.47,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "mg/h/kg",
-        "unit_inherited": false,
-        "value_qualifier": "Optimized"
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "ml/min/kg",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
-        "source_quote": "Human\nChemical-specific\nSaturable resorption rate (mg/h/kg)\nTmc\n0.47\nOptimized",
-        "parameter_status": "Optimized",
-        "confidence": "high"
-      }
+        "source_quote": "Tmc | 0.47 | Optimized |  ",
+        "reference": null,
+        "status": "optimized",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Half-life (years)",
-      "symbol": "T_{1/2}",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "half_life",
+      "parameter_name_original": "Half-life (years)",
+      "parameter_name_standardized": null,
+      "symbol_original": "T 1/2",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": "Human",
+        "formulation": null,
+        "species": "Human",
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
         "value_text": "5.3",
         "value": 5.3,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "years",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "years",
+        "unit_standardized": null,
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 3",
-        "source_quote": "Human\nChemical-specific\nHalf-life (years)\nT_{1/2}\n5.3\nLi et al. (2018)",
-        "parameter_status": "Literature",
-        "confidence": "high"
-      }
+        "source_quote": "T 1/2 | 5.3 | Li et al. (2018) |  ",
+        "reference": "Li et al. (2018)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "cardiac blood output (QCC)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5 L/h/kg 0.74",
+        "value": 12.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to other compounds",
+        "source_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively .",
+        "reference": null,
+        "status": "allometrically_scaled",
+        "derivation": {
+          "method": "allometric_scaling",
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "saturable resorption rate (Tmc)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "for a half-life of 3.4 years",
+        "value": null,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to other compounds",
+        "source_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively .",
+        "reference": null,
+        "status": "optimized",
+        "derivation": {
+          "method": "optimized",
+          "source_species": null,
+          "optimization_target": "half-life"
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "medium",
+        "unit_confidence": "low",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "medium"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "saturable resorption rate (Tmc)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "for a half-life of 2.7 years",
+        "value": null,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to other compounds",
+        "source_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively .",
+        "reference": null,
+        "status": "optimized",
+        "derivation": {
+          "method": "optimized",
+          "source_species": null,
+          "optimization_target": "half-life"
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "medium",
+        "unit_confidence": "low",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "medium"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "cardiac blood output (QCC)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5 L/h/kg 0.74",
+        "value": 12.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to PFHxS",
+        "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg .",
+        "reference": null,
+        "status": "allometrically_scaled",
+        "derivation": {
+          "method": "allometric_scaling",
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "saturable resorption rate (Tmc)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.47 mg/h/kg",
+        "value": 0.47,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to PFHxS",
+        "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg .",
+        "reference": null,
+        "status": "optimized",
+        "derivation": {
+          "method": "optimized",
+          "source_species": null,
+          "optimization_target": "half-life"
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "clearance",
+      "parameter_name_original": "clearance",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.06 mL/kg-day",
+        "value": 0.06,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mL/kg-day",
+        "unit_standardized": "mL kg^-1 day^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Application to PFHxS",
+        "source_quote": "Notably, for doses well below saturation (<1000 mg/kg BW/day), the human model is associated with a clearance of approximately 0.06 mL/kg-day for a 70 kg adult, which falls between the clearance values applied for males and females outside of reproductive ages (0.041 mL/kg-day) and females of reproductive ages (0.072 mL/kg-day) in the EPA’s derivation of PFHxS candidate toxicity values .",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     }
   ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "dosing": [
+    {
+      "compound": "PFOS",
+      "dose": 14.9,
+      "dose_unit": "ng PFOS/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOS model predicted serum levels with an MSLE of 0.07 (Fig. 3) and an underlying exposure model that peaked in 1990 at 14.9 ng PFOS/kg BW/day, fell to 2.5 ng PFOS/kg BW/day in 1998, and continued decreasing to 0.24 ng PFOS/kg BW/day in 2017 (Fig. S5)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 1.1,
+      "dose_unit": "ng PFOA/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOA model more closely predicted the NHANES observed serum levels with an MSLE of 0.03 (Fig. 4) and an underlying exposure model that increased from 0.45 ng/kg BW/day in 1990 to 1.1 ng/kg BW/day in 1998 and fell to 0.13 ng/kg BW/day in 2017 (Fig. S6)."
+    },
+    {
+      "compound": "PFHxS",
+      "dose": 0.47,
+      "dose_unit": "mg/h/kg",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": 1,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg (Li et al. 2018)."
+    },
+    {
+      "compound": "PFOS",
+      "dose": 2.5,
+      "dose_unit": "ng PFOS/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOS model predicted serum levels with an MSLE of 0.07 (Fig. 3) and an underlying exposure model that peaked in 1990 at 14.9 ng PFOS/kg BW/day, fell to 2.5 ng PFOS/kg BW/day in 1998, and continued decreasing to 0.24 ng PFOS/kg BW/day in 2017 (Fig. S5)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 0.13,
+      "dose_unit": "ng PFOA/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOA model more closely predicted the NHANES observed serum levels with an MSLE of 0.03 (Fig. 4) and an underlying exposure model that increased from 0.45 ng/kg BW/day in 1990 to 1.1 ng/kg BW/day in 1998 and fell to 0.13 ng/kg BW/day in 2017 (Fig. S6)."
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
   "laya_filter_summary": {
     "model_type_triage": "compartmental",
-    "evaluated_chunks": 5,
+    "evaluated_chunks": 1,
     "discarded_chunks": 0,
-    "retained_chunks": 5
-  },
-  "wevisdoc_summary": {
-    "enabled": true,
-    "pages_transcribed": 4
+    "retained_chunks": 1
   },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.48,
-    "total_parameters": 23,
-    "flagged_count": 13,
-    "error_count": 0,
-    "warning_count": 13,
+    "elapsed_ms": 0.87,
+    "total_parameters": 40,
+    "parameters_with_flags": 11,
+    "total_flags": 13,
+    "error_count": 4,
+    "warning_count": 9,
     "clean": false,
-    "summary": "13/23 parameters flagged: 13 warning(s). Elapsed: 0.5ms.",
+    "summary": "13/40 parameters flagged: 4 error(s), 9 warning(s). Elapsed: 0.9ms.",
     "flags": [
       {
-        "param_index": 9,
-        "param_name": "Fraction of cardiac output to filtrate",
-        "severity": "warning",
-        "rule": "MISSING_UNIT",
-        "message": "value_text='0.15' present but unit is null.",
-        "suggested_fix": "Check if unit appears in a table column header."
-      },
-      {
-        "param_index": 11,
-        "param_name": "Bioavailability",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 11,
-        "param_name": "Bioavailability",
-        "severity": "warning",
-        "rule": "MISSING_UNIT",
-        "message": "value_text='0.9' present but unit is null.",
-        "suggested_fix": "Check if unit appears in a table column header."
-      },
-      {
-        "param_index": 13,
-        "param_name": "Saturable resorption rate (mg/h/kg)",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 14,
-        "param_name": "Saturable resorption affinity (mg/L)",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 15,
-        "param_name": "Proportion of free compound in serum",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 15,
-        "param_name": "Proportion of free compound in serum",
-        "severity": "warning",
-        "rule": "MISSING_UNIT",
-        "message": "value_text='0.0009' present but unit is null.",
-        "suggested_fix": "Check if unit appears in a table column header."
-      },
-      {
-        "param_index": 16,
-        "param_name": "Rate from central to second compartment (1/h)",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 17,
+        "param_index": 10,
         "param_name": "Rate from second to central compartment (1/h)",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
       },
       {
-        "param_index": 18,
+        "param_index": 11,
+        "param_name": "Rate from gut to central compartment (1/h)",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 24,
+        "param_name": "Proportion of free compound in serum",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 8 (key: ('pfos', 'nonhuman primate', '', '', (), 'biochemical', 'fraction_unbound', '', 'proportion of free compound in serum'), value=0.0045).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 26,
         "param_name": "Rate from gut to central compartment (1/h)",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "VALUE_MISMATCH",
+        "message": "value=1.32 does not match parsed value_text='132' (132.0).",
+        "suggested_fix": "Re-check the source cell."
       },
       {
-        "param_index": 18,
+        "param_index": 26,
+        "param_name": "Rate from gut to central compartment (1/h)",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 26,
         "param_name": "Rate from gut to central compartment (1/h)",
         "severity": "warning",
-        "rule": "IMPLAUSIBLE_VALUE",
-        "message": "value=132.0 1/h is outside the expected plausible range [0.0, 100.0] for 'Rate from gut to central compartment (1/h)'.",
-        "suggested_fix": "Verify unit conversion or check for a magnitude error (e.g. mL vs L)."
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='Compound name (e.g., drug X)' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
       },
       {
-        "param_index": 21,
+        "param_index": 29,
+        "param_name": "Bioavailability",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 4 (key: ('pfos', 'nonhuman primate', '', '', (), 'biochemical', 'bioavailability', '', 'bioavailability'), value=0.9).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 30,
         "param_name": "Saturable resorption rate (mg/h/kg)",
         "severity": "warning",
         "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
         "suggested_fix": "Infer from paper title/abstract or mark as unknown."
       },
       {
-        "param_index": 22,
+        "param_index": 32,
+        "param_name": "Saturable resorption rate (mg/h/kg)",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='Compound not specified, but required for non-physiological parameter' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 33,
         "param_name": "Half-life (years)",
         "severity": "warning",
         "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
         "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 35,
+        "param_name": "saturable resorption rate (Tmc)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='for a half-life of 3.4 years' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 36,
+        "param_name": "saturable resorption rate (Tmc)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='for a half-life of 2.7 years' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "clearance",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'clearance' expects dimensional signature like ['l/h', 'ml/min', 'μl/h/kg^0.25', 'ml/min/kg', 'l/h/kg'], but VLM assigned 'mL kg^-1 day^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      }
+    ],
+    "note": "Re-run after Tier 2 LLM patching."
+  },
+  "llm_verification": {
+    "reviewed": 15,
+    "patched": 12,
+    "rejected": 0,
+    "elapsed_s": 25.04,
+    "verdicts": [
+      {
+        "param_index": 26,
+        "verdict": "fix",
+        "reasoning": "Missing compound context prevents attribution; value 132.0 1/h is implausible for absorption rate. Both require correction.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 30,
+        "verdict": "fix",
+        "reasoning": "Renal clearance parameters must reflect volume/time units, not mass/time. 'mg/h/kg' is invalid for renal clearance. Must correct unit to match standard dimensions.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 32,
+        "verdict": "fix",
+        "reasoning": "Renal clearance parameters must reflect volume/time units, not mass/time. 'mg/h/kg' is invalid for renal clearance. Must standardize unit to match expected dimensions.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 2,
+        "verdict": "fix",
+        "reasoning": "Value '0.15' lacks unit. In physiological contexts, this typically implies dimensionless fraction (e.g., unitless or 'fraction').",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 4,
+        "verdict": "fix",
+        "reasoning": "Value '0.9' lacks unit. Bioavailability is unitless, so unit should be 'dimensionless'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 8,
+        "verdict": "fix",
+        "reasoning": "Value '4.50E-03' is a proportion, so unit should be 'dimensionless' or 'fraction'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 9,
+        "verdict": "fix",
+        "reasoning": "Unit 'h^-1' is mathematically equivalent to '1/h' and dimensionally correct for rate constants. The error is a false positive due to dimensional representation preference.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 10,
+        "verdict": "ok",
+        "reasoning": "The unit 'h^-1' is dimensionally equivalent to '1/h' and is accepted in pharmacokinetic contexts. Tier 1's dimensional check is overly strict; 'h^-1' is a valid representation of reciprocal hours.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 11,
+        "verdict": "fix",
+        "reasoning": "Unit 'h^-1' is dimensionally equivalent to '1/h' and acceptable for rate constants. The error is false positive; no correction needed.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 14,
+        "verdict": "fix",
+        "reasoning": "Bioavailability is unitless, so 'unit_original' and 'unit_standardized' should be set to 'unitless'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 24,
+        "verdict": "fix",
+        "reasoning": "Conflicting value (0.0009 vs 0.0045) for same context. Must resolve discrepancy. Prefer source or flag for review.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 27,
+        "verdict": "fix",
+        "reasoning": "Missing compound context prevents attribution to a specific chemical. Must be filled for non-physiological parameters.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 28,
+        "verdict": "fix",
+        "reasoning": "Missing compound context prevents attribution to a specific chemical. Must be filled for non-physiological parameters.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 29,
+        "verdict": "ok",
+        "reasoning": "Tier 1 flag indicates duplicate entry, but no evidence of actual duplication in data. Parameter is complete and consistent. No correction needed.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 31,
+        "verdict": "fix",
+        "reasoning": "Missing compound context prevents attribution to a chemical. Must be filled for non-physiological parameters.",
+        "status": "reviewed"
       }
     ]
   }

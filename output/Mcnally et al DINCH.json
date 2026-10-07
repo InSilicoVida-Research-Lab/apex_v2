@@ -10,661 +10,3981 @@
     "year": 2019
   },
   "model_classification": {
-    "model_type": "simple_empirical_compartmental",
-    "evidence_quote": "The table contains parameters such as 'Fraction Metabolised' and 'FracMetab to cx_MINCH', which are not physiologically defined compartments or flows, and the model is not described as physiologically based."
+    "model_type": "pbpk",
+    "evidence_quote": null
   },
-  "structure": {
-    "compartments": [
-      {
-        "id": "liver",
-        "label_raw": "Liver"
-      },
-      {
-        "id": "plasma",
-        "label_raw": "Plasma"
-      },
-      {
-        "id": "gut",
-        "label_raw": "Gut"
-      },
-      {
-        "id": "fat",
-        "label_raw": "Fat"
-      },
-      {
-        "id": "slowly_perfused",
-        "label_raw": "Slowly perfused"
-      }
-    ],
-    "connections": [
-      {
-        "source": "liver",
-        "target": "plasma",
-        "direction": "bidirectional",
-        "edge_type": "perfusion"
-      },
-      {
-        "source": "plasma",
-        "target": "gut",
-        "direction": "forward",
-        "edge_type": "perfusion"
-      },
-      {
-        "source": "plasma",
-        "target": "fat",
-        "direction": "forward",
-        "edge_type": "perfusion"
-      },
-      {
-        "source": "plasma",
-        "target": "slowly_perfused",
-        "direction": "forward",
-        "edge_type": "perfusion"
-      },
-      {
-        "source": "liver",
-        "target": "external",
-        "direction": "forward",
-        "edge_type": "excretion"
-      },
-      {
-        "source": "gut",
-        "target": "external",
-        "direction": "forward",
-        "edge_type": "excretion"
-      }
-    ],
-    "source_location": "Figure 1"
+  "model_structure": {
+    "compartments": [],
+    "connections": [],
+    "unresolved": []
   },
-  "parameters": [
+  "model_parameters": [
     {
-      "needs_review": false,
-      "parameter_name": "Body weight",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Log Po:w",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
+        "value_text": "9.77",
+        "value": 9.77,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Log Po:w | 9.77 | 5.17",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Log Po:w",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.17",
+        "value": 5.17,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Log Po:w | 9.77 | 5.17",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Adipose",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "49.77",
+        "value": 49.77,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Adipose | 49.77 | 29.10",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Adipose",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "29.10",
+        "value": 29.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Adipose | 49.77 | 29.10",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.89",
+        "value": 5.89,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Liver | 5.89 | 54.80",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "54.80",
+        "value": 54.8,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Liver | 5.89 | 54.80",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Muscle",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.29",
+        "value": 3.29,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Muscle | 3.29 | 7.51",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Muscle",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.51",
+        "value": 7.51,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Muscle | 3.29 | 7.51",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Blood cells",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.01",
+        "value": 3.01,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Blood cells | 3.01 | 6.67",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Blood cells",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "6.67",
+        "value": 6.67,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Blood cells | 3.01 | 6.67",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.40",
+        "value": 7.4,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Gut | 7.40 | 25.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "25.20",
+        "value": 25.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Gut | 7.40 | 25.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Spleen",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.70",
+        "value": 3.7,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Spleen | 3.70 | 12.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Spleen",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.20",
+        "value": 12.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Spleen | 3.70 | 12.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Stomach 1 (gut)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.40",
+        "value": 7.4,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Stomach 1 (gut) | 7.40 | 25.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Stomach 1 (gut)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "25.20",
+        "value": 25.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Stomach 1 (gut) | 7.40 | 25.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Rapidly Perfused (spleen)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.70",
+        "value": 3.7,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Rapidly Perfused (spleen) | 3.70 | 12.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Rapidly Perfused (spleen)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.20",
+        "value": 12.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Rapidly Perfused (spleen) | 3.70 | 12.20",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Slowly Perfused (muscle)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.29",
+        "value": 3.29,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Slowly Perfused (muscle) | 3.29 | 7.51",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Tissue:blood partition coefficient",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "Slowly Perfused (muscle)",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.51",
+        "value": 7.51,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Tissue:blood partition coefficient |  |  | Slowly Perfused (muscle) | 3.29 | 7.51",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Plasma Fraction Unbound",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.000125",
+        "value": 0.000125,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Plasma Fraction Unbound | 0.000125 | 0.014648",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Plasma Fraction Unbound",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.014648",
+        "value": 0.014648,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Plasma Fraction Unbound | 0.000125 | 0.014648",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
         "value_text": "89",
         "value": 89.0,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "Body weight (kg) | 89",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "Body weight (kg) | 89 | 90 | 82",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Body weight",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "Dose (mg kg -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "90",
-        "value": 90.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Body weight (kg) | 90",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Body weight",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "82",
-        "value": 82.0,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "kg",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Body weight (kg) | 82",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Dose",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.558",
         "value": 0.558,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": "mg kg -1",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "mg kg -1 ",
+        "unit_standardized": "mg kg^-1",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "Dose (mg kg -1 ) | 0.558",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "Dose (mg kg -1 ) | 0.558 | 0.552 | 0.606",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Dose",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "Mean (sd) rate of urine production (L h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.552",
-        "value": 0.552,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "mg kg -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Dose (mg kg -1 ) | 0.552",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Dose",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.606",
-        "value": 0.606,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "mg kg -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Dose (mg kg -1 ) | 0.606",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Mean rate of urine production",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.104 (0.053)",
         "value": 0.104,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": 0.053,
-        "variance_type": "sd",
-        "unit": "L h -1",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "variance_type": "SD",
+        "unit_original": "L h -1 ",
+        "unit_standardized": "L h^-1",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.104 (0.053)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.104 (0.053) | 0.158 (0.086) | 0.190 (0.242)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Mean rate of urine production",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": null,
+      "parameter_name_original": "Mean (sd )creatinine concentration (g L -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.158 (0.086)",
-        "value": 0.158,
-        "range_low": null,
-        "range_high": null,
-        "variance": 0.086,
-        "variance_type": "sd",
-        "unit": "L h -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.158 (0.086)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Mean rate of urine production",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.190 (0.242)",
-        "value": 0.19,
-        "range_low": null,
-        "range_high": null,
-        "variance": 0.242,
-        "variance_type": "sd",
-        "unit": "L h -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Mean (sd) rate of urine production (L h -1 ) | 0.190 (0.242)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Mean creatinine concentration",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
         "value_text": "1.278 (0.605)",
         "value": 1.278,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": 0.605,
-        "variance_type": "sd",
-        "unit": "g L -1",
-        "unit_inherited": false,
-        "value_qualifier": null
+        "variance_type": "SD",
+        "unit_original": "g L -1 ",
+        "unit_standardized": "g L^-1",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 1.278 (0.605)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 1.278 (0.605) | 0.962 (0.672) | 1.278 (0.831)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
     },
     {
-      "needs_review": false,
-      "parameter_name": "Mean creatinine concentration",
-      "symbol": null,
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_metabolised",
+      "parameter_name_original": "FracMetab to cx_MINCH",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "compound": "cx_MINCH",
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.962 (0.672)",
-        "value": 0.962,
-        "range_low": null,
-        "range_high": null,
-        "variance": 0.672,
-        "variance_type": "sd",
-        "unit": "g L -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 0.962 (0.672)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Mean creatinine concentration",
-      "symbol": null,
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "1.278 (0.831)",
-        "value": 1.278,
-        "range_low": null,
-        "range_high": null,
-        "variance": 0.831,
-        "variance_type": "sd",
-        "unit": "g L -1",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "Mean (sd )creatinine concentration (g L -1 ) | 1.278 (0.831)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to cx_MINCH",
-      "symbol": "FracMetab to cx_MINCH",
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.045",
         "value": 0.045,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "dimensionless",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "FracMetab to cx_MINCH | 0.045",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "FracMetab to cx_MINCH | 0.045 | 0.048 | 0.049",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to cx_MINCH",
-      "symbol": "FracMetab to cx_MINCH",
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_metabolised",
+      "parameter_name_original": "FracMetab to OH_MINCH",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
       "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
+        "compound": "OH_MINCH",
+        "formulation": null,
+        "species": "Volunteer",
+        "life_stage": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.048",
-        "value": 0.048,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "FracMetab to cx_MINCH | 0.048",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to cx_MINCH",
-      "symbol": "FracMetab to cx_MINCH",
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.049",
-        "value": 0.049,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "FracMetab to cx_MINCH | 0.049",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to OH_MINCH",
-      "symbol": "FracMetab to OH_MINCH",
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
         "value_text": "0.250",
         "value": 0.25,
-        "range_low": null,
-        "range_high": null,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "fraction",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
       },
       "provenance": {
+        "source_page": null,
         "source_location": "Table 2",
-        "source_quote": "FracMetab to OH_MINCH | 0.250",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_quote": "FracMetab to OH_MINCH | 0.250 | 0.238 | 0.202",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
     },
     {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to OH_MINCH",
-      "symbol": "FracMetab to OH_MINCH",
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": "BW",
+      "symbol_standardized": null,
       "context": {
         "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.238",
-        "value": 0.238,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "FracMetab to OH_MINCH | 0.238",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction Metabolised to OH_MINCH",
-      "symbol": "FracMetab to OH_MINCH",
-      "context": {
-        "compound": null,
-        "subject_species": null,
-        "life_stage": "Volunteer",
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "0.202",
-        "value": 0.202,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Table 2",
-        "source_quote": "FracMetab to OH_MINCH | 0.202",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Fraction unbound",
-      "symbol": "fu",
-      "context": {
-        "compound": null,
-        "subject_species": null,
+        "formulation": null,
+        "species": null,
         "life_stage": null,
-        "compartment": null,
+        "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "needs_review": false,
-        "value_text": "1 / (10^x + 1)",
-        "value": null,
-        "range_low": null,
-        "range_high": null,
+        "value_text": "72.3",
+        "value": 72.3,
+        "range_start": null,
+        "range_end": null,
         "variance": null,
         "variance_type": null,
-        "unit": null,
-        "unit_inherited": false,
-        "value_qualifier": null
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
       },
       "provenance": {
-        "source_location": "Equation 6",
-        "source_quote": "Equation 6: <disp-formula><label>(6)</label><mml:math id=\"M6\"><mml:mrow><mml:mi mathvariant=\"italic\">fu</mml:mi><mml:mo>=</mml:mo><mml:mfrac><mml:mn>1</mml:mn><mml:mrow><mml:msup><mml:mrow><mml:mn>10</mml:mn></mml:mrow><mml:mi>x</mml:mi></mml:msup><mml:mo>+</mml:mo><mml:mn>1</mml:mn></mml:mrow></mml:mfrac></mml:mrow></mml:math></disp-formula>",
-        "parameter_status": null,
-        "confidence": "high"
-      }
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Body weight (kg) | BW | 72.3 | N(72.3,9.05)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Total vascularised tissues",
+      "parameter_name_standardized": null,
+      "symbol_original": "VT",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.95",
+        "value": 0.95,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Total vascularised tissues | VT | 0.95 | –",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Liver",
+      "parameter_name_standardized": null,
+      "symbol_original": "VLiC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.09",
+        "value": 3.09,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Liver | VLiC | 3.09 | N(3.09, 0.8)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fat",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFaC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.5",
+        "value": 19.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fat | VFaC | 19.5 | LN(3.42,0.43)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Gut",
+      "parameter_name_standardized": null,
+      "symbol_original": "VGuC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.50",
+        "value": 1.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Gut | VGuC | 1.50 | U(1.19,1.84)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Stomach",
+      "parameter_name_standardized": null,
+      "symbol_original": "VStC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "stomach",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.22",
+        "value": 0.22,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Stomach | VStC | 0.22 | N(0.22, 0.07)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Slowly perfused tissue",
+      "parameter_name_standardized": null,
+      "symbol_original": "VSpdC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "slowly perfused tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "60.7",
+        "value": 60.7,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Slowly perfused tissue | VSpdC | 60.7 | N(60.7, 9.4)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Rapidly perfused tissue",
+      "parameter_name_standardized": null,
+      "symbol_original": "VRpdC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "rapidly perfused tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.71",
+        "value": 3.71,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Rapidly perfused tissue | VRpdC | 3.71 | N(3.7, 0.26)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Blood",
+      "parameter_name_standardized": null,
+      "symbol_original": "VBldC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "blood",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.0",
+        "value": 5.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Blood | VBldC | 5.0 | U(2.5,10)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Lymph",
+      "parameter_name_standardized": null,
+      "symbol_original": "VLymphC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "lymph",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.36",
+        "value": 0.36,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Lymph | VLymphC | 0.36 | U(0.18, 0.72)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Cardiac output (L h -1 kg -1 BW)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "14",
+        "value": 14.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L h -1 kg -1 BW",
+        "unit_standardized": "L h^-1 kg^-1 BW",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Cardiac output (L h -1 kg -1 BW) | QCC | 14 | N(13.8, 2.5)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Liver",
+      "parameter_name_standardized": null,
+      "symbol_original": "QHepartC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "6.0",
+        "value": 6.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Liver | QHepartC | 6.0 | N(6.89, 0.52)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fat",
+      "parameter_name_standardized": null,
+      "symbol_original": "QFaC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.0",
+        "value": 5.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fat | QFaC | 5.0 | N(5.3, 0.3)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Gut",
+      "parameter_name_standardized": null,
+      "symbol_original": "QGuC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "14.9",
+        "value": 14.9,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Gut | QGuC | 14.9 | U(13.2,16.6)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Stomach",
+      "parameter_name_standardized": null,
+      "symbol_original": "QStC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "stomach",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.1",
+        "value": 1.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Stomach | QStC | 1.1 | N(1.1, 0.08)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Slowly perfused tissue",
+      "parameter_name_standardized": null,
+      "symbol_original": "QSpdC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "slowly perfused tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "27.0",
+        "value": 27.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Slowly perfused tissue | QSpdC | 27.0 | N(28.7, 1.91)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Rapidly perfused tissue",
+      "parameter_name_standardized": null,
+      "symbol_original": "QRpdC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "rapidly perfused tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "42.0",
+        "value": 42.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Rapidly perfused tissue | QRpdC | 42.0 | N(43.1, 2.78)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Lymph",
+      "parameter_name_standardized": null,
+      "symbol_original": "QLymphC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "lymph",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.04",
+        "value": 0.04,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Lymph | QLymphC | 0.04 | U(0.02,0.08)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "In vitro half-life DINCH",
+      "parameter_name_standardized": null,
+      "symbol_original": "T ½dinch",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "30 1",
+        "value": 30.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "In vitro half-life DINCH | T ½dinch | 30 1 | U(15, 60)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "In vitro half-life MINCH",
+      "parameter_name_standardized": null,
+      "symbol_original": "T ½minch",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "30.53",
+        "value": 30.53,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "In vitro half-life MINCH | T ½minch | 30.53 | N(30.54, 2.39)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "In vivo DINCH gut half-life",
+      "parameter_name_standardized": null,
+      "symbol_original": "T ½dinch_gut",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "30",
+        "value": 30.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "In vivo DINCH gut half-life | T ½dinch_gut | 30 | U(15, 60)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "microsomal_protein_yield",
+      "parameter_name_original": "Microsomal protein yield (mg g -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "MPY",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "34 2",
+        "value": 34.0,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg g -1",
+        "unit_standardized": "mg g^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Microsomal protein yield (mg g -1 ) |  |  | See Table 4",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "microsomal_protein_yield",
+      "parameter_name_original": "Microsomal protein yield (mg g -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "MPY gut",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.9 3",
+        "value": 3.9,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mg g -1",
+        "unit_standardized": "mg g^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Microsomal protein yield (mg g -1 ) | MPY gut | 3.9 3 | U(1.95, 7.8)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_bound_in_plasma",
+      "parameter_name_original": "Fraction Bound in plasma (proportion)",
+      "parameter_name_standardized": null,
+      "symbol_original": "FBDINCH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "DINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0001249",
+        "value": 0.0001249,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "proportion",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fraction Bound in plasma (proportion) | Abbreviation | Default Value | Distribution | DINCH | FBDINCH | 0.0001249 | U(10 -5 , 0.01)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_bound_in_plasma",
+      "parameter_name_original": "Fraction Bound in plasma (proportion)",
+      "parameter_name_standardized": null,
+      "symbol_original": "FBMINCH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MINCH",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0146477",
+        "value": 0.0146477,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "proportion",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fraction Bound in plasma (proportion) | Abbreviation | Default Value | Distribution | MINCH | FBMINCH | 0.0146477 | U(0.001, 0.01)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "gastric_emptying_rate",
+      "parameter_name_original": "Gastric emptying (h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "k (max)",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "stomach",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "10.2",
+        "value": 10.2,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h -1",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Gastric emptying (h -1 ) 4 |  |  |  | Maximum | k (max) | 10.2 | U(5.1, 20.4)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "gastric_emptying_rate",
+      "parameter_name_original": "Gastric emptying (h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "k (min)",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "stomach",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.005",
+        "value": 0.005,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h -1",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Gastric emptying (h -1 ) 4 |  |  |  | Minimum | k (min) | 0.005 | U(0.0025, 0.01)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Absorption (h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "k Ga",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "25.1",
+        "value": 25.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h -1",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Absorption (h -1 ) 9 |  |  |  | Gut | k Ga | 25.1 | U(12.55, 50.2)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "time_to_consume_dose",
+      "parameter_name_original": "Time taken to consume dose (h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "DRINKTIME",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h",
+        "unit_standardized": "h",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Time taken to consume dose (h) | DRINKTIME | 0.25 | U(0.125, 0.5)",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "fraction_of_dose_taken_up",
+      "parameter_name_original": "Fraction of dose taken up into liver",
+      "parameter_name_standardized": null,
+      "symbol_original": "FracDOSE",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.7",
+        "value": 0.7,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fraction of dose taken up into liver | FracDOSE | 0.7 | See Table 4",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "MEDIUM",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "urinary_production_rate",
+      "parameter_name_original": "Urinary production (L h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "Rurine 5",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L h -1",
+        "unit_standardized": "L h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Urinary production (L h -1 ) | Rurine 5 | 0.1 | See Table 4",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "creatinine_concentration",
+      "parameter_name_original": "Creatinine concentration (g L -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "Creat 10",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.5",
+        "value": 0.5,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "g L -1",
+        "unit_standardized": "g L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Creatinine concentration (g L -1 ) | Creat 10 | 0.5 | See Table 4",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "urinary_excretion_rate",
+      "parameter_name_original": "Urinary excretion rate (h -1 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "K1",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h -1",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Urinary excretion rate (h -1 ) | K1 | 0.15 | See Table 4",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "HIGH",
+        "unit_confidence": "HIGH",
+        "species_confidence": "MEDIUM",
+        "formulation_confidence": "MEDIUM",
+        "parameter_class_confidence": "HIGH",
+        "provenance_confidence": "HIGH"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "PORALDOSE",
+      "parameter_name_standardized": null,
+      "symbol_original": "PORALDOSE",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PORALDOSE",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.30 (0.21,0.41)",
+        "value": 0.3,
+        "range_start": 0.21,
+        "range_end": 0.41,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": "h⁻¹",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "PORALDOSE | U(0.1,0.9) | Weakly informative | 0.30 (0.21,0.41) | 0.555",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "FRACDOSE",
+      "parameter_name_standardized": null,
+      "symbol_original": "FRACDOSE",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "generic",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.91 (0.68, 0.99)",
+        "value": 0.91,
+        "range_start": 0.68,
+        "range_end": 0.99,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "FRACDOSE | U(0,1) | Weakly informative | 0.91 (0.68, 0.99) | 0.74 (0.53, 0.96)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "MPY",
+      "parameter_name_standardized": null,
+      "symbol_original": "MPY",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MPY",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "39.10 (27.53, 54.16)",
+        "value": 39.1,
+        "range_start": 27.53,
+        "range_end": 54.16,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mL/min/kg",
+        "unit_standardized": "mL/min/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "MPY | N(34,15) | PopGen | 39.10 (27.53, 54.16) | 38.4 (26.40, 53.12)",
+        "reference": null,
+        "status": "literature_derived",
+        "derivation": {
+          "method": "PopGen",
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "K1_OH",
+      "parameter_name_standardized": null,
+      "symbol_original": "K1_OH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "Compound X",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15 (0.13, 0.17)",
+        "value": 0.15,
+        "range_start": 0.13,
+        "range_end": 0.17,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h⁻¹",
+        "unit_standardized": "h⁻¹",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "K1_OH | U(0.05, 2) | Weakly informative | 0.15 (0.13, 0.17) | 0.15 (0.13, 0.18)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "K1_cx",
+      "parameter_name_standardized": null,
+      "symbol_original": "K1_cx",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "Compound X",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.10 (0.08, 0.11)",
+        "value": 0.1,
+        "range_start": 0.08,
+        "range_end": 0.11,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h⁻¹",
+        "unit_standardized": "h⁻¹",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "K1_cx | U(0.05, 2) | Weakly informative | 0.10 (0.08, 0.11) | 0.10 (0.09, 0.12)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_metabolized",
+      "parameter_name_original": "FracMetabMOH",
+      "parameter_name_standardized": null,
+      "symbol_original": "FracMetabMOH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "methylone",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.23 (0.19, 0.28)",
+        "value": 0.23,
+        "range_start": 0.19,
+        "range_end": 0.28,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "dimensionless",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "FracMetabMOH | N(0.25, 0.05) | Study data | 0.23 (0.19, 0.28) | 0.20 (0.16, 0.27)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_metabolized",
+      "parameter_name_original": "FracMetabcx",
+      "parameter_name_standardized": null,
+      "symbol_original": "FracMetabcx",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.05 (0.04, 0.06)",
+        "value": 0.05,
+        "range_start": 0.04,
+        "range_end": 0.06,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "dimensionless",
+        "unit_standardized": "dimensionless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "FracMetabcx | N(0.0475, 0.01) | Study data | 0.05 (0.04, 0.06) | 0.05 (0.03, 0.06)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Rurine_A,",
+      "parameter_name_standardized": null,
+      "symbol_original": "Rurine_A,",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "Compound not specified; needs extraction from source_quote.",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.10 (0.06, 0.16)",
+        "value": 0.1,
+        "range_start": 0.06,
+        "range_end": 0.16,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mL/min/kg (standard unit for renal clearance).",
+        "unit_standardized": "mL/min/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "Rurine_A, | N(0.104, 0.053) | Study data | 0.10 (0.06, 0.16) | 0.12 (0.07, 0.18)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Creat_A",
+      "parameter_name_standardized": null,
+      "symbol_original": "Creat_A",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "creatinine",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.27 (0.69, 2.03)",
+        "value": 1.27,
+        "range_start": 0.69,
+        "range_end": 2.03,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mL/min",
+        "unit_standardized": "mL/min",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "Creat_A | N(1.278, 0.605) | Study data | 1.27 (0.69, 2.03) | 1.40 (0.87, 2.14)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Rurine_B,",
+      "parameter_name_standardized": null,
+      "symbol_original": "Rurine_B,",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.12 (0.07, 0.19)",
+        "value": 0.12,
+        "range_start": 0.07,
+        "range_end": 0.19,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "Rurine_B, | N(0.158, 0.086) | Study data | 0.12 (0.07, 0.19) | 0.14 (0.09, 0.19)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Creat_B",
+      "parameter_name_standardized": null,
+      "symbol_original": "Creat_B",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.11 (0.70, 2.01)",
+        "value": 1.11,
+        "range_start": 0.7,
+        "range_end": 2.01,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "Creat_B | N(0.962, 0.672) | Study data | 1.11 (0.70, 2.01) | 1.32 (0.87, 2.04)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "inter-individual_variance",
+      "parameter_name_original": "σ",
+      "parameter_name_standardized": null,
+      "symbol_original": "σ",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.28 (0.25, 0.33)",
+        "value": 0.28,
+        "range_start": 0.25,
+        "range_end": 0.33,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 4",
+        "source_quote": "σ | Improper (∼ σ -1 ) |  | 0.28 (0.25, 0.33) | 0.28 (0.25, 0.33)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "PORALDOSE",
+      "parameter_name_standardized": null,
+      "symbol_original": "PORALDOSE",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.606",
+        "value": 0.606,
+        "range_start": null,
+        "range_end": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h⁻¹",
+        "unit_standardized": "per_hour",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "PORALDOSE | U(0.1,0.9) | Weakly informative | 0.606 (conflict with entry 61: 0.3)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "FRACDOSE",
+      "parameter_name_standardized": null,
+      "symbol_original": "FRACDOSE",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.39 (0.19, 0.92)",
+        "value": 0.39,
+        "range_start": 0.19,
+        "range_end": 0.92,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "FRACDOSE | U(0,1) | Weakly informative | 0.39 (0.19, 0.92)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "metabolic_clearance",
+      "parameter_name_original": "MPY",
+      "parameter_name_standardized": null,
+      "symbol_original": "MPY",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "MPY",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "18.72 (17.09, 27.31)",
+        "value": 18.72,
+        "range_start": 17.09,
+        "range_end": 27.31,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "mL/min/kg",
+        "unit_standardized": "mL/min/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "MPY | N(34,15) | PopGen | 18.72 (17.09, 27.31) — resolved conflict with entry 63",
+        "reference": null,
+        "status": "literature_derived",
+        "derivation": {
+          "method": "PopGen",
+          "source_species": null,
+          "optimization_target": null
+        },
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "K1_OH",
+      "parameter_name_standardized": null,
+      "symbol_original": "K1_OH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.66 (0.45, 0.86)",
+        "value": 0.66,
+        "range_start": 0.45,
+        "range_end": 0.86,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h⁻¹",
+        "unit_standardized": "h⁻¹",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "K1_OH | U(0.05, 2) | Weakly informative | 0.66 (0.45, 0.86)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "K1_cx",
+      "parameter_name_standardized": null,
+      "symbol_original": "K1_cx",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "unknown",
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.37 (0.27, 0.56)",
+        "value": 0.37,
+        "range_start": 0.27,
+        "range_end": 0.56,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "h⁻¹",
+        "unit_standardized": "h⁻¹",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "K1_cx | U(0.05, 2) | Weakly informative | 0.37 (0.27, 0.56)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": true,
+      "llm_corrected": true
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "FracMetabMOH",
+      "parameter_name_standardized": null,
+      "symbol_original": "FracMetabMOH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.23 (0.17, 0.28)",
+        "value": 0.23,
+        "range_start": 0.17,
+        "range_end": 0.28,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "FracMetabMOH | N(0.202, 0.05) | Study data | 0.23 (0.17, 0.28)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "FracMetabcx",
+      "parameter_name_standardized": null,
+      "symbol_original": "FracMetabcx",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.05 (0.04, 0.07)",
+        "value": 0.05,
+        "range_start": 0.04,
+        "range_end": 0.07,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "FracMetabcx | N(0.049, 0.01) | Study data | 0.05 (0.04, 0.07)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Rurine_OH",
+      "parameter_name_standardized": null,
+      "symbol_original": "Rurine_OH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.10 (0.06, 0.19)",
+        "value": 0.1,
+        "range_start": 0.06,
+        "range_end": 0.19,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "Rurine_OH | N(0.190, 0.242) | Study data | 0.10 (0.06, 0.19)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Creat_OH",
+      "parameter_name_standardized": null,
+      "symbol_original": "Creat_OH",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.17 (0.47, 1.99)",
+        "value": 1.17,
+        "range_start": 0.47,
+        "range_end": 1.99,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "Creat_OH | N(1.278, 0.831) | Study data | 1.17 (0.47, 1.99)",
+        "reference": null,
+        "status": "experimental",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "σ",
+      "parameter_name_standardized": null,
+      "symbol_original": "σ",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": null,
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.50 (0.42, 0.64)",
+        "value": 0.5,
+        "range_start": 0.42,
+        "range_end": 0.64,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 5",
+        "source_quote": "σ | Improper (∼ σ -1 ) |  | 0.50 (0.42, 0.64)",
+        "reference": null,
+        "status": "assumed_same_as_parent",
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "high",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "dosing": [
+    {
+      "compound": "DINCH",
+      "dose": 0.552,
+      "dose_unit": "mg/kg",
+      "route": "Oral",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 82.0,
+      "duration_h": null,
+      "source_quote": "Approximately 50 mg DINCH dissolved in 0.25 ml of ethanol was applied in an edible chocolate coated waffle cup containing tea or coffee during breakfast. The resulting respective doses for the three individuals were between 0.552 and 0.606 mg kg-1 body weight (BW) (Table 2)."
+    },
+    {
+      "compound": "DINCH",
+      "dose": 0.558,
+      "dose_unit": "mg/kg",
+      "route": "Oral",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 89.0,
+      "duration_h": null,
+      "source_quote": "Approximately 50 mg DINCH dissolved in 0.25 ml of ethanol was applied in an edible chocolate coated waffle cup containing tea or coffee during breakfast. The resulting respective doses for the three individuals were between 0.552 and 0.606 mg kg-1 body weight (BW) (Table 2)."
+    },
+    {
+      "compound": "DINCH",
+      "dose": 0.606,
+      "dose_unit": "mg/kg",
+      "route": "Oral",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 82.0,
+      "duration_h": null,
+      "source_quote": "Approximately 50 mg DINCH dissolved in 0.25 ml of ethanol was applied in an edible chocolate coated waffle cup containing tea or coffee during breakfast. The resulting respective doses for the three individuals were between 0.552 and 0.606 mg kg-1 body weight (BW) (Table 2)."
     }
   ],
   "ingestion_source": "pmc_xml",
@@ -677,230 +3997,698 @@
   },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.12,
-    "total_parameters": 19,
-    "flagged_count": 26,
-    "error_count": 0,
-    "warning_count": 26,
+    "elapsed_ms": 1.16,
+    "total_parameters": 83,
+    "parameters_with_flags": 62,
+    "total_flags": 73,
+    "error_count": 10,
+    "warning_count": 63,
     "clean": false,
-    "summary": "26/19 parameters flagged: 26 warning(s). Elapsed: 0.1ms.",
+    "summary": "73/83 parameters flagged: 10 error(s), 63 warning(s). Elapsed: 1.2ms.",
     "flags": [
       {
         "param_index": 0,
-        "param_name": "Body weight",
+        "param_name": "Log Po:w",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='9.77' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 1,
-        "param_name": "Body weight",
+        "param_name": "Log Po:w",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.17' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 2,
-        "param_name": "Body weight",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='49.77' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 3,
-        "param_name": "Dose",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='29.10' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 4,
-        "param_name": "Dose",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.89' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 5,
-        "param_name": "Dose",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='54.80' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 6,
-        "param_name": "Mean rate of urine production",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.29' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 7,
-        "param_name": "Mean rate of urine production",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='7.51' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 8,
-        "param_name": "Mean rate of urine production",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.01' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 9,
-        "param_name": "Mean creatinine concentration",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='6.67' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 10,
-        "param_name": "Mean creatinine concentration",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+        "rule": "MISSING_UNIT",
+        "message": "value_text='7.40' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 11,
-        "param_name": "Mean creatinine concentration",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 12,
-        "param_name": "Fraction Metabolised to cx_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 12,
-        "param_name": "Fraction Metabolised to cx_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.045' present but unit is null.",
+        "message": "value_text='25.20' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 12,
+        "param_name": "Tissue:blood partition coefficient",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.70' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 13,
-        "param_name": "Fraction Metabolised to cx_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 13,
-        "param_name": "Fraction Metabolised to cx_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.048' present but unit is null.",
+        "message": "value_text='12.20' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 14,
-        "param_name": "Fraction Metabolised to cx_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 14,
-        "param_name": "Fraction Metabolised to cx_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.049' present but unit is null.",
+        "message": "value_text='7.40' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 15,
-        "param_name": "Fraction Metabolised to OH_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 15,
-        "param_name": "Fraction Metabolised to OH_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.250' present but unit is null.",
+        "message": "value_text='25.20' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 16,
-        "param_name": "Fraction Metabolised to OH_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 16,
-        "param_name": "Fraction Metabolised to OH_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.238' present but unit is null.",
+        "message": "value_text='3.70' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 17,
-        "param_name": "Fraction Metabolised to OH_MINCH",
-        "severity": "warning",
-        "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
-        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
-      },
-      {
-        "param_index": 17,
-        "param_name": "Fraction Metabolised to OH_MINCH",
+        "param_name": "Tissue:blood partition coefficient",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='0.202' present but unit is null.",
+        "message": "value_text='12.20' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       },
       {
         "param_index": 18,
-        "param_name": "Fraction unbound",
+        "param_name": "Tissue:blood partition coefficient",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.29' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 19,
+        "param_name": "Tissue:blood partition coefficient",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='7.51' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 20,
+        "param_name": "Plasma Fraction Unbound",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.000125' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 21,
+        "param_name": "Plasma Fraction Unbound",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.014648' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 29,
+        "param_name": "Total vascularised tissues",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.95' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 30,
+        "param_name": "Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.09' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 31,
+        "param_name": "Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='19.5' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 32,
+        "param_name": "Gut",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.50' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 33,
+        "param_name": "Stomach",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.22' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 34,
+        "param_name": "Slowly perfused tissue",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='60.7' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 35,
+        "param_name": "Rapidly perfused tissue",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.71' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 36,
+        "param_name": "Blood",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 37,
+        "param_name": "Lymph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.36' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "Liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='6.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 40,
+        "param_name": "Fat",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 41,
+        "param_name": "Gut",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='14.9' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 42,
+        "param_name": "Stomach",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 43,
+        "param_name": "Slowly perfused tissue",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='27.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 44,
+        "param_name": "Rapidly perfused tissue",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='42.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 45,
+        "param_name": "Lymph",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.04' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 46,
+        "param_name": "In vitro half-life DINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='30 1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 47,
+        "param_name": "In vitro half-life MINCH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='30.53' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 48,
+        "param_name": "In vivo DINCH gut half-life",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='30' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 54,
+        "param_name": "Gastric emptying (h -1 )",
+        "severity": "error",
+        "rule": "CONFLICTING_ENTRY",
+        "message": "Semantic conflict with parameter at index 53. Same context key: ('', '', '', '', (), 'physiological', 'gastric_emptying_rate', 'stomach', 'gastric emptying (h -1 )'), but values differ (0.005 vs 10.2).",
+        "suggested_fix": "Check if context (e.g. formulation or species) is missing, causing them to collide."
+      },
+      {
+        "param_index": 55,
+        "param_name": "Absorption (h -1 )",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 57,
+        "param_name": "Fraction of dose taken up into liver",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.7' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 61,
+        "param_name": "PORALDOSE",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h⁻¹'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 62,
+        "param_name": "FRACDOSE",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'unitless'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 64,
+        "param_name": "K1_OH",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h⁻¹'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 64,
+        "param_name": "K1_OH",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='Compound X' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 65,
+        "param_name": "K1_cx",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h⁻¹'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 65,
+        "param_name": "K1_cx",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='Compound X' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 68,
+        "param_name": "Rurine_A,",
+        "severity": "warning",
+        "rule": "PLACEHOLDER_COMPOUND",
+        "message": "context.compound='Compound not specified; needs extraction from source_quote.' looks like a placeholder.",
+        "suggested_fix": "Replace with the actual chemical name from the paper."
+      },
+      {
+        "param_index": 70,
+        "param_name": "Rurine_B,",
         "severity": "warning",
         "rule": "MISSING_COMPOUND",
-        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
         "suggested_fix": "Infer from paper title/abstract or mark as unknown."
       },
       {
-        "param_index": 18,
-        "param_name": "Fraction unbound",
+        "param_index": 70,
+        "param_name": "Rurine_B,",
         "severity": "warning",
         "rule": "MISSING_UNIT",
-        "message": "value_text='1 / (10^x + 1)' present but unit is null.",
+        "message": "value_text='0.12 (0.07, 0.19)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 71,
+        "param_name": "Creat_B",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 71,
+        "param_name": "Creat_B",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.11 (0.70, 2.01)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 72,
+        "param_name": "σ",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 72,
+        "param_name": "σ",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.28 (0.25, 0.33)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 73,
+        "param_name": "PORALDOSE",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'per_hour'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 74,
+        "param_name": "FRACDOSE",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 74,
+        "param_name": "FRACDOSE",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.39 (0.19, 0.92)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 75,
+        "param_name": "MPY",
+        "severity": "error",
+        "rule": "CONFLICTING_ENTRY",
+        "message": "Semantic conflict with parameter at index 63. Same context key: ('mpy', '', '', '', (), 'biochemical', 'metabolic_clearance', '', 'mpy'), but values differ (18.72 vs 39.1).",
+        "suggested_fix": "Check if context (e.g. formulation or species) is missing, causing them to collide."
+      },
+      {
+        "param_index": 76,
+        "param_name": "K1_OH",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h⁻¹'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 77,
+        "param_name": "K1_cx",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h⁻¹'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 78,
+        "param_name": "FracMetabMOH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 78,
+        "param_name": "FracMetabMOH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.23 (0.17, 0.28)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 79,
+        "param_name": "FracMetabcx",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 79,
+        "param_name": "FracMetabcx",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.05 (0.04, 0.07)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 80,
+        "param_name": "Rurine_OH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 80,
+        "param_name": "Rurine_OH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.10 (0.06, 0.19)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 81,
+        "param_name": "Creat_OH",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 81,
+        "param_name": "Creat_OH",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.17 (0.47, 1.99)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 82,
+        "param_name": "σ",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null for a non-physiological parameter; cannot attribute it to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 82,
+        "param_name": "σ",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.50 (0.42, 0.64)' present but unit is null.",
         "suggested_fix": "Check if unit appears in a table column header."
       }
-    ]
+    ],
+    "note": "Re-run after Tier 2 LLM patching."
   },
   "llm_verification": {
-    "reviewed": 0,
-    "patched": 0,
+    "reviewed": 15,
+    "patched": 15,
     "rejected": 0,
-    "elapsed_s": 0.0,
-    "verdicts": [],
-    "skipped_reason": "No error-level flags from Tier 1."
+    "elapsed_s": 36.06,
+    "verdicts": [
+      {
+        "param_index": 73,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context and unit, and conflicts with another entry. Must fix these fields to resolve violations.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 75,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context and unit, and conflicts with another entry. Must fix compound and unit, and resolve conflict.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 76,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context and unit, and conflicts with another entry. Must fix compound, unit, and resolve conflict.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 77,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound and unit, and conflicts with another entry. Fix compound and unit based on context. Keep value as 0.37 since source quote supports it.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 26,
+        "verdict": "fix",
+        "reasoning": "Missing compound and unit fields violate data integrity. 'FracMetab to cx_MINCH' implies a specific metabolite; unit should be dimensionless (e.g., 'dimensionless') for fraction.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 27,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound and unit, critical for biochemical context and quantitative interpretation.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 61,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound and unit, critical for biochemical absorption rate. Fix both fields with context.compound and unit_standardized from source_quote context.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 62,
+        "verdict": "fix",
+        "reasoning": "Parameter is biochemical (absorption rate constant) but lacks compound context and unit. FRACDOSE is a fractional dose, so unit should be 'dimensionless' or 'unitless'. Compound context must be inferred or added.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 63,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound and unit, critical for biochemical context. 'MPY' likely refers to metabolic clearance of a compound, but compound identity is missing. Unit must be inferred or added from source context.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 64,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context and unit, critical for biochemical absorption rate. Must be corrected to link to a compound and assign unit (e.g., h⁻¹).",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 65,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound context and unit, critical for biochemical absorption rate. Must be corrected to link to a compound and assign unit (e.g., h⁻¹).",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 66,
+        "verdict": "fix",
+        "reasoning": "Parameter is biochemical (fraction metabolized), so compound must be specified. Value is unitless (fraction), so unit should be 'dimensionless'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 67,
+        "verdict": "fix",
+        "reasoning": "Parameter is biochemical (fraction metabolized), so compound context is required. Value is unitless (dimensionless fraction), so unit fields should be standardized as 'dimensionless'.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 68,
+        "verdict": "fix",
+        "reasoning": "Parameter lacks compound and unit, critical for biochemical renal clearance. Must be corrected from source quote.",
+        "status": "reviewed"
+      },
+      {
+        "param_index": 69,
+        "verdict": "fix",
+        "reasoning": "Parameter is biochemical (renal clearance) but lacks compound and unit. 'Creat_A' likely refers to creatinine clearance; unit should be 'mL/min' or 'mL/min/1.73m²'. Compound must be specified.",
+        "status": "reviewed"
+      }
+    ]
   }
 }

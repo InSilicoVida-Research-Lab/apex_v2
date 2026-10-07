@@ -1,0 +1,4760 @@
+{
+  "page_metadata": {
+    "title": "Development of PBPK Models for PFOA and PFOS for Human Pregnancy and Lactation Life Stages",
+    "authors": [
+      "Anne E. Loccisano",
+      "Matthew P. Longnecker",
+      "Jerry L. Campbell",
+      "Melvin E. Andersen",
+      "Harvey J. Clewell"
+    ],
+    "journal": "Journal of toxicology and environmental health. Part A",
+    "year": 2013
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": null
+  },
+  "model_structure": {
+    "listed_compartment_count": 10,
+    "compartments": [
+      {
+        "id": "plasma",
+        "label_raw": "Plasma (free fraction available for uptake into tissues)"
+      },
+      {
+        "id": "gut",
+        "label_raw": "Gut"
+      },
+      {
+        "id": "liver",
+        "label_raw": "Liver"
+      },
+      {
+        "id": "fat",
+        "label_raw": "Fat"
+      },
+      {
+        "id": "skin",
+        "label_raw": "Skin"
+      },
+      {
+        "id": "milk",
+        "label_raw": "Milk"
+      },
+      {
+        "id": "rest_of_body",
+        "label_raw": "Rest of body"
+      },
+      {
+        "id": "kidney",
+        "label_raw": "Kidney"
+      },
+      {
+        "id": "filtrate",
+        "label_raw": "Filtrate"
+      },
+      {
+        "id": "storage",
+        "label_raw": "storage"
+      }
+    ],
+    "connections": [
+      {
+        "source": "plasma",
+        "target": "gut",
+        "label_raw": "QGut",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "liver",
+        "label_raw": "QLiv",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "fat",
+        "label_raw": "QFat",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "skin",
+        "label_raw": "QSk",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "milk",
+        "label_raw": "QMam",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "rest_of_body",
+        "label_raw": "QR",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "kidney",
+        "label_raw": "QKid",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "filtrate",
+        "label_raw": "QFil",
+        "direction": "forward"
+      },
+      {
+        "source": "gut",
+        "target": "liver",
+        "direction": "forward"
+      },
+      {
+        "source": "milk",
+        "target": "rest_of_body (infant)",
+        "label_raw": "kmilk",
+        "direction": "forward"
+      },
+      {
+        "source": "rest_of_body (infant)",
+        "target": "urine",
+        "label_raw": "keliml",
+        "direction": "forward"
+      },
+      {
+        "source": "filtrate",
+        "target": "storage",
+        "direction": "forward"
+      },
+      {
+        "source": "storage",
+        "target": "urine",
+        "direction": "forward"
+      },
+      {
+        "source": "kidney",
+        "target": "filtrate",
+        "label_raw": "Tm,Kt",
+        "direction": "forward"
+      },
+      {
+        "source": "filtrate",
+        "target": "kidney",
+        "direction": "forward"
+      },
+      {
+        "source": "plasma",
+        "target": "external",
+        "label_raw": "IV",
+        "direction": "forward"
+      },
+      {
+        "source": "gut",
+        "target": "external",
+        "label_raw": "Oral, Drinking H2O",
+        "direction": "forward"
+      }
+    ],
+    "absorption": {
+      "route": "oral",
+      "model_type": "first_order",
+      "site": "gut"
+    },
+    "elimination": {
+      "routes": [
+        "renal",
+        "fecal"
+      ]
+    },
+    "source_location": "Figure 2"
+  },
+  "model_parameters": [
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Maternal body weight (BW; kg) and fetal weight (VFet; kg)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "56.9 – 70 (initial); 65.3 – 79.6 (increasing)",
+        "value": null,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Maternal body weight (BW; kg) and fetal weight (VFet; kg) | 56.9 – 70 (initial); 65.3 – 79.6 (increasing) | 0 – 3.8 * | Clewell, et al 1999 ; Gentry, et al 2003",
+        "reference": "Clewell, et al 1999 ; Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Gut, VGutC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VGutC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0171",
+        "value": 0.0171,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Gut, VGutC | 0.0171 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Liver, VLivC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VLivC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Liver, VLivC | 0.026 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Kidney, VKidC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VKidC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Kidney, VKidC | 0.004 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Filtrate, VFilC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Filtrate, VFilC | 0.0004 | - | 10% of kidney volume",
+        "reference": "10% of kidney volume",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fat, VFatC (initial volume)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFatC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.214",
+        "value": 0.214,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Fat, VFatC (initial volume) | 0.214 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Mammary tissue, VMamC (initial volume)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VMamC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0062",
+        "value": 0.0062,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, VMamC (initial volume) | 0.0062 | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fetal plasma, VPIasFC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VPIasFC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Fetus",
+        "life_stage": null,
+        "organ": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0428",
+        "value": 0.0428,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Fetal plasma, VPIasFC | - | 0.0428 | Davies & Morris, 1993",
+        "reference": "Davies & Morris, 1993",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fat, VFat",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFat",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "14.0 – 19.5 *",
+        "value": null,
+        "range_low": 14.0,
+        "range_high": 19.5,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Fat, VFat | 14.0 – 19.5 * | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Mammary tissue, VMam",
+      "parameter_name_standardized": null,
+      "symbol_original": "VMam",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.41 – 0.79 *",
+        "value": null,
+        "range_low": 0.41,
+        "range_high": 0.79,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, VMam | 0.41 – 0.79 * | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Placenta, VPIa",
+      "parameter_name_standardized": null,
+      "symbol_original": "VPIa",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Placenta",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0 – 0.63 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 0.63,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Placenta, VPIa | 0 – 0.63 * | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Plasma, VPIas",
+      "parameter_name_standardized": null,
+      "symbol_original": "VPIas",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.7 – 3.2 *",
+        "value": null,
+        "range_low": 2.7,
+        "range_high": 3.2,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Plasma, VPIas | 2.7 – 3.2 * | - | Salas, et al 2006",
+        "reference": "Salas, et al 2006",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Remaining tissues, VR",
+      "parameter_name_standardized": null,
+      "symbol_original": "VR",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "34.5 – 31.9 *",
+        "value": null,
+        "range_low": 34.5,
+        "range_high": 31.9,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Remaining tissues, VR | 34.5 – 31.9 * |  | difference between BW and sum of other tissues",
+        "reference": "difference between BW and sum of other tissues",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Amniotic fluid (L, one fetus)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Fetus",
+        "life_stage": null,
+        "organ": "Amniotic fluid",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0 – 0.51 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 0.51,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Amniotic fluid (L, one fetus) | - | 0 – 0.51 * | Beall, et al 2007",
+        "reference": "Beall, et al 2007",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Cardiac output (QCC, L/h/kg 0.75 ; initial)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Cardiac output",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "20.0",
+        "value": 20.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Cardiac output (QCC, L/h/kg 0.75 ; initial) | 20.0 | - | Clewell, et al 1999",
+        "reference": "Clewell, et al 1999",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "fetal cardiac output (L/h/kg blood)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Fetus",
+        "life_stage": null,
+        "organ": "Cardiac output",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "54.0",
+        "value": 54.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg blood",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "fetal cardiac output (L/h/kg blood) | - | 54.0 | Clewell, et al 1999",
+        "reference": "Clewell, et al 1999",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Gut, QGutC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QGutC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Gut, QGutC | 0.181 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Liver, QLivC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QLivC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Liver, QLivC | 0.25 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Skin, QSkC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QSkC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Skin",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.058",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Skin, QSkC | 0.058 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "hematocrit",
+      "parameter_name_original": "hematocrit, Htc",
+      "parameter_name_standardized": null,
+      "symbol_original": "Htc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.38 – 0.367 *",
+        "value": null,
+        "range_low": 0.38,
+        "range_high": 0.367,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "hematocrit, Htc | 0.38 – 0.367 * | 0.5 | Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn)",
+        "reference": "Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Cardiac output, increasing, QC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Cardiac output",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "295 – 355 *",
+        "value": null,
+        "range_low": 295.0,
+        "range_high": 355.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Cardiac output, increasing, QC | 295 – 355 * | 0 – 4.8 * | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fat, QFat",
+      "parameter_name_standardized": null,
+      "symbol_original": "QFat",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "14.8 – 21.2 *",
+        "value": null,
+        "range_low": 14.8,
+        "range_high": 21.2,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Fat, QFat | 14.8 – 21.2 * | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Mammary tissue, QMam",
+      "parameter_name_standardized": null,
+      "symbol_original": "QMam",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.7 – 15.4 *",
+        "value": null,
+        "range_low": 7.7,
+        "range_high": 15.4,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Mammary tissue, QMam | 7.7 – 15.4 * | - | Gentry, et al 2002",
+        "reference": "Gentry, et al 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Placenta, QPIa",
+      "parameter_name_standardized": null,
+      "symbol_original": "QPIa",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Placenta",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0 – 23.4 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 23.4,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Placenta, QPIa | 0 – 23.4 * | - | Clewell, et al, 2002",
+        "reference": "Clewell, et al, 2002",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Kidney, QKid ; plasma flow",
+      "parameter_name_standardized": null,
+      "symbol_original": "QKid",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "24.4 – 40.3 *",
+        "value": null,
+        "range_low": 24.4,
+        "range_high": 40.3,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Kidney, QKid ; plasma flow | 24.4 – 40.3 * | - | Sims & Krantz, 1958",
+        "reference": "Sims & Krantz, 1958",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Filtrate, QFilC—glomular filtration rate (L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QFilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "6.0 – 9.1 *",
+        "value": null,
+        "range_low": 6.0,
+        "range_high": 9.1,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Filtrate, QFilC—glomular filtration rate (L/h) | 6.0 – 9.1 * | - | Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995",
+        "reference": "Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Remaining tissue, QR",
+      "parameter_name_standardized": null,
+      "symbol_original": "QR",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "108 – 115 *",
+        "value": null,
+        "range_low": 108.0,
+        "range_high": 115.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 1",
+        "source_quote": "Remaining tissue, QR | 108 – 115 * | 0 – 4.0 * | difference between total CO and flows to other tissues",
+        "reference": "difference between total CO and flows to other tissues",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "BW (kg) (changing)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "72 – 67.5 *",
+        "value": null,
+        "range_low": 72.0,
+        "range_high": 67.5,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "BW (kg) (changing) | 72 – 67.5 * | 3.5 – 8 * | Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "reference": "Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "BW (kg) (changing)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Infant",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.5 – 8 *",
+        "value": null,
+        "range_low": 3.5,
+        "range_high": 8.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "kg",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "BW (kg) (changing) | 72 – 67.5 * | 3.5 – 8 * | Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "reference": "Wosje, et al, 2004 (maternal); CDC, 2002 (infant)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Gut, VGutC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VGutC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0171",
+        "value": 0.0171,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Gut, VGutC | 0.0171 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Liver, VLivC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VLivC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.026",
+        "value": 0.026,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Liver, VLivC | 0.026 |  | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fat, VFatC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFatC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.30 – 0.285 *",
+        "value": null,
+        "range_low": 0.3,
+        "range_high": 0.285,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Fat, VFatC | 0.30 – 0.285 * | - | Wosje, et al 2004",
+        "reference": "Wosje, et al 2004",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Kidney, VKidC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VKidC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Kidney, VKidC | 0.004 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Filtrate, VFilC",
+      "parameter_name_standardized": null,
+      "symbol_original": "VFilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of BW",
+        "unit_standardized": null,
+        "normalization_basis": "BW"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Filtrate, VFilC | 0.0004 | - | 10% of kidney volume",
+        "reference": "10% of kidney volume",
+        "status": "calculated",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Remaining tissues, VR (L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VR",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "31.4 – 30.2 *",
+        "value": null,
+        "range_low": 31.4,
+        "range_high": 30.2,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Remaining tissues, VR (L) | 31.4 – 30.2 * |  | difference between BW and sum of other tissues",
+        "reference": "difference between BW and sum of other tissues",
+        "status": "calculated",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Residual milk volume, Vmilk (L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Vmilk",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Residual milk volume, Vmilk (L) | 0.25 | - | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Plasma, VPIas (L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "VPIas",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Plasma",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.2 – 2.4 *",
+        "value": null,
+        "range_low": 3.2,
+        "range_high": 2.4,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Plasma, VPIas (L) | 3.2 – 2.4 * | - | Salas, et al 2006 (mother)",
+        "reference": "Salas, et al 2006 (mother)",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Mammary tissue (L)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.82 – 1.37 *",
+        "value": null,
+        "range_low": 0.82,
+        "range_high": 1.37,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Mammary tissue (L) | 0.82 – 1.37 * | - | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Maternal (QCC; L/h/kg 0.75 ; nonpregnant)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QCC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "20.0",
+        "value": 20.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75",
+        "unit_standardized": null,
+        "normalization_basis": "body_weight"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Maternal (QCC; L/h/kg 0.75 ; nonpregnant) | 20.0 |  | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Maternal (changing; L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "335–330 *",
+        "value": null,
+        "range_low": 335.0,
+        "range_high": 330.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Maternal (changing; L/h) | 335–330 * |  |  ",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Gut, QGutC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QGutC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.181",
+        "value": 0.181,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": null,
+        "normalization_basis": "cardiac_output"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Gut, QGutC | 0.181 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Liver, QLivC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QLivC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": null,
+        "normalization_basis": "cardiac_output"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Liver, QLivC | 0.25 |  | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Skin, QSkC",
+      "parameter_name_standardized": null,
+      "symbol_original": "QSkC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Skin",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.058",
+        "value": 0.058,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": null,
+        "normalization_basis": "cardiac_output"
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Skin, QSkC | 0.058 | - | Brown, et al 1997",
+        "reference": "Brown, et al 1997",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Kidney, QKid (L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QKid",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "38.5 – 30 *",
+        "value": null,
+        "range_low": 38.5,
+        "range_high": 30.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Kidney, QKid (L/h) | 38.5 – 30 * | - | GFR ~ 20% of renal plasma flow",
+        "reference": "GFR ~ 20% of renal plasma flow",
+        "status": "calculated",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Filtrate, QFilC (glomerular filtration rate; L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QFilC",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Filtrate",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.7 – 6.0 *",
+        "value": null,
+        "range_low": 7.7,
+        "range_high": 6.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Filtrate, QFilC (glomerular filtration rate; L/h) | 7.7 – 6.0 * | - | Sims & Krantz, 1958",
+        "reference": "Sims & Krantz, 1958",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fat, QFat (L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QFat",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "21.4 – 20.3 *",
+        "value": null,
+        "range_low": 21.4,
+        "range_high": 20.3,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Fat, QFat (L/h) | 21.4 – 20.3 * | - | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Mammary, QMam (L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QMam",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Mammary",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "13.7 – 21.0 *",
+        "value": null,
+        "range_low": 13.7,
+        "range_high": 21.0,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Mammary, QMam (L/h) | 13.7 – 21.0 * |  | Gentry, et al 2003",
+        "reference": "Gentry, et al 2003",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Remaining tissues, QR (L/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "QR",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": "Remaining tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "96.7 – 96.6 *",
+        "value": null,
+        "range_low": 96.7,
+        "range_high": 96.6,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Remaining tissues, QR (L/h) | 96.7 – 96.6 * | - | difference between total CO and flows to other tissues",
+        "reference": "difference between total CO and flows to other tissues",
+        "status": "calculated",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Hematocrit",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.38",
+        "value": 0.38,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Hematocrit | 0.38 | - | Davies & Morris 1993",
+        "reference": "Davies & Morris 1993",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Milk production rate, kmilk (L/hr)",
+      "parameter_name_standardized": null,
+      "symbol_original": "kmilk",
+      "symbol_standardized": null,
+      "context": {
+        "compound": null,
+        "formulation": null,
+        "species": "Mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0 – 0.037 *",
+        "value": null,
+        "range_low": 0.0,
+        "range_high": 0.037,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/hr",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 2",
+        "source_quote": "Milk production rate, kmilk (L/hr) | 0.0 – 0.037 * | milk production rate = suckling rate | Dewey, et al 1983",
+        "reference": "Dewey, et al 1983",
+        "status": "literature_derived",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free fraction of chemical in plasma (Free)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.02",
+        "value": 0.02,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Free fraction of chemical in plasma (Free) | 0.02 | 0.02 | 0.02 | 0.025 | 0.025 | 0.025",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "volume_of_distribution",
+      "parameter_name_original": "Volume of distribution (Vdc; infant only, scaled to BWKid)",
+      "parameter_name_standardized": null,
+      "symbol_original": null,
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "infant",
+        "life_stage": "infant",
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.17",
+        "value": 0.17,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Volume of distribution (Vdc; infant only, scaled to BWKid) | - | - | 0.17 |  | - | 0.22",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "transporter maximum, Tmc (ug/h/kg 0.75 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "Tmc",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "10",
+        "value": 10.0,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "ug/h/kg 0.75 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "transporter maximum, Tmc (ug/h/kg 0.75 ) | 10 | - | - | 3.5 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "affinity constant, Kt (ug/L)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Kt",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.055",
+        "value": 0.055,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "ug/L",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "affinity constant, Kt (ug/L) | 0.055 | - | - | 0.023 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Gut:plasma (Pgut)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Pgut",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "gut",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.05",
+        "value": 0.05,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Gut:plasma (Pgut) | 0.05 | - | - | 0.57 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Liver:plasma (Pliv)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Pliv",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "liver",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.2",
+        "value": 2.2,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Liver:plasma (Pliv) | 2.2 | - | - | 3.72 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Kidney: plasma (Pkid)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Pkid",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "kidney",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.05",
+        "value": 1.05,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Kidney: plasma (Pkid) | 1.05 | - | - | 0.8 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Fat: plasma (Pfat)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Pfat",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "fat",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.04",
+        "value": 0.04,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Fat: plasma (Pfat) | 0.04 | - | - | 0.13 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Mammary Tissue: plasma (Pmam; gestation only)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Pmam",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": "gestation",
+        "organ": "mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.13",
+        "value": 0.13,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Mammary Tissue: plasma (Pmam; gestation only) | 0.13 | - | - | 0.16 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Rest of body tissues: plasma (Ptis)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Ptis",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "rest of body tissues",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.12",
+        "value": 0.12,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Rest of body tissues: plasma (Ptis) | 0.12 | 0.12 | - | 0.20 | 0.20 | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Placenta:Plasma (Ppla)",
+      "parameter_name_standardized": null,
+      "symbol_original": "Ppla",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "placenta",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.28",
+        "value": 0.28,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Placenta:Plasma (Ppla) | 0.28 | - | - | 0.41 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Skin: plasma (PSk)",
+      "parameter_name_standardized": null,
+      "symbol_original": "PSk",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": "skin",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Skin: plasma (PSk) | 0.1 | - | - | 0.29 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Mammary tissue:plasma (PMam; gestation only)",
+      "parameter_name_standardized": null,
+      "symbol_original": "PMam",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": "gestation",
+        "organ": "mammary tissue",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.13",
+        "value": 0.13,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Mammary tissue:plasma (PMam; gestation only) | 0.13 | - |  | 0.16 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Milk: plasma (PMilk; lactation only)",
+      "parameter_name_standardized": null,
+      "symbol_original": "PMilk",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": "lactation",
+        "organ": "milk",
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.038",
+        "value": 0.038,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "Milk: plasma (PMilk; lactation only) | 0.038 | - | - | 0.0122 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": null,
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "uptake_elimination_rate_constant",
+      "parameter_name_original": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+      "parameter_name_standardized": null,
+      "symbol_original": "kurinec",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "/h/kg-0.25",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h) | 0.1 | - | 0.005 | 0.005 | - | 0.001",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "uptake_elimination_rate_constant",
+      "parameter_name_original": "mother to fetus, ktrans1C (L/h/kg 0.75 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "ktrans1C",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "mother",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.46",
+        "value": 0.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "mother to fetus, ktrans1C (L/h/kg 0.75 ) | 0.46 | - | - | 0.46 | - | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "uptake_elimination_rate_constant",
+      "parameter_name_original": "fetus to mother, ktrans2C (L/h/kg 0.75 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "ktrans2C",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "fetus",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.46",
+        "value": 0.46,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "fetus to mother, ktrans2C (L/h/kg 0.75 ) | - | 0.46 | - | - | 1.01 | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "uptake_elimination_rate_constant",
+      "parameter_name_original": "fetus to fluid, ktrans3C (L/h/kg 0.75 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "ktrans3C",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "fetus",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.008",
+        "value": 0.008,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "fetus to fluid, ktrans3C (L/h/kg 0.75 ) | - | 0.008 | - | - | 0.006 | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": null,
+      "parameter_class": "biochemical",
+      "parameter_subclass": "uptake_elimination_rate_constant",
+      "parameter_name_original": "fluid to fetus, ktrans4C (L/h/kg 0.75 )",
+      "parameter_name_standardized": null,
+      "symbol_original": "ktrans4C",
+      "symbol_standardized": null,
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "fetus",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.001",
+        "value": 0.001,
+        "range_low": null,
+        "range_high": null,
+        "variance": null,
+        "variance_type": null,
+        "unit_original": "L/h/kg 0.75 ",
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_page": null,
+        "source_location": "Table 3",
+        "source_quote": "fluid to fetus, ktrans4C (L/h/kg 0.75 ) | - | 0.001 | - | - | 0.001 | -",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": null
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": null,
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "dosing": [
+    {
+      "dose": 0.00019,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Exposure was modeled as a generic input to the plasma compartment (designated as “IV” in Figures 1 and 2) as contributions of PFAA exposure from different exposure routes are not well understood (Fromme et al. 2009)."
+    },
+    {
+      "dose": 0.0004,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "Exposure was modeled as a generic input to the plasma compartment (designated as “IV” in Figures 1 and 2) as contributions of PFAA exposure from different exposure routes are not well understood (Fromme et al. 2009)."
+    },
+    {
+      "dose": 0.00019,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "For PFOA, sensitivity analysis was performed assuming an estimated maternal exposure of 1.9e-4 ug/kg BW/day for both gestation and lactation; for PFOS, the analysis was performed assuming an estimated maternal exposure of 4.0e-4 ug/kg BW/day for both the gestation and lactation models."
+    },
+    {
+      "dose": 0.00011,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "For PFOA exposure during pregnancy, estimated maternal exposures ranged from 1.1e−04 to 6.9e−04 ug/kg BW/day, and for PFOS, estimated maternal exposures ranged from 1.9e−04 to 4.4e−03 ug/kg BW/day."
+    },
+    {
+      "dose": 0.00028,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "For PFOA during lactation, estimated exposures ranged from 1.1e−04 to 2.8e−04 ug/kg BW/day."
+    },
+    {
+      "dose": 0.00035,
+      "dose_unit": "ug/kg BW/day",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "PFOS was detected in all studies in plasma or milk, and estimated maternal PFOS exposures during lactation ranged from 3.5e−04 to 2.3e−03 ug/kg BW/day."
+    },
+    {
+      "dose": 3.55,
+      "dose_unit": "ppb",
+      "route": "Oral",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "The reported concentrations for PFOA in drinking water were used (3.55 ppb for Little Hocking)(Emmett et al. 2006) and 0.519 ppb for Arnsberg (Holzer et al. 2008)."
+    },
+    {
+      "dose": 0.519,
+      "dose_unit": "ppb",
+      "route": "Oral",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": null,
+      "duration_h": null,
+      "source_quote": "The reported concentrations for PFOA in drinking water were used (3.55 ppb for Little Hocking)(Emmett et al. 2006) and 0.519 ppb for Arnsberg (Holzer et al. 2008)."
+    }
+  ],
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 1.86,
+    "total_parameters": 69,
+    "parameters_with_flags": 69,
+    "total_flags": 153,
+    "error_count": 80,
+    "warning_count": 73,
+    "clean": false,
+    "summary": "153/69 parameters flagged: 80 error(s), 73 warning(s). Elapsed: 1.9ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 0,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='56.9 – 70 (initial); 65.3 – 79.6 (increasing)' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 1,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 1,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0171' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 2,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 2,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.026' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 3,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 3,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.004' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 4,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 4,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0004' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 5,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 5,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.214' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 6,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 6,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0062' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 7,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 7,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0428' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 8,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 8,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='14.0 – 19.5 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 9,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 9,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.41 – 0.79 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 10,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 10,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0 – 0.63 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 11,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 11,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.7 – 3.2 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 12,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 12,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='34.5 – 31.9 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 12,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=34.5 > range_high=31.9.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 13,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 13,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0 – 0.51 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 14,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 14,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='20.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 15,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 15,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='54.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 16,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 16,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.181' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 17,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 17,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.25' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 18,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 18,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.058' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 19,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 19,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.38 – 0.367 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 19,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=0.38 > range_high=0.367.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 20,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 20,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='295 – 355 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 21,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 21,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='14.8 – 21.2 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 22,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 22,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='7.7 – 15.4 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 23,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 23,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0 – 23.4 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 24,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 24,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='24.4 – 40.3 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 25,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 25,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='6.0 – 9.1 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 26,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 26,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='108 – 115 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 27,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 27,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='72 – 67.5 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 27,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=72.0 > range_high=67.5.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 28,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 28,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.5 – 8 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 29,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 29,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0171' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 29,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 1 (key: ('', 'mother', (), 'physiological', 'organ_volume_fraction', 'gut', 'gut, vgutc'), value=0.0171).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 30,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 30,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.026' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 30,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 2 (key: ('', 'mother', (), 'physiological', 'organ_volume_fraction', 'liver', 'liver, vlivc'), value=0.026).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 31,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 31,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.30 – 0.285 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 31,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=0.3 > range_high=0.285.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 32,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 32,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.004' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 32,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 3 (key: ('', 'mother', (), 'physiological', 'organ_volume_fraction', 'kidney', 'kidney, vkidc'), value=0.004).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 33,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 33,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0004' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 33,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact semantic duplicate of parameter at index 4 (key: ('', 'mother', (), 'physiological', 'organ_volume_fraction', 'filtrate', 'filtrate, vfilc'), value=0.0004).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 34,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 34,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='31.4 – 30.2 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 34,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=31.4 > range_high=30.2.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 35,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 35,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.25' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 36,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 36,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.2 – 2.4 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 36,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=3.2 > range_high=2.4.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 37,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 37,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.82 – 1.37 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 38,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 38,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='20.0' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 39,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='335–330 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=335.0 > range_high=330.0.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 40,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 40,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.181' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 41,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 41,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.25' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 42,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 42,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.058' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 43,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 43,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='38.5 – 30 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 43,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=38.5 > range_high=30.0.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 44,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 44,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='7.7 – 6.0 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 44,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=7.7 > range_high=6.0.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 45,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 45,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='21.4 – 20.3 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 45,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=21.4 > range_high=20.3.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 46,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 46,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='13.7 – 21.0 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 47,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 47,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='96.7 – 96.6 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 47,
+        "param_name": "",
+        "severity": "error",
+        "rule": "INVERTED_RANGE",
+        "message": "range_low=96.7 > range_high=96.6.",
+        "suggested_fix": "Swap low and high values."
+      },
+      {
+        "param_index": 48,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 48,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.38' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 49,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 49,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0 – 0.037 *' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 50,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 50,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.02' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 51,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 51,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.17' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 52,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 52,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='10' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 53,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 53,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.055' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 54,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 54,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.05' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 55,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 55,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.2' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 56,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 56,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.05' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 57,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 57,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.04' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 58,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 58,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.13' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 59,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 59,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.12' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 60,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 60,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.28' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 61,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 61,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 62,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 62,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.13' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 63,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 63,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.038' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 64,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 64,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.1' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 65,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 65,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.46' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 66,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 66,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.46' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 67,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 67,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.008' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 68,
+        "param_name": "<UNNAMED>",
+        "severity": "error",
+        "rule": "MISSING_NAME",
+        "message": "parameter_name is empty or null.",
+        "suggested_fix": "Provide a descriptive name or the printed symbol."
+      },
+      {
+        "param_index": 68,
+        "param_name": "",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.001' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  }
+}

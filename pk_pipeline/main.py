@@ -110,41 +110,237 @@ def convert_pdf_to_images(pdf_path: str):
 import copy
 import re
 
+# ─────────────────────────────────────────────────────────────
+# Parameter Category Classifier
+# ─────────────────────────────────────────────────────────────
+
+# Keywords strongly associated with SYSTEM-SPECIFIC (physiological) parameters.
+# These describe the biological organism, not the drug.
+_SYSTEM_KEYWORDS = [
+    # Anatomical / organ volumes
+    "body weight", "organ weight", "tissue volume", "volume fraction",
+    "cardiac output", "blood flow", "regional blood flow", "plasma flow",
+    "glomerular filtration", "renal filtration", "urine flow",
+    "fractional blood flow", "fractional tissue volume",
+    # Tissue composition
+    "water content", "lipid content", "protein content", "neutral lipid",
+    "phospholipid", "albumin", "water fraction", "lipid fraction",
+    "neutral phospholipid", "acidic phospholipid",
+    # Biological activity / enzyme/transporter abundance
+    "enzyme abundance", "transporter expression", "mrna", "cyp abundance",
+    "microsomal protein", "hepatocellularity", "liver weight",
+    # Common PBPK anatomical symbols
+    "qco", "qliv", "qkid", "qgut", "qfat", "qsk", "qmam", "qr", "qfil",
+    "vblood", "vliv", "vkid", "vgut", "vfat", "vsk", "vr", "vmam", "vfil",
+    "bw", "vfet",
+    # General physiological descriptors
+    "physiological", "anatomical", "hemodynamic", "species-specific",
+    "population", "tissue",
+]
+
+# Keywords strongly associated with COMPOUND-SPECIFIC (chemical/biochemical) parameters.
+_COMPOUND_KEYWORDS = [
+    # Physicochemical
+    "molecular weight", "logp", "logd", "log p", "log d",
+    "pka", "solubility", "intrinsic solubility", "particle size",
+    "particle density", "particle radius", "lipophilicity",
+    "ionization", "dissociation", "Henderson",
+    # Protein binding / blood
+    "plasma protein binding", "fraction unbound", "fu", "fup", "fub",
+    "blood-to-plasma", "blood to plasma", "b/p ratio", "b:p",
+    # Permeability / transport
+    "permeability", "caco-2", "caco2", "papp", "passive permeability",
+    "p-glycoprotein", "pgp", "efflux", "influx transporter",
+    "membrane permeability",
+    # Metabolism / clearance
+    "intrinsic clearance", "clint", "cl_int", "metabolic clearance",
+    "in vitro clearance", "microsomal clearance", "hepatic clearance",
+    "renal clearance", "total clearance", "apparent clearance",
+    "half-life", "half life", "t1/2", "elimination rate",
+    "metabolic rate", "vmax", "km",
+    # Inhibition
+    "inhibition constant", "ki", "ic50", "ec50",
+    # Distribution
+    "volume of distribution", "vd", "vc", "vp",
+    "partition coefficient", "tissue-to-plasma", "tissue:plasma",
+    "distribution coefficient",
+    # Absorption
+    "absorption rate", "ka", "bioavailability", "fraction absorbed",
+    "first-pass", "gut absorption", "dissolution",
+]
+
+
+# Subclasses that always belong to the 'physiological' class
+_PHYSIOLOGICAL_SUBCLASSES = [
+    "organ_blood_flow_fraction", "blood_flow_fraction",
+    "organ_volume_fraction", "volume_fraction",
+    "glomerular_filtration", "cardiac_output",
+]
+
+# Subclasses that always belong to the 'biochemical' class
+_BIOCHEMICAL_SUBCLASSES = [
+    "partition_coefficient", "fraction_unbound",
+    "absorption_rate_constant", "gastric_emptying_rate", "fecal_elimination_rate_constant",
+    "maximal_velocity", "michaelis_menten_constant",
+    "renal_clearance", "metabolic_clearance", "clearance",
+]
+
+
+def _classify_parameter_category(param: dict) -> str:
+    """Classify a single parameter dict as 'physiological', 'biochemical', or 'compound_specific'.
+
+    Rules (applied in order, first match wins):
+    1. If parameter_subclass maps to a known physiological subclass -> physiological.
+    2. If parameter_subclass maps to a known biochemical subclass -> biochemical.
+    3. If parameter_name or symbol contains physiological keywords -> physiological.
+    4. If parameter_name or symbol contains biochemical/compound keywords -> biochemical.
+    5. Default: physiological (anatomical parameters dominate PBPK tables).
+    """
+    import re as _re
+    subclass = (param.get("parameter_subclass") or "").lower()
+    name = (param.get("parameter_name_original") or param.get("parameter_name") or "").lower()
+    symbol = (param.get("symbol_original") or param.get("symbol") or "").lower()
+    full_text = f"{name} {symbol} {subclass}"
+
+    def _matches(kw: str, text: str) -> bool:
+        if len(kw) <= 4:
+            return bool(_re.search(r'\b' + _re.escape(kw) + r'\b', text))
+        return kw in text
+
+    # Rule 1: subclass-based physiological
+    for sub in _PHYSIOLOGICAL_SUBCLASSES:
+        if sub in subclass:
+            return "physiological"
+
+    # Rule 2: subclass-based biochemical
+    for sub in _BIOCHEMICAL_SUBCLASSES:
+        if sub in subclass:
+            return "biochemical"
+
+    # Rule 3: name-based physiological
+    for kw in _SYSTEM_KEYWORDS:
+        if _matches(kw, full_text):
+            return "physiological"
+
+    # Rule 4: name-based biochemical/compound
+    for kw in _COMPOUND_KEYWORDS:
+        if _matches(kw, full_text):
+            return "biochemical"
+
+    # Rule 5: default
+    return "physiological"
+
+
 def post_process_document(document, pdf_path):
     print("Step 4: Running Python Post-Processing Cleanup...")
-    # 1. Clean up stubborn VLM Formulations (split ranges with comma values and multiple compounds)
+    # 1. Clean up parameters with no quantitative value, and split multi-formulation comma-separated values
     new_params = []
-    for p in document.get("parameters", []):
-        compound = p.get("context", {}).get("compound", "")
-        # Look for multiple compounds like "Rilutor, ASD"
-        if compound and ("," in compound or " and " in compound):
-            q_data = p.get("quantitative_data", {})
-            r_low = q_data.get("range_low")
-            r_high = q_data.get("range_high")
-            val_text = q_data.get("value_text", "")
+    for p in document.get("model_parameters", []):
+        q_data = p.get("quantitative_data", {})
+        
+        # Skip parameters with no quantitative value whatsoever
+        if q_data.get("value_text") is None and q_data.get("value") is None:
+            continue
             
-            # If the VLM mapped it to range_low and range_high but it came from comma separated values
-            if r_low is not None and r_high is not None and "," in val_text:
-                compounds = [c.strip() for c in re.split(r',| and ', compound) if c.strip()]
-                if len(compounds) == 2:
-                    p1 = copy.deepcopy(p)
-                    p1["context"]["compound"] = compounds[0]
-                    p1["quantitative_data"]["value"] = float(r_low)
-                    p1["quantitative_data"]["range_low"] = None
-                    p1["quantitative_data"]["range_high"] = None
-                    p1["quantitative_data"]["value_text"] = str(r_low)
-                    
-                    p2 = copy.deepcopy(p)
-                    p2["context"]["compound"] = compounds[1]
-                    p2["quantitative_data"]["value"] = float(r_high)
-                    p2["quantitative_data"]["range_low"] = None
-                    p2["quantitative_data"]["range_high"] = None
-                    p2["quantitative_data"]["value_text"] = str(r_high)
-                    
-                    new_params.extend([p1, p2])
+        # Reroute non-PBPK physical measurements (like contact angle) that the LLM mistakenly placed here
+        p_name_lower = (p.get("parameter_name_original") or "").lower()
+        uo_str = q_data.get("unit_original") or ""
+        
+        if "contact angle" in p_name_lower or uo_str == "°" or "particle size" in p_name_lower or "dissolution" in p_name_lower:
+            print(f"  -> [Safety] Rerouting '{p.get('parameter_name_original')}' from model_parameters to formulation_characterization.")
+            # extract first formulation name if present
+            fm_form = (p.get("context") or {}).get("formulation", [None])
+            fm_form = fm_form[0] if fm_form else (p.get("context") or {}).get("compound")
+            fm = {
+                "measurement_type": "contact_angle" if ("angle" in p_name_lower or uo_str == "°") else "particle_size",
+                "sample_component": fm_form,
+                "probe_liquid": None,
+                "value": q_data.get("value"),
+                "variance": q_data.get("variance"),
+                "variance_type": q_data.get("variance_type"),
+                "unit": uo_str,
+                "provenance": p.get("provenance")
+            }
+            if "formulation_characterization" not in document:
+                document["formulation_characterization"] = []
+            document["formulation_characterization"].append(fm)
+            continue
+        
+        # Split comma-separated multi-formulation values into distinct atomic records
+        # e.g. Kabs = '0.69, 2.19' for formulations ['Rilutor', 'ASD']
+        val_text = (q_data.get("value_text") or "")
+        formulations = (p.get("context") or {}).get("formulation") or []
+        if (
+            "," in val_text
+            and q_data.get("value") is None  # not already a single float
+        ):
+            raw_vals = [v.strip() for v in val_text.split(",")]
+            parsed = []
+            for rv in raw_vals:
+                try:
+                    parsed.append((rv, float(rv)))
+                except ValueError:
+                    pass
+            if parsed and len(parsed) > 1:
+                # If we don't have enough formulations, pad with generic names or reuse what we have
+                forms_to_use = formulations.copy()
+                while len(forms_to_use) < len(parsed):
+                    forms_to_use.append(f"Formulation {len(forms_to_use)+1}")
+                
+                for (rv, fv), form in zip(parsed, forms_to_use):
+                    child = copy.deepcopy(p)
+                    child["context"]["formulation"] = [form] if form and not form.startswith("Formulation ") else []
+                    child["quantitative_data"]["value_text"] = rv
+                    child["quantitative_data"]["value"] = fv
+                    child["quantitative_data"]["range_start"] = None
+                    child["quantitative_data"]["range_end"] = None
+                    new_params.append(child)
+                continue
+        
+        # Enforce type: if value is somehow a string (LLM hallucination), nullify it
+        if q_data.get("value") is not None and not isinstance(q_data.get("value"), (int, float)):
+            try:
+                p["quantitative_data"]["value"] = float(q_data.get("value"))
+            except (ValueError, TypeError):
+                p["quantitative_data"]["value"] = None
+        
+        # Prevent silent order-of-magnitude corruption: check for dropped SI prefixes
+        uo = q_data.get("unit_original")
+        us = q_data.get("unit_standardized")
+        if uo and us:
+            uo_lower = uo.lower()
+            us_lower = us.lower()
+            prefixes = ["nmol", "μmol", "umol", "mmol", "pmol", "mg", "μg", "ug", "ng", "pg", "ml", "μl", "ul"]
+            for prefix in prefixes:
+                norm_p = prefix.replace("μ", "u")
+                norm_uo = uo_lower.replace("μ", "u")
+                norm_us = us_lower.replace("μ", "u")
+                if norm_p in norm_uo and norm_p not in norm_us:
+                    print(f"  -> [Safety] Nullifying corrupted unit_standardized '{us}' (dropped '{prefix}' from '{uo}')")
+                    p["quantitative_data"]["unit_standardized"] = None
+                    break
+        
+        # Also fix when range_start and range_end are actually comma-pairs for two formulations
+        r_start = q_data.get("range_start")
+        r_end = q_data.get("range_end")
+        if r_start is not None and r_end is not None:
+            try:
+                if len(formulations) == 2:
+                    # This is two formulation values, not a range
+                    for fv, form in [(float(r_start), formulations[0]), (float(r_end), formulations[1])]:
+                        child = copy.deepcopy(p)
+                        child["context"]["formulation"] = [form]
+                        child["quantitative_data"]["value"] = fv
+                        child["quantitative_data"]["value_text"] = str(fv)
+                        child["quantitative_data"]["range_start"] = None
+                        child["quantitative_data"]["range_end"] = None
+                        new_params.append(child)
                     continue
+            except (TypeError, ValueError):
+                pass
+            
         new_params.append(p)
-    document["parameters"] = new_params
+    document["model_parameters"] = new_params
     
     # 2. Text-sweep for targeted commonly dropped parameters (e.g. ratios broken across columns)
     try:
@@ -174,19 +370,19 @@ def post_process_document(document, pdf_path):
                     if "placental" in context or "cord/mother" in context or "maternal/cord" in context or "ktrans" in context:
                         # Check if this parameter already exists in document["parameters"]
                         exists = False
-                        for p in document["parameters"]:
+                        for p in document["model_parameters"]:
                             c = p.get("context", {}).get("compound", "")
                             if not c: continue
-                            n = p.get("parameter_name", "").lower()
+                            n = p.get("parameter_name_original", "").lower()
                             if c.lower() == comp.lower() and ("ratio" in n or "placental" in n):
                                 exists = True
                                 break
                         if not exists:
                             print(f"  -> Post-processing sweep found missed parameter: {comp} Placental transfer ratio = {val}")
-                            document["parameters"].append({
+                            document["model_parameters"].append({
                                 "needs_review": True,
-                                "parameter_name": f"Placental transfer ratio for {comp}",
-                                "symbol": "ktrans",
+                                "parameter_name_original": f"Placental transfer ratio for {comp}",
+                                "symbol_original": "ktrans",
                                 "context": {
                                     "compound": comp,
                                     "subject_species": None,
@@ -198,13 +394,13 @@ def post_process_document(document, pdf_path):
                                 "quantitative_data": {
                                     "value_text": str(val),
                                     "value": val,
-                                    "range_low": None,
-                                    "range_high": None,
+                                    "range_start": None,
+                                    "range_end": None,
                                     "variance": None,
                                     "variance_type": None,
-                                    "unit": "None",
-                                    "unit_inherited": False,
-                                    "value_qualifier": None
+                                    "unit_original": "None",
+                                    "unit_standardized": None,
+                                    "normalization_basis": None
                                 },
                                 "provenance": {
                                     "source_location": "Regex text sweep fallback",
@@ -216,6 +412,18 @@ def post_process_document(document, pdf_path):
                             
     except Exception as e:
         print(f"  -> Error in post-processing text sweep: {e}")
+
+    # 3. Classify each parameter using the 3-class taxonomy
+    print("  -> Classifying parameters into physiological / biochemical / compound_specific...")
+    for p in document.get("model_parameters", []):
+        # Only override if not already set by VLM or block propagation
+        if not p.get("parameter_class"):
+            p["parameter_class"] = _classify_parameter_category(p)
+
+    n_phys  = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "physiological")
+    n_bio   = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "biochemical")
+    n_cmpd  = sum(1 for p in document["model_parameters"] if p.get("parameter_class") == "compound_specific")
+    print(f"     physiological: {n_phys}  |  biochemical: {n_bio}  |  compound_specific: {n_cmpd}")
 
     return document
 
@@ -261,8 +469,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             final_document = {
                 "page_metadata": xml_data.get("metadata", {"title": None, "authors": None, "journal": None, "year": None}),
                 "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-                "structure": None,
-                "parameters": [],
+                "model_structure": None,
+                "model_parameters": [],
+                "observed_data": [],
+                "simulated_data": [],
+                "formulation_characterization": [],
+                "qualitative_findings": [],
+                "parameter_mentions_without_values": [],
                 "dosing": [],
                 "ingestion_source": res.get("source"),
                 "ingestion_source_type": res.get("source_type", "published"),
@@ -384,11 +597,29 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         if final_document["model_classification"]["model_type"] == "not_applicable":
                             final_document["model_classification"] = extracted_page.model_classification.model_dump()
 
-                    if extracted_page and extracted_page.structure and not final_document["structure"]:
-                        final_document["structure"] = extracted_page.structure.model_dump(by_alias=True, exclude_none=True)
+                    if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
+                        final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
 
-                    if extracted_page.parameters:
-                        final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
+                    if extracted_page.parameter_blocks:
+                        for block in extracted_page.parameter_blocks:
+                            for p in block.parameters:
+                                if block.implied_species and not p.context.species:
+                                    p.context.species = block.implied_species
+                                if block.implied_unit_original and not p.quantitative_data.unit_original:
+                                    p.quantitative_data.unit_original = block.implied_unit_original
+                                if block.parameter_class and not p.parameter_class:
+                                    p.parameter_class = block.parameter_class
+                                final_document["model_parameters"].append(p.model_dump())
+                    if extracted_page.observed_data:
+                        final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
+                    if extracted_page.simulated_data:
+                        final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
+                    if extracted_page.formulation_characterization:
+                        final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
+                    if extracted_page.qualitative_findings:
+                        final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
+                    if extracted_page.parameter_mentions_without_values:
+                        final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
 
             if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
                 final_document["model_classification"]["model_type"] = doc_triage_type
@@ -490,32 +721,40 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                     table_boxes.append(box.tolist())
                     
             if table_boxes:
-                table_context = text
-                if use_wevisdoc:
-                    try:
-                        print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} table structure to HTML & LaTeX...")
-                        clean_pix = page.get_pixmap(matrix=pymupdf.Matrix(200/72, 200/72))
-                        clean_img = Image.open(io.BytesIO(clean_pix.tobytes())).convert("RGB")
-                        wevisdoc_md = get_wevisdoc().parse_image(clean_img)
-                        table_context = wevisdoc_md
-                        wevisdoc_stats["pages_transcribed"] += 1
-                        print(f"  -> [WeVisDoc-4B] Page {page_num} table transcribed successfully ({len(wevisdoc_md)} chars).")
-                    except Exception as e:
-                        print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
-                        table_context = text
+                # --- Crop each detected table box individually ---
+                # Padding (in pixels at 300 DPI render) to retain sub-headers / footnotes
+                PAD = 30
+                img_w, img_h = full_page_img.size
 
-                # Draw thick red boundaries around the detected tables on the full page image
-                draw = ImageDraw.Draw(full_page_img)
-                for box in table_boxes:
+                for t_idx, box in enumerate(table_boxes):
                     x_min, y_min, x_max, y_max = box
-                    draw.rectangle([x_min, y_min, x_max, y_max], outline="red", width=6)
-                
-                llm_payloads.append({
-                    "role": "page_with_table",
-                    "page": page_num,
-                    "img_obj": full_page_img,
-                    "markdown_context": table_context,
-                })
+                    # Apply padding, clamped to image bounds
+                    cx0 = max(0, int(x_min) - PAD)
+                    cy0 = max(0, int(y_min) - PAD)
+                    cx1 = min(img_w, int(x_max) + PAD)
+                    cy1 = min(img_h, int(y_max) + PAD)
+
+                    table_crop_img = full_page_img.crop((cx0, cy0, cx1, cy1))
+
+                    table_context = text  # fallback: native text from pymupdf4llm
+                    if use_wevisdoc:
+                        try:
+                            print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} Table {t_idx+1}/{len(table_boxes)} (crop {cx1-cx0}x{cy1-cy0}px)...")
+                            wevisdoc_md = get_wevisdoc().parse_image(table_crop_img)
+                            table_context = wevisdoc_md
+                            wevisdoc_stats["pages_transcribed"] += 1
+                            print(f"  -> [WeVisDoc-4B] Page {page_num} Table {t_idx+1} transcribed ({len(wevisdoc_md)} chars).")
+                        except Exception as e:
+                            print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
+                            table_context = text
+
+                    llm_payloads.append({
+                        "role": "page_with_table",
+                        "page": page_num,
+                        "table_index": t_idx + 1,
+                        "img_obj": table_crop_img,        # tight crop, not full page
+                        "markdown_context": table_context,
+                    })
             elif has_image:
                 laya_stats["evaluated"] += 1
                 keep, prob, mtype = get_laya().is_pk_relevant(text)
@@ -550,12 +789,20 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         async def bound_extract(p):
             async with sem:
                 role = p.get("role")
-                if role in ["page_with_table", "page_with_figure"]:
+                if role == "page_with_table":
+                    t_idx = p.get("table_index", 1)
+                    return await get_extractor().extract_data(
+                        p["img_obj"],
+                        role="table_crop",
+                        evidence_text=p["markdown_context"],
+                        chunk_title=f"Page {p['page']} Table {t_idx}"
+                    )
+                elif role == "page_with_figure":
                     return await get_extractor().extract_data(
                         p["img_obj"],
                         role="full_page",
                         evidence_text=p["markdown_context"],
-                        chunk_title=f"Page {p['page']} {role.replace('page_with_', '')}"
+                        chunk_title=f"Page {p['page']} figure"
                     )
                 else:
                     return await get_extractor().extract_from_text(
@@ -570,8 +817,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         final_document = {
             "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
             "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-            "structure": None,
-            "parameters": []
+            "model_structure": None,
+            "model_parameters": [],
+            "observed_data": [],
+            "simulated_data": [],
+            "formulation_characterization": [],
+            "qualitative_findings": [],
+            "parameter_mentions_without_values": [],
         }
         
         for chunk_idx, res_item in enumerate(results):
@@ -582,10 +834,28 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 if extracted_page and extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
                     if final_document["model_classification"]["model_type"] == "not_applicable":
                         final_document["model_classification"] = extracted_page.model_classification.model_dump()
-                if extracted_page and extracted_page.structure and not final_document["structure"]:
-                    final_document["structure"] = extracted_page.structure.model_dump(by_alias=True, exclude_none=True)
-                if extracted_page and extracted_page.parameters:
-                    final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
+                if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
+                    final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+                if extracted_page and extracted_page.parameter_blocks:
+                    for block in extracted_page.parameter_blocks:
+                        for p in block.parameters:
+                            if block.implied_species and not p.context.species:
+                                p.context.species = block.implied_species
+                            if block.implied_unit_original and not p.quantitative_data.unit_original:
+                                p.quantitative_data.unit_original = block.implied_unit_original
+                            if block.parameter_class and not p.parameter_class:
+                                p.parameter_class = block.parameter_class
+                            final_document["model_parameters"].append(p.model_dump())
+                if extracted_page and extracted_page.observed_data:
+                    final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
+                if extracted_page and extracted_page.simulated_data:
+                    final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
+                if extracted_page and extracted_page.formulation_characterization:
+                    final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
+                if extracted_page and extracted_page.qualitative_findings:
+                    final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
+                if extracted_page and extracted_page.parameter_mentions_without_values:
+                    final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
                     
         if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
             final_document["model_classification"]["model_type"] = doc_triage_type
@@ -740,8 +1010,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
     final_document = {
         "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
         "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-        "structure": None,
-        "parameters": [],
+        "model_structure": None,
+        "model_parameters": [],
+        "observed_data": [],
+        "simulated_data": [],
+        "formulation_characterization": [],
+        "qualitative_findings": [],
+        "parameter_mentions_without_values": [],
         "dosing": []
     }
     # Use a Semaphore to limit concurrency to 2 pages at a time to prevent GPU OOM deadlocks
@@ -773,12 +1048,30 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 final_document["model_classification"] = extracted_page.model_classification.model_dump()
         
         # Merge structure (take the first one we find)
-        if extracted_page.structure and not final_document["structure"]:
-            final_document["structure"] = extracted_page.structure.model_dump(by_alias=True, exclude_none=True)
+        if extracted_page.model_structure and not final_document["model_structure"]:
+            final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
             
         # Aggregate all parameters
-        if extracted_page.parameters:
-            final_document["parameters"].extend([p.model_dump() for p in extracted_page.parameters])
+        if extracted_page.parameter_blocks:
+            for block in extracted_page.parameter_blocks:
+                for p in block.parameters:
+                    if block.implied_species and not p.context.species:
+                        p.context.species = block.implied_species
+                    if block.implied_unit_original and not p.quantitative_data.unit_original:
+                        p.quantitative_data.unit_original = block.implied_unit_original
+                    if block.parameter_class and not p.parameter_class:
+                        p.parameter_class = block.parameter_class
+                    final_document["model_parameters"].append(p.model_dump())
+        if extracted_page.observed_data:
+            final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
+        if extracted_page.simulated_data:
+            final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
+        if extracted_page.formulation_characterization:
+            final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
+        if extracted_page.qualitative_findings:
+            final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
+        if extracted_page.parameter_mentions_without_values:
+            final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
             
     print("Step: Extracting Dosing Events from Methods...")
     try:
@@ -924,7 +1217,7 @@ Examples:
                     json.dump(result, f, indent=2, ensure_ascii=False)
 
                 doc_time = time.time() - doc_start
-                n_params = len(result.get("parameters", [])) if isinstance(result, dict) else "?"
+                n_params = sum(len(b.get("parameters", [])) for b in result.get("parameter_blocks", [])) if isinstance(result, dict) else "?"
                 print(f"  DONE   {label} {basename}  |  {n_params} params  |  {doc_time:.1f}s  ->  {output_path}")
 
                 # ── Optional Tier 2 LLM critic ───────────────────────────────
@@ -979,7 +1272,7 @@ Examples:
     batch_time = time.time() - batch_start
 
     # ── Summary ───────────────────────────────────────────────────────────────
-    total_params   = sum(len(r.get("parameters", [])) for r in results_map.values() if isinstance(r, dict))
+    total_params   = sum(sum(len(b.get("parameters", [])) for b in r.get("parameter_blocks", [])) for r in results_map.values() if isinstance(r, dict))
     total_laya     = sum(r.get("laya_filter_summary", {}).get("discarded_chunks", 0) for r in results_map.values() if isinstance(r, dict))
     total_wevisdoc = sum(r.get("wevisdoc_summary", {}).get("pages_transcribed", 0) for r in results_map.values() if isinstance(r, dict))
 

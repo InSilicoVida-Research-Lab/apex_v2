@@ -37,6 +37,14 @@ UNPAYWALL_EMAIL = "pbpk-extractor@research.local"   # required by Unpaywall ToS
 def _normalize_doi(doi: str) -> str:
     return re.sub(r"^https?://doi\.org/", "", doi.strip())
 
+def _title_matches(query: str, target: str) -> bool:
+    import difflib
+    if not query or not target:
+        return False
+    q = query.lower().strip()
+    t = target.lower().strip()
+    return difflib.SequenceMatcher(None, q, t).ratio() > 0.8
+
 
 def _esearch_pmc(params: dict) -> str | None:
     try:
@@ -362,6 +370,14 @@ def try_europe_pmc(doi: str = None, title: str = None) -> str | None:
             return None
 
         hit = results[0]
+        
+        # Enforce strict title matching to prevent fuzzy-search wrong paper downloads
+        if title:
+            hit_title = hit.get("title", "")
+            if not _title_matches(title, hit_title):
+                print(f"  [Europe PMC] Result title mismatch: '{hit_title}' != '{title}'")
+                return None
+
         pmcid = hit.get("pmcid")
         has_full_text = hit.get("hasTextMinedTerms") == "Y" or hit.get("inEPMC") == "Y"
 
@@ -523,6 +539,13 @@ def try_semantic_scholar(doi: str = None, title: str = None) -> str | None:
 
         r.raise_for_status() if hasattr(r, "status_code") else None
         paper = r.json()
+        
+        # Enforce strict title matching to prevent fuzzy-search wrong paper downloads
+        if title and not doi:
+            hit_title = paper.get("title", "")
+            if not _title_matches(title, hit_title):
+                print(f"  [Semantic Scholar] Result title mismatch: '{hit_title}' != '{title}'")
+                return None
 
         oa_pdf = paper.get("openAccessPdf")
         if not oa_pdf or not oa_pdf.get("url"):
