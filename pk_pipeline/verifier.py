@@ -126,6 +126,129 @@ class VerificationReport:
 
 
 # ---------------------------------------------------------------------------
+# Helpers for Table and Cell Normalization / Matching
+# ---------------------------------------------------------------------------
+
+def normalize_text(text: Optional[str]) -> str:
+    """Normalize text for reliable string comparison."""
+    if not text:
+        return ""
+    return re.sub(r"\s+", " ", str(text).strip().lower())
+
+def normalize_table_id(s: Optional[str]) -> str:
+    """Normalize table ID (e.g. 'Table 1: ...' -> 'table1', 'Table S1' -> 'tables1')."""
+    if not s:
+        return ""
+    norm = re.sub(r"\s+", "", str(s).strip().lower())
+    m = re.match(r"(table\s*s?\d+)", norm)
+    if m:
+        return m.group(1).replace(" ", "")
+    return norm
+
+def find_matched_cell(param: dict, te: dict) -> Optional[dict]:
+    """Find the specific TableCell in TableEvidence corresponding to an extracted parameter."""
+    if not te:
+        return None
+    cells = te.get("cells", [])
+    if not cells:
+        return None
+
+    rows_by_id = {r.get("row_id"): r for r in te.get("rows", []) if r.get("row_id")}
+    cols_by_id = {c.get("column_id"): c for c in te.get("columns", []) if c.get("column_id")}
+
+    def format_cell_info(c: dict) -> dict:
+        r_obj = rows_by_id.get(c.get("row_id"), {})
+        c_obj = cols_by_id.get(c.get("column_id"), {})
+        return {
+            "cell_id": c.get("cell_id"),
+            "row_id": c.get("row_id"),
+            "row_path": r_obj.get("path", []),
+            "column_id": c.get("column_id"),
+            "column_path": c_obj.get("path", []),
+            "text": c.get("text"),
+            "numeric_value": c.get("numeric_value"),
+            "unit": c.get("unit"),
+            "qualifier": c.get("qualifier"),
+            "uncertainty_text": c.get("uncertainty_text")
+        }
+
+    prov = param.get("provenance", {}) or {}
+    qdata = param.get("quantitative_data", {}) or {}
+    ctx = param.get("context", {}) or {}
+    val = qdata.get("value")
+    val_text = str(qdata.get("value_text") or "").strip()
+    param_name = (param.get("parameter_name_original") or param.get("symbol_original") or "").lower()
+    compound = (ctx.get("compound") or "").lower()
+
+    # 1. Match by cell_id if present
+    target_cell_id = prov.get("cell_id")
+    if target_cell_id:
+        for c in cells:
+            if c.get("cell_id") == target_cell_id:
+                return format_cell_info(c)
+
+    # 2. Match by row_id and column_id if present
+    target_row_id = prov.get("row_id")
+    target_col_id = prov.get("column_id")
+    if target_row_id and target_col_id:
+        for c in cells:
+            if c.get("row_id") == target_row_id and c.get("column_id") == target_col_id:
+                return format_cell_info(c)
+
+    # 3. Match by numeric value or text
+    candidates = []
+    for c in cells:
+        c_val = c.get("numeric_value")
+        c_text = str(c.get("text") or "").strip()
+        val_match = False
+        if val is not None and c_val is not None:
+            if abs(c_val - val) <= abs(val) * 0.03 + 1e-6:
+                val_match = True
+        elif val_text and (val_text in c_text or c_text in val_text):
+            val_match = True
+
+        if val_match:
+            candidates.append(c)
+
+    if not candidates:
+        return None
+
+    if len(candidates) == 1:
+        return format_cell_info(candidates[0])
+
+    # Rank candidates by row/column match against param context
+    best_c = candidates[0]
+    best_score = -1
+    for c in candidates:
+        info = format_cell_info(c)
+        score = 0
+        r_text = " ".join([str(x).lower() for x in info["row_path"]])
+        c_text = " ".join([str(x).lower() for x in info["column_path"]])
+        if compound:
+            if compound in c_text:
+                score += 5
+            elif compound in r_text:
+                score += 3
+        if param_name:
+            if param_name in r_text:
+                score += 5
+            elif param_name in c_text:
+                score += 3
+        prov_r_path = " ".join([str(x).lower() for x in prov.get("row_path", [])])
+        if prov_r_path and prov_r_path in r_text:
+            score += 4
+        prov_c_path = " ".join([str(x).lower() for x in prov.get("column_path", [])])
+        if prov_c_path and prov_c_path in c_text:
+            score += 4
+
+        if score > best_score:
+            best_score = score
+            best_c = c
+
+    return format_cell_info(best_c)
+
+
+# ---------------------------------------------------------------------------
 # Tier 1: Deterministic Rule Engine
 # ---------------------------------------------------------------------------
 
@@ -138,13 +261,38 @@ class Tier1Verifier:
     def verify(self, document: dict) -> VerificationReport:
         t0 = time.monotonic()
         params: list[dict] = document.get("model_parameters", [])
+        table_evidences: list[dict] = document.get("table_evidence", [])
         flags: list[ParameterFlag] = []
         
+        # Build TableEvidence lookup with dual indexing (raw ID and normalized ID)
+        table_evidence_dict = {}
+        for te in table_evidences:
+            t_id = te.get("table_id")
+            if t_id:
+                table_evidence_dict[t_id] = te
+                table_evidence_dict[normalize_table_id(t_id)] = te
+        
+        # Pre-compute compound distribution per table to detect cross-contamination anomalies
+        table_compounds = {}
+        for i, p in enumerate(params):
+            cmpd = (p.get("context") or {}).get("compound")
+            tbl = (p.get("provenance") or {}).get("source_table")
+            if cmpd and tbl:
+                if tbl not in table_compounds:
+                    table_compounds[tbl] = {}
+                table_compounds[tbl][cmpd] = table_compounds[tbl].get(cmpd, 0) + 1
+        
         def get_composite_key(p_dict: dict) -> tuple:
-            ctx = p_dict.get("context", {})
+            ctx = p_dict.get("context") or {}
             species = (ctx.get("species") or "").lower()
             organ = (ctx.get("organ") or "").lower()
-            formulations = tuple(sorted(ctx.get("formulation") or []))
+            formulation_raw = ctx.get("formulation")
+            if formulation_raw is None:
+                formulations = ()
+            elif isinstance(formulation_raw, str):
+                formulations = (formulation_raw.lower(),)
+            else:
+                formulations = tuple(sorted(str(x).lower() for x in formulation_raw))
             compound = (ctx.get("compound") or "").lower()
             life_stage = (ctx.get("life_stage") or "").lower()
             population = (ctx.get("population") or "").lower()
@@ -152,8 +300,9 @@ class Tier1Verifier:
             p_class = (p_dict.get("parameter_class") or "").lower()
             p_subclass = (p_dict.get("parameter_subclass") or "").lower()
             p_name = (p_dict.get("parameter_name_standardized") or p_dict.get("parameter_name_original") or "").lower()
+            source_table = ((p_dict.get("provenance") or {}).get("source_table") or "").lower()
             
-            return (compound, species, life_stage, population, formulations, p_class, p_subclass, organ, p_name)
+            return (compound, species, life_stage, population, formulations, p_class, p_subclass, organ, p_name, source_table)
 
         seen_keys = {}
 
@@ -230,7 +379,11 @@ class Tier1Verifier:
                 name_lc = name.lower()
                 sym_lc = symbol.lower()
                 for name_frags, unit_frags, lo, hi in _PLAUSIBILITY_RULES:
-                    name_hit = any(f in name_lc or f in sym_lc for f in name_frags)
+                    # Use regex with word boundaries for name fragments to avoid 'q' matching 'frequency'
+                    name_hit = any(
+                        re.search(rf'\b{re.escape(f)}\b', name_lc) or re.search(rf'\b{re.escape(f)}\b', sym_lc)
+                        for f in name_frags
+                    )
                     unit_hit = any(f in unit_lc for f in unit_frags)
                     if name_hit and unit_hit:
                         if not (lo <= value <= hi):
@@ -253,10 +406,10 @@ class Tier1Verifier:
             unit_lc = (unit or "").lower()
             
             unit_dictionary = {
-                "blood_flow_fraction": ["dimensionless", "fraction", "ratio", "none", ""],
-                "organ_volume_fraction": ["dimensionless", "fraction", "ratio", "none", ""],
-                "partition_coefficient": ["dimensionless", "fraction", "ratio", "none", ""],
-                "fraction_unbound": ["dimensionless", "fraction", "ratio", "none", ""],
+                "blood_flow_fraction": ["dimensionless", "fraction", "ratio", "none"],
+                "organ_volume_fraction": ["dimensionless", "fraction", "ratio", "none"],
+                "partition_coefficient": ["dimensionless", "fraction", "ratio", "none"],
+                "fraction_unbound": ["dimensionless", "fraction", "ratio", "none"],
                 "clearance": ["l/h", "ml/min", "μl/h/kg^0.25", "ml/min/kg", "l/h/kg"],
                 "rate_constant": ["1/h", "1/min", "h-1", "min-1", "1/h/kg^0.25"],
                 "vmax": ["nmol/h/kg^0.75", "pmol/min/mg", "nmol/min/mg", "mg/h"],
@@ -265,7 +418,13 @@ class Tier1Verifier:
             
             for required_subclass, allowed_units in unit_dictionary.items():
                 if required_subclass in p_subclass:
-                    if unit_lc and not any(allowed in unit_lc for allowed in allowed_units):
+                    is_valid = False
+                    if not unit_lc and "dimensionless" in allowed_units:
+                        is_valid = True
+                    elif unit_lc and any(allowed in unit_lc for allowed in allowed_units):
+                        is_valid = True
+                        
+                    if not is_valid:
                         flags.append(ParameterFlag(
                             param_index=i, param_name=name,
                             severity="error", rule="INVALID_UNIT_DIMENSION",
@@ -293,19 +452,17 @@ class Tier1Verifier:
                         suggested_fix="Check for sign errors or inverted table row."
                     ))
 
-            # Rule 7: Missing range bound
-            try:
-                r_start = float(qdata.get("range_start")) if qdata.get("range_start") is not None else None
-                r_end = float(qdata.get("range_end")) if qdata.get("range_end") is not None else None
-            except (ValueError, TypeError):
-                r_start, r_end = None, None
+            # Rule 7: Missing uncertainty bound
+            unc = qdata.get("uncertainty") or {}
+            lower = unc.get("lower")
+            upper = unc.get("upper")
 
-            if (r_start is not None and r_end is None) or (r_start is None and r_end is not None):
+            if (lower is not None and upper is None) or (lower is None and upper is not None):
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
-                    severity="warning", rule="INCOMPLETE_RANGE",
-                    message="One range bound is populated but the other is null.",
-                    suggested_fix="Check if the source has a complete range or if this is a single value."
+                    severity="warning", rule="INCOMPLETE_UNCERTAINTY",
+                    message="One uncertainty/CI bound is populated but the other is null.",
+                    suggested_fix="Check if the source has a complete range or if this is a single +/- value."
                 ))
 
             # Rule 8: Placeholder compound strings
@@ -320,6 +477,137 @@ class Tier1Verifier:
                         message=f"context.compound='{compound}' looks like a placeholder.",
                         suggested_fix="Replace with the actual chemical name from the paper."
                     ))
+
+            # Rule 8.5: Minority Compound in Table (Cross-contamination check)
+            tbl = prov.get("source_table")
+            if compound and tbl:
+                cmpd_counts = table_compounds.get(tbl, {})
+                if len(cmpd_counts) > 1:
+                    total = sum(cmpd_counts.values())
+                    count = cmpd_counts[compound]
+                    # If this compound is less than 15% of the table's parameters, flag as suspicious
+                    if count / total < 0.15:
+                        flags.append(ParameterFlag(
+                            param_index=i, param_name=name,
+                            severity="warning", rule="MINORITY_COMPOUND_IN_TABLE",
+                            message=f"Compound '{compound}' is a minority in '{tbl}' (only {count}/{total} parameters). Possible table/compound cross-contamination.",
+                            suggested_fix="Verify if the table genuinely contains multiple compounds or if a footnote caused hallucination."
+                        ))
+
+            # Rule 8.6: Missing provenance hierarchy
+            row_path = prov.get("row_path", [])
+            col_path = prov.get("column_path", [])
+            
+            if tbl and not row_path and not col_path:
+                flags.append(ParameterFlag(
+                    param_index=i, param_name=name,
+                    severity="warning", rule="MISSING_TABLE_HIERARCHY",
+                    message=f"Parameter belongs to '{tbl}' but row_path and column_path are empty.",
+                    suggested_fix="Ensure the extraction model is correctly capturing the table cell hierarchy."
+                ))
+                
+            # Rule 8.7: Hierarchy Consistency Check (Compound/Column Conflict)
+            all_path_text = " ".join([str(x) for x in (row_path or []) + (col_path or [])]).lower()
+            if compound and all_path_text and compound.lower() not in all_path_text:
+                flags.append(ParameterFlag(
+                    param_index=i, param_name=name,
+                    severity="error", rule="COMPOUND_COLUMN_CONFLICT",
+                    message=f"Compound '{compound}' does not appear in the row or column path ({row_path}, {col_path}).",
+                    suggested_fix="Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+                ))
+
+            # Rule 8.8: Source Table Evidence & Cell-Level Verification
+            if tbl:
+                norm_tbl = normalize_table_id(tbl)
+                te = table_evidence_dict.get(tbl) or table_evidence_dict.get(norm_tbl)
+
+                if not te:
+                    flags.append(ParameterFlag(
+                        param_index=i, param_name=name,
+                        severity="error", rule="SOURCE_TABLE_EVIDENCE_MISSING",
+                        message=f"Parameter cites source_table='{tbl}', but no TableEvidence was reconstructed for '{tbl}'.",
+                        suggested_fix="Ensure this table was captured in document processing or check for table numbering typos."
+                    ))
+                elif te.get("evidence_status") == "failed":
+                    flags.append(ParameterFlag(
+                        param_index=i, param_name=name,
+                        severity="error", rule="SOURCE_TABLE_RECONSTRUCTION_FAILED",
+                        message=f"Parameter cites source_table='{tbl}', but table reconstruction failed ({te.get('error')}).",
+                        suggested_fix="Re-run table reconstruction or review the source table image manually."
+                    ))
+                else:
+                    te_subject_compounds = [normalize_text(c) for c in te.get("subject_compounds", []) if c]
+                    te_footnote_compounds = [normalize_text(c) for c in te.get("footnote_compounds", []) if c]
+                    te_referenced_compounds = [normalize_text(c) for c in te.get("referenced_compounds", []) if c]
+
+                    if compound:
+                        cmpd_norm = normalize_text(compound)
+                        if te_subject_compounds and cmpd_norm not in te_subject_compounds:
+                            if cmpd_norm in te_footnote_compounds:
+                                flags.append(ParameterFlag(
+                                    param_index=i, param_name=name,
+                                    severity="warning", rule="FOOTNOTE_ONLY_COMPOUND",
+                                    message=f"Compound '{compound}' appears only in footnotes of '{tbl}' (subjects: {te.get('subject_compounds')}).",
+                                    suggested_fix="Verify if parameter is legitimately an assumed/footnote value or a cross-table error."
+                                ))
+                            elif cmpd_norm in te_referenced_compounds:
+                                flags.append(ParameterFlag(
+                                    param_index=i, param_name=name,
+                                    severity="warning", rule="REFERENCED_ONLY_COMPOUND",
+                                    message=f"Compound '{compound}' appears only as a reference/comparison in '{tbl}' (subjects: {te.get('subject_compounds')}).",
+                                    suggested_fix="Verify if parameter belongs to the modeled compound rather than an external reference."
+                                ))
+                            else:
+                                flags.append(ParameterFlag(
+                                    param_index=i, param_name=name,
+                                    severity="error", rule="SOURCE_TABLE_COMPOUND_MISMATCH",
+                                    message=f"Compound '{compound}' does not appear in source table '{tbl}' (subjects: {te.get('subject_compounds')}).",
+                                    suggested_fix="Re-attribute parameter to the correct compound or table."
+                                ))
+
+                    te_species = [normalize_text(s) for s in te.get("species", []) if s]
+                    species = ctx.get("species")
+                    if species and te_species:
+                        spec_norm = normalize_text(species)
+                        if spec_norm not in te_species:
+                            flags.append(ParameterFlag(
+                                param_index=i, param_name=name,
+                                severity="error", rule="SOURCE_TABLE_SPECIES_MISMATCH",
+                                message=f"Species '{species}' does not appear in source table '{tbl}' (found species: {te.get('species')}).",
+                                suggested_fix="Check if species was mistakenly carried over from another table."
+                            ))
+
+                    # Cell-level validation: parameter -> row, compound -> column, value -> cell
+                    matched_cell = find_matched_cell(p, te)
+                    if matched_cell:
+                        c_val = matched_cell.get("numeric_value")
+                        if value is not None and c_val is not None:
+                            if abs(c_val - value) > abs(c_val) * 0.05 + 1e-6:
+                                flags.append(ParameterFlag(
+                                    param_index=i, param_name=name,
+                                    severity="error", rule="CELL_VALUE_MISMATCH",
+                                    message=f"Extracted value {value} differs from matched source cell ({matched_cell.get('cell_id')}) value {c_val}.",
+                                    suggested_fix=f"Use cell value {c_val}."
+                                ))
+
+                        col_path_text = " ".join([str(x).lower() for x in matched_cell.get("column_path", [])])
+                        if compound:
+                            cmpd_norm = normalize_text(compound)
+                            other_subjects = [sc for sc in te_subject_compounds if sc != cmpd_norm]
+                            if any(other in col_path_text for other in other_subjects) and cmpd_norm not in col_path_text:
+                                flags.append(ParameterFlag(
+                                    param_index=i, param_name=name,
+                                    severity="error", rule="CELL_COMPOUND_MISALIGNMENT",
+                                    message=f"Context mismatch: Parameter assigns compound '{compound}', but matched cell column path is {matched_cell.get('column_path')}.",
+                                    suggested_fix="Re-attribute parameter to the column's compound."
+                                ))
+                    elif te.get("cells") and value is not None:
+                        flags.append(ParameterFlag(
+                            param_index=i, param_name=name,
+                            severity="error", rule="CELL_NOT_FOUND_IN_SOURCE_TABLE",
+                            message=f"Value {value} ({value_text}) for '{name}' could not be matched to any cell in source table '{tbl}'.",
+                            suggested_fix="Check if value was taken from a different table or narrative text."
+                        ))
 
             # Rule 9: High-confidence entry missing source_quote
             source_quote = prov.get("source_quote")
@@ -399,11 +687,12 @@ _CRITIC_VERDICT_SCHEMA = {
     "properties": {
         "verdict": {
             "type": "string",
-            "enum": ["ok", "fix", "reject"],
+            "enum": ["ok", "fix", "reject", "uncertain"],
             "description": (
-                "'ok' = parameter is correct as-is, flag was a false positive. "
-                "'fix' = parameter has real errors; corrected_fields contains fixes. "
-                "'reject' = parameter is entirely wrong/fabricated and should be removed."
+                "'ok' = verified correct against source evidence. "
+                "'fix' = verified incorrect and safely correctable from evidence. "
+                "'reject' = verified invalid or hallucinated. "
+                "'uncertain' = insufficient source evidence to decide; do not modify."
             )
         },
         "reasoning": {
@@ -414,8 +703,7 @@ _CRITIC_VERDICT_SCHEMA = {
             "type": "object",
             "description": (
                 "Flat dict of dot-notation field paths -> corrected values. "
-                "Only populate when verdict='fix'. "
-                "Example: {\"context.compound\": \"PFOA\", \"quantitative_data.unit\": \"L/h\"}"
+                "Only populate when verdict='fix'."
             ),
             "additionalProperties": True
         }
@@ -425,37 +713,60 @@ _CRITIC_VERDICT_SCHEMA = {
 
 _CRITIC_SYSTEM_PROMPT = """\
 You are a pharmacokinetics data quality auditor. You will be given:
-  1. A single extracted parameter (JSON)
-  2. Automated rule violations detected by Tier 1 verification
+  1. An extracted parameter (JSON)
+  2. The source table metadata (subject compounds, species, footnotes)
+  3. The matched source cell (row path, column path, exact text, value, unit) when available
+  4. Automated rule violations detected by Tier 1 verification
 
 Your job: decide if the parameter is correct, needs fixing, or should be rejected.
 
 Rules:
 - Answer ONLY with valid JSON matching the CriticVerdict schema.
-- verdict="ok"     → The parameter is acceptable; the rule flag was a false positive.
-- verdict="fix"    → Real errors exist. Populate corrected_fields with ONLY the fields
-                     that need changing, using dot-notation paths.
-- verdict="reject" → The parameter is hallucinated, has no traceable source, or is
-                     so corrupted it cannot be salvaged.
-- corrected_fields keys use dot notation: "context.compound", "quantitative_data.value",
-  "quantitative_data.unit_original", "quantitative_data.unit_standardized", "provenance.source_quote", etc.
-- Keep reasoning under 80 words.
-- NEVER invent data. If you cannot determine the correct value, use verdict="ok"
-  (leave the needs_review flag) rather than guessing.
+- verdict="ok"        → Verified correct against source evidence.
+- verdict="fix"       → Verified incorrect AND source evidence explicitly supplies the corrected value/context (e.g. matched cell column proves compound was wrong).
+- verdict="reject"    → Parameter is hallucinated, cross-contaminated, or not present in source.
+- verdict="uncertain" → Insufficient source evidence to make a safe decision. Do not guess.
+- A correction is permitted ONLY when the provided source evidence explicitly supports the corrected value.
+- NEVER correct a parameter based solely on plausibility, prior knowledge, pattern matching, or the parameter value itself.
 """
 
 
-def _build_critic_prompt(param: dict, flags: list) -> str:
-    """Build the full Qwen3 chat-format prompt for one parameter."""
+def _build_critic_prompt(
+    param: dict,
+    flags: list,
+    table_evidence: dict = None,
+    matched_source_cell: dict = None
+) -> str:
+    """Build the full Qwen3 chat-format prompt for one parameter with grounded cell evidence."""
     import json as _json
     flag_lines = "\n".join(
         f"  [{f.rule}] {f.severity.upper()}: {f.message}"
         for f in flags
     )
+    
+    critic_input = {
+        "extracted_parameter": param,
+        "source_table_metadata": {
+            "table_id": table_evidence.get("table_id") if table_evidence else None,
+            "title": table_evidence.get("title") if table_evidence else None,
+            "subject_compounds": table_evidence.get("subject_compounds", []) if table_evidence else [],
+            "footnote_compounds": table_evidence.get("footnote_compounds", []) if table_evidence else [],
+            "referenced_compounds": table_evidence.get("referenced_compounds", []) if table_evidence else [],
+            "species": table_evidence.get("species", []) if table_evidence else [],
+            "footnotes": table_evidence.get("footnotes", []) if table_evidence else []
+        } if table_evidence else None,
+        "matched_source_cell": matched_source_cell,
+        "tier1_flags": [
+            {"severity": f.severity, "rule": f.rule, "message": f.message}
+            for f in flags
+        ]
+    }
+    
     user_content = (
-        f"Parameter to review:\n```json\n{_json.dumps(param, indent=2)}\n```\n\n"
+        f"Audit this extracted parameter against the provided source evidence:\n"
+        f"```json\n{_json.dumps(critic_input, indent=2)}\n```\n\n"
         f"Tier 1 violations detected:\n{flag_lines or '(none)'}\n\n"
-        f"Return a CriticVerdict JSON object."
+        f"Return a CriticVerdict JSON object strictly adhering to the schema."
     )
     return (
         f"<|im_start|>system\n{_CRITIC_SYSTEM_PROMPT}<|im_end|>\n"
@@ -466,11 +777,42 @@ def _build_critic_prompt(param: dict, flags: list) -> str:
 
 def _apply_corrected_fields(param: dict, corrected_fields: dict) -> dict:
     """
-    Patch dot-notation corrected fields back into the parameter dict.
+    Patch dot-notation corrected fields back into the parameter dict using a strict whitelist.
     E.g. {"context.compound": "PFOA"} -> param["context"]["compound"] = "PFOA"
     """
     import copy
+    from pk_pipeline.schemas import ExtractedParameter
+    
     result = copy.deepcopy(param)
+    
+    ALLOWED_CORRECTIONS = {
+        "context.compound",
+        "context.species",
+        "context.population",
+        "context.life_stage",
+        "context.organ",
+        "context.formulation",
+        "parameter_name_original",
+        "parameter_name_standardized",
+        "symbol_original",
+        "quantitative_data.value",
+        "quantitative_data.value_text",
+        "quantitative_data.unit_original",
+        "quantitative_data.unit_standardized",
+        "quantitative_data.uncertainty.type",
+        "quantitative_data.uncertainty.lower",
+        "quantitative_data.uncertainty.upper",
+        "quantitative_data.uncertainty.absolute",
+        "quantitative_data.uncertainty.raw_text",
+        "provenance.source_table",
+        "provenance.row_id",
+        "provenance.column_id",
+        "provenance.cell_id",
+        "provenance.row_path",
+        "provenance.column_path",
+        "provenance.source_quote",
+        "provenance.status",
+    }
     
     # Common schema mappings in case LLM forgets the prefix
     key_mappings = {
@@ -479,10 +821,9 @@ def _apply_corrected_fields(param: dict, corrected_fields: dict) -> dict:
         "unit_standardized": "quantitative_data.unit_standardized",
         "value": "quantitative_data.value",
         "value_text": "quantitative_data.value_text",
-        "range_start": "quantitative_data.range_start",
-        "range_end": "quantitative_data.range_end",
         "compound": "context.compound",
         "species": "context.species",
+        "organ": "context.organ",
         "formulation": "context.formulation",
         "parameter_name": "parameter_name_original",
         "symbol": "symbol_original",
@@ -492,6 +833,10 @@ def _apply_corrected_fields(param: dict, corrected_fields: dict) -> dict:
         if dotkey in key_mappings:
             dotkey = key_mappings[dotkey]
             
+        if dotkey not in ALLOWED_CORRECTIONS:
+            logger.warning(f"Tier 2 LLM attempted to correct non-whitelisted field: {dotkey}. Ignoring.")
+            continue
+            
         parts = dotkey.split(".")
         obj = result
         for part in parts[:-1]:
@@ -499,7 +844,14 @@ def _apply_corrected_fields(param: dict, corrected_fields: dict) -> dict:
                 obj[part] = {}
             obj = obj[part]
         obj[parts[-1]] = val
-    return result
+        
+    try:
+        # Revalidate the patched parameter to ensure the LLM didn't break the schema
+        valid_param = ExtractedParameter.model_validate(result)
+        return valid_param.model_dump()
+    except Exception as e:
+        logger.error(f"Tier 2 LLM correction broke the schema: {e}")
+        return param # Fallback to unpatched parameter if invalid
 
 
 class Tier2LLMCritic:
@@ -575,7 +927,11 @@ class Tier2LLMCritic:
         import time as _time
 
         t0 = _time.monotonic()
-        params = document.get("model_parameters", [])
+        table_evidences = {}
+        for te in document.get("table_evidence", []):
+            if te.get("table_id"):
+                table_evidences[te.get("table_id")] = te
+                table_evidences[normalize_table_id(te.get("table_id"))] = te
 
         # Build a map: param_index -> [flags]
         target_severities = {"error"}
@@ -615,15 +971,18 @@ class Tier2LLMCritic:
                 if param_idx >= len(params):
                     return {"param_index": param_idx, "status": "skipped", "reason": "index out of range"}
                 param = params[param_idx]
-                prompt = _build_critic_prompt(param, flags)
+                source_table = (param.get("provenance") or {}).get("source_table")
+                te = (table_evidences.get(source_table) or table_evidences.get(normalize_table_id(source_table))) if source_table else None
+                matched_cell = find_matched_cell(param, te) if te else None
+                prompt = _build_critic_prompt(param, flags, table_evidence=te, matched_source_cell=matched_cell)
                 try:
                     verdict_dict = await self._call_llm(prompt)
-                    verdict     = verdict_dict.get("verdict", "ok")
+                    verdict     = verdict_dict.get("verdict", "uncertain")
                     reasoning   = verdict_dict.get("reasoning", "")
                     corrections = verdict_dict.get("corrected_fields", {})
 
                     icon = {"ok": "OK ", "fix": "FIX", "reject": "DEL"}.get(verdict, "???")
-                    name_short = (param.get("parameter_name") or "?")[:50]
+                    name_short = (param.get("parameter_name_original") or param.get("symbol_original") or "?")[:50]
                     print(f"  [{icon}] #{param_idx} '{name_short}' — {reasoning[:70]}")
 
                     return {

@@ -18,4 +18,5 @@ USE_MOCKS = os.getenv("USE_MOCKS", "True").lower() in ("true", "1", "yes")
 
 class Config:
     TEMP_IMAGE_DIR = "/tmp/pk_pipeline_images"
+    OUTPUT_DIR = os.getenv("OUTPUT_DIR", "output")
     os.makedirs(TEMP_IMAGE_DIR, exist_ok=True)

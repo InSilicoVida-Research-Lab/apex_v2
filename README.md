@@ -51,3 +51,46 @@ The extracted parameters will be saved as a structured JSON file in the `output/
 * `pk_pipeline/main.py`: The core orchestrator. Handles PDF layout parsing, TATR table detection, and chunks the document into actionable LLM payloads.
 * `pk_pipeline/ml_services.py`: Manages the SGLang interface, structuring prompts and schemas to enforce JSON compliance from the Vision-Language Model.
 * `test_tatr.py`: Standalone script for evaluating the Microsoft Table Transformer object detection model. 
+
+## Curated PBPK reference corpus
+
+`pk_pipeline/pbpk_data/` contains five paired source PDFs and curated extraction
+records (341 canonical parameters). The corpus is for deterministic validation
+and quality reporting only; it is never supplied to extraction models.
+
+Validate its file hashes, pairings, and schema contract:
+
+```bash
+python -m pk_pipeline.corpus validate
+```
+
+List stable paper identifiers:
+
+```bash
+python -m pk_pipeline.corpus list
+```
+
+Evaluate a pipeline result against one curated reference without any model call:
+
+```bash
+python -m pk_pipeline.corpus evaluate \
+  --reference dean_2025_pfas \
+  --prediction "output/Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).json" \
+  --out output/dean_2025_evaluation.json
+```
+
+The report includes parameter precision/recall/F1, cell- and field-level
+mismatches, unmatched records, provenance/unit/value agreement, and document
+metadata/model-structure agreement. Numerical values use a 5% relative and
+`1e-9` absolute tolerance by default; units are formatting-normalized but never
+converted. To curate a reference, update its JSON and its manifest title/year,
+parameter count, corpus version, and SHA-256 digest together.
+
+To compare multiple outputs, pass a JSON object (or a `predictions` object)
+mapping each stable paper ID to its output path:
+
+```bash
+python -m pk_pipeline.corpus evaluate-all \
+  --predictions-manifest predictions.json \
+  --out output/pbpk_corpus_evaluation.json
+```

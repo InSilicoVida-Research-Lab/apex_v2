@@ -164,73 +164,223 @@ class JatsXMLParser:
 
         return metadata
 
+    def _parse_table_wrap(self, table_wrap, idx: int) -> Tuple[str, str, Any]:
+        """
+        Parse a JATS <table-wrap> element into:
+        1. full_title: Clean title with label and caption
+        2. content_str: Robust, correctly aligned Markdown preserving multi-level headers,
+                        rowspans, colspans, section dividers, and all footnotes.
+        3. table_evidence: Structured TableEvidence object with cells, columns, rows,
+                           subject_compounds, and footnotes.
+        """
+        label = table_wrap.find("label")
+        t_label = label.get_text(strip=True).rstrip(".") if label else f"Table {idx + 1}"
+        caption = table_wrap.find("caption")
+        t_caption = caption.get_text(separator=" ", strip=True) if caption else ""
+        full_title = f"{t_label}: {t_caption}".strip(": ") if t_caption else t_label
+
+        table_node = table_wrap.find("table")
+        if table_node is None:
+            return full_title, f"{full_title}\n\n{str(table_wrap)}", None
+
+        # 2D Grid reconstruction tracking rowspans and colspans
+        grid = {}
+        curr_r = 0
+        max_r, max_c = 0, 0
+        thead = table_node.find("thead")
+        thead_tr_count = len(thead.find_all("tr")) if thead else 0
+
+        for tr in table_node.find_all("tr"):
+            curr_c = 0
+            for cell in tr.find_all(["th", "td"]):
+                while (curr_r, curr_c) in grid:
+                    curr_c += 1
+                try:
+                    rowspan = int(cell.get("rowspan", 1))
+                except (ValueError, TypeError):
+                    rowspan = 1
+                try:
+                    colspan = int(cell.get("colspan", 1))
+                except (ValueError, TypeError):
+                    colspan = 1
+                text = re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
+                for dr in range(rowspan):
+                    for dc in range(colspan):
+                        grid[(curr_r + dr, curr_c + dc)] = text
+                        if curr_r + dr > max_r:
+                            max_r = curr_r + dr
+                        if curr_c + dc > max_c:
+                            max_c = curr_c + dc
+                curr_c += colspan
+            curr_r += 1
+
+        num_rows = max(max_r + 1, curr_r)
+        num_cols = max_c + 1 if num_rows > 0 else 0
+        if num_cols == 0 or num_rows == 0:
+            return full_title, f"{full_title}\n\n{str(table_wrap)}", None
+
+        matrix = [["" for _ in range(num_cols)] for _ in range(num_rows)]
+        for (r, c), val in grid.items():
+            if r < num_rows and c < num_cols:
+                matrix[r][c] = val
+
+        # Handle headers: multi-row thead vs single header row
+        if thead_tr_count > 1:
+            combined_headers = []
+            for c in range(num_cols):
+                hdr_parts = []
+                for r in range(thead_tr_count):
+                    txt = matrix[r][c].strip()
+                    if txt and (not hdr_parts or txt != hdr_parts[-1]):
+                        hdr_parts.append(txt)
+                combined_headers.append(" - ".join(hdr_parts) if hdr_parts else f"Col {c+1}")
+            data_matrix = matrix[thead_tr_count:]
+        else:
+            combined_headers = [c.strip() or f"Col {i+1}" for i, c in enumerate(matrix[0])]
+            data_matrix = matrix[1:]
+
+        md_lines = []
+        md_lines.append(full_title)
+        md_lines.append("")
+        md_lines.append("| " + " | ".join(combined_headers) + " |")
+        md_lines.append("|" + "|".join(["---"] * num_cols) + "|")
+
+        for row in data_matrix:
+            non_empty = [x for x in row if x.strip()]
+            if non_empty and all(x == non_empty[0] for x in non_empty) and len(non_empty) == num_cols:
+                md_lines.append(f"| **[Section: {non_empty[0]}]** |" + "|".join([""] * (num_cols - 1)) + "|")
+            else:
+                md_lines.append("| " + " | ".join(row) + " |")
+
+        # Extract all footnotes
+        footnotes = []
+        foot = table_wrap.find("table-wrap-foot")
+        if foot:
+            md_lines.append("")
+            md_lines.append("Footnotes:")
+            for fn in foot.find_all("fn"):
+                lbl = fn.find("label")
+                lbl_str = lbl.get_text(strip=True) if lbl else "*"
+                fn_txt = re.sub(r'\s+', ' ', fn.get_text(separator=' ', strip=True))
+                if lbl and fn_txt.startswith(lbl_str):
+                    fn_txt = fn_txt[len(lbl_str):].strip()
+                footnotes.append(f"[{lbl_str}] {fn_txt}")
+                md_lines.append(f"- [{lbl_str}] {fn_txt}")
+
+        content_str = "\n".join(md_lines)
+
+        # Build structured TableEvidence object
+        table_evidence = None
+        try:
+            from pk_pipeline.schemas import TableEvidence, TableColumn, TableRow, TableCell
+
+            columns = []
+            for c in range(num_cols):
+                col_path = []
+                for r in range(max(1, thead_tr_count)):
+                    txt = matrix[r][c].strip()
+                    if txt and (not col_path or txt != col_path[-1]):
+                        col_path.append(txt)
+                columns.append(TableColumn(column_id=f"c{c+1}", path=col_path or [f"Col {c+1}"], index=c))
+
+            rows = []
+            cells = []
+            current_section = ""
+            start_data_r = thead_tr_count if thead_tr_count > 0 else 1
+
+            for r_idx, r in enumerate(range(start_data_r, num_rows)):
+                row_vals = matrix[r]
+                non_empty = [x for x in row_vals if x.strip()]
+                if non_empty and all(x == non_empty[0] for x in non_empty) and len(non_empty) == num_cols:
+                    current_section = non_empty[0]
+                    continue
+
+                r_path = [current_section] if current_section else []
+                for c in range(min(4, num_cols)):
+                    v = row_vals[c].strip()
+                    if v and v not in r_path:
+                        r_path.append(v)
+
+                row_id = f"r{len(rows)+1}"
+                rows.append(TableRow(row_id=row_id, path=r_path, index=len(rows)))
+
+                for c_idx in range(num_cols):
+                    cell_txt = row_vals[c_idx].strip()
+                    if cell_txt:
+                        col_id = f"c{c_idx+1}"
+                        cell_id = f"cell_{row_id}_{col_id}"
+                        num_val = None
+                        m_num = re.search(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?', cell_txt)
+                        if m_num:
+                            try:
+                                num_val = float(m_num.group(0))
+                            except ValueError:
+                                pass
+                        cells.append(TableCell(
+                            cell_id=cell_id,
+                            row_id=row_id,
+                            column_id=col_id,
+                            text=cell_txt,
+                            numeric_value=num_val
+                        ))
+
+            full_table_text = f"{full_title} " + " ".join(" ".join(r) for r in matrix) + " " + " ".join(footnotes)
+            header_and_title_text = f"{full_title} " + " ".join(" ".join(c.path) for c in columns)
+            fn_text = " ".join(footnotes)
+
+            known_compounds = ["PFOS", "PFOA", "PFHxS", "PFBS", "PFNA", "PFDA", "GenX", "HFPO-DA"]
+            subject_compounds = [
+                c for c in known_compounds 
+                if re.search(r'\b' + re.escape(c) + r'\b', header_and_title_text)
+            ]
+            if not subject_compounds:
+                subject_compounds = [
+                    c for c in known_compounds 
+                    if re.search(r'\b' + re.escape(c) + r'\b', full_table_text)
+                ]
+
+            footnote_compounds = [
+                c for c in known_compounds 
+                if re.search(r'\b' + re.escape(c) + r'\b', fn_text) and c not in subject_compounds
+            ]
+
+            known_species = ["Nonhuman primate", "Human", "Rat", "Mouse", "Dog", "Monkey", "Cynomolgus monkey"]
+            species = [
+                s for s in known_species 
+                if re.search(r'\b' + re.escape(s) + r'\b', full_table_text, re.IGNORECASE)
+            ]
+
+            table_evidence = TableEvidence(
+                evidence_status="success",
+                needs_review=False,
+                table_id=t_label,
+                title=full_title,
+                columns=columns,
+                rows=rows,
+                cells=cells,
+                subject_compounds=subject_compounds,
+                footnote_compounds=footnote_compounds,
+                species=species,
+                footnotes=footnotes
+            )
+        except Exception:
+            pass
+
+        return full_title, content_str, table_evidence
+
     def extract_chunks(self, filter_narrative: bool = True) -> List[Dict[str, Any]]:
-        """
-        Chunks the document into LLM-ready elements.
-
-        Rules:
-          - Tables      → always included (role='table_xml')
-          - Equations   → always included (role='equation_xml')
-          - Narrative   → only included if filter_narrative=False OR the section
-                          passes the PK keyword relevance filter
-
-        Each chunk dict carries:
-          {
-            "role":      str,   # table_xml | equation_xml | narrative_xml
-            "content":   str,   # text sent to the LLM
-            "title":     str,   # section title (for narrative), empty for tables/eqs
-            "kept":      bool,  # True = will be dispatched to LLM
-            "skip_reason": str  # populated when kept=False (for inspection/test)
-          }
-        """
         chunks: List[Dict[str, Any]] = []
 
         # 1. Tables — always keep
         for idx, table_wrap in enumerate(self.soup.find_all("table-wrap")):
-            label   = table_wrap.find("label")
-            t_title = label.get_text(strip=True) if label else f"Table {idx + 1}"
-            
-            table_node = table_wrap.find("table")
-            content_str = ""
-            if table_node is not None:
-                rows = []
-                for tr in table_node.find_all("tr"):
-                    row = []
-                    for cell in tr.find_all(["th", "td"]):
-                        text = re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
-                        try:
-                            colspan = int(cell.get('colspan', 1))
-                        except (TypeError, ValueError):
-                            colspan = 1
-                        row.extend([text] * colspan)
-                    if any(row):
-                        rows.append(row)
-                
-                # We need at least one row of headers and one row of data
-                if len(rows) > 1:
-                    # Pad rows if they are uneven
-                    max_cols = max(len(r) for r in rows)
-                    for r in rows:
-                        r.extend([""] * (max_cols - len(r)))
-                    
-                    md = []
-                    md.append("| " + " | ".join(rows[0]) + " |")
-                    md.append("|" + "|".join(["---"] * max_cols) + "|")
-                    for r in rows[1:]:
-                        md.append("| " + " | ".join(r) + " |")
-                    
-                    content_str = "\n".join(md)
-                else:
-                    content_str = str(table_wrap)
-            else:
-                content_str = str(table_wrap)
-                
+            t_title, content_str, table_evidence = self._parse_table_wrap(table_wrap, idx)
             chunks.append({
-                "role":        "table_xml",
-                "content":     f"{t_title}:\n{content_str}",
-                "title":       t_title,
-                "kept":        True,
-                "skip_reason": "",
+                "role":           "table_xml",
+                "content":        content_str,
+                "title":          t_title,
+                "kept":           True,
+                "skip_reason":    "",
+                "table_evidence": table_evidence,
             })
 
         # 2. Equations — always keep

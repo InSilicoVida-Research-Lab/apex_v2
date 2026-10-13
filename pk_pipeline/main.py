@@ -9,9 +9,9 @@ import sys
 # Ensure the root directory is on PYTHONPATH so pk_pipeline modules can be imported
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from pk_pipeline.schemas import ExtractionRequest
+from pk_pipeline.schemas import ExtractedDocument, ExtractionRequest
 from pk_pipeline.ml_services import SGLangExtractor
-from pk_pipeline.config import logger
+from pk_pipeline.config import logger, Config
 
 # Initialize models lazily
 extractor = None
@@ -172,17 +172,38 @@ _COMPOUND_KEYWORDS = [
 
 # Subclasses that always belong to the 'physiological' class
 _PHYSIOLOGICAL_SUBCLASSES = [
-    "organ_blood_flow_fraction", "blood_flow_fraction",
-    "organ_volume_fraction", "volume_fraction",
-    "glomerular_filtration", "cardiac_output",
+    # Blood flow subclasses
+    "organ_blood_flow_fraction", "blood_flow_fraction", "organ_blood_flow",
+    # Volume subclasses
+    "organ_volume_fraction", "volume_fraction", "organ_volume",
+    # Other physiological
+    "glomerular_filtration", "glomerular_filtration_rate",
+    "cardiac_output",
+    "body_weight",
+    "hematocrit",
+    "milk_flow",
+    "urine_production",
 ]
 
 # Subclasses that always belong to the 'biochemical' class
 _BIOCHEMICAL_SUBCLASSES = [
+    # Transport / binding
     "partition_coefficient", "fraction_unbound",
+    # Absorption
     "absorption_rate_constant", "gastric_emptying_rate", "fecal_elimination_rate_constant",
+    # Enzyme kinetics
     "maximal_velocity", "michaelis_menten_constant",
+    # Clearance / elimination
     "renal_clearance", "metabolic_clearance", "clearance",
+    "biliary_elimination_rate", "urinary_excretion_rate",
+    # Distribution
+    "distribution_volume", "distribution_rate",
+    # PK properties
+    "elimination_half_life", "bioavailability",
+    # Transfer / activity
+    "transfer_rate", "relative_activity_factor",
+    # In vitro
+    "microsomal_protein_yield", "fraction_metabolized", "ptc_protein",
 ]
 
 
@@ -231,8 +252,282 @@ def _classify_parameter_category(param: dict) -> str:
     return "physiological"
 
 
+def flatten_parameter_blocks(parameter_blocks: list) -> list:
+    import hashlib
+    flat_params = []
+    for block in parameter_blocks:
+        for p in getattr(block, "parameters", []):
+            if hasattr(block, "implied_species") and block.implied_species and not p.context.species:
+                p.context.species = block.implied_species
+            if hasattr(block, "implied_unit_original") and block.implied_unit_original and not p.quantitative_data.unit_original:
+                p.quantitative_data.unit_original = block.implied_unit_original
+            if hasattr(block, "parameter_class") and block.parameter_class and not getattr(p, "parameter_class", None):
+                p.parameter_class = block.parameter_class
+                
+            if not p.parameter_id:
+                prov = getattr(p, "provenance", None)
+                ctx = getattr(p, "context", None)
+                source_tbl = getattr(prov, "source_table", "") or ""
+                row_str = getattr(prov, "row_id", "") or "_".join(getattr(prov, "row_path", []) or [])
+                col_str = getattr(prov, "column_id", "") or "_".join(getattr(prov, "column_path", []) or [])
+                p_name = getattr(p, "parameter_name_original", "") or getattr(p, "symbol_original", "") or ""
+                cmpd = getattr(ctx, "compound", "") or ""
+                spec = getattr(ctx, "species", "") or ""
+                
+                raw_identity = f"{source_tbl}|{row_str}|{col_str}|{p_name}|{cmpd}|{spec}".lower().strip()
+                if raw_identity == "|||||":
+                    raw_identity = p.model_dump_json()
+                h = hashlib.sha256(raw_identity.encode("utf-8")).hexdigest()[:16]
+                p.parameter_id = f"param_{h}"
+                
+            flat_params.append(p.model_dump())
+    return flat_params
+
+
+def _unit_from_parameter_name(name: str) -> str | None:
+    """Return a unit printed at the end of a table's parameter label."""
+    match = re.search(r"\(([^()]+)\)\s*$", name or "")
+    return match.group(1).strip() if match else None
+
+
+def _parse_cell_uncertainty(value_text: str) -> tuple[float | None, float | None]:
+    """Parse the common ``estimate (lower, upper)`` table notation."""
+    match = re.search(
+        r"\(\s*([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s*,\s*"
+        r"([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)\s*\)",
+        value_text or "",
+    )
+    if not match:
+        return None, None
+    return float(match.group(1)), float(match.group(2))
+
+
+def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
+    """Recover parameter records when a table extraction returns an empty block.
+
+    JATS parsing already gives us aligned row, column, and cell evidence. This
+    intentionally conservative fallback only handles parameter tables with both
+    a descriptor column (``Variable``/``Name``) and a numerical estimate column
+    (``Mean``/``Estimate``/``Value``). Outcome tables are left untouched.
+    Recovered records retain cell-level provenance and are marked for review.
+    """
+    from pk_pipeline.schemas import (
+        BiologicalContext,
+        ConfidenceScores,
+        ExtractedParameter,
+        Provenance,
+        QuantitativeData,
+        Uncertainty,
+    )
+    import hashlib
+
+    recovered = []
+    species_terms = (
+        "nonhuman primate", "cynomolgus monkey", "rhesus macaque",
+        "human", "rat", "mouse", "rabbit", "dog", "monkey", "pig",
+    )
+
+    for table in table_evidences or []:
+        if not isinstance(table, dict) or table.get("evidence_status") != "success":
+            continue
+        columns = table.get("columns") or []
+        rows = {row.get("row_id"): row for row in table.get("rows") or []}
+        cells = table.get("cells") or []
+        if not columns or not rows or not cells:
+            continue
+
+        column_paths = {
+            col.get("column_id"): [str(part) for part in col.get("path") or []]
+            for col in columns
+        }
+        descriptor_columns = {
+            column_id for column_id, path in column_paths.items()
+            if any(token in " ".join(path).lower() for token in ("variable", "parameter", "name", "symbol"))
+        }
+        value_columns = {
+            column_id for column_id, path in column_paths.items()
+            if any(token in " ".join(path).lower() for token in ("mean", "estimate", "value", "fitted", "optimized"))
+        }
+        # A table must explicitly look like a model-parameter table. This
+        # prevents toxicity/outcome tables with numeric result columns from
+        # becoming model parameters.
+        if not descriptor_columns or not value_columns:
+            continue
+
+        cells_by_row: dict[str, list[dict]] = {}
+        for cell in cells:
+            cells_by_row.setdefault(cell.get("row_id"), []).append(cell)
+
+        table_compounds = [str(c) for c in table.get("subject_compounds") or []]
+        for row_id, row_cells in cells_by_row.items():
+            row = rows.get(row_id)
+            if not row:
+                continue
+            row_path = [str(part) for part in row.get("path") or []]
+            row_text = " ".join(row_path)
+            descriptor_cells = [c for c in row_cells if c.get("column_id") in descriptor_columns]
+            if not descriptor_cells:
+                continue
+            # Prefer the descriptive cell over a short symbol such as BW.
+            parameter_name = max((str(c.get("text") or "").strip() for c in descriptor_cells), key=len, default="")
+            if not parameter_name:
+                continue
+            symbol = min((str(c.get("text") or "").strip() for c in descriptor_cells), key=len, default=None)
+            if symbol == parameter_name:
+                symbol = None
+            unit = _unit_from_parameter_name(parameter_name)
+            species = next((term for term in species_terms if re.search(rf"\b{re.escape(term)}\b", row_text, re.I)), None)
+
+            for cell in row_cells:
+                column_id = cell.get("column_id")
+                value = cell.get("numeric_value")
+                if column_id not in value_columns or value is None:
+                    continue
+                col_path = column_paths.get(column_id, [])
+                header_text = " ".join(col_path)
+                compound = next((c for c in table_compounds if re.search(rf"\b{re.escape(c)}\b", header_text, re.I)), None)
+                if compound is None and len(table_compounds) == 1:
+                    compound = table_compounds[0]
+                lower, upper = _parse_cell_uncertainty(str(cell.get("text") or ""))
+                source_quote = " | ".join([
+                    str(table.get("title") or table.get("table_id") or ""),
+                    " > ".join(row_path),
+                    " > ".join(col_path),
+                    str(cell.get("text") or ""),
+                ])
+                source_cell = next(
+                    (c for c in row_cells if "source" in " ".join(column_paths.get(c.get("column_id"), [])).lower()),
+                    None,
+                )
+                source_text = str(source_cell.get("text") or "").lower() if source_cell else ""
+                status = "fitted" if "optim" in source_text else "literature"
+                identity = f"{table.get('table_id')}|{row_id}|{column_id}|{parameter_name}|{compound}|{species}".lower()
+                parameter = ExtractedParameter(
+                    parameter_id=f"param_{hashlib.sha256(identity.encode('utf-8')).hexdigest()[:16]}",
+                    parameter_name_original=parameter_name,
+                    symbol_original=symbol,
+                    context=BiologicalContext(compound=compound, species=species),
+                    quantitative_data=QuantitativeData(
+                        value_text=str(cell.get("text") or ""),
+                        value=float(value),
+                        uncertainty=Uncertainty(lower=lower, upper=upper) if lower is not None else None,
+                        unit_original=unit,
+                        unit_standardized=unit,
+                    ),
+                    provenance=Provenance(
+                        source_table=table.get("table_id"),
+                        row_id=row_id,
+                        column_id=column_id,
+                        cell_id=cell.get("cell_id"),
+                        row_path=row_path,
+                        column_path=col_path,
+                        source_quote=source_quote,
+                        status=status,
+                        evidence_directness="direct",
+                    ),
+                    confidence=ConfidenceScores(
+                        value_confidence="high",
+                        provenance_confidence="high",
+                        unit_confidence="medium" if unit else "low",
+                    ),
+                    needs_review=True,
+                )
+                recovered.append(parameter.model_dump())
+    return recovered
+
+def _load_chunk_checkpoint(checkpoint_dir: str, chunk_key: str):
+    """Factor 5 & 6: Load previously extracted chunk to resume interrupted runs."""
+    import re
+    safe_key = re.sub(r"[^A-Za-z0-9_.-]", "_", str(chunk_key)).strip("_")[:80] or "chunk"
+    cp_file = os.path.join(checkpoint_dir, f"{safe_key}.json")
+    if os.path.exists(cp_file):
+        try:
+            with open(cp_file, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            from pk_pipeline.schemas import ExtractedPage
+            return ExtractedPage.model_validate(data)
+        except Exception as e:
+            logger.warning(f"Could not read chunk checkpoint {cp_file}: {e}")
+    return None
+
+def _save_chunk_checkpoint(checkpoint_dir: str, chunk_key: str, page) -> None:
+    """Factor 5 & 6: Persist extracted chunk immediately for fault tolerance and resume."""
+    import re
+    safe_key = re.sub(r"[^A-Za-z0-9_.-]", "_", str(chunk_key)).strip("_")[:80] or "chunk"
+    cp_file = os.path.join(checkpoint_dir, f"{safe_key}.json")
+    try:
+        os.makedirs(checkpoint_dir, exist_ok=True)
+        with open(cp_file, "w", encoding="utf-8") as f:
+            if hasattr(page, "model_dump_json"):
+                f.write(page.model_dump_json(indent=2))
+            else:
+                json.dump(page, f, indent=2)
+    except Exception as e:
+        logger.warning(f"Failed to save chunk checkpoint {cp_file}: {e}")
+
+def _merge_biological_basis(final_doc: dict, extracted_page) -> None:
+    if not extracted_page or not getattr(extracted_page, "biological_basis", None):
+        return
+    bb_dict = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
+    if not final_doc.get("biological_basis"):
+        final_doc["biological_basis"] = bb_dict
+        return
+    curr_bb = final_doc["biological_basis"]
+    existing_quotes = {
+        (a.get("evidence_quote") or a.get("description") or "").strip().lower()
+        for a in curr_bb.get("stated_assumptions", [])
+    }
+    for a in bb_dict.get("stated_assumptions", []):
+        key = (a.get("evidence_quote") or a.get("description") or "").strip().lower()
+        if key and key not in existing_quotes:
+            curr_bb.setdefault("stated_assumptions", []).append(a)
+            existing_quotes.add(key)
+    existing_adme = set(curr_bb.get("adme_determinants", []))
+    for d in bb_dict.get("adme_determinants", []):
+        if d not in existing_adme:
+            curr_bb.setdefault("adme_determinants", []).append(d)
+            existing_adme.add(d)
+    existing_mech = set(curr_bb.get("specialized_mechanisms", []))
+    for m in bb_dict.get("specialized_mechanisms", []):
+        if m not in existing_mech:
+            curr_bb.setdefault("specialized_mechanisms", []).append(m)
+            existing_mech.add(m)
+
+
+def finalize_extracted_document(document: dict) -> dict:
+    """Validate and serialize the canonical output contract before persistence."""
+    return ExtractedDocument.model_validate(document).model_dump(mode="json")
+
+
+def refresh_parameter_views(document: dict) -> None:
+    """Materialize backwards-compatible parameter category views from canonical data."""
+    parameters = document.get("model_parameters", [])
+    document["system_specific_parameters"] = [
+        parameter for parameter in parameters if parameter.get("parameter_class") == "physiological"
+    ]
+    document["compound_specific_parameters"] = [
+        parameter for parameter in parameters if parameter.get("parameter_class") != "physiological"
+    ]
+
 def post_process_document(document, pdf_path):
     print("Step 4: Running Python Post-Processing Cleanup...")
+    # XML table parsing can be completely successful while a constrained LLM
+    # response returns an empty parameter_blocks list.  Do not silently emit a
+    # superficially successful document with no model parameters in that case.
+    if not document.get("model_parameters"):
+        recovered = _parameters_from_table_evidence(document.get("table_evidence", []))
+        if recovered:
+            document["model_parameters"] = recovered
+            logger.warning(
+                "LLM extraction returned no model parameters; recovered %d "
+                "cell-backed records from parameter-table evidence.",
+                len(recovered),
+            )
+        elif document.get("table_evidence"):
+            logger.warning(
+                "LLM extraction returned no model parameters and no safe "
+                "parameter-table fallback was available."
+            )
     # 1. Clean up parameters with no quantitative value, and split multi-formulation comma-separated values
     new_params = []
     for p in document.get("model_parameters", []):
@@ -371,7 +666,7 @@ def post_process_document(document, pdf_path):
                         # Check if this parameter already exists in document["parameters"]
                         exists = False
                         for p in document["model_parameters"]:
-                            c = p.get("context", {}).get("compound", "")
+                            c = (p.get("context") or {}).get("compound", "")
                             if not c: continue
                             n = p.get("parameter_name_original", "").lower()
                             if c.lower() == comp.lower() and ("ratio" in n or "placental" in n):
@@ -379,68 +674,85 @@ def post_process_document(document, pdf_path):
                                 break
                         if not exists:
                             print(f"  -> Post-processing sweep found missed parameter: {comp} Placental transfer ratio = {val}")
-                            document["model_parameters"].append({
-                                "needs_review": True,
-                                "parameter_name_original": f"Placental transfer ratio for {comp}",
-                                "symbol_original": "ktrans",
-                                "context": {
-                                    "compound": comp,
-                                    "subject_species": None,
-                                    "life_stage": None,
-                                    "compartment": None,
-                                    "route": None,
-                                    "population": None
-                                },
-                                "quantitative_data": {
-                                    "value_text": str(val),
-                                    "value": val,
-                                    "range_start": None,
-                                    "range_end": None,
-                                    "variance": None,
-                                    "variance_type": None,
-                                    "unit_original": "None",
-                                    "unit_standardized": None,
-                                    "normalization_basis": None
-                                },
-                                "provenance": {
-                                    "source_location": "Regex text sweep fallback",
-                                    "source_quote": text[match.start():match.end()],
-                                    "parameter_status": "Literature",
-                                    "confidence": "medium"
-                                }
-                            })
+                            from pk_pipeline.schemas import ExtractedParameter, BiologicalContext, QuantitativeData, Provenance
+                            import hashlib
+                            raw_id = f"sweep|placental_transfer_ratio|{comp}".lower()
+                            h = hashlib.sha256(raw_id.encode("utf-8")).hexdigest()[:16]
+                            sweep_param = ExtractedParameter(
+                                parameter_id=f"param_{h}",
+                                parameter_class="biochemical",
+                                parameter_subclass="partition_coefficient",
+                                parameter_name_original=f"Placental transfer ratio for {comp}",
+                                symbol_original="ktrans",
+                                context=BiologicalContext(
+                                    compound=comp,
+                                    species=None,
+                                    life_stage=None,
+                                    organ="placenta",
+                                    route=None,
+                                    population=None
+                                ),
+                                quantitative_data=QuantitativeData(
+                                    value_text=str(val),
+                                    value=val,
+                                    unit_original="dimensionless",
+                                    unit_standardized="dimensionless"
+                                ),
+                                provenance=Provenance(
+                                    source_location="Regex text sweep fallback",
+                                    source_quote=text[match.start():match.end()],
+                                    status="literature",
+                                    evidence_directness="direct"
+                                ),
+                                needs_review=True
+                            )
+                            document["model_parameters"].append(sweep_param.model_dump())
                             
     except Exception as e:
         print(f"  -> Error in post-processing text sweep: {e}")
 
     # 3. Classify each parameter using the 3-class taxonomy
     print("  -> Classifying parameters into physiological / biochemical / compound_specific...")
-    system_params = []
-    compound_params = []
-    
     for p in document.get("model_parameters", []):
         # Only override if not already set by VLM or block propagation
         cls = p.get("parameter_class") or _classify_parameter_category(p)
         p["parameter_class"] = cls
-        if cls == "physiological":
-            system_params.append(p)
-        else: # biochemical or compound_specific
-            compound_params.append(p)
-            
-    document["system_specific_parameters"] = system_params
-    document["compound_specific_parameters"] = compound_params
-    
-    print(f"     physiological: {len(system_params)}  |  compound/biochemical: {len(compound_params)}")
 
-    # Remove the old flat list so the final JSON is cleanly split
-    if "model_parameters" in document:
-        del document["model_parameters"]
+    # 4. Strict Schema Revalidation for all parameters in canonical model_parameters
+    print("  -> Revalidating all parameters against ExtractedParameter schema...")
+    from pk_pipeline.schemas import ExtractedParameter
+    from pydantic import ValidationError
+    validated_params = []
+    for p in document.get("model_parameters", []):
+        try:
+            valid_p = ExtractedParameter.model_validate(p)
+            validated_params.append(valid_p.model_dump())
+        except ValidationError as exc:
+            logger.error(f"Parameter failed final schema validation: {exc}. Parameter: {p.get('parameter_name_original')}")
+            if isinstance(p, dict):
+                p["needs_review"] = True
+                p.setdefault("validation_errors", []).append(str(exc))
+                validated_params.append(p)
+
+    # CANONICAL source list - preserved for audit trails and Tier 1 / Tier 2 verification
+    document["model_parameters"] = validated_params
+    
+    # Filtered views derived from canonical model_parameters
+    refresh_parameter_views(document)
+    system_params = document["system_specific_parameters"]
+    compound_params = document["compound_specific_parameters"]
+
+    print(f"     physiological: {len(system_params)}  |  compound/biochemical: {len(compound_params)}  |  total canonical: {len(validated_params)}")
 
     return document
 
-async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False, verify: bool = True):
+async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False, verify: bool = True, output_dir: str = "output"):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
+    
+    pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
+    checkpoint_dir = os.path.join(output_dir or Config.OUTPUT_DIR, ".checkpoints", pdf_stem)
+    os.makedirs(checkpoint_dir, exist_ok=True)
     
     wevisdoc_stats = {"pages_transcribed": 0}
 
@@ -490,6 +802,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 "formulation_characterization": [],
                 "qualitative_findings": [],
                 "parameter_mentions_without_values": [],
+                "table_evidence": [],
                 "dosing": [],
                 "ingestion_source": res.get("source"),
                 "ingestion_source_type": res.get("source_type", "published"),
@@ -497,6 +810,12 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
 
             # Filter out chunks that were skipped by the narrative filter
             chunks = [c for c in xml_data.get("chunks", []) if c.get("kept", True)]
+
+            # Pre-collect any pre-computed XML table evidence into final_document
+            for c in chunks:
+                te = c.get("table_evidence")
+                if te:
+                    final_document["table_evidence"].append(te.model_dump())
 
             # Separate figure chunks — they may need image download + visual dispatch
             figure_chunks  = [c for c in chunks if c["role"] == "figure_xml"]
@@ -571,30 +890,50 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
 
             if text_chunks or caption_chunks or diagram_chunks:
                 print(f"Step 1/1: Running Extraction ({n_text} text + {n_visual} visual)...")
-                # SGLang supports massive continuous batching. Increase concurrency to 10.
-                sem = asyncio.Semaphore(10)
+                # Use concurrency 3 to ensure smooth, non-congested continuous batching on SGLang
+                sem = asyncio.Semaphore(3)
 
-                async def bound_extract_text(chunk):
+                async def bound_extract_text(chunk, idx):
+                    chunk_title = chunk.get("title", "") or f"chunk_{idx}"
+                    chunk_key = f"xml_{chunk.get('role', 'text')}_{chunk_title}_{idx}"
+                    cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+                    if cached:
+                        n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                        print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                        return cached
                     async with sem:
-                        return await get_extractor().extract_from_text(
+                        te = chunk.get("table_evidence")
+                        page = await get_extractor().extract_from_text(
                             chunk["content"], 
                             role=chunk["role"], 
-                            chunk_title=chunk.get("title", "")
+                            chunk_title=chunk.get("title", ""),
+                            table_evidence=te
                         )
+                        _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                        return page
 
-                async def bound_extract_image(chunk):
+                async def bound_extract_image(chunk, idx):
+                    chunk_title = chunk.get("title", "") or f"diag_{idx}"
+                    chunk_key = f"xml_diag_{chunk_title}_{idx}"
+                    cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+                    if cached:
+                        n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                        print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                        return cached
                     async with sem:
                         img = chunk["image_obj"]
-                        return await get_extractor().extract_data(
+                        page = await get_extractor().extract_data(
                             img,
                             role="figure_crop",
                             evidence_text=f"{chunk['title']}: {chunk['caption']}",
                             chunk_title=chunk.get("title", "")
                         )
+                        _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                        return page
 
                 tasks = (
-                    [bound_extract_text(c) for c in text_chunks + caption_chunks]
-                    + [bound_extract_image(c) for c in diagram_chunks]
+                    [bound_extract_text(c, idx) for idx, c in enumerate(text_chunks + caption_chunks)]
+                    + [bound_extract_image(c, idx) for idx, c in enumerate(diagram_chunks)]
                 )
                 results = await asyncio.gather(*tasks, return_exceptions=True)
 
@@ -613,23 +952,15 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
 
                     if extracted_page and extracted_page.model_context and not final_document["model_context"]:
                         final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
-                    if extracted_page and extracted_page.biological_basis and not final_document["biological_basis"]:
-                        final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
+                    _merge_biological_basis(final_document, extracted_page)
                     if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
                         final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
                     if extracted_page and extracted_page.metabolic_pathways:
                         final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
 
                     if extracted_page.parameter_blocks:
-                        for block in extracted_page.parameter_blocks:
-                            for p in block.parameters:
-                                if block.implied_species and not p.context.species:
-                                    p.context.species = block.implied_species
-                                if block.implied_unit_original and not p.quantitative_data.unit_original:
-                                    p.quantitative_data.unit_original = block.implied_unit_original
-                                if block.parameter_class and not p.parameter_class:
-                                    p.parameter_class = block.parameter_class
-                                final_document["model_parameters"].append(p.model_dump())
+                        flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
+                        final_document["model_parameters"].extend(flat_params)
                     if extracted_page.observed_data:
                         final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
                     if extracted_page.simulated_data:
@@ -640,6 +971,11 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
                     if extracted_page.parameter_mentions_without_values:
                         final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
+                    if extracted_page.table_evidence:
+                        for te_item in extracted_page.table_evidence:
+                            te_dict = te_item.model_dump()
+                            if not any(e.get("table_id") == te_dict.get("table_id") for e in final_document["table_evidence"]):
+                                final_document["table_evidence"].append(te_dict)
 
             if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
                 final_document["model_classification"]["model_type"] = doc_triage_type
@@ -670,7 +1006,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             if verify:
                 from pk_pipeline.verifier import verify_document
                 verify_document(processed)
-            return processed
+            print("Step: Running Tier 2 Evaluation Pass...")
+            try:
+                judgments = await get_extractor().evaluate_extracted_model(json.dumps(processed))
+                processed["evaluator_judgments"] = judgments.model_dump()
+            except Exception as e:
+                print(f"  -> Failed to run Tier 2 evaluation: {e}")
+            return finalize_extracted_document(processed)
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
             print(f"  -> Switching from local PDF to Open Access PDF ({res['source']}): {res['pdf_path']}")
@@ -806,47 +1148,83 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks. Running LLM extraction concurrently...")
         
         sem = asyncio.Semaphore(5)
-        async def bound_extract(p):
-            async with sem:
-                role = p.get("role")
-                if role == "page_with_table":
-                    t_idx = p.get("table_index", 1)
-                    return await get_extractor().extract_data(
+        async def bound_extract(p, idx):
+            role = p.get("role")
+            if role == "page_with_table":
+                t_idx = p.get("table_index", 1)
+                chunk_title = f"Page {p['page']} Table {t_idx}"
+                chunk_key = f"pdf_table_p{p['page']}_t{t_idx}_{idx}"
+                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+                if cached:
+                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                    return cached
+                async with sem:
+                    table_evidence = await get_extractor().extract_table_evidence(
+                        p["img_obj"],
+                        markdown_context=p["markdown_context"],
+                        chunk_title=chunk_title
+                    )
+                    page = await get_extractor().extract_data(
                         p["img_obj"],
                         role="table_crop",
                         evidence_text=p["markdown_context"],
-                        chunk_title=f"Page {p['page']} Table {t_idx}"
+                        chunk_title=chunk_title,
+                        table_evidence=table_evidence
                     )
-                elif role == "page_with_figure":
-                    return await get_extractor().extract_data(
+                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                    return page
+            elif role == "page_with_figure":
+                chunk_title = f"Page {p['page']} figure"
+                chunk_key = f"pdf_figure_p{p['page']}_{idx}"
+                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+                if cached:
+                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                    return cached
+                async with sem:
+                    page = await get_extractor().extract_data(
                         p["img_obj"],
                         role="full_page",
                         evidence_text=p["markdown_context"],
-                        chunk_title=f"Page {p['page']} figure"
+                        chunk_title=chunk_title
                     )
-                else:
-                    return await get_extractor().extract_from_text(
+                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                    return page
+            else:
+                chunk_title = f"Page {p['page']} Text"
+                chunk_key = f"pdf_narrative_p{p['page']}_{idx}"
+                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+                if cached:
+                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                    return cached
+                async with sem:
+                    page = await get_extractor().extract_from_text(
                         p["markdown_context"],
                         role=role,
-                        chunk_title=f"Page {p['page']} Text"
+                        chunk_title=chunk_title
                     )
+                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                    return page
                     
-        tasks = [bound_extract(p) for p in llm_payloads]
+        tasks = [bound_extract(p, idx) for idx, p in enumerate(llm_payloads)]
         results = await asyncio.gather(*tasks, return_exceptions=True)
         
         final_document = {
             "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
             "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
             "model_context": None,
-                "biological_basis": None,
-                "model_structure": None,
-                "metabolic_pathways": [],
+            "biological_basis": None,
+            "model_structure": None,
+            "metabolic_pathways": [],
             "model_parameters": [],
             "observed_data": [],
             "simulated_data": [],
             "formulation_characterization": [],
             "qualitative_findings": [],
             "parameter_mentions_without_values": [],
+            "table_evidence": [],
         }
         
         for chunk_idx, res_item in enumerate(results):
@@ -858,23 +1236,15 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                     if final_document["model_classification"]["model_type"] == "not_applicable":
                         final_document["model_classification"] = extracted_page.model_classification.model_dump()
                 if extracted_page and extracted_page.model_context and not final_document["model_context"]:
-                        final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
-                    if extracted_page and extracted_page.biological_basis and not final_document["biological_basis"]:
-                        final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
-                    if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
+                    final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
+                _merge_biological_basis(final_document, extracted_page)
+                if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
                     final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
-                    if extracted_page and extracted_page.metabolic_pathways:
-                        final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
+                if extracted_page and extracted_page.metabolic_pathways:
+                    final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
                 if extracted_page and extracted_page.parameter_blocks:
-                    for block in extracted_page.parameter_blocks:
-                        for p in block.parameters:
-                            if block.implied_species and not p.context.species:
-                                p.context.species = block.implied_species
-                            if block.implied_unit_original and not p.quantitative_data.unit_original:
-                                p.quantitative_data.unit_original = block.implied_unit_original
-                            if block.parameter_class and not p.parameter_class:
-                                p.parameter_class = block.parameter_class
-                            final_document["model_parameters"].append(p.model_dump())
+                    flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
+                    final_document["model_parameters"].extend(flat_params)
                 if extracted_page and extracted_page.observed_data:
                     final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
                 if extracted_page and extracted_page.simulated_data:
@@ -885,6 +1255,8 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                     final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
                 if extracted_page and extracted_page.parameter_mentions_without_values:
                     final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
+                if extracted_page and extracted_page.table_evidence:
+                    final_document["table_evidence"].extend([t.model_dump() for t in extracted_page.table_evidence])
                     
         if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
             final_document["model_classification"]["model_type"] = doc_triage_type
@@ -909,7 +1281,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         if verify:
             from pk_pipeline.verifier import verify_document
             verify_document(processed)
-        return processed
+        return finalize_extracted_document(processed)
         
     print(f"Found MinerU structured output: {mineru_json_path}")
     
@@ -1040,9 +1412,9 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
         "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
         "model_context": None,
-                "biological_basis": None,
-                "model_structure": None,
-                "metabolic_pathways": [],
+        "biological_basis": None,
+        "model_structure": None,
+        "metabolic_pathways": [],
         "model_parameters": [],
         "observed_data": [],
         "simulated_data": [],
@@ -1082,8 +1454,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         # Merge model_context, biological_basis, structure, pathways
         if extracted_page.model_context and not final_document["model_context"]:
             final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
-        if extracted_page.biological_basis and not final_document["biological_basis"]:
-            final_document["biological_basis"] = extracted_page.biological_basis.model_dump(by_alias=True, exclude_none=True)
+        _merge_biological_basis(final_document, extracted_page)
         # Merge structure (take the first one we find)
         if extracted_page.model_structure and not final_document["model_structure"]:
             final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
@@ -1092,15 +1463,8 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             
         # Aggregate all parameters
         if extracted_page.parameter_blocks:
-            for block in extracted_page.parameter_blocks:
-                for p in block.parameters:
-                    if block.implied_species and not p.context.species:
-                        p.context.species = block.implied_species
-                    if block.implied_unit_original and not p.quantitative_data.unit_original:
-                        p.quantitative_data.unit_original = block.implied_unit_original
-                    if block.parameter_class and not p.parameter_class:
-                        p.parameter_class = block.parameter_class
-                    final_document["model_parameters"].append(p.model_dump())
+            flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
+            final_document["model_parameters"].extend(flat_params)
         if extracted_page.observed_data:
             final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
         if extracted_page.simulated_data:
@@ -1137,7 +1501,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
     except Exception as e:
         print(f"  -> Failed to run Tier 2 evaluation: {e}")
         
-    return processed
+    return finalize_extracted_document(processed)
 
 import time
 import glob
@@ -1254,6 +1618,7 @@ Examples:
                     use_wevisdoc=args.wevisdoc,
                     force_pdf=args.force_pdf,
                     verify=not args.no_verify,
+                    output_dir=args.output_dir,
                 )
 
                 # ── Save immediately ─────────────────────────────────────────
@@ -1264,16 +1629,16 @@ Examples:
                     json.dump(result, f, indent=2, ensure_ascii=False)
 
                 doc_time = time.time() - doc_start
-                n_params = sum(len(b.get("parameters", [])) for b in result.get("parameter_blocks", [])) if isinstance(result, dict) else "?"
+                n_params = len(result.get("model_parameters", [])) if isinstance(result, dict) else "?"
                 print(f"  DONE   {label} {basename}  |  {n_params} params  |  {doc_time:.1f}s  ->  {output_path}")
 
                 # ── Optional Tier 2 LLM critic ───────────────────────────────
                 if args.llm_verify and isinstance(result, dict):
-                    tier1_clean = result.get("verification", {}).get("clean", True)
+                    tier1_clean = (result.get("verification") or {}).get("clean", True)
                     if tier1_clean:
                         print(f"  [T2]   {label} Tier 1 clean — LLM critic skipped.")
                     else:
-                        err_n = result.get("verification", {}).get("error_count", 0)
+                        err_n = (result.get("verification") or {}).get("error_count", 0)
                         print(f"  [T2]   {label} Running LLM critic on {err_n} error(s)...")
                         from pk_pipeline.verifier import verify_document_with_llm
                         _, llm_sum = await verify_document_with_llm(
@@ -1281,6 +1646,8 @@ Examples:
                             verbose=False,
                             include_warnings=args.llm_verify_warnings,
                         )
+                        refresh_parameter_views(result)
+                        result = finalize_extracted_document(result)
                         with open(output_path, "w", encoding="utf-8") as f:
                             json.dump(result, f, indent=2, ensure_ascii=False)
                         print(
@@ -1319,9 +1686,9 @@ Examples:
     batch_time = time.time() - batch_start
 
     # ── Summary ───────────────────────────────────────────────────────────────
-    total_params   = sum(sum(len(b.get("parameters", [])) for b in r.get("parameter_blocks", [])) for r in results_map.values() if isinstance(r, dict))
-    total_laya     = sum(r.get("laya_filter_summary", {}).get("discarded_chunks", 0) for r in results_map.values() if isinstance(r, dict))
-    total_wevisdoc = sum(r.get("wevisdoc_summary", {}).get("pages_transcribed", 0) for r in results_map.values() if isinstance(r, dict))
+    total_params   = sum(len(r.get("model_parameters", [])) for r in results_map.values() if isinstance(r, dict))
+    total_laya     = sum((r.get("laya_filter_summary") or {}).get("discarded_chunks", 0) for r in results_map.values() if isinstance(r, dict))
+    total_wevisdoc = sum((r.get("wevisdoc_summary") or {}).get("pages_transcribed", 0) for r in results_map.values() if isinstance(r, dict))
 
     print(f"\n{'='*60}")
     print(f"  BATCH COMPLETE")
@@ -1344,4 +1711,3 @@ Examples:
 
 if __name__ == "__main__":
     main()
-

@@ -1,0 +1,105 @@
+{
+  "page_metadata": {
+    "title": "",
+    "authors": [],
+    "journal": "",
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": ""
+  },
+  "model_context": {
+    "model_origin": "adapted_from",
+    "stated_purpose": "risk_assessment",
+    "dose_metric": "serum_levels"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "body_weight",
+      "cardiac_output",
+      "saturable_reabsorption",
+      "free_fraction_in_plasma",
+      "absorption_rate_constant",
+      "intercompartmental_transfer_rates"
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Saturable process with Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment.",
+        "evidence_quote": "a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment ( Fig. 1 )",
+        "source_location": "Selected model"
+      },
+      {
+        "description": "Bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion.",
+        "evidence_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion",
+        "source_location": "Inferences"
+      },
+      {
+        "description": "The TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "source_location": "Model checking and validation"
+      },
+      {
+        "description": "The parameters deemed identifiable were associated with much narrower credible intervals.",
+        "evidence_quote": "The parameters deemed identifiable were associated with much narrower credible intervals.",
+        "source_location": "Discussion"
+      }
+    ],
+    "specialized_mechanisms": [
+      "saturable_reabsorption",
+      "Michaelis-Menten_kinetics"
+    ]
+  },
+  "table_evidence": [],
+  "model_structure": {
+    "reported_compartment_count": 3,
+    "listed_compartment_count": 3,
+    "count_consistency": "consistent",
+    "compartments": [
+      {
+        "id": "central_compartment",
+        "label_raw": "central compartment",
+        "confidence": null
+      },
+      {
+        "id": "deep_compartment",
+        "label_raw": "second (\"deep\") compartment",
+        "confidence": null
+      },
+      {
+        "id": "filtrate_compartment",
+        "label_raw": "filtrate compartment",
+        "confidence": null
+      }
+    ],
+    "connections": [],
+    "absorption": {
+      "route": null,
+      "model_type": null,
+      "site": null,
+      "evidence_quote": null
+    },
+    "metabolism": null,
+    "elimination": {
+      "routes": [
+        "renal"
+      ],
+      "evidence_quote": null
+    },
+    "unresolved": [],
+    "source_location": null,
+    "equations_provided": "none",
+    "allometric_scaling_rules": [
+      "QCC = QCC * BW^0.74"
+    ]
+  },
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "dosing": null
+}

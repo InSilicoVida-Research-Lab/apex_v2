@@ -12,7 +12,48 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Table 3. presents organ-specific blood flows, compartment volumes, and saturable resorption parameters, characteristic of a PBPK model."
+    "evidence_quote": null
+  },
+  "model_context": {
+    "model_origin": "adapted_from",
+    "stated_purpose": "risk_assessment",
+    "dose_metric": "serum_levels"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "body_weight",
+      "cardiac_output",
+      "saturable_reabsorption",
+      "free_fraction_in_plasma",
+      "absorption_rate_constant",
+      "intercompartmental_transfer_rates"
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Saturable process with Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment.",
+        "evidence_quote": "a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment ( Fig. 1 )",
+        "source_location": "Selected model"
+      },
+      {
+        "description": "Bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion.",
+        "evidence_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion",
+        "source_location": "Inferences"
+      },
+      {
+        "description": "The TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "source_location": "Model checking and validation"
+      },
+      {
+        "description": "The parameters deemed identifiable were associated with much narrower credible intervals.",
+        "evidence_quote": "The parameters deemed identifiable were associated with much narrower credible intervals.",
+        "source_location": "Discussion"
+      }
+    ],
+    "specialized_mechanisms": [
+      "saturable_reabsorption",
+      "Michaelis-Menten_kinetics"
+    ]
   },
   "model_structure": {
     "reported_compartment_count": 3,
@@ -20,45 +61,54 @@
     "count_consistency": "consistent",
     "compartments": [
       {
-        "id": "central",
-        "label_raw": "central compartment"
+        "id": "central_compartment",
+        "label_raw": "central compartment",
+        "confidence": null
       },
       {
-        "id": "deep",
-        "label_raw": "deep compartment"
+        "id": "deep_compartment",
+        "label_raw": "second (\"deep\") compartment",
+        "confidence": null
       },
       {
-        "id": "filtrate",
-        "label_raw": "filtrate compartment"
+        "id": "filtrate_compartment",
+        "label_raw": "filtrate compartment",
+        "confidence": null
       }
     ],
-    "source_location": "Text"
+    "connections": [],
+    "absorption": {
+      "route": null,
+      "model_type": null,
+      "site": null,
+      "evidence_quote": null
+    },
+    "metabolism": null,
+    "elimination": {
+      "routes": [
+        "renal"
+      ],
+      "evidence_quote": null
+    },
+    "unresolved": [],
+    "source_location": null,
+    "equations_provided": "none",
+    "allometric_scaling_rules": [
+      "QCC = QCC * BW^0.74"
+    ]
   },
-  "observed_data": [],
-  "simulated_data": [],
-  "formulation_characterization": [],
-  "qualitative_findings": [],
-  "parameter_mentions_without_values": [],
-  "dosing": [],
-  "ingestion_source": "pmc_xml",
-  "ingestion_source_type": "published",
-  "laya_filter_summary": {
-    "model_type_triage": "compartmental",
-    "evaluated_chunks": 1,
-    "discarded_chunks": 0,
-    "retained_chunks": 1
-  },
-  "system_specific_parameters": [
+  "metabolic_pathways": [],
+  "model_parameters": [
     {
-      "parameter_id": "param_1",
+      "parameter_id": "param_a660cb553648ab0f",
       "parameter_class": "physiological",
-      "parameter_subclass": "organ_weight",
+      "parameter_subclass": "body_weight",
       "parameter_name_original": "Body weight (kg)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "body_weight",
       "symbol_original": "BW",
-      "symbol_standardized": null,
+      "symbol_standardized": "BW",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -69,44 +119,53 @@
       "quantitative_data": {
         "value_text": "5",
         "value": 5.0,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
-        "unit_original": "kg",
-        "unit_standardized": "kg",
+        "unit_original": null,
+        "unit_standardized": null,
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "5",
         "reference": "Chang (2020d)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_2",
+      "parameter_id": "param_24d0d18122a91168",
       "parameter_class": "physiological",
-      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_subclass": "cardiac_output",
       "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "cardiac_output",
       "symbol_original": "QCC",
-      "symbol_standardized": null,
+      "symbol_standardized": "QCC",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -117,44 +176,53 @@
       "quantitative_data": {
         "value_text": "19.8",
         "value": 19.8,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
-        "unit_original": "L/h/kg 0.74",
+        "unit_original": "L/h/kg 0.74 ",
         "unit_standardized": "h^-1 kg^-0.74",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "19.8",
         "reference": "Wambaugh et al. (2013)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_3",
+      "parameter_id": "param_a61c232f9952bf26",
       "parameter_class": "physiological",
-      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_subclass": "organ_volume_fraction",
       "parameter_name_original": "Fraction of cardiac output to filtrate",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
       "symbol_original": "QfilC",
-      "symbol_standardized": null,
+      "symbol_standardized": "QfilC",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -165,44 +233,53 @@
       "quantitative_data": {
         "value_text": "0.15",
         "value": 0.15,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": null,
-        "unit_standardized": "unitless",
+        "unit_standardized": null,
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.15",
         "reference": "Wambaugh et al. (2013)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_4",
+      "parameter_id": "param_b9def7675605a355",
       "parameter_class": "physiological",
       "parameter_subclass": "organ_volume_fraction",
       "parameter_name_original": "Volume of filtrate compartment (L/Kg)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "filtrate_compartment_volume_fraction",
       "symbol_original": "VfilC",
-      "symbol_standardized": null,
+      "symbol_standardized": "VfilC",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -213,238 +290,53 @@
       "quantitative_data": {
         "value_text": "4.00E-04",
         "value": 0.0004,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "L/Kg",
-        "unit_standardized": "L kg^-1",
+        "unit_standardized": "L/kg",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "4.00E-04",
         "reference": "Loccisano et al. (2011)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_13",
-      "parameter_class": "physiological",
-      "parameter_subclass": "organ_weight",
-      "parameter_name_original": "Body weight (kg)",
-      "parameter_name_standardized": null,
-      "symbol_original": "BW",
-      "symbol_standardized": null,
-      "context": {
-        "compound": "PFOS",
-        "formulation": null,
-        "species": "Human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "70",
-        "value": 70.0,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "kg",
-        "unit_standardized": "kg",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Table 3.",
-        "source_quote": "70",
-        "reference": "Loccisano et al. (2011)",
-        "status": "literature_derived",
-        "derivation": null,
-        "evidence_directness": "direct"
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    },
-    {
-      "parameter_id": "param_14",
-      "parameter_class": "physiological",
-      "parameter_subclass": "organ_blood_flow_fraction",
-      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
-      "parameter_name_standardized": null,
-      "symbol_original": "QCC",
-      "symbol_standardized": null,
-      "context": {
-        "compound": "PFOS",
-        "formulation": null,
-        "species": "Human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "12.5",
-        "value": 12.5,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "L/h/kg 0.74",
-        "unit_standardized": "h^-1 kg^-0.74",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Table 3.",
-        "source_quote": "12.5",
-        "reference": "Loccisano et al. (2011)",
-        "status": "literature_derived",
-        "derivation": null,
-        "evidence_directness": "direct"
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    },
-    {
-      "parameter_id": null,
-      "parameter_class": "physiological",
-      "parameter_subclass": null,
-      "parameter_name_original": "bodyweight",
-      "parameter_name_standardized": null,
-      "symbol_original": "BW",
-      "symbol_standardized": null,
-      "context": {
-        "compound": null,
-        "formulation": null,
-        "species": "human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "70",
-        "value": 70.0,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "kg",
-        "unit_standardized": "kg",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Text",
-        "source_quote": "bodyweight (70 kg)",
-        "reference": null,
-        "status": "assumed",
-        "derivation": null,
-        "evidence_directness": null
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    },
-    {
-      "parameter_id": null,
-      "parameter_class": "physiological",
-      "parameter_subclass": "organ_blood_flow_fraction",
-      "parameter_name_original": "cardiac output",
-      "parameter_name_standardized": null,
-      "symbol_original": "QCC",
-      "symbol_standardized": null,
-      "context": {
-        "compound": null,
-        "formulation": null,
-        "species": "human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "12.5",
-        "value": 12.5,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "L/h/kg 0.74",
-        "unit_standardized": "L h^-1 kg^-0.74",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Text",
-        "source_quote": "cardiac output (12.5 L/h/kg 0.74 )",
-        "reference": null,
-        "status": "assumed",
-        "derivation": null,
-        "evidence_directness": null
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    }
-  ],
-  "compound_specific_parameters": [
-    {
-      "parameter_id": "param_5",
-      "parameter_class": "compound_specific",
-      "parameter_subclass": "fraction_unbound",
+      "parameter_id": "param_2f9b70680462ae8b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
       "parameter_name_original": "Bioavailability",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "oral_bioavailability",
       "symbol_original": "bioAv",
-      "symbol_standardized": null,
+      "symbol_standardized": "bioAv",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -455,44 +347,53 @@
       "quantitative_data": {
         "value_text": "0.9",
         "value": 0.9,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": null,
-        "unit_standardized": "unitless",
+        "unit_standardized": null,
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.9",
         "reference": "Assumed (PFOS)",
-        "status": "assumed",
+        "status": "assumed_default",
+        "status_raw": "assumed_default",
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_6",
+      "parameter_id": "param_dc222e1df066cb71",
       "parameter_class": "biochemical",
-      "parameter_subclass": "volume_of_distribution",
+      "parameter_subclass": "distribution_volume",
       "parameter_name_original": "Volume of distribution central compartment (L/kg)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "central_compartment_volume",
       "symbol_original": "VCC",
-      "symbol_standardized": null,
+      "symbol_standardized": "VCC",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -503,44 +404,59 @@
       "quantitative_data": {
         "value_text": "0.17 (0.16, 0.20)",
         "value": 0.17,
-        "range_start": 0.16,
-        "range_end": 0.2,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.16,
+          "upper": 0.2,
+          "absolute": null,
+          "raw_text": "0.17 (0.16, 0.20)"
+        },
         "value_qualifier": null,
         "unit_original": "L/kg",
-        "unit_standardized": "L kg^-1",
+        "unit_standardized": "L/kg",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.17 (0.16, 0.20)",
-        "reference": null,
-        "status": "optimized",
+        "reference": "Optimized",
+        "status": "fitted",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_7",
+      "parameter_id": "param_a2ce1d068a29c220",
       "parameter_class": "biochemical",
       "parameter_subclass": "maximal_velocity",
       "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "maximal_resorption_rate",
       "symbol_original": "Tmc",
-      "symbol_standardized": null,
+      "symbol_standardized": "Tmc",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -551,44 +467,59 @@
       "quantitative_data": {
         "value_text": "0.21 (0.18, 0.25)",
         "value": 0.21,
-        "range_start": 0.18,
-        "range_end": 0.25,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.18,
+          "upper": 0.25,
+          "absolute": null,
+          "raw_text": "0.21 (0.18, 0.25)"
+        },
         "value_qualifier": null,
         "unit_original": "mg/h/kg",
-        "unit_standardized": "mg h^-1 kg^-1",
+        "unit_standardized": "mg/h/kg",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.21 (0.18, 0.25)",
-        "reference": null,
-        "status": "optimized",
+        "reference": "Optimized",
+        "status": "fitted",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_8",
+      "parameter_id": "param_aac0bd11e4043a59",
       "parameter_class": "biochemical",
-      "parameter_subclass": "partition_coefficient",
+      "parameter_subclass": "michaelis_menten_constant",
       "parameter_name_original": "Saturable resorption affinity (mg/L)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "michaelis_menten_constant",
       "symbol_original": "K t",
-      "symbol_standardized": null,
+      "symbol_standardized": "Kt",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -599,44 +530,53 @@
       "quantitative_data": {
         "value_text": "0.004",
         "value": 0.004,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "mg/L",
-        "unit_standardized": "mg L^-1",
+        "unit_standardized": "mg/L",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.004",
         "reference": "Assumed (PFOS)",
-        "status": "assumed",
+        "status": "assumed_default",
+        "status_raw": "assumed_default",
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_9",
+      "parameter_id": "param_2b2e8667ad9126f0",
       "parameter_class": "biochemical",
       "parameter_subclass": "fraction_unbound",
       "parameter_name_original": "Proportion of free compound in serum",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "fraction_unbound_in_plasma",
       "symbol_original": "Free",
-      "symbol_standardized": null,
+      "symbol_standardized": "Free",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -647,44 +587,53 @@
       "quantitative_data": {
         "value_text": "0.0009",
         "value": 0.0009,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": null,
-        "unit_standardized": "unitless",
+        "unit_standardized": null,
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.0009",
         "reference": "Smeltz et al. (2023)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_10",
+      "parameter_id": "param_96914d45ef631712",
       "parameter_class": "biochemical",
-      "parameter_subclass": "absorption_rate_constant",
+      "parameter_subclass": "distribution_rate",
       "parameter_name_original": "Rate from central to second compartment (1/h)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "intercompartmental_rate_k12",
       "symbol_original": "k 12",
-      "symbol_standardized": null,
+      "symbol_standardized": "k12",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -695,44 +644,53 @@
       "quantitative_data": {
         "value_text": "3.3",
         "value": 3.3,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "1/h",
         "unit_standardized": "h^-1",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "3.3",
         "reference": "Andersen et al. (2006)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_11",
+      "parameter_id": "param_1dfab8705369541d",
       "parameter_class": "biochemical",
-      "parameter_subclass": "absorption_rate_constant",
+      "parameter_subclass": "distribution_rate",
       "parameter_name_original": "Rate from second to central compartment (1/h)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "intercompartmental_rate_k21",
       "symbol_original": "k 21",
-      "symbol_standardized": null,
+      "symbol_standardized": "k21",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -743,44 +701,53 @@
       "quantitative_data": {
         "value_text": "3.4",
         "value": 3.4,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "1/h",
         "unit_standardized": "h^-1",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "3.4",
         "reference": "Andersen et al. (2006)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_12",
+      "parameter_id": "param_63b72bc7739a9d91",
       "parameter_class": "biochemical",
       "parameter_subclass": "absorption_rate_constant",
       "parameter_name_original": "Rate from gut to central compartment (1/h)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "absorption_rate_constant",
       "symbol_original": "k a",
-      "symbol_standardized": null,
+      "symbol_standardized": "ka",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Nonhuman primate",
         "life_stage": null,
@@ -791,44 +758,110 @@
       "quantitative_data": {
         "value_text": "132",
         "value": 132.0,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "1/h",
         "unit_standardized": "h^-1",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "132",
         "reference": "Wambaugh et al. (2013)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_15",
+      "parameter_id": "param_72adb239862b1a0e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "70",
+        "reference": "Loccisano et al. (2011)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a96ca9830ba12a17",
       "parameter_class": "biochemical",
       "parameter_subclass": "maximal_velocity",
       "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "maximal_resorption_rate",
       "symbol_original": "Tmc",
-      "symbol_standardized": null,
+      "symbol_standardized": "Tmc",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Human",
         "life_stage": null,
@@ -839,44 +872,53 @@
       "quantitative_data": {
         "value_text": "0.47",
         "value": 0.47,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "mg/h/kg",
-        "unit_standardized": "mg h^-1 kg^-1",
+        "unit_standardized": "mg/h/kg",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "0.47",
-        "reference": null,
-        "status": "optimized",
+        "reference": "Optimized",
+        "status": "fitted",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": "param_16",
-      "parameter_class": "compound_specific",
-      "parameter_subclass": "half_life",
+      "parameter_id": "param_c1803a8c68b49bc8",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
       "parameter_name_original": "Half-life (years)",
-      "parameter_name_standardized": null,
+      "parameter_name_standardized": "elimination_half_life",
       "symbol_original": "T 1/2",
-      "symbol_standardized": null,
+      "symbol_standardized": "t1/2",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
         "species": "Human",
         "life_stage": null,
@@ -887,46 +929,4206 @@
       "quantitative_data": {
         "value_text": "5.3",
         "value": 5.3,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "years",
         "unit_standardized": "years",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Table 3.",
+        "source_section": null,
+        "source_location": "Table 3",
         "source_quote": "5.3",
         "reference": "Li et al. (2018)",
-        "status": "literature_derived",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
         "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "table_evidence": [
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 1",
+      "title": "Table 1: Mean (95% CI) TK parameters for PFOS and PFOA fit to nonhuman primate data and scaled to humans.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Species"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "Type of variable"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "Variable"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "Name"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "Mean (95% CI)",
+            "PFOS"
+          ],
+          "index": 4
+        },
+        {
+          "column_id": "c6",
+          "path": [
+            "Mean (95% CI)",
+            "PFOA"
+          ],
+          "index": 5
+        },
+        {
+          "column_id": "c7",
+          "path": [
+            "Source"
+          ],
+          "index": 6
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Nonhuman primate",
+            "Physiological",
+            "Body weight (kg)",
+            "BW"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Nonhuman primate",
+            "Cardiac blood output (L/h/kg 0.74 )",
+            "QCC"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Nonhuman primate",
+            "Fraction of cardiac output to filtrate",
+            "QfilC"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "Nonhuman primate",
+            "Volume of filtrate compartment (L/kg)",
+            "VfilC"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "Nonhuman primate",
+            "Chemical-specific",
+            "Bioavailability",
+            "bioAv"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "Nonhuman primate",
+            "Volume of distribution central compartment (L/kg)",
+            "VCC"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "Nonhuman primate",
+            "Saturable resorption rate (mg/h/kg)",
+            "Tmc"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "Nonhuman primate",
+            "Saturable resorption affinity (mg/L)",
+            "K t"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "Nonhuman primate",
+            "Proportion of free compound in serum",
+            "Free"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "Nonhuman primate",
+            "Rate from central to second compartment (1/h)",
+            "k 12"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "Nonhuman primate",
+            "Rate from second to central compartment (1/h)",
+            "k 21"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "Nonhuman primate",
+            "Rate from gut to central compartment (1/h)",
+            "k a"
+          ],
+          "index": 11
+        },
+        {
+          "row_id": "r13",
+          "path": [
+            "Human",
+            "Physiological",
+            "Body weight (kg)",
+            "BW"
+          ],
+          "index": 12
+        },
+        {
+          "row_id": "r14",
+          "path": [
+            "Human",
+            "Cardiac blood output (L/h/kg 0.74 )",
+            "QCC"
+          ],
+          "index": 13
+        },
+        {
+          "row_id": "r15",
+          "path": [
+            "Human",
+            "Chemical-specific",
+            "Bioavailability",
+            "bioAv"
+          ],
+          "index": 14
+        },
+        {
+          "row_id": "r16",
+          "path": [
+            "Human",
+            "Saturable resorption rate (mg/h/kg)",
+            "Tmc"
+          ],
+          "index": 15
+        },
+        {
+          "row_id": "r17",
+          "path": [
+            "Human",
+            "Saturable resorption affinity (mg/L)",
+            "K t"
+          ],
+          "index": 16
+        },
+        {
+          "row_id": "r18",
+          "path": [
+            "Human",
+            "Half-life (years)",
+            "T 1/2"
+          ],
+          "index": 17
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "Physiological",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "Body weight (kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "BW",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c5",
+          "row_id": "r1",
+          "column_id": "c5",
+          "text": "5 a",
+          "numeric_value": 5.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c6",
+          "row_id": "r1",
+          "column_id": "c6",
+          "text": "4.1 a",
+          "numeric_value": 4.1,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c7",
+          "row_id": "r1",
+          "column_id": "c7",
+          "text": "Butenhoff et al. (2004) ; Chang et al. (2012) ; Seacat et al. (2002)",
+          "numeric_value": 2004.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c3",
+          "row_id": "r2",
+          "column_id": "c3",
+          "text": "Cardiac blood output (L/h/kg 0.74 )",
+          "numeric_value": 0.74,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c4",
+          "row_id": "r2",
+          "column_id": "c4",
+          "text": "QCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c5",
+          "row_id": "r2",
+          "column_id": "c5",
+          "text": "19.8",
+          "numeric_value": 19.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c6",
+          "row_id": "r2",
+          "column_id": "c6",
+          "text": "19.8",
+          "numeric_value": 19.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c7",
+          "row_id": "r2",
+          "column_id": "c7",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "Fraction of cardiac output to filtrate",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "QfilC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c5",
+          "row_id": "r3",
+          "column_id": "c5",
+          "text": "0.15",
+          "numeric_value": 0.15,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c6",
+          "row_id": "r3",
+          "column_id": "c6",
+          "text": "0.15",
+          "numeric_value": 0.15,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c7",
+          "row_id": "r3",
+          "column_id": "c7",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "Volume of filtrate compartment (L/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "VfilC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "4.00E-04",
+          "numeric_value": 0.0004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c6",
+          "row_id": "r4",
+          "column_id": "c6",
+          "text": "4.00E-04",
+          "numeric_value": 0.0004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c7",
+          "row_id": "r4",
+          "column_id": "c7",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "Chemical-specific",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "Bioavailability",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "bioAv",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "0.9",
+          "numeric_value": 0.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c6",
+          "row_id": "r5",
+          "column_id": "c6",
+          "text": "0.32 (0.20, 0.46)",
+          "numeric_value": 0.32,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c7",
+          "row_id": "r5",
+          "column_id": "c7",
+          "text": "US EPA (2024a) (PFOS) Optimized (PFOA)",
+          "numeric_value": 2024.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "Volume of distribution central compartment (L/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "VCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c5",
+          "row_id": "r6",
+          "column_id": "c5",
+          "text": "0.24 (0.24, 0.25)",
+          "numeric_value": 0.24,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c6",
+          "row_id": "r6",
+          "column_id": "c6",
+          "text": "0.23 (0.18, 0.29)",
+          "numeric_value": 0.23,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c7",
+          "row_id": "r6",
+          "column_id": "c7",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "Saturable resorption rate (mg/h/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "Tmc",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "2.5 (2.31, 2.80)",
+          "numeric_value": 2.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c6",
+          "row_id": "r7",
+          "column_id": "c6",
+          "text": "0.28 (0.17, 0.53)",
+          "numeric_value": 0.28,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c7",
+          "row_id": "r7",
+          "column_id": "c7",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c3",
+          "row_id": "r8",
+          "column_id": "c3",
+          "text": "Saturable resorption affinity (mg/L)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c4",
+          "row_id": "r8",
+          "column_id": "c4",
+          "text": "K t",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c5",
+          "row_id": "r8",
+          "column_id": "c5",
+          "text": "0.004 (0.003, 0.004)",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c6",
+          "row_id": "r8",
+          "column_id": "c6",
+          "text": "0.017 (0.010, 0.041)",
+          "numeric_value": 0.017,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c7",
+          "row_id": "r8",
+          "column_id": "c7",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c3",
+          "row_id": "r9",
+          "column_id": "c3",
+          "text": "Proportion of free compound in serum",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c4",
+          "row_id": "r9",
+          "column_id": "c4",
+          "text": "Free",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c5",
+          "row_id": "r9",
+          "column_id": "c5",
+          "text": "4.50E-03",
+          "numeric_value": 0.0045,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c6",
+          "row_id": "r9",
+          "column_id": "c6",
+          "text": "1.20E-3",
+          "numeric_value": 0.0012,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c7",
+          "row_id": "r9",
+          "column_id": "c7",
+          "text": "Smeltz et al. (2023)",
+          "numeric_value": 2023.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c3",
+          "row_id": "r10",
+          "column_id": "c3",
+          "text": "Rate from central to second compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c4",
+          "row_id": "r10",
+          "column_id": "c4",
+          "text": "k 12",
+          "numeric_value": 12.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c5",
+          "row_id": "r10",
+          "column_id": "c5",
+          "text": "3.3",
+          "numeric_value": 3.3,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c6",
+          "row_id": "r10",
+          "column_id": "c6",
+          "text": "3.3",
+          "numeric_value": 3.3,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c7",
+          "row_id": "r10",
+          "column_id": "c7",
+          "text": "Andersen et al. (2006)",
+          "numeric_value": 2006.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "Rate from second to central compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "k 21",
+          "numeric_value": 21.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c5",
+          "row_id": "r11",
+          "column_id": "c5",
+          "text": "3.4",
+          "numeric_value": 3.4,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c6",
+          "row_id": "r11",
+          "column_id": "c6",
+          "text": "3.4",
+          "numeric_value": 3.4,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c7",
+          "row_id": "r11",
+          "column_id": "c7",
+          "text": "Andersen et al. (2006)",
+          "numeric_value": 2006.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c3",
+          "row_id": "r12",
+          "column_id": "c3",
+          "text": "Rate from gut to central compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c4",
+          "row_id": "r12",
+          "column_id": "c4",
+          "text": "k a",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c5",
+          "row_id": "r12",
+          "column_id": "c5",
+          "text": "132",
+          "numeric_value": 132.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c6",
+          "row_id": "r12",
+          "column_id": "c6",
+          "text": "230",
+          "numeric_value": 230.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c7",
+          "row_id": "r12",
+          "column_id": "c7",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c2",
+          "row_id": "r13",
+          "column_id": "c2",
+          "text": "Physiological",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c3",
+          "row_id": "r13",
+          "column_id": "c3",
+          "text": "Body weight (kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c4",
+          "row_id": "r13",
+          "column_id": "c4",
+          "text": "BW",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c5",
+          "row_id": "r13",
+          "column_id": "c5",
+          "text": "70",
+          "numeric_value": 70.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c6",
+          "row_id": "r13",
+          "column_id": "c6",
+          "text": "70",
+          "numeric_value": 70.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c7",
+          "row_id": "r13",
+          "column_id": "c7",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c3",
+          "row_id": "r14",
+          "column_id": "c3",
+          "text": "Cardiac blood output (L/h/kg 0.74 )",
+          "numeric_value": 0.74,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c4",
+          "row_id": "r14",
+          "column_id": "c4",
+          "text": "QCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c5",
+          "row_id": "r14",
+          "column_id": "c5",
+          "text": "12.5",
+          "numeric_value": 12.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c6",
+          "row_id": "r14",
+          "column_id": "c6",
+          "text": "12.5",
+          "numeric_value": 12.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c7",
+          "row_id": "r14",
+          "column_id": "c7",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c2",
+          "row_id": "r15",
+          "column_id": "c2",
+          "text": "Chemical-specific",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c3",
+          "row_id": "r15",
+          "column_id": "c3",
+          "text": "Bioavailability",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c4",
+          "row_id": "r15",
+          "column_id": "c4",
+          "text": "bioAv",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c5",
+          "row_id": "r15",
+          "column_id": "c5",
+          "text": "0.9",
+          "numeric_value": 0.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c6",
+          "row_id": "r15",
+          "column_id": "c6",
+          "text": "0.9",
+          "numeric_value": 0.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c7",
+          "row_id": "r15",
+          "column_id": "c7",
+          "text": "US EPA (2024a , 2024b)",
+          "numeric_value": 2024.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c3",
+          "row_id": "r16",
+          "column_id": "c3",
+          "text": "Saturable resorption rate (mg/h/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c4",
+          "row_id": "r16",
+          "column_id": "c4",
+          "text": "Tmc",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c5",
+          "row_id": "r16",
+          "column_id": "c5",
+          "text": "1.07",
+          "numeric_value": 1.07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c6",
+          "row_id": "r16",
+          "column_id": "c6",
+          "text": "0.54",
+          "numeric_value": 0.54,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c7",
+          "row_id": "r16",
+          "column_id": "c7",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c3",
+          "row_id": "r17",
+          "column_id": "c3",
+          "text": "Saturable resorption affinity (mg/L)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c4",
+          "row_id": "r17",
+          "column_id": "c4",
+          "text": "K t",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c5",
+          "row_id": "r17",
+          "column_id": "c5",
+          "text": "0.004",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c6",
+          "row_id": "r17",
+          "column_id": "c6",
+          "text": "0.008 b",
+          "numeric_value": 0.008,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c7",
+          "row_id": "r17",
+          "column_id": "c7",
+          "text": "Optimized (nonhuman primate)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c3",
+          "row_id": "r18",
+          "column_id": "c3",
+          "text": "Half-life (years)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c4",
+          "row_id": "r18",
+          "column_id": "c4",
+          "text": "T 1/2",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c5",
+          "row_id": "r18",
+          "column_id": "c5",
+          "text": "3.4",
+          "numeric_value": 3.4,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c6",
+          "row_id": "r18",
+          "column_id": "c6",
+          "text": "2.7",
+          "numeric_value": 2.7,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c7",
+          "row_id": "r18",
+          "column_id": "c7",
+          "text": "Li et al. (2018)",
+          "numeric_value": 2018.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [
+        "PFOS",
+        "PFOA"
+      ],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [
+        "Nonhuman primate",
+        "Human"
+      ],
+      "populations": [],
+      "footnotes": [
+        "[a] The code uses the average body weight for each nonhuman primate or group of nonhuman primates as reported in the original studies.",
+        "[b] If the bioavailability is set to 90% for the nonhuman primate model of PFOA, the Tmc and K t values for the nonhuman primates are 0.15 mg/h/kg and 0.008 mg/L, respectively. For the human model, a set value of 0.008 mg/L for K t was used as it is representative of the higher bioavailability considered more typical for intake of food and water."
+      ],
+      "source_page": null,
+      "source_image_path": null
+    },
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 2",
+      "title": "Table 2: Comparing the POD HEDs calculated with the Verner model in ( US EPA 2024a , 2024b ) for PFOS and PFOA to estimates calculated with the human-adapted Wambaugh model.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Compound"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "Effect"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "Outcome"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "Study"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "POD (mg/L)"
+          ],
+          "index": 4
+        },
+        {
+          "column_id": "c6",
+          "path": [
+            "EPA’s POD HED (mg/kg/day)"
+          ],
+          "index": 5
+        },
+        {
+          "column_id": "c7",
+          "path": [
+            "Our POD HED (mg/kg/day)"
+          ],
+          "index": 6
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "PFOS",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Dong et al. (2019)"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "PFOS",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Steenland et al. (2009)"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "PFOS",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Lin et al. (2019)"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "PFOS",
+            "Hepatic",
+            "Elevated ALT",
+            "Gallo et al. (2012)"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "PFOS",
+            "Hepatic",
+            "Elevated ALT",
+            "Nian et al. (2019)"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "PFOS",
+            "Hepatic",
+            "Increased individual cell necrosis",
+            "Butenhoff et al. (2012)"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "PFOA",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Dong et al. (2019)"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "PFOA",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Steenland et al. (2009)"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "PFOA",
+            "Cardiovascular",
+            "Increased total cholesterol",
+            "Lin et al. (2019)"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Elevated ALT",
+            "Gallo et al. (2012)"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Elevated ALT",
+            "Darrow et al. (2016)"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Elevated ALT",
+            "Nian et al. (2019)"
+          ],
+          "index": 11
+        },
+        {
+          "row_id": "r13",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Increased focal necrosis",
+            "Loveless et al. (2008)"
+          ],
+          "index": 12
+        },
+        {
+          "row_id": "r14",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Increased individual cell necrosis",
+            "Loveless et al. (2008)"
+          ],
+          "index": 13
+        },
+        {
+          "row_id": "r15",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Increased hepatocyte single cell death",
+            "NTP (2020)"
+          ],
+          "index": 14
+        },
+        {
+          "row_id": "r16",
+          "path": [
+            "PFOA",
+            "Hepatic",
+            "Increased necrosis",
+            "NTP (2020)"
+          ],
+          "index": 15
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c1",
+          "row_id": "r1",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "Dong et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c5",
+          "row_id": "r1",
+          "column_id": "c5",
+          "text": "0.009",
+          "numeric_value": 0.009,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c6",
+          "row_id": "r1",
+          "column_id": "c6",
+          "text": "1.20E-06",
+          "numeric_value": 1.2e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c7",
+          "row_id": "r1",
+          "column_id": "c7",
+          "text": "1.43E-06",
+          "numeric_value": 1.43e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c1",
+          "row_id": "r2",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c2",
+          "row_id": "r2",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c3",
+          "row_id": "r2",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c4",
+          "row_id": "r2",
+          "column_id": "c4",
+          "text": "Steenland et al. (2009)",
+          "numeric_value": 2009.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c5",
+          "row_id": "r2",
+          "column_id": "c5",
+          "text": "0.010",
+          "numeric_value": 0.01,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c6",
+          "row_id": "r2",
+          "column_id": "c6",
+          "text": "1.22E-06",
+          "numeric_value": 1.22e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c7",
+          "row_id": "r2",
+          "column_id": "c7",
+          "text": "1.45E-06",
+          "numeric_value": 1.45e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c1",
+          "row_id": "r3",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c2",
+          "row_id": "r3",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "Lin et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c5",
+          "row_id": "r3",
+          "column_id": "c5",
+          "text": "0.067",
+          "numeric_value": 0.067,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c6",
+          "row_id": "r3",
+          "column_id": "c6",
+          "text": "8.51E-06",
+          "numeric_value": 8.51e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c7",
+          "row_id": "r3",
+          "column_id": "c7",
+          "text": "1.02E-05",
+          "numeric_value": 1.02e-05,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c1",
+          "row_id": "r4",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c2",
+          "row_id": "r4",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "Elevated ALT",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "Gallo et al. (2012)",
+          "numeric_value": 2012.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "0.057",
+          "numeric_value": 0.057,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c6",
+          "row_id": "r4",
+          "column_id": "c6",
+          "text": "7.27E-06",
+          "numeric_value": 7.27e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c7",
+          "row_id": "r4",
+          "column_id": "c7",
+          "text": "8.68E-06",
+          "numeric_value": 8.68e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c1",
+          "row_id": "r5",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "Elevated ALT",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "Nian et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "0.015",
+          "numeric_value": 0.015,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c6",
+          "row_id": "r5",
+          "column_id": "c6",
+          "text": "1.94E-06",
+          "numeric_value": 1.94e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c7",
+          "row_id": "r5",
+          "column_id": "c7",
+          "text": "2.31E-06",
+          "numeric_value": 2.31e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c1",
+          "row_id": "r6",
+          "column_id": "c1",
+          "text": "PFOS",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c2",
+          "row_id": "r6",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "Increased individual cell necrosis",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "Butenhoff et al. (2012)",
+          "numeric_value": 2012.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c5",
+          "row_id": "r6",
+          "column_id": "c5",
+          "text": "27",
+          "numeric_value": 27.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c6",
+          "row_id": "r6",
+          "column_id": "c6",
+          "text": "3.45E-03",
+          "numeric_value": 0.00345,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c7",
+          "row_id": "r6",
+          "column_id": "c7",
+          "text": "4.43E-03",
+          "numeric_value": 0.00443,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c1",
+          "row_id": "r7",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c2",
+          "row_id": "r7",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "Dong et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "0.002",
+          "numeric_value": 0.002,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c6",
+          "row_id": "r7",
+          "column_id": "c6",
+          "text": "2.75E-07",
+          "numeric_value": 2.75e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c7",
+          "row_id": "r7",
+          "column_id": "c7",
+          "text": "4.15E-07",
+          "numeric_value": 4.15e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c1",
+          "row_id": "r8",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c2",
+          "row_id": "r8",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c3",
+          "row_id": "r8",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c4",
+          "row_id": "r8",
+          "column_id": "c4",
+          "text": "Steenland et al. (2009)",
+          "numeric_value": 2009.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c5",
+          "row_id": "r8",
+          "column_id": "c5",
+          "text": "0.004",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c6",
+          "row_id": "r8",
+          "column_id": "c6",
+          "text": "5.10E-07",
+          "numeric_value": 5.1e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c7",
+          "row_id": "r8",
+          "column_id": "c7",
+          "text": "7.70E-07",
+          "numeric_value": 7.7e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c1",
+          "row_id": "r9",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c2",
+          "row_id": "r9",
+          "column_id": "c2",
+          "text": "Cardiovascular",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c3",
+          "row_id": "r9",
+          "column_id": "c3",
+          "text": "Increased total cholesterol",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c4",
+          "row_id": "r9",
+          "column_id": "c4",
+          "text": "Lin et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c5",
+          "row_id": "r9",
+          "column_id": "c5",
+          "text": "0.005",
+          "numeric_value": 0.005,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c6",
+          "row_id": "r9",
+          "column_id": "c6",
+          "text": "6.34E-07",
+          "numeric_value": 6.34e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c7",
+          "row_id": "r9",
+          "column_id": "c7",
+          "text": "9.57E-07",
+          "numeric_value": 9.57e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c1",
+          "row_id": "r10",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c2",
+          "row_id": "r10",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c3",
+          "row_id": "r10",
+          "column_id": "c3",
+          "text": "Elevated ALT",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c4",
+          "row_id": "r10",
+          "column_id": "c4",
+          "text": "Gallo et al. (2012)",
+          "numeric_value": 2012.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c5",
+          "row_id": "r10",
+          "column_id": "c5",
+          "text": "0.02",
+          "numeric_value": 0.02,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c6",
+          "row_id": "r10",
+          "column_id": "c6",
+          "text": "2.15E-06",
+          "numeric_value": 2.15e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c7",
+          "row_id": "r10",
+          "column_id": "c7",
+          "text": "3.25E-06",
+          "numeric_value": 3.25e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c1",
+          "row_id": "r11",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c2",
+          "row_id": "r11",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "Elevated ALT",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "Darrow et al. (2016)",
+          "numeric_value": 2016.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c5",
+          "row_id": "r11",
+          "column_id": "c5",
+          "text": "0.07",
+          "numeric_value": 0.07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c6",
+          "row_id": "r11",
+          "column_id": "c6",
+          "text": "7.92E-06",
+          "numeric_value": 7.92e-06,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c7",
+          "row_id": "r11",
+          "column_id": "c7",
+          "text": "1.20E-05",
+          "numeric_value": 1.2e-05,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c1",
+          "row_id": "r12",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c2",
+          "row_id": "r12",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c3",
+          "row_id": "r12",
+          "column_id": "c3",
+          "text": "Elevated ALT",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c4",
+          "row_id": "r12",
+          "column_id": "c4",
+          "text": "Nian et al. (2019)",
+          "numeric_value": 2019.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c5",
+          "row_id": "r12",
+          "column_id": "c5",
+          "text": "0.004",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c6",
+          "row_id": "r12",
+          "column_id": "c6",
+          "text": "4.51E-07",
+          "numeric_value": 4.51e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c7",
+          "row_id": "r12",
+          "column_id": "c7",
+          "text": "6.82E-07",
+          "numeric_value": 6.82e-07,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c1",
+          "row_id": "r13",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c2",
+          "row_id": "r13",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c3",
+          "row_id": "r13",
+          "column_id": "c3",
+          "text": "Increased focal necrosis",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c4",
+          "row_id": "r13",
+          "column_id": "c4",
+          "text": "Loveless et al. (2008)",
+          "numeric_value": 2008.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c5",
+          "row_id": "r13",
+          "column_id": "c5",
+          "text": "10",
+          "numeric_value": 10.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c6",
+          "row_id": "r13",
+          "column_id": "c6",
+          "text": "1.20E-03",
+          "numeric_value": 0.0012,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c7",
+          "row_id": "r13",
+          "column_id": "c7",
+          "text": "1.84E-03",
+          "numeric_value": 0.00184,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c1",
+          "row_id": "r14",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c2",
+          "row_id": "r14",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c3",
+          "row_id": "r14",
+          "column_id": "c3",
+          "text": "Increased individual cell necrosis",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c4",
+          "row_id": "r14",
+          "column_id": "c4",
+          "text": "Loveless et al. (2008)",
+          "numeric_value": 2008.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c5",
+          "row_id": "r14",
+          "column_id": "c5",
+          "text": "36",
+          "numeric_value": 36.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c6",
+          "row_id": "r14",
+          "column_id": "c6",
+          "text": "4.32E-03",
+          "numeric_value": 0.00432,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c7",
+          "row_id": "r14",
+          "column_id": "c7",
+          "text": "6.86E-03",
+          "numeric_value": 0.00686,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c1",
+          "row_id": "r15",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c2",
+          "row_id": "r15",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c3",
+          "row_id": "r15",
+          "column_id": "c3",
+          "text": "Increased hepatocyte single cell death",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c4",
+          "row_id": "r15",
+          "column_id": "c4",
+          "text": "NTP (2020)",
+          "numeric_value": 2020.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c5",
+          "row_id": "r15",
+          "column_id": "c5",
+          "text": "100",
+          "numeric_value": 100.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c6",
+          "row_id": "r15",
+          "column_id": "c6",
+          "text": "1.20E-02",
+          "numeric_value": 0.012,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c7",
+          "row_id": "r15",
+          "column_id": "c7",
+          "text": "2.10E-02",
+          "numeric_value": 0.021,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c1",
+          "row_id": "r16",
+          "column_id": "c1",
+          "text": "PFOA",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c2",
+          "row_id": "r16",
+          "column_id": "c2",
+          "text": "Hepatic",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c3",
+          "row_id": "r16",
+          "column_id": "c3",
+          "text": "Increased necrosis",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c4",
+          "row_id": "r16",
+          "column_id": "c4",
+          "text": "NTP (2020)",
+          "numeric_value": 2020.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c5",
+          "row_id": "r16",
+          "column_id": "c5",
+          "text": "26.9",
+          "numeric_value": 26.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c6",
+          "row_id": "r16",
+          "column_id": "c6",
+          "text": "3.23E-03",
+          "numeric_value": 0.00323,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c7",
+          "row_id": "r16",
+          "column_id": "c7",
+          "text": "5.06E-03",
+          "numeric_value": 0.00506,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [
+        "PFOS",
+        "PFOA"
+      ],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [
+        "Human"
+      ],
+      "populations": [],
+      "footnotes": [],
+      "source_page": null,
+      "source_image_path": null
+    },
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 3",
+      "title": "Table 3: Optimized TK parameters and 95% CI for nonhuman primate and human models of PFHxS.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Species"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "Type of variable"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "Variable"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "Name"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "Mean (95% CI)"
+          ],
+          "index": 4
+        },
+        {
+          "column_id": "c6",
+          "path": [
+            "Source"
+          ],
+          "index": 5
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Nonhuman primate",
+            "Physiological",
+            "Body weight (kg)",
+            "BW"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Nonhuman primate",
+            "Cardiac blood output (L/h/kg 0.74 )",
+            "QCC"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Nonhuman primate",
+            "Fraction of cardiac output to filtrate",
+            "QfilC"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "Nonhuman primate",
+            "Volume of filtrate compartment (L/Kg)",
+            "VfilC"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "Nonhuman primate",
+            "Chemical-specific",
+            "Bioavailability",
+            "bioAv"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "Nonhuman primate",
+            "Volume of distribution central compartment (L/kg)",
+            "VCC"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "Nonhuman primate",
+            "Saturable resorption rate (mg/h/kg)",
+            "Tmc"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "Nonhuman primate",
+            "Saturable resorption affinity (mg/L)",
+            "K t"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "Nonhuman primate",
+            "Proportion of free compound in serum",
+            "Free"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "Nonhuman primate",
+            "Rate from central to second compartment (1/h)",
+            "k 12"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "Nonhuman primate",
+            "Rate from second to central compartment (1/h)",
+            "k 21"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "Nonhuman primate",
+            "Rate from gut to central compartment (1/h)",
+            "k a"
+          ],
+          "index": 11
+        },
+        {
+          "row_id": "r13",
+          "path": [
+            "Human",
+            "Physiological",
+            "Body weight (kg)",
+            "BW"
+          ],
+          "index": 12
+        },
+        {
+          "row_id": "r14",
+          "path": [
+            "Human",
+            "Cardiac blood output (L/h/kg 0.74 )",
+            "QCC"
+          ],
+          "index": 13
+        },
+        {
+          "row_id": "r15",
+          "path": [
+            "Human",
+            "Chemical-specific",
+            "Saturable resorption rate (mg/h/kg)",
+            "Tmc"
+          ],
+          "index": 14
+        },
+        {
+          "row_id": "r16",
+          "path": [
+            "Human",
+            "Half-life (years)",
+            "T 1/2"
+          ],
+          "index": 15
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "Physiological",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "Body weight (kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "BW",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c5",
+          "row_id": "r1",
+          "column_id": "c5",
+          "text": "5",
+          "numeric_value": 5.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c6",
+          "row_id": "r1",
+          "column_id": "c6",
+          "text": "Chang (2020d)",
+          "numeric_value": 2020.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c3",
+          "row_id": "r2",
+          "column_id": "c3",
+          "text": "Cardiac blood output (L/h/kg 0.74 )",
+          "numeric_value": 0.74,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c4",
+          "row_id": "r2",
+          "column_id": "c4",
+          "text": "QCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c5",
+          "row_id": "r2",
+          "column_id": "c5",
+          "text": "19.8",
+          "numeric_value": 19.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c6",
+          "row_id": "r2",
+          "column_id": "c6",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "Fraction of cardiac output to filtrate",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "QfilC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c5",
+          "row_id": "r3",
+          "column_id": "c5",
+          "text": "0.15",
+          "numeric_value": 0.15,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c6",
+          "row_id": "r3",
+          "column_id": "c6",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "Volume of filtrate compartment (L/Kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "VfilC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "4.00E-04",
+          "numeric_value": 0.0004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c6",
+          "row_id": "r4",
+          "column_id": "c6",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "Chemical-specific",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "Bioavailability",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "bioAv",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "0.9",
+          "numeric_value": 0.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c6",
+          "row_id": "r5",
+          "column_id": "c6",
+          "text": "Assumed (PFOS)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "Volume of distribution central compartment (L/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "VCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c5",
+          "row_id": "r6",
+          "column_id": "c5",
+          "text": "0.17 (0.16, 0.20)",
+          "numeric_value": 0.17,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c6",
+          "row_id": "r6",
+          "column_id": "c6",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "Saturable resorption rate (mg/h/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "Tmc",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "0.21 (0.18, 0.25)",
+          "numeric_value": 0.21,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c6",
+          "row_id": "r7",
+          "column_id": "c6",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c3",
+          "row_id": "r8",
+          "column_id": "c3",
+          "text": "Saturable resorption affinity (mg/L)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c4",
+          "row_id": "r8",
+          "column_id": "c4",
+          "text": "K t",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c5",
+          "row_id": "r8",
+          "column_id": "c5",
+          "text": "0.004",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c6",
+          "row_id": "r8",
+          "column_id": "c6",
+          "text": "Assumed (PFOS)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c3",
+          "row_id": "r9",
+          "column_id": "c3",
+          "text": "Proportion of free compound in serum",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c4",
+          "row_id": "r9",
+          "column_id": "c4",
+          "text": "Free",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c5",
+          "row_id": "r9",
+          "column_id": "c5",
+          "text": "0.0009",
+          "numeric_value": 0.0009,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c6",
+          "row_id": "r9",
+          "column_id": "c6",
+          "text": "Smeltz et al. (2023)",
+          "numeric_value": 2023.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c3",
+          "row_id": "r10",
+          "column_id": "c3",
+          "text": "Rate from central to second compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c4",
+          "row_id": "r10",
+          "column_id": "c4",
+          "text": "k 12",
+          "numeric_value": 12.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c5",
+          "row_id": "r10",
+          "column_id": "c5",
+          "text": "3.3",
+          "numeric_value": 3.3,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c6",
+          "row_id": "r10",
+          "column_id": "c6",
+          "text": "Andersen et al. (2006)",
+          "numeric_value": 2006.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "Rate from second to central compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "k 21",
+          "numeric_value": 21.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c5",
+          "row_id": "r11",
+          "column_id": "c5",
+          "text": "3.4",
+          "numeric_value": 3.4,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c6",
+          "row_id": "r11",
+          "column_id": "c6",
+          "text": "Andersen et al. (2006)",
+          "numeric_value": 2006.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c3",
+          "row_id": "r12",
+          "column_id": "c3",
+          "text": "Rate from gut to central compartment (1/h)",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c4",
+          "row_id": "r12",
+          "column_id": "c4",
+          "text": "k a",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c5",
+          "row_id": "r12",
+          "column_id": "c5",
+          "text": "132",
+          "numeric_value": 132.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c6",
+          "row_id": "r12",
+          "column_id": "c6",
+          "text": "Wambaugh et al. (2013)",
+          "numeric_value": 2013.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c2",
+          "row_id": "r13",
+          "column_id": "c2",
+          "text": "Physiological",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c3",
+          "row_id": "r13",
+          "column_id": "c3",
+          "text": "Body weight (kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c4",
+          "row_id": "r13",
+          "column_id": "c4",
+          "text": "BW",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c5",
+          "row_id": "r13",
+          "column_id": "c5",
+          "text": "70",
+          "numeric_value": 70.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c6",
+          "row_id": "r13",
+          "column_id": "c6",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c3",
+          "row_id": "r14",
+          "column_id": "c3",
+          "text": "Cardiac blood output (L/h/kg 0.74 )",
+          "numeric_value": 0.74,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c4",
+          "row_id": "r14",
+          "column_id": "c4",
+          "text": "QCC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c5",
+          "row_id": "r14",
+          "column_id": "c5",
+          "text": "12.5",
+          "numeric_value": 12.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c6",
+          "row_id": "r14",
+          "column_id": "c6",
+          "text": "Loccisano et al. (2011)",
+          "numeric_value": 2011.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c2",
+          "row_id": "r15",
+          "column_id": "c2",
+          "text": "Chemical-specific",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c3",
+          "row_id": "r15",
+          "column_id": "c3",
+          "text": "Saturable resorption rate (mg/h/kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c4",
+          "row_id": "r15",
+          "column_id": "c4",
+          "text": "Tmc",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c5",
+          "row_id": "r15",
+          "column_id": "c5",
+          "text": "0.47",
+          "numeric_value": 0.47,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c6",
+          "row_id": "r15",
+          "column_id": "c6",
+          "text": "Optimized",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c3",
+          "row_id": "r16",
+          "column_id": "c3",
+          "text": "Half-life (years)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c4",
+          "row_id": "r16",
+          "column_id": "c4",
+          "text": "T 1/2",
+          "numeric_value": 1.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c5",
+          "row_id": "r16",
+          "column_id": "c5",
+          "text": "5.3",
+          "numeric_value": 5.3,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c6",
+          "row_id": "r16",
+          "column_id": "c6",
+          "text": "Li et al. (2018)",
+          "numeric_value": 2018.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [
+        "PFHxS"
+      ],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [
+        "Nonhuman primate",
+        "Human"
+      ],
+      "populations": [],
+      "footnotes": [],
+      "source_page": null,
+      "source_image_path": null
+    }
+  ],
+  "dosing": [
+    {
+      "compound": "PFOS",
+      "dose": 14.9,
+      "dose_unit": "ng PFOS/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOS model predicted serum levels with an MSLE of 0.07 (Fig. 3) and an underlying exposure model that peaked in 1990 at 14.9 ng PFOS/kg BW/day, fell to 2.5 ng PFOS/kg BW/day in 1998, and continued decreasing to 0.24 ng PFOS/kg BW/day in 2017 (Fig. S5)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 1.1,
+      "dose_unit": "ng PFOA/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOA model more closely predicted the NHANES observed serum levels with an MSLE of 0.03 (Fig. 4) and an underlying exposure model that increased from 0.45 ng/kg BW/day in 1990 to 1.1 ng/kg BW/day in 1998 and fell to 0.13 ng/kg BW/day in 2017 (Fig. S6)."
+    },
+    {
+      "compound": "PFHxS",
+      "dose": 0.47,
+      "dose_unit": "mg/h/kg",
+      "route": "IV",
+      "schedule": "single",
+      "interval_h": null,
+      "n_doses": 1,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The animal model was scaled to human using a half-life of 5.3 years, resulting in a Tmc of 0.47 mg/h/kg (Li et al. 2018)."
+    },
+    {
+      "compound": "PFOS",
+      "dose": 2.5,
+      "dose_unit": "ng PFOS/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOS model predicted serum levels with an MSLE of 0.07 (Fig. 3) and an underlying exposure model that peaked in 1990 at 14.9 ng PFOS/kg BW/day, fell to 2.5 ng PFOS/kg BW/day in 1998, and continued decreasing to 0.24 ng PFOS/kg BW/day in 2017 (Fig. S5)."
+    },
+    {
+      "compound": "PFOA",
+      "dose": 0.13,
+      "dose_unit": "ng PFOA/kg BW/day",
+      "route": "Oral",
+      "schedule": "repeated",
+      "interval_h": null,
+      "n_doses": null,
+      "body_weight": 70.0,
+      "duration_h": null,
+      "source_quote": "The PFOA model more closely predicted the NHANES observed serum levels with an MSLE of 0.03 (Fig. 4) and an underlying exposure model that increased from 0.45 ng/kg BW/day in 1990 to 1.1 ng/kg BW/day in 1998 and fell to 0.13 ng/kg BW/day in 2017 (Fig. S6)."
+    }
+  ],
+  "system_specific_parameters": [
+    {
+      "parameter_id": "param_a660cb553648ab0f",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "5",
+        "reference": "Chang (2020d)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": null,
-      "parameter_class": "compound_specific",
-      "parameter_subclass": null,
-      "parameter_name_original": "half-life",
-      "parameter_name_standardized": null,
-      "symbol_original": "T1/2",
-      "symbol_standardized": null,
+      "parameter_id": "param_24d0d18122a91168",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
       "context": {
-        "compound": "PFOS",
+        "compound": "PFHxS",
         "formulation": null,
-        "species": "human",
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg 0.74 ",
+        "unit_standardized": "h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "19.8",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a61c232f9952bf26",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.15",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b9def7675605a355",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment (L/Kg)",
+      "parameter_name_standardized": "filtrate_compartment_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/Kg",
+        "unit_standardized": "L/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "4.00E-04",
+        "reference": "Loccisano et al. (2011)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_72adb239862b1a0e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight (kg)",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "70",
+        "reference": "Loccisano et al. (2011)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    }
+  ],
+  "compound_specific_parameters": [
+    {
+      "parameter_id": "param_2f9b70680462ae8b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "oral_bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.9",
+        "reference": "Assumed (PFOS)",
+        "status": "assumed_default",
+        "status_raw": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_dc222e1df066cb71",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution central compartment (L/kg)",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.17 (0.16, 0.20)",
+        "value": 0.17,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.16,
+          "upper": 0.2,
+          "absolute": null,
+          "raw_text": "0.17 (0.16, 0.20)"
+        },
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.17 (0.16, 0.20)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a2ce1d068a29c220",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": "maximal_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.21 (0.18, 0.25)",
+        "value": 0.21,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.18,
+          "upper": 0.25,
+          "absolute": null,
+          "raw_text": "0.21 (0.18, 0.25)"
+        },
+        "value_qualifier": null,
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg/h/kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.21 (0.18, 0.25)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_aac0bd11e4043a59",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity (mg/L)",
+      "parameter_name_standardized": "michaelis_menten_constant",
+      "symbol_original": "K t",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "mg/L",
+        "unit_standardized": "mg/L",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.004",
+        "reference": "Assumed (PFOS)",
+        "status": "assumed_default",
+        "status_raw": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_2b2e8667ad9126f0",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound_in_plasma",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0009",
+        "value": 0.0009,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": null,
+        "unit_standardized": null,
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.0009",
+        "reference": "Smeltz et al. (2023)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_96914d45ef631712",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment (1/h)",
+      "parameter_name_standardized": "intercompartmental_rate_k12",
+      "symbol_original": "k 12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_1dfab8705369541d",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment (1/h)",
+      "parameter_name_standardized": "intercompartmental_rate_k21",
+      "symbol_original": "k 21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Nonhuman primate",
         "life_stage": null,
         "organ": null,
         "route": null,
@@ -935,142 +5137,112 @@
       "quantitative_data": {
         "value_text": "3.4",
         "value": 3.4,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
-        "unit_original": "years",
-        "unit_standardized": "years",
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Text",
-        "source_quote": "half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively",
-        "reference": null,
-        "status": "fitted",
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
-        "evidence_directness": null
+        "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": null,
-      "parameter_class": "compound_specific",
-      "parameter_subclass": null,
-      "parameter_name_original": "half-life",
-      "parameter_name_standardized": null,
-      "symbol_original": "T1/2",
-      "symbol_standardized": null,
-      "context": {
-        "compound": "PFOA",
-        "formulation": null,
-        "species": "human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "2.7",
-        "value": 2.7,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "years",
-        "unit_standardized": "years",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Text",
-        "source_quote": "half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively",
-        "reference": null,
-        "status": "fitted",
-        "derivation": null,
-        "evidence_directness": null
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    },
-    {
-      "parameter_id": null,
-      "parameter_class": "compound_specific",
-      "parameter_subclass": "compound_specific",
-      "parameter_name_original": "bioavailability",
-      "parameter_name_standardized": null,
-      "symbol_original": "bioAv",
-      "symbol_standardized": null,
-      "context": {
-        "compound": "PFOS/PFOA",
-        "formulation": null,
-        "species": "human",
-        "life_stage": null,
-        "organ": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "value_text": "90%",
-        "value": null,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
-        "value_qualifier": null,
-        "unit_original": "%",
-        "unit_standardized": "unitless",
-        "normalization_basis": null
-      },
-      "provenance": {
-        "source_page": null,
-        "source_location": "Text",
-        "source_quote": "bioavailability was initially set at 90% for both compounds",
-        "reference": null,
-        "status": "assumed",
-        "derivation": null,
-        "evidence_directness": null
-      },
-      "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
-      },
-      "needs_review": false
-    },
-    {
-      "parameter_id": null,
+      "parameter_id": "param_63b72bc7739a9d91",
       "parameter_class": "biochemical",
-      "parameter_subclass": "maximal_velocity",
-      "parameter_name_original": "saturable resorption rate",
-      "parameter_name_standardized": null,
-      "symbol_original": "Tmc",
-      "symbol_standardized": null,
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment (1/h)",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "k a",
+      "symbol_standardized": "ka",
       "context": {
         "compound": "PFHxS",
         "formulation": null,
-        "species": "human",
+        "species": "Nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 132.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r1",
+        "column_id": "c5",
+        "cell_id": "cell_r1_c5",
+        "row_path": [
+          "Nonhuman primate"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
+        "source_page": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "132",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "measured_here",
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a96ca9830ba12a17",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
+      "parameter_name_standardized": "maximal_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "Human",
         "life_stage": null,
         "organ": null,
         "route": null,
@@ -1079,93 +5251,422 @@
       "quantitative_data": {
         "value_text": "0.47",
         "value": 0.47,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "uncertainty": null,
         "value_qualifier": null,
         "unit_original": "mg/h/kg",
-        "unit_standardized": "mg h^-1 kg^-1",
+        "unit_standardized": "mg/h/kg",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Text",
-        "source_quote": "resulting in a Tmc of 0.47 mg/h/kg",
-        "reference": null,
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "0.47",
+        "reference": "Optimized",
         "status": "fitted",
+        "status_raw": null,
         "derivation": null,
-        "evidence_directness": null
+        "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     },
     {
-      "parameter_id": null,
+      "parameter_id": "param_c1803a8c68b49bc8",
       "parameter_class": "biochemical",
-      "parameter_subclass": "metabolic_clearance",
-      "parameter_name_original": "clearance",
-      "parameter_name_standardized": null,
-      "symbol_original": null,
-      "symbol_standardized": null,
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life (years)",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T 1/2",
+      "symbol_standardized": "t1/2",
       "context": {
         "compound": "PFHxS",
         "formulation": null,
-        "species": "human",
+        "species": "Human",
         "life_stage": null,
         "organ": null,
         "route": null,
         "population": null
       },
       "quantitative_data": {
-        "value_text": "0.06",
-        "value": 0.06,
-        "range_start": null,
-        "range_end": null,
-        "variance": null,
-        "variance_type": null,
+        "value_text": "5.3",
+        "value": 5.3,
+        "uncertainty": null,
         "value_qualifier": null,
-        "unit_original": "mL/kg-day",
-        "unit_standardized": "mL kg^-1 day^-1",
+        "unit_original": "years",
+        "unit_standardized": "years",
         "normalization_basis": null
       },
       "provenance": {
+        "source_table": "Table 3",
+        "row_id": "r2",
+        "column_id": "c5",
+        "cell_id": "cell_r2_c5",
+        "row_path": [
+          "Human"
+        ],
+        "column_path": [
+          "Mean (95% CI)"
+        ],
         "source_page": null,
-        "source_location": "Text",
-        "source_quote": "clearance of approximately 0.06 mL/kg-day",
-        "reference": null,
-        "status": "fitted",
+        "source_section": null,
+        "source_location": "Table 3",
+        "source_quote": "5.3",
+        "reference": "Li et al. (2018)",
+        "status": "measured_here",
+        "status_raw": null,
         "derivation": null,
-        "evidence_directness": null
+        "evidence_directness": "direct"
       },
       "confidence": {
-        "value_confidence": "high",
-        "unit_confidence": "high",
-        "species_confidence": "high",
-        "formulation_confidence": "high",
-        "parameter_class_confidence": "high",
-        "provenance_confidence": "high"
+        "value_confidence": null,
+        "unit_confidence": null,
+        "species_confidence": null,
+        "formulation_confidence": null,
+        "parameter_class_confidence": null,
+        "provenance_confidence": null
       },
       "needs_review": false
     }
   ],
+  "evaluator_judgments": {
+    "author_stated_limitations": [],
+    "missing_standard_assumptions": [],
+    "data_independence_assessment": "The evaluation datasets (Table 2, comparing POD HEDs) appear to be derived from independent studies and are not used in model calibration, as the model parameters were optimized using nonhuman primate and human data (Table 3) prior to comparison. The calibration data (nonhuman primate and human TK parameters) are distinct from the outcome data (Table 2) used for validation, supporting data independence.",
+    "overall_confidence": "medium"
+  },
   "verification": {
     "tier": 1,
-    "elapsed_ms": 0.0,
-    "total_parameters": 0,
-    "parameters_with_flags": 0,
-    "total_flags": 0,
-    "error_count": 0,
-    "warning_count": 0,
-    "clean": true,
-    "summary": "All 0 parameters passed Tier 1 verification.",
-    "flags": []
-  }
+    "elapsed_ms": 1.67,
+    "total_parameters": 15,
+    "parameters_with_flags": 15,
+    "total_flags": 36,
+    "error_count": 31,
+    "warning_count": 5,
+    "clean": false,
+    "summary": "36/15 parameters flagged: 31 error(s), 5 warning(s). Elapsed: 1.7ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "body_weight",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 0,
+        "param_name": "body_weight",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 1,
+        "param_name": "cardiac_output",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 1,
+        "param_name": "cardiac_output",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 19.8 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 2,
+        "param_name": "fraction_cardiac_output_to_filtrate",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.15' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 2,
+        "param_name": "fraction_cardiac_output_to_filtrate",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 2,
+        "param_name": "fraction_cardiac_output_to_filtrate",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.15 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 3,
+        "param_name": "filtrate_compartment_volume_fraction",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'organ_volume_fraction' expects dimensional signature like ['dimensionless', 'fraction', 'ratio', 'none'], but VLM assigned 'L/kg'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 3,
+        "param_name": "filtrate_compartment_volume_fraction",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 3,
+        "param_name": "filtrate_compartment_volume_fraction",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.0004 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 4,
+        "param_name": "oral_bioavailability",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.9' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 4,
+        "param_name": "oral_bioavailability",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 4,
+        "param_name": "oral_bioavailability",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.9 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 5,
+        "param_name": "central_compartment_volume",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 5,
+        "param_name": "central_compartment_volume",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.17 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 6,
+        "param_name": "maximal_resorption_rate",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 6,
+        "param_name": "maximal_resorption_rate",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.21 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 7,
+        "param_name": "michaelis_menten_constant",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 7,
+        "param_name": "michaelis_menten_constant",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.004 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 8,
+        "param_name": "fraction_unbound_in_plasma",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.0009' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 8,
+        "param_name": "fraction_unbound_in_plasma",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 8,
+        "param_name": "fraction_unbound_in_plasma",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.0009 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 9,
+        "param_name": "intercompartmental_rate_k12",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 9,
+        "param_name": "intercompartmental_rate_k12",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 3.3 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 10,
+        "param_name": "intercompartmental_rate_k21",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 10,
+        "param_name": "intercompartmental_rate_k21",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 3.4 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 11,
+        "param_name": "absorption_rate_constant",
+        "severity": "error",
+        "rule": "INVALID_UNIT_DIMENSION",
+        "message": "Subclass 'absorption_rate_constant' expects dimensional signature like ['1/h', '1/min', 'h-1', 'min-1', '1/h/kg^0.25'], but VLM assigned 'h^-1'.",
+        "suggested_fix": "Strip hallucinated unit or force standard dimensional unit."
+      },
+      {
+        "param_index": 11,
+        "param_name": "absorption_rate_constant",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Nonhuman primate'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 11,
+        "param_name": "absorption_rate_constant",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 132.0 differs from matched source cell (cell_r1_c5) value 5.0.",
+        "suggested_fix": "Use cell value 5.0."
+      },
+      {
+        "param_index": 12,
+        "param_name": "body_weight",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='70' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 12,
+        "param_name": "body_weight",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Human'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 12,
+        "param_name": "body_weight",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 70.0 differs from matched source cell (cell_r2_c5) value 19.8.",
+        "suggested_fix": "Use cell value 19.8."
+      },
+      {
+        "param_index": 13,
+        "param_name": "maximal_resorption_rate",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Human'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 13,
+        "param_name": "maximal_resorption_rate",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 0.47 differs from matched source cell (cell_r2_c5) value 19.8.",
+        "suggested_fix": "Use cell value 19.8."
+      },
+      {
+        "param_index": 14,
+        "param_name": "elimination_half_life",
+        "severity": "error",
+        "rule": "COMPOUND_COLUMN_CONFLICT",
+        "message": "Compound 'PFHxS' does not appear in the row or column path (['Human'], ['Mean (95% CI)']).",
+        "suggested_fix": "Check if the compound is legitimately inferred from the table title, or if this is a cross-table leakage hallucination."
+      },
+      {
+        "param_index": 14,
+        "param_name": "elimination_half_life",
+        "severity": "error",
+        "rule": "CELL_VALUE_MISMATCH",
+        "message": "Extracted value 5.3 differs from matched source cell (cell_r2_c5) value 19.8.",
+        "suggested_fix": "Use cell value 19.8."
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": []
+  },
+  "laya_filter_summary": {
+    "model_type_triage": "compartmental",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "wevisdoc_summary": null,
+  "ingestion_source": "pmc_xml",
+  "ingestion_source_type": "published"
 }

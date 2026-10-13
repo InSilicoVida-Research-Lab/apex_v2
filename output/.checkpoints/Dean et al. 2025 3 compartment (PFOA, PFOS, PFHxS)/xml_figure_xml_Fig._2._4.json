@@ -1,0 +1,25 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "not_applicable",
+    "evidence_quote": null
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "dosing": null
+}

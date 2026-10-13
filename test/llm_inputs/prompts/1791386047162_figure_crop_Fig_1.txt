@@ -1,0 +1,1567 @@
+<|im_start|>system
+You are a pharmacokinetic (PK) model analyzer. You are shown an image of a model structure diagram (e.g., boxes and arrows representing a PBPK or compartmental model) from a scientific paper. 
+
+Your task is strictly to extract the model structure, compartments, and connections shown in this diagram, and return them in the exact JSON schema provided below. 
+
+## INSTRUCTIONS
+1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
+2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
+3. Fill out the `structure` object with `compartments` and `connections`:
+   - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
+   - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
+4. Return an EMPTY `parameter_blocks` array (`"parameter_blocks": []`). Your only goal is to fill out the `model_structure` field and `model_classification`.
+5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{
+  "$defs": {
+    "Assumption": {
+      "properties": {
+        "description": {
+          "description": "The stated assumption (e.g., 'well-stirred compartment', 'flow-limited kinetics')",
+          "title": "Description",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "description": "Direct verbatim quote from the text where the assumption is stated.",
+          "title": "Evidence Quote",
+          "type": "string"
+        },
+        "source_location": {
+          "description": "Page or section where this assumption is located.",
+          "title": "Source Location",
+          "type": "string"
+        }
+      },
+      "required": [
+        "description",
+        "evidence_quote",
+        "source_location"
+      ],
+      "title": "Assumption",
+      "type": "object"
+    },
+    "BiologicalBasis": {
+      "properties": {
+        "adme_determinants": {
+          "description": "Physiological/physicochemical factors driving kinetics.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Adme Determinants",
+          "type": "array"
+        },
+        "stated_assumptions": {
+          "description": "Explicit list of assumptions stated by the authors with direct quotes.",
+          "items": {
+            "$ref": "#/$defs/Assumption"
+          },
+          "title": "Stated Assumptions",
+          "type": "array"
+        },
+        "specialized_mechanisms": {
+          "description": "e.g., renal reabsorption, enterohepatic recirculation. Or 'not_applicable'.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Specialized Mechanisms",
+          "type": "array"
+        }
+      },
+      "required": [
+        "adme_determinants",
+        "stated_assumptions",
+        "specialized_mechanisms"
+      ],
+      "title": "BiologicalBasis",
+      "type": "object"
+    },
+    "BiologicalContext": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Active chemical entity (e.g., 'riluzole', 'PFOS'). NOT a formulation name.",
+          "title": "Compound"
+        },
+        "formulation": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Specific formulations (e.g., ['Rilutor', 'ASD']). Separate from compound.",
+          "title": "Formulation"
+        },
+        "species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Animal or human subject (e.g., 'rat', 'human').",
+          "title": "Species"
+        },
+        "life_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Age or life stage only if explicitly stated.",
+          "title": "Life Stage"
+        },
+        "organ": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Biological organ (e.g., 'liver', 'plasma').",
+          "title": "Organ"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Route of administration if stated.",
+          "title": "Route"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Named patient group or population.",
+          "title": "Population"
+        }
+      },
+      "title": "BiologicalContext",
+      "type": "object"
+    },
+    "ConfidenceScores": {
+      "properties": {
+        "value_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Value Confidence"
+        },
+        "unit_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Unit Confidence"
+        },
+        "species_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Species Confidence"
+        },
+        "formulation_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Formulation Confidence"
+        },
+        "parameter_class_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Parameter Class Confidence"
+        },
+        "provenance_confidence": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'high', 'medium', 'low'",
+          "title": "Provenance Confidence"
+        }
+      },
+      "title": "ConfidenceScores",
+      "type": "object"
+    },
+    "Derivation": {
+      "properties": {
+        "method": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'allometric_scaling', 'rodgers_rowland', 'literature', 'optimized'",
+          "title": "Method"
+        },
+        "source_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'rat' when human value was derived from rat",
+          "title": "Source Species"
+        },
+        "optimization_target": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'experimental_PK_data', 'Liboux et al.'",
+          "title": "Optimization Target"
+        }
+      },
+      "title": "Derivation",
+      "type": "object"
+    },
+    "DoseEvent": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "The chemical being dosed.",
+          "title": "Compound"
+        },
+        "dose": {
+          "description": "Amount of dose administered",
+          "title": "Dose",
+          "type": "number"
+        },
+        "dose_unit": {
+          "description": "Unit of dose (e.g., 'mg/kg', 'mg', 'mcg/kg')",
+          "title": "Dose Unit",
+          "type": "string"
+        },
+        "route": {
+          "description": "Route of administration (e.g., 'Oral', 'IV', 'Inhalation', 'Dermal', 'Drinking Water')",
+          "title": "Route",
+          "type": "string"
+        },
+        "schedule": {
+          "description": "Dosing schedule (e.g., 'single', 'repeated', 'continuous')",
+          "title": "Schedule",
+          "type": "string"
+        },
+        "interval_h": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hours between doses (if repeated)",
+          "title": "Interval H"
+        },
+        "n_doses": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Number of doses (if repeated)",
+          "title": "N Doses"
+        },
+        "body_weight": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Body weight in kg (if stated in Methods)",
+          "title": "Body Weight"
+        },
+        "duration_h": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Total simulation duration in hours (if stated)",
+          "title": "Duration H"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Verbatim quote from Methods section",
+          "title": "Source Quote"
+        }
+      },
+      "required": [
+        "dose",
+        "dose_unit",
+        "route",
+        "schedule"
+      ],
+      "title": "DoseEvent",
+      "type": "object"
+    },
+    "ExtractedParameter": {
+      "properties": {
+        "parameter_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unique composite ID (auto-generated post-extraction).",
+          "title": "Parameter Id"
+        },
+        "parameter_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Broad semantic class. Must be exactly one of: 'physiological' (organ volumes, blood flows, GFR - describes the organism), 'biochemical' (partition coefficients, fu, Vmax, Km, clearances - drug-specific properties), 'compound_specific' (physicochemical: MW, logP, solubility, pKa). Blood flows and organ volumes are ALWAYS 'physiological', never 'compound_specific'.",
+          "title": "Parameter Class"
+        },
+        "parameter_subclass": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Specific sub-category. Common values: 'organ_blood_flow_fraction', 'organ_volume_fraction', 'partition_coefficient', 'fraction_unbound', 'absorption_rate_constant', 'gastric_emptying_rate', 'fecal_elimination_rate_constant', 'maximal_velocity', 'michaelis_menten_constant', 'renal_clearance', 'metabolic_clearance'. GE = 'gastric_emptying_rate', Kabs = 'absorption_rate_constant', Kfeces = 'fecal_elimination_rate_constant'.",
+          "title": "Parameter Subclass"
+        },
+        "parameter_name_original": {
+          "description": "Full descriptive name exactly as printed in the source.",
+          "title": "Parameter Name Original",
+          "type": "string"
+        },
+        "parameter_name_standardized": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standardized ontology name (e.g., 'liver_blood_flow_fraction'). Mark as derived if not in paper.",
+          "title": "Parameter Name Standardized"
+        },
+        "symbol_original": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mathematical symbol exactly as printed.",
+          "title": "Symbol Original"
+        },
+        "symbol_standardized": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standardized symbol (e.g., 'Kp_liver_plasma'). Null if not printed and not derivable.",
+          "title": "Symbol Standardized"
+        },
+        "context": {
+          "$ref": "#/$defs/BiologicalContext",
+          "description": "Biological and study context."
+        },
+        "quantitative_data": {
+          "$ref": "#/$defs/QuantitativeData",
+          "description": "Numerical values and units."
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance",
+          "description": "Source location and status."
+        },
+        "confidence": {
+          "$ref": "#/$defs/ConfidenceScores"
+        },
+        "needs_review": {
+          "default": false,
+          "title": "Needs Review",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "parameter_name_original",
+        "context",
+        "quantitative_data",
+        "provenance"
+      ],
+      "title": "ExtractedParameter",
+      "type": "object"
+    },
+    "FormulationMeasurement": {
+      "properties": {
+        "measurement_type": {
+          "description": "e.g., 'contact_angle', 'particle_size', 'dissolution_rate'",
+          "title": "Measurement Type",
+          "type": "string"
+        },
+        "sample_component": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Sample being measured (e.g., 'PAA', 'RLZ:PVP VA ASD')",
+          "title": "Sample Component"
+        },
+        "probe_liquid": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Probe medium if applicable (e.g., 'water')",
+          "title": "Probe Liquid"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "variance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Variance"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'SD', 'SE', '+/-'",
+          "title": "Variance Type"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Provenance"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "measurement_type"
+      ],
+      "title": "FormulationMeasurement",
+      "type": "object"
+    },
+    "MetabolicPathway": {
+      "properties": {
+        "parent_compound": {
+          "description": "The chemical being metabolized.",
+          "title": "Parent Compound",
+          "type": "string"
+        },
+        "metabolite_produced": {
+          "description": "The specific downstream metabolite. Use 'sink' if not explicitly tracked.",
+          "title": "Metabolite Produced",
+          "type": "string"
+        },
+        "enzyme": {
+          "description": "Enzyme/pathway responsible (e.g., 'CYP1A2', 'glucuronidation'). Use 'unclear' if not stated.",
+          "title": "Enzyme",
+          "type": "string"
+        },
+        "location": {
+          "description": "Tissue/compartment where metabolism occurs (e.g., 'Liver', 'Gut').",
+          "title": "Location",
+          "type": "string"
+        },
+        "kinetics_type": {
+          "description": "The mathematical form of the metabolic kinetics.",
+          "enum": [
+            "clearance_based",
+            "michaelis_menten",
+            "michaelis_menten_with_inhibition",
+            "hill",
+            "mixed",
+            "not_reported"
+          ],
+          "title": "Kinetics Type",
+          "type": "string"
+        },
+        "ivive_used": {
+          "description": "True if In Vitro to In Vivo Extrapolation was used for this pathway.",
+          "title": "Ivive Used",
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "parent_compound",
+        "metabolite_produced",
+        "enzyme",
+        "location",
+        "kinetics_type",
+        "ivive_used"
+      ],
+      "title": "MetabolicPathway",
+      "type": "object"
+    },
+    "ModelClassification": {
+      "properties": {
+        "model_type": {
+          "description": "Must be 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'",
+          "title": "Model Type",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "ModelClassification",
+      "type": "object"
+    },
+    "ModelContext": {
+      "properties": {
+        "model_origin": {
+          "description": "Is this 'new', 'adapted from [cite]', or 'reused unchanged'? Use 'not_reported' if unclear.",
+          "title": "Model Origin",
+          "type": "string"
+        },
+        "stated_purpose": {
+          "description": "The authors' stated context of use (e.g., risk assessment). Use 'not_reported' if unclear.",
+          "title": "Stated Purpose",
+          "type": "string"
+        },
+        "dose_metric": {
+          "description": "What metric links to toxicity? (e.g., liver AUC of metabolite). Use 'not_reported' if unclear.",
+          "title": "Dose Metric",
+          "type": "string"
+        }
+      },
+      "required": [
+        "model_origin",
+        "stated_purpose",
+        "dose_metric"
+      ],
+      "title": "ModelContext",
+      "type": "object"
+    },
+    "ModelStructure": {
+      "properties": {
+        "reported_compartment_count": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "string"
+            }
+          ],
+          "description": "Integer count, or 'not_reported'.",
+          "title": "Reported Compartment Count"
+        },
+        "compartments": {
+          "description": "List of all specific compartments modeled.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Compartments",
+          "type": "array"
+        },
+        "equations_provided": {
+          "description": "Where are the ODEs/equations provided?",
+          "enum": [
+            "text",
+            "supplementary_info",
+            "code_repo",
+            "none"
+          ],
+          "title": "Equations Provided",
+          "type": "string"
+        },
+        "allometric_scaling_rules": {
+          "description": "Explicit scaling rules stated (e.g., 'QC = QCC * BW^0.75'). Empty list if none.",
+          "items": {
+            "type": "string"
+          },
+          "title": "Allometric Scaling Rules",
+          "type": "array"
+        }
+      },
+      "required": [
+        "reported_compartment_count",
+        "compartments",
+        "equations_provided",
+        "allometric_scaling_rules"
+      ],
+      "title": "ModelStructure",
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        }
+      },
+      "title": "PageMetadata",
+      "type": "object"
+    },
+    "ParameterBlock": {
+      "properties": {
+        "block_name": {
+          "description": "Name of the section/table block (e.g. 'Physiological parameters (Rat)'). Use 'Text' if from narrative.",
+          "title": "Block Name",
+          "type": "string"
+        },
+        "implied_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Species shared by all rows in this block (e.g. 'rat', 'human').",
+          "title": "Implied Species"
+        },
+        "implied_unit_original": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit-as-printed shared by all rows in this block (e.g. 'fraction of cardiac output').",
+          "title": "Implied Unit Original"
+        },
+        "parameter_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Class shared by all rows: 'physiological', 'biochemical', or 'compound_specific'.",
+          "title": "Parameter Class"
+        },
+        "parameters": {
+          "description": "Parameters belonging to this block.",
+          "items": {
+            "$ref": "#/$defs/ExtractedParameter"
+          },
+          "title": "Parameters",
+          "type": "array"
+        }
+      },
+      "required": [
+        "block_name"
+      ],
+      "title": "ParameterBlock",
+      "type": "object"
+    },
+    "ParameterMentionWithoutValue": {
+      "properties": {
+        "parameter_name": {
+          "description": "Name as mentioned in text.",
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Symbol"
+        },
+        "availability": {
+          "description": "'mentioned_but_not_numerically_reported', 'supplement_only'",
+          "title": "Availability",
+          "type": "string"
+        },
+        "source": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g., 'main_text', 'methods'",
+          "title": "Source"
+        },
+        "requires_supplement": {
+          "anyOf": [
+            {
+              "type": "boolean"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Requires Supplement"
+        },
+        "context_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Context Quote"
+        }
+      },
+      "required": [
+        "parameter_name",
+        "availability"
+      ],
+      "title": "ParameterMentionWithoutValue",
+      "type": "object"
+    },
+    "Provenance": {
+      "properties": {
+        "source_page": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Source Page"
+        },
+        "source_location": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'Table I', 'Figure 2', 'Results paragraph'.",
+          "title": "Source Location"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Verbatim quote from the source cell/sentence.",
+          "title": "Source Quote"
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Literature citation like '[17]'.",
+          "title": "Reference"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "How the value was obtained. Must be one of: 'experimental', 'calculated', 'literature_derived', 'optimized', 'similar_to_rat', 'assumed_same_as_parent', 'human_specific', 'allometrically_scaled'. Leave null if not stated.",
+          "title": "Status"
+        },
+        "derivation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Derivation"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Detailed derivation metadata when status is 'optimized', 'allometrically_scaled', or 'similar_to_rat'."
+        },
+        "evidence_directness": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "'direct' or 'inferred'",
+          "title": "Evidence Directness"
+        }
+      },
+      "title": "Provenance",
+      "type": "object"
+    },
+    "QualitativeFinding": {
+      "properties": {
+        "finding_type": {
+          "description": "e.g., 'relative_model_output_comparison'",
+          "title": "Finding Type",
+          "type": "string"
+        },
+        "metric": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Metric"
+        },
+        "formulation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formulation"
+        },
+        "comparator": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Comparator"
+        },
+        "species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Species"
+        },
+        "relative_change": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. '2.0-2.5x higher'",
+          "title": "Relative Change"
+        },
+        "qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'about'",
+          "title": "Qualifier"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "finding_type",
+        "provenance"
+      ],
+      "title": "QualitativeFinding",
+      "type": "object"
+    },
+    "QuantitativeData": {
+      "properties": {
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact printed value text verbatim, e.g. '5a', '0.174', '0.69, 2.19'.",
+          "title": "Value Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Primary numerical value as a pure float. Null if multi-valued or non-numeric.",
+          "title": "Value"
+        },
+        "range_start": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Start of a range (e.g. '34.5' in '34.5-31.9'). NOT for +/- values.",
+          "title": "Range Start"
+        },
+        "range_end": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "End of a range. Preserves direction (e.g. '31.9').",
+          "title": "Range End"
+        },
+        "variance": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Variance/uncertainty numeric value from +/- notation.",
+          "title": "Variance"
+        },
+        "variance_type": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Type of variance as printed: 'SD', 'SE', '95% CI', '+/-'.",
+          "title": "Variance Type"
+        },
+        "value_qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Qualifiers like 'Fixed', 'Assumed', 'Optimized', '<', '~'.",
+          "title": "Value Qualifier"
+        },
+        "unit_original": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit exactly as printed in the source (e.g., '1/h/kg^0.25'). NEVER convert or interpret.",
+          "title": "Unit Original"
+        },
+        "unit_standardized": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standardized/normalized unit (e.g., 'h^-1 kg^-0.25'). MUST STRICTLY PRESERVE all SI prefixes (e.g. 'nmol' stays 'nmol', '\u03bcL' stays '\u03bcL', NEVER convert to 'mol' or 'L'). Null if not normalized.",
+          "title": "Unit Standardized"
+        },
+        "normalization_basis": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "E.g., 'cardiac_output', 'body_weight', 'tissue_plasma_ratio'.",
+          "title": "Normalization Basis"
+        }
+      },
+      "title": "QuantitativeData",
+      "type": "object"
+    },
+    "SensitivityCoefficient": {
+      "properties": {
+        "parameter_name": {
+          "description": "Name of the parameter being perturbed.",
+          "title": "Parameter Name",
+          "type": "string"
+        },
+        "model_output": {
+          "description": "The model output metric being evaluated (e.g. 'maternal plasma AUC').",
+          "title": "Model Output",
+          "type": "string"
+        },
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Compound"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "e.g. 'Fetus', 'Infant'",
+          "title": "Population"
+        },
+        "value": {
+          "description": "The normalized sensitivity coefficient (can be negative).",
+          "title": "Value",
+          "type": "number"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/Provenance"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "parameter_name",
+        "model_output",
+        "value"
+      ],
+      "title": "SensitivityCoefficient",
+      "type": "object"
+    },
+    "ValidationResult": {
+      "properties": {
+        "metric": {
+          "description": "e.g., 'Cmax', 'AUC', 'Tmax'",
+          "title": "Metric",
+          "type": "string"
+        },
+        "formulation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Formulation"
+        },
+        "species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Species"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "source_type": {
+          "description": "Must be 'observed' or 'simulated'",
+          "title": "Source Type",
+          "type": "string"
+        },
+        "provenance": {
+          "$ref": "#/$defs/Provenance"
+        }
+      },
+      "required": [
+        "metric",
+        "source_type",
+        "provenance"
+      ],
+      "title": "ValidationResult",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "page_metadata": {
+      "$ref": "#/$defs/PageMetadata"
+    },
+    "model_classification": {
+      "$ref": "#/$defs/ModelClassification"
+    },
+    "model_context": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelContext"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "biological_basis": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/BiologicalBasis"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "model_structure": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/ModelStructure"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Compartmental model structure."
+    },
+    "metabolic_pathways": {
+      "items": {
+        "$ref": "#/$defs/MetabolicPathway"
+      },
+      "title": "Metabolic Pathways",
+      "type": "array"
+    },
+    "parameter_blocks": {
+      "description": "Parameters grouped by table blocks/sections. PBPK input parameters ONLY.",
+      "items": {
+        "$ref": "#/$defs/ParameterBlock"
+      },
+      "title": "Parameter Blocks",
+      "type": "array"
+    },
+    "observed_data": {
+      "description": "Observed PK metrics (e.g., observed Cmax, AUC).",
+      "items": {
+        "$ref": "#/$defs/ValidationResult"
+      },
+      "title": "Observed Data",
+      "type": "array"
+    },
+    "simulated_data": {
+      "description": "Simulated PK metrics (e.g., simulated Cmax, AUC).",
+      "items": {
+        "$ref": "#/$defs/ValidationResult"
+      },
+      "title": "Simulated Data",
+      "type": "array"
+    },
+    "formulation_characterization": {
+      "description": "Physicochemical measurements (contact angle, dissolution). NOT model parameters.",
+      "items": {
+        "$ref": "#/$defs/FormulationMeasurement"
+      },
+      "title": "Formulation Characterization",
+      "type": "array"
+    },
+    "qualitative_findings": {
+      "description": "Relative comparisons or qualitative statements.",
+      "items": {
+        "$ref": "#/$defs/QualitativeFinding"
+      },
+      "title": "Qualitative Findings",
+      "type": "array"
+    },
+    "parameter_mentions_without_values": {
+      "description": "Named PBPK parameters mentioned in text but without numerical values.",
+      "items": {
+        "$ref": "#/$defs/ParameterMentionWithoutValue"
+      },
+      "title": "Parameter Mentions Without Values",
+      "type": "array"
+    },
+    "sensitivity_analysis": {
+      "description": "Sensitivity analysis coefficients.",
+      "items": {
+        "$ref": "#/$defs/SensitivityCoefficient"
+      },
+      "title": "Sensitivity Analysis",
+      "type": "array"
+    },
+    "dosing": {
+      "anyOf": [
+        {
+          "items": {
+            "$ref": "#/$defs/DoseEvent"
+          },
+          "type": "array"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null,
+      "description": "Dosing events extracted from the methods section.",
+      "title": "Dosing"
+    }
+  },
+  "required": [
+    "page_metadata",
+    "model_classification"
+  ],
+  "title": "ExtractedPage",
+  "type": "object"
+}
+<|im_end|>
+<|im_start|>user
+<|vision_start|><|image_pad|><|vision_end|>Extract parameters from this image strictly into the JSON schema.
+
+Use the following native PDF text extracted from this region as evidence hints to avoid hallucinating names or values:
+
+Fig. 1.: Schematic for the three-compartment model ( V c , V t , V fil ) with a saturable resorption process ( T m , K t ) adapted from Wambaugh et al. (2013 ) and Andersen et al. (2006 ); C Prim , C Deep , and C fil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments.<|im_end|>
+<|im_start|>assistant

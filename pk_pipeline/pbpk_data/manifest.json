@@ -1,0 +1,55 @@
+{
+  "corpus_version": "1.0",
+  "papers": [
+    {
+      "paper_id": "dean_2025_pfas",
+      "pdf_path": "Dean et al. 2025 3 compartment (PFOA, PFOS, PFHxS).pdf",
+      "reference_path": "dean_pfas_compartment_update.json",
+      "title": "Adapting existing toxicokinetic models to relate perfluoroalkyl and polyfluoroalkyl intake to biomarkers in humans",
+      "year": 2025,
+      "expected_parameter_count": 56,
+      "pdf_sha256": "68e5f065427f0f0da81e407ef6643a05f930784851cda440a1882cf044efdedd",
+      "reference_sha256": "f423219386e49be8be0c75fe8bf86ddeb26c1b7d6a9474ed038940c89ea76ec0"
+    },
+    {
+      "paper_id": "loccisano_2013_pfoa_pfos",
+      "pdf_path": "Loccisano 2013.pdf",
+      "reference_path": "loccisano_pfoa_pfos_pbpk_update.json",
+      "title": "Development of PBPK Models for PFOA and PFOS for Human Pregnancy and Lactation Life Stages",
+      "year": 2013,
+      "expected_parameter_count": 102,
+      "pdf_sha256": "7ce80c3380ba41aa1d07d379a7766002feda1e6cc373918ec2789352653c0f01",
+      "reference_sha256": "7475dbc84e6e4f9f6054fc627188b1adc257b89b493993711f79a7bc16bfe548"
+    },
+    {
+      "paper_id": "mcnally_2019_dinch",
+      "pdf_path": "Mcnally et al DINCH.pdf",
+      "reference_path": "mcnally_dinch_pbpk_update.json",
+      "title": "Development, Testing, Parameterization, and Calibration of a Human Physiologically Based Pharmacokinetic Model for the Plasticizer, Hexamoll® Diisononyl-Cyclohexane-1, 2-Dicarboxylate Using In Silico, In Vitro, and Human Biomonitoring Data",
+      "year": 2019,
+      "expected_parameter_count": 96,
+      "pdf_sha256": "abfccd6af15935ce396b0c1f2db3d312dc5bfe6e9a6275d1eefea0e526f3aeff",
+      "reference_sha256": "38d41f62c2b017d9555ed391c8e0358e0d564b86a05b21b30979de28bdc62362"
+    },
+    {
+      "paper_id": "riluzole_2023_pbpk",
+      "pdf_path": "s12249-023-02680-y.pdf",
+      "reference_path": "riluzole_pbpk_update.json",
+      "title": "Development and Evaluation of Amorphous Solid Dispersion of Riluzole with PBPK Model to Simulate the Pharmacokinetic Profile",
+      "year": 2023,
+      "expected_parameter_count": 60,
+      "pdf_sha256": "a7a8e665dc8ca439793eed7ad85dbf6a95b6dd5f0b32683563e14920a0918d68",
+      "reference_sha256": "e29a72a20599d32c53038e2af3ea250f181470ac1c962189bc1b13258890086b"
+    },
+    {
+      "paper_id": "worley_2017_pfoa",
+      "pdf_path": "PFOA 3 compartment model.pdf",
+      "reference_path": "worley_pfoa_pbpk_update.json",
+      "title": "Physiologically based pharmacokinetic modeling of human exposure to perfluorooctanoic acid suggests historical non drinking-water exposures are important for predicting current serum concentrations",
+      "year": 2017,
+      "expected_parameter_count": 27,
+      "pdf_sha256": "afe05cf5a23713baf98e5b4ef4a48c79258a27339213bd5536ab5cc2a9f7ba8b",
+      "reference_sha256": "9225937e1a4cfb82a9996cd23eba2e72a4c3dba444f0a19cbd3e829dc44a7afb"
+    }
+  ]
+}
