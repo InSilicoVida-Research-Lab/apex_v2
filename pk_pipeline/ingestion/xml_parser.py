@@ -115,6 +115,47 @@ def is_pk_relevant(text: str, title: str = "") -> bool:
 # PBPK Table Gating, Group Header Preprocessing & Extraction
 # ─────────────────────────────────────────────────────────────
 
+NON_VALUE_COL_NAMES = {
+    "species", "type of variable", "variable", "name", "symbol",
+    "source", "reference", "parameter", "tissue", "organ", "description"
+}
+
+def parse_cell_numeric(text: str, col_path: List[str]) -> Tuple[float | None, str | None, str | None]:
+    """
+    Only parse numeric values in actual value columns.
+    Returns (numeric_value, footnote_marker, uncertainty_or_range_text).
+    """
+    col_str = " ".join(col_path).lower()
+    if any(k in col_str for k in NON_VALUE_COL_NAMES):
+        return None, None, None
+
+    clean = (text or "").strip()
+    if not clean:
+        return None, None, None
+
+    # Match scientific notation or float with optional CI/range and optional footnote letter (e.g., '5 a', '0.008 b', '0.21 (0.18, 0.25)')
+    m = re.match(
+        r"^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*([a-zA-Z\*])?(?:\s*\(([^)]+)\))?$",
+        clean
+    )
+    if m:
+        try:
+            return float(m.group(1)), m.group(2), m.group(3)
+        except ValueError:
+            return None, None, None
+
+    # Also handle ranges like "56.9 - 70" or "0.18 - 0.25"
+    m_range = re.match(r"^([+-]?\d+(?:\.\d+)?)\s*[\-\u2013\u2014]\s*([+-]?\d+(?:\.\d+)?)", clean)
+    if m_range:
+        try:
+            return float(m_range.group(1)), None, clean
+        except ValueError:
+            return None, None, None
+
+    return None, None, None
+
+# ─────────────────────────────────────────────────────────────
+
 import pandas as pd
 
 # 1. Gate out non-input tables (Sensitivity Analysis, POD/HED, Exposure intakes)
@@ -482,19 +523,16 @@ class JatsXMLParser:
                     if cell_txt:
                         col_id = f"c{c_idx+1}"
                         cell_id = f"cell_{row_id}_{col_id}"
-                        num_val = None
-                        m_num = re.search(r'[-+]?\d*\.?\d+(?:[eE][-+]?\d+)?', cell_txt)
-                        if m_num:
-                            try:
-                                num_val = float(m_num.group(0))
-                            except ValueError:
-                                pass
+                        col_p = columns[c_idx].path if c_idx < len(columns) else []
+                        num_val, qualifier, unc_txt = parse_cell_numeric(cell_txt, col_p)
                         cells.append(TableCell(
                             cell_id=cell_id,
                             row_id=row_id,
                             column_id=col_id,
                             text=cell_txt,
-                            numeric_value=num_val
+                            numeric_value=num_val,
+                            qualifier=qualifier,
+                            uncertainty_text=unc_txt
                         ))
 
             full_table_text = f"{full_title} " + " ".join(" ".join(r) for r in matrix) + " " + " ".join(footnotes)

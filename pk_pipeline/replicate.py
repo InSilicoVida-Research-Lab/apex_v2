@@ -62,7 +62,7 @@ def run_replication(pdf_path, compound=None):
         
         print("\n--- 3. Digitizing Figure (Phase 4) ---")
         # Attempt to find a figure to digitize
-        # Note: images are usually placed by MinerU in <pdf_dir>/<pdf_stem>/auto/images/
+        # Note: images can be located in <pdf_dir>/<pdf_stem>/auto/images/ or rendered directly
         pdf_dir = os.path.dirname(pdf_path)
         img_dir = os.path.join(pdf_dir, pdf_stem, "auto", "images")
         fig_candidates = [f for f in os.listdir(img_dir) if f.endswith(".jpg") or f.endswith(".png")] if os.path.exists(img_dir) else []

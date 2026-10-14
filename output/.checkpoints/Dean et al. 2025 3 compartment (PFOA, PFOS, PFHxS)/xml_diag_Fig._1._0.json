@@ -1,13 +1,13 @@
 {
   "page_metadata": {
-    "title": "",
-    "authors": [],
-    "journal": "Toxicological Sciences",
-    "year": 2025
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
   },
   "model_classification": {
     "model_type": "simple_empirical_compartmental",
-    "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
+    "evidence_quote": null
   },
   "model_context": null,
   "biological_basis": null,
@@ -17,11 +17,6 @@
     "listed_compartment_count": 3,
     "count_consistency": "consistent",
     "compartments": [
-      {
-        "id": "oral_dose",
-        "label_raw": "Oral Dose",
-        "confidence": null
-      },
       {
         "id": "central_compartment",
         "label_raw": "Central Compartment",
@@ -51,7 +46,7 @@
       {
         "source": "central_compartment",
         "target": "second_compartment",
-        "label_raw": "Q_d = k_12 * V_c",
+        "label_raw": "Q_d = k_12 × V_c",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
@@ -60,7 +55,7 @@
       {
         "source": "second_compartment",
         "target": "central_compartment",
-        "label_raw": "Q_d = k_12 * V_c",
+        "label_raw": "Q_d = k_12 × V_c",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
@@ -78,7 +73,7 @@
       {
         "source": "filtrate_compartment",
         "target": "central_compartment",
-        "label_raw": "T_m = Tmc * BW",
+        "label_raw": "T_m = Tmc × BW",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
@@ -87,28 +82,18 @@
       {
         "source": "filtrate_compartment",
         "target": "external",
-        "label_raw": "Q_fil = Q_filC * QCC * BW^0.74",
+        "label_raw": "Q_fil = Q_filC × QCC × BW^0.74",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
         "confidence": null
       }
     ],
-    "absorption": {
-      "route": "oral",
-      "model_type": "first_order",
-      "site": "gut",
-      "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
-    },
+    "absorption": null,
     "metabolism": null,
-    "elimination": {
-      "routes": [
-        "renal"
-      ],
-      "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
-    },
+    "elimination": null,
     "unresolved": null,
-    "source_location": "Fig. 1",
+    "source_location": null,
     "equations_provided": "none",
     "allometric_scaling_rules": [],
     "scaling_equations": []

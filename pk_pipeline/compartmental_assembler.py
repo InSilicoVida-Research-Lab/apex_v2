@@ -153,6 +153,65 @@ def normalize_and_validate_units(param: dict) -> dict:
     return param
 
 
+def backfill_cross_species_inherited_parameters(model_parameters: list[dict]) -> list[dict]:
+    """
+    When a paper adapts an animal model (e.g., Nonhuman primate / Rat) to Human
+    and only tabulates the scaled overrides under Human, clone the held-constant
+    parameters from the animal baseline into the Human context.
+    """
+    out = list(model_parameters)
+    by_comp_species: dict[tuple[str, str], dict[str, dict]] = {}
+
+    for p in out:
+        ctx = p.get("context") or {}
+        comp = (ctx.get("compound") or "SYSTEM").upper()
+        sp = (ctx.get("species") or ctx.get("subject_species") or "").strip().lower()
+        sym = (p.get("symbol_standardized") or p.get("symbol") or p.get("symbol_original") or p.get("parameter_name_standardized") or p.get("parameter_name_original") or "").strip()
+        if sp and sym:
+            by_comp_species.setdefault((comp, sp), {})[sym] = p
+
+    compounds = {c for (c, _) in by_comp_species}
+    donor_priority = ["nonhuman primate", "monkey", "cynomolgus monkey", "rat", "mouse"]
+
+    for comp in compounds:
+        human_dict = by_comp_species.get((comp, "human"))
+        donor_dict = None
+        donor_sp_name = None
+        for dp in donor_priority:
+            if by_comp_species.get((comp, dp)):
+                donor_dict = by_comp_species[(comp, dp)]
+                donor_sp_name = dp
+                break
+
+        if not human_dict or not donor_dict:
+            continue
+
+        for sym, donor_param in donor_dict.items():
+            sym_clean = sym.upper()
+            # Do not inherit body weight or compound/species specific overrides that are distinctly tabulated
+            if sym_clean in ["BW", "BODY WEIGHT", "BODY_WEIGHT", "T1/2", "HALF_LIFE", "HALF-LIFE"]:
+                continue
+            if sym not in human_dict:
+                cloned = copy.deepcopy(donor_param)
+                donor_id = donor_param.get("parameter_id", "param")
+                cloned["parameter_id"] = f"{donor_id}_human_inherited"
+                cloned_ctx = cloned.setdefault("context", {})
+                cloned_ctx["species"] = "human"
+                cloned_ctx["subject_species"] = "Human"
+                cloned_prov = cloned.setdefault("provenance", {})
+                cloned_prov["status"] = "assumed_default"
+                cloned_prov["parameter_status"] = "Assumed"
+                cloned_prov["derivation"] = {
+                    "method": f"Held constant from {donor_sp_name.title()} model",
+                    "source_species": donor_sp_name,
+                }
+                cloned_prov["evidence_directness"] = "inherited_cross_species"
+                out.append(cloned)
+                human_dict[sym] = cloned
+
+    return out
+
+
 def apply_pbpk_inheritance(parameters: list[dict]) -> list[dict]:
     """
     1. Cross-Compound Inheritance: If value_qualifier contains 'Assumed (PFOS)',
@@ -174,73 +233,8 @@ def apply_pbpk_inheritance(parameters: list[dict]) -> list[dict]:
             prov["parameter_status"] = "Assumed"
             prov["status"] = "assumed"
 
-    # Group parameters by (compound_or_physio, species)
-    by_species = {}
-    for p in enriched:
-        ctx = p.get("context") or {}
-        sp = (ctx.get("subject_species") or ctx.get("species") or "").strip().lower()
-        comp = (ctx.get("compound") or "physiological").strip().upper()
-        sym = (p.get("symbol") or p.get("symbol_original") or p.get("parameter_name") or p.get("parameter_name_original") or "").strip()
-        if sp and sym:
-            by_species.setdefault((comp, sp), {})[sym] = p
-
-    # Check if Human exists alongside Nonhuman primate / Monkey / Rat
-    all_compounds = {comp for (comp, _) in by_species.keys()}
-    donor_species_priority = ["nonhuman primate", "monkey", "rat"]
-
-    for comp in all_compounds:
-        human_params = by_species.get((comp, "human"), {})
-        if not human_params:
-            continue
-
-        for donor_sp in donor_species_priority:
-            donor_params = by_species.get((comp, donor_sp), {})
-            if not donor_params:
-                continue
-
-            for sym, donor_p in donor_params.items():
-                sym_upper = sym.upper()
-                if sym_upper in ["BW", "QCC", "BODY WEIGHT", "CARDIAC BLOOD OUTPUT"]:
-                    continue
-
-                # Only inherit physiological filtration / baseline constants held constant across models
-                p_sub = (donor_p.get("parameter_subclass") or "").lower()
-                is_physio_baseline = (
-                    sym_upper in ["QFILC", "VFILC"]
-                    or "filtrate" in (donor_p.get("parameter_name_original") or "").lower()
-                    or p_sub in ["organ_blood_flow_fraction", "organ_volume_fraction"]
-                )
-                if not is_physio_baseline:
-                    continue
-
-                if comp == "PFHXS":
-                    continue
-
-                if sym not in human_params:
-                    inherited_p = copy.deepcopy(donor_p)
-                    donor_ctx = donor_p.get("context") or {}
-                    donor_sp_label = donor_ctx.get("subject_species") or donor_ctx.get("species") or donor_sp.title()
-                    
-                    inherited_ctx = inherited_p.setdefault("context", {})
-                    inherited_ctx["subject_species"] = "Human"
-                    inherited_ctx["species"] = "human"
-                    
-                    inherited_prov = inherited_p.setdefault("provenance", {})
-                    inherited_prov["parameter_status"] = "Assumed"
-                    inherited_prov["status"] = "assumed_default"
-                    inherited_prov["source_location"] = f"Table 1, Human, {comp}, {inherited_p.get('parameter_name_original')}"
-                    inherited_prov["source_quote"] = f"{inherited_p.get('quantitative_data', {}).get('value')} (held constant)"
-                    
-                    inherited_q = inherited_p.setdefault("quantitative_data", {})
-                    inherited_q["value_qualifier"] = None
-                    inherited_q["value_text"] = f"{inherited_q.get('value')} (held constant)"
-                    
-                    raw_id = f"inherited|{comp}|human|{sym}".lower()
-                    h = hashlib.sha256(raw_id.encode("utf-8")).hexdigest()[:16]
-                    inherited_p["parameter_id"] = f"param_{h}"
-
-                    enriched.append(inherited_p)
-                    human_params[sym] = inherited_p
+    # Backfill cross-species inherited parameters across all compounds (PFOA, PFOS, PFHxS, etc.)
+    enriched = backfill_cross_species_inherited_parameters(enriched)
 
     return enriched
 

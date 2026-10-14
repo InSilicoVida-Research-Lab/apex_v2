@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, model_validator
+from pydantic import BaseModel, ConfigDict, Field, ValidationInfo, model_validator, field_validator
 from typing import Any, Dict, List, Optional, Union, Literal
 from enum import Enum
 
@@ -202,6 +202,13 @@ class Derivation(BaseModel):
     source_species: Optional[str] = Field(None, description="e.g. 'rat' when human value was derived from rat")
     optimization_target: Optional[str] = Field(None, description="e.g. 'experimental_PK_data', 'Liboux et al.'")
 
+    @model_validator(mode="before")
+    @classmethod
+    def from_string(cls, data: Any) -> Any:
+        if isinstance(data, str):
+            return {"method": data}
+        return data
+
 class ProvenanceStatus(str, Enum):
     """Controlled vocabulary for how a parameter value was obtained."""
 
@@ -259,6 +266,8 @@ class Provenance(BaseModel):
         if not isinstance(data, dict):
             return data
         normalized = dict(data)
+        if normalized.get("derivation") and isinstance(normalized["derivation"], str):
+            normalized["derivation"] = {"method": normalized["derivation"]}
         if not normalized.get("status") and normalized.get("parameter_status"):
             p_status = str(normalized["parameter_status"]).strip().lower()
             normalized["status"] = _LEGACY_PROVENANCE_STATUS_MAP.get(p_status, p_status)
@@ -361,9 +370,27 @@ class ModelStructure(BaseModel):
     elimination: Optional[EliminationModel] = None
     unresolved: Optional[List[UnresolvedTopology]] = None
     source_location: Optional[str] = None
-    equations_provided: Literal["text", "supplementary_info", "code_repo", "none"] = Field("none", description="Where are the ODEs/equations provided?")
+    equations_provided: Literal["text", "supplementary_info", "code_repo", "diagram", "none"] = Field("none", description="Where are the ODEs/equations provided?")
     allometric_scaling_rules: List[str] = Field(default_factory=list, description="Explicit scaling rules stated (e.g., 'QC = QCC * BW^0.75'). Empty list if none.")
     scaling_equations: List[str] = Field(default_factory=list, description="Symbolic scaling equations without numeric values.")
+
+    @field_validator("equations_provided", mode="before")
+    @classmethod
+    def normalize_equations_provided(cls, v: Any) -> str:
+        if not v:
+            return "none"
+        s = str(v).strip().lower()
+        if s in ("text", "supplementary_info", "code_repo", "diagram", "none"):
+            return s
+        if "diagram" in s or "figure" in s:
+            return "diagram"
+        if "supp" in s:
+            return "supplementary_info"
+        if "code" in s or "repo" in s or "github" in s:
+            return "code_repo"
+        if "text" in s or "article" in s or "paper" in s:
+            return "text"
+        return "none"
 
 class MetabolicPathway(BaseModel):
     parent_compound: str = Field(description="The chemical being metabolized.")
@@ -577,7 +604,7 @@ class ParameterBlock(BaseModel):
     parameters: List[ExtractedParameter] = Field(default_factory=list, description="Parameters belonging to this block.")
 
 class ExtractedPage(BaseModel):
-    page_metadata: PageMetadata
+    page_metadata: PageMetadata = Field(default_factory=PageMetadata)
     model_classification: ModelClassification
     model_context: Optional[ModelContext] = None
     biological_basis: Optional[BiologicalBasis] = None
@@ -592,6 +619,92 @@ class ExtractedPage(BaseModel):
     parameter_mentions_without_values: List[ParameterMentionWithoutValue] = Field(default_factory=list, description="Named PBPK parameters mentioned in text but without numerical values.")
     sensitivity_analysis: List[SensitivityCoefficient] = Field(default_factory=list, description="Sensitivity analysis coefficients.")
     dosing: Optional[List[DoseEvent]] = Field(default=None, description="Dosing events extracted from the methods section.")
+
+
+# ─── Lightweight Table Extraction Schema (for Table Prompts) ────────────────────
+
+class ParameterClass(str, Enum):
+    PHYSIOLOGICAL = "physiological"
+    BIOCHEMICAL = "biochemical"
+    COMPOUND_SPECIFIC = "compound_specific"
+
+class TableParameterContext(BaseModel):
+    compound: Optional[str] = Field(None, description="Chemical or drug entity (e.g. PFOS, PFOA). Leave null for compound-independent physiological parameters.")
+    species: Optional[str] = Field(None, description="Explicitly stated species (e.g. Human, Nonhuman primate, Rat, Monkey).")
+    life_stage: Optional[str] = Field(None, description="Life stage or physiological state (e.g. Mother, Fetus, Infant, Gestation, Adult).")
+    formulation: Optional[Union[str, List[str]]] = Field(None, description="Specific drug formulation if stated (e.g. Rilutor, ASD). Never merge two formulations into a range.")
+    compartment: Optional[str] = Field(None, description="Target organ, tissue, or fluid compartment (e.g. Liver, Kidney, Plasma, Filtrate, Gut, Fat).")
+    route: Optional[str] = Field(None, description="Route of administration (e.g. Oral, IV, Dermal).")
+    population: Optional[str] = Field(None, description="Specific cohort or sub-population if stated.")
+
+class TableQuantitativeData(BaseModel):
+    value_text: Optional[str] = Field(None, description="Exact verbatim text printed in the table cell (e.g. '0.21 (0.18, 0.25)', '5a', '4.00E-04').")
+    value: Optional[float] = Field(None, description="Primary point estimate as a pure float.")
+    start_value: Optional[float] = Field(None, description="Initial numerical value for time-varying physiological ranges (e.g. 56.9 in '56.9 - 70').")
+    end_value: Optional[float] = Field(None, description="Final numerical value for time-varying physiological ranges (e.g. 70.0 in '56.9 - 70').")
+    ci_low: Optional[float] = Field(None, description="Lower bound of confidence interval (e.g. 0.18 in '0.21 (0.18, 0.25)').")
+    ci_high: Optional[float] = Field(None, description="Upper bound of confidence interval (e.g. 0.25 in '0.21 (0.18, 0.25)').")
+    unit: Optional[str] = Field(None, description="Exact unit printed or inherited (e.g. 'L/h/kg^0.74', 'mg/L', 'fraction of BW').")
+    unit_inherited: bool = Field(False, description="True if unit was inherited from a group header or table caption.")
+    value_qualifier: Optional[str] = Field(None, description="Qualifier printed with value (e.g. 'Optimized', 'Fixed', '<').")
+    footnote_marker: Optional[str] = Field(None, description="Trailing footnote symbol or letter stripped from the number (e.g. 'a', 'b', '*').")
+    normalization_basis: Optional[str] = Field(None, description="Normalization basis (e.g. 'cardiac_output', 'body_weight').")
+
+class TableProvenance(BaseModel):
+    source_table: Optional[str] = Field(None, description="Explicit table ID (e.g. 'Table 1', 'Table 3'). Crucial for verification.")
+    row_id: Optional[str] = Field(None, description="Identifier of the row in TableEvidence (e.g. 'r1').")
+    column_id: Optional[str] = Field(None, description="Identifier of the column in TableEvidence (e.g. 'c1').")
+    cell_id: Optional[str] = Field(None, description="Identifier of the cell in TableEvidence (e.g. 'cell_r1_c1').")
+    row_path: Optional[List[str]] = Field(None, description="Hierarchical row context path.")
+    column_path: Optional[List[str]] = Field(None, description="Hierarchical column context path.")
+    source_quote: Optional[str] = Field(None, description="Verbatim text from source cell.")
+    reference: Optional[str] = Field(None, description="Literature citation or reference (e.g. 'Wambaugh et al. (2013)', '[17]').")
+    status: Optional[ProvenanceStatus] = Field(None, description="Controlled vocabulary: 'measured_here', 'literature', 'fitted', 'derived', 'assumed_default', 'in_vitro_ivive', 'predicted_qsar', 'not_reported'.")
+
+class TableExtractedParameter(BaseModel):
+    parameter_class: Optional[ParameterClass] = Field(None, description="Broad class: 'physiological' (organ volume, blood flow, BW, GFR), 'biochemical' (Kp, fu, clearance, Vmax, Km, Vc, ka, half-life), or 'compound_specific' (logP, MW).")
+    parameter_subclass: Optional[str] = Field(None, description="Specific canonical subclass (e.g. 'body_weight', 'cardiac_output', 'organ_blood_flow_fraction', 'organ_volume_fraction', 'partition_coefficient', 'fraction_unbound', 'distribution_volume', 'distribution_rate', 'absorption_rate_constant', 'maximal_velocity', 'michaelis_menten_constant', 'bioavailability', 'elimination_half_life').")
+    parameter_name: Optional[str] = Field(None, description="Descriptive parameter name. If under a group header, prepend it (e.g. 'Blood flow - Liver').")
+    parameter_name_standardized: Optional[str] = Field(None, description="Standardized snake_case name (e.g. 'body_weight', 'cardiac_output', 'partition_coefficient_liver', 'central_compartment_volume').")
+    symbol: Optional[str] = Field(None, description="Mathematical symbol as printed (e.g. 'BW', 'QCC', 'Tmc', 'Kt', 'k12').")
+    symbol_standardized: Optional[str] = Field(None, description="Standardized symbol in common PBPK notation (e.g. 'BW', 'QCC', 'Kp_liver').")
+    context: TableParameterContext
+    quantitative_data: TableQuantitativeData
+    provenance: TableProvenance
+
+class TableParameterBlock(BaseModel):
+    block_name: str = Field(..., description="Section/block name (e.g. 'Nonhuman primate', 'Physiological parameters').")
+    implied_species: Optional[str] = Field(None, description="Species shared across this block.")
+    implied_unit: Optional[str] = Field(None, description="Unit shared across this block.")
+    parameter_class: Optional[str] = Field(None, description="Class shared across this block.")
+    parameters: List[TableExtractedParameter] = Field(default_factory=list, description="Extracted parameters belonging to this block.")
+
+class TableValidationResult(BaseModel):
+    metric: str = Field(..., description="Observed PK metric name, e.g. 'Cmax', 'AUC', 'Tmax'")
+    value: Optional[float] = None
+    unit: Optional[str] = None
+    source_type: Literal["observed", "simulated"] = "observed"
+    provenance: Optional[TableProvenance] = None
+
+class TableExtractionPage(BaseModel):
+    page_metadata: Optional[PageMetadata] = None
+    model_classification: ModelClassification = Field(..., description="Model classification: 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'.")
+    parameter_blocks: List[TableParameterBlock] = Field(default_factory=list, description="Parameters grouped by table section/blocks. PBPK input parameters ONLY.")
+    observed_data: List[TableValidationResult] = Field(default_factory=list, description="Observed clinical PK metrics if reported in the table.")
+    simulated_data: List[TableValidationResult] = Field(default_factory=list, description="Simulated PK metrics if reported in the table.")
+
+
+# ─── Lightweight Diagram Extraction Schema (for Diagram / Figure Prompts) ─────
+
+class DiagramExtractionPage(BaseModel):
+    page_metadata: Optional[PageMetadata] = None
+    model_classification: ModelClassification = Field(
+        ..., description="Model classification: 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'."
+    )
+    model_structure: Optional[ModelStructure] = Field(
+        default_factory=ModelStructure,
+        description="Boxes and arrows: compartments, connections, and scaling equations."
+    )
 
 
 # ─── Canonical Document Output ────────────────────────────────────────────────

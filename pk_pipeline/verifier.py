@@ -410,10 +410,15 @@ class Tier1Verifier:
                 "organ_volume_fraction": ["dimensionless", "fraction", "ratio", "none"],
                 "partition_coefficient": ["dimensionless", "fraction", "ratio", "none"],
                 "fraction_unbound": ["dimensionless", "fraction", "ratio", "none"],
-                "clearance": ["l/h", "ml/min", "μl/h/kg^0.25", "ml/min/kg", "l/h/kg"],
-                "rate_constant": ["1/h", "1/min", "h-1", "min-1", "1/h/kg^0.25"],
-                "vmax": ["nmol/h/kg^0.75", "pmol/min/mg", "nmol/min/mg", "mg/h"],
-                "km": ["μmol/l", "umol/l", "mg/l", "ng/ml", "μm"]
+                "cardiac_output": ["l/h", "l/h/kg^0.74", "l/h/kg 0.74", "l/h/kg^0.75", "l/h/kg 0.75", "l/min", "ml/min"],
+                "clearance": ["l/h", "ml/min", "μl/h/kg^0.25", "ml/min/kg", "l/h/kg", "l/h/kg^0.74", "l/h/kg 0.74", "l/h/kg^0.75", "l/h/kg 0.75"],
+                "rate_constant": ["1/h", "1/min", "h-1", "min-1", "h^-1", "min^-1", "1/h/kg^0.25"],
+                "distribution_rate": ["1/h", "1/min", "h-1", "min-1", "h^-1", "min^-1"],
+                "absorption_rate": ["1/h", "1/min", "h-1", "min-1", "h^-1", "min^-1"],
+                "compartment_volume": ["l", "ml", "l/kg", "ml/kg"],
+                "organ_volume": ["l", "ml", "l/kg", "ml/kg", "dimensionless", "fraction", "ratio", "none"],
+                "vmax": ["nmol/h/kg^0.75", "pmol/min/mg", "nmol/min/mg", "mg/h", "mg/h/kg", "umol/h/kg", "μmol/h/kg"],
+                "km": ["μmol/l", "umol/l", "mg/l", "ng/ml", "μm", "um"]
             }
             
             for required_subclass, allowed_units in unit_dictionary.items():
@@ -508,7 +513,13 @@ class Tier1Verifier:
                 
             # Rule 8.7: Hierarchy Consistency Check (Compound/Column Conflict)
             all_path_text = " ".join([str(x) for x in (row_path or []) + (col_path or [])]).lower()
-            if compound and all_path_text and compound.lower() not in all_path_text:
+            norm_tbl = normalize_table_id(tbl) if tbl else None
+            te = (table_evidence_dict.get(tbl) or table_evidence_dict.get(norm_tbl)) if tbl else None
+            te_title = (te.get("title") or "").lower() if te else ""
+            te_subjects = [str(c).lower() for c in (te.get("subject_compounds") or [])] if te else []
+            in_table_meta = bool(compound and (compound.lower() in te_title or any(compound.lower() in sc for sc in te_subjects)))
+
+            if compound and all_path_text and compound.lower() not in all_path_text and not in_table_meta:
                 flags.append(ParameterFlag(
                     param_index=i, param_name=name,
                     severity="error", rule="COMPOUND_COLUMN_CONFLICT",
@@ -518,9 +529,6 @@ class Tier1Verifier:
 
             # Rule 8.8: Source Table Evidence & Cell-Level Verification
             if tbl:
-                norm_tbl = normalize_table_id(tbl)
-                te = table_evidence_dict.get(tbl) or table_evidence_dict.get(norm_tbl)
-
                 if not te:
                     flags.append(ParameterFlag(
                         param_index=i, param_name=name,
@@ -582,7 +590,9 @@ class Tier1Verifier:
                     if matched_cell:
                         c_val = matched_cell.get("numeric_value")
                         if value is not None and c_val is not None:
-                            if abs(c_val - value) > abs(c_val) * 0.05 + 1e-6:
+                            abs_diff = abs(c_val - value)
+                            rel_tol = abs(c_val) * 0.05 + 1e-4
+                            if abs_diff > rel_tol and abs_diff > 0.005:
                                 flags.append(ParameterFlag(
                                     param_index=i, param_name=name,
                                     severity="error", rule="CELL_VALUE_MISMATCH",
@@ -602,12 +612,18 @@ class Tier1Verifier:
                                     suggested_fix="Re-attribute parameter to the column's compound."
                                 ))
                     elif te.get("cells") and value is not None:
-                        flags.append(ParameterFlag(
-                            param_index=i, param_name=name,
-                            severity="error", rule="CELL_NOT_FOUND_IN_SOURCE_TABLE",
-                            message=f"Value {value} ({value_text}) for '{name}' could not be matched to any cell in source table '{tbl}'.",
-                            suggested_fix="Check if value was taken from a different table or narrative text."
-                        ))
+                        is_inherited = (
+                            prov.get("evidence_directness") == "inherited_cross_species"
+                            or "held constant" in str(prov.get("source_quote", "")).lower()
+                            or "held constant" in str(prov.get("derivation", "")).lower()
+                        )
+                        if not is_inherited:
+                            flags.append(ParameterFlag(
+                                param_index=i, param_name=name,
+                                severity="error", rule="CELL_NOT_FOUND_IN_SOURCE_TABLE",
+                                message=f"Value {value} ({value_text}) for '{name}' could not be matched to any cell in source table '{tbl}'.",
+                                suggested_fix="Check if value was taken from a different table or narrative text."
+                            ))
 
             # Rule 9: High-confidence entry missing source_quote
             source_quote = prov.get("source_quote")

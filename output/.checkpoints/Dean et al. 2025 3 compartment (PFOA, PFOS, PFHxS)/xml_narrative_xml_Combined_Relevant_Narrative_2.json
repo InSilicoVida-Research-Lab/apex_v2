@@ -1,63 +1,75 @@
 {
   "page_metadata": {
-    "title": "",
-    "authors": [],
-    "journal": "",
+    "title": null,
+    "authors": null,
+    "journal": null,
     "year": null
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": ""
+    "evidence_quote": null
   },
   "model_context": {
     "model_origin": "adapted_from",
     "stated_purpose": "risk_assessment",
-    "dose_metric": "serum_levels"
+    "dose_metric": "not_reported"
   },
   "biological_basis": {
-    "adme_determinants": [
-      "body_weight",
-      "cardiac_output",
-      "saturable_reabsorption",
-      "free_fraction_in_serum",
-      "absorption_rate_constant",
-      "intercompartmental_transfer_rate"
-    ],
+    "adme_determinants": [],
     "stated_assumptions": [
       {
-        "description": "Saturable process with Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment.",
-        "evidence_quote": "a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment ( Fig. 1 )",
+        "description": "Saturable reabsorption from the filtrate compartment to the central compartment via Michaelis–Menten kinetics.",
+        "evidence_quote": "a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment",
         "source_location": "Selected model"
       },
       {
-        "description": "Oral bioavailability fixed to 90% for both PFOS and PFOA.",
+        "description": "Bioavailability parameter added to align with the model implemented by the EPA for PFOS and PFOA.",
+        "evidence_quote": "a parameter for bioavailability was added to the model to align with the model implemented by the , in their final reference dose level setting for PFOS and PFOA",
+        "source_location": "Inferences"
+      },
+      {
+        "description": "Bioavailability initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion.",
         "evidence_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion",
         "source_location": "Inferences"
       },
       {
-        "description": "Model does not include a development compartment, thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
-        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "description": "The model does not include a development compartment, thus underestimating serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures",
         "source_location": "Model checking and validation"
       },
       {
-        "description": "Parameters for Free, ka, k12, k21 were assigned set values from iterative evaluation of starting parameters.",
-        "evidence_quote": "the proportion of free compound in the serum ( Free ), the rate of absorption from the gut ( k a ), and the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 )",
+        "description": "The saturable resorption process is assumed to be minimal for PFBS due to its short half-life (<7 days).",
+        "evidence_quote": "we decided not to pursue the study of this compound further",
+        "source_location": "Application to other compounds"
+      },
+      {
+        "description": "The proportion of free compound in serum (Free), absorption rate (ka), and inter-compartmental rates (k12, k21) were assigned set values from iterative evaluation of starting parameters.",
+        "evidence_quote": "the proportion of free compound in the serum ( Free ), the rate of absorption from the gut ( k a ), and the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters",
         "source_location": "Model parameters estimated for humans for both PFOA and PFOS"
       },
       {
-        "description": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively.",
-        "evidence_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively.",
+        "description": "The animal models were scaled to humans by adjusting cardiac blood output (QCC) to 12.5 L/h/kg^0.74.",
+        "evidence_quote": "We scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg 0.74 ) following the procedure of ; We then adjusted the maximum rate of the saturable resorption parameter ( T m , mg/h) to match the half-life estimated in humans from an exposure study deemed to be representative of the general population",
+        "source_location": "TK modeling approach: a case study with PFOS and PFOA"
+      },
+      {
+        "description": "The saturable resorption rate (Tmc) was fitted for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively.",
+        "evidence_quote": "The animal models were scaled to humans by adjusting the cardiac blood output ( QCC ) to 12.5 L/h/kg 0.74 and fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively",
         "source_location": "Model parameters estimated for humans for both PFOA and PFOS"
       },
       {
-        "description": "The remaining parameters were held constant between the animal and human models, as shown in Table 1, with the exception of the PFOA bioAv and K t parameters, which were refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model, as the lower bioavailability observed in the nonhuman primate model was assumed to be the result of experiment-specific conditions.",
-        "evidence_quote": "The remaining parameters were held constant between the animal and human models, as shown in Table 1 , with the exception of the PFOA bioAv and K t parameters, which were refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model, as the lower bioavailability observed in the nonhuman primate model was assumed to be the result of experiment-specific conditions.",
+        "description": "The PFOA bioAv and Kt parameters were refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model.",
+        "evidence_quote": "the PFOA bioAv and K t parameters, which were refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model, as the lower bioavailability observed in the nonhuman primate model was assumed to be the result of experiment-specific conditions",
         "source_location": "Model parameters estimated for humans for both PFOA and PFOS"
+      },
+      {
+        "description": "The human model is associated with a clearance of approximately 0.06 mL/kg-day for a 70 kg adult for doses well below saturation (<1000 mg/kg BW/day).",
+        "evidence_quote": "Notably, for doses well below saturation (<1000 mg/kg BW/day), the human model is associated with a clearance of approximately 0.06 mL/kg-day for a 70 kg adult",
+        "source_location": "Application to PFHxS"
       }
     ],
     "specialized_mechanisms": [
-      "saturable_reabsorption",
-      "Michaelis-Menten_kinetics"
+      "saturable_reabsorption"
     ]
   },
   "table_evidence": [],
@@ -86,36 +98,17 @@
       {
         "source": "filtrate_compartment",
         "target": "central_compartment",
-        "rate_or_flow_symbol": "Tmc",
-        "equation": "saturable process with Michaelis–Menten kinetics"
+        "rate_or_flow_symbol": "Tm",
+        "equation": null
       }
     ],
-    "absorption": {
-      "route": "oral",
-      "model_type": "first_order",
-      "site": "gut",
-      "evidence_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion"
-    },
-    "metabolism": {
-      "organ": "kidney",
-      "enzyme": "unclear",
-      "metabolite": "sink",
-      "kinetics": "not_reported",
-      "parameters": [],
-      "evidence_quote": ""
-    },
-    "elimination": {
-      "routes": [
-        "renal"
-      ],
-      "evidence_quote": ""
-    },
-    "unresolved": [],
-    "source_location": "",
+    "absorption": null,
+    "metabolism": null,
+    "elimination": null,
+    "unresolved": null,
+    "source_location": null,
     "equations_provided": "none",
-    "allometric_scaling_rules": [
-      "QCC = QCC * BW^0.74"
-    ],
+    "allometric_scaling_rules": [],
     "scaling_equations": []
   },
   "metabolic_pathways": [],
@@ -126,5 +119,5 @@
   "qualitative_findings": [],
   "parameter_mentions_without_values": [],
   "sensitivity_analysis": [],
-  "dosing": []
+  "dosing": null
 }

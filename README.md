@@ -8,7 +8,7 @@ At its core, APEX utilizes **Qwen3-VL-8B-Instruct** (hosted via SGLang) to perfo
 
 - **Multi-modal Extraction**: Capable of reading text, complex tables, and extracting numerical data directly from visual figures (e.g., concentration-time curves).
 - **Intelligent Layout Parsing**: Uses a cascading fallback strategy for parsing complex PDF layouts:
-  1. Searches for existing JATS XML or MinerU structured output.
+  1. Searches for structured JATS XML (via PMC / Europe PMC open access).
   2. Falls back to `PyMuPDF4LLM` to chunk text and detect figures/tables.
 - **Advanced Table Cropping (TATR)**: Natively integrates `microsoft/table-transformer-detection` (TATR) to automatically detect and mathematically crop borderless tables (with 40px padding), passing a clean, high-resolution image to Qwen3-VL to avoid layout distortion.
 - **Concurrent Processing**: Splits documents into narrative, table, and figure chunks, processing them concurrently against the SGLang backend to maximize throughput.

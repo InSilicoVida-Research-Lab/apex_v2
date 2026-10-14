@@ -26,7 +26,6 @@ _SPECIES_KEYWORDS = [
     "pig", "hamster", "guinea pig", "non-human primate", "nhp", "sheep"
 ]
 
-# Removed ColQwenRetriever as per MinerU migration plan
 
 def get_extractor():
     global extractor
@@ -302,14 +301,216 @@ def _parse_cell_uncertainty(value_text: str) -> tuple[float | None, float | None
     return float(match.group(1)), float(match.group(2))
 
 
-def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
-    """Recover parameter records when a table extraction returns an empty block.
+# Tables that should NEVER be treated as model-parameter input tables.
+# Sensitivity analysis, exposure, POD/HED, and outcome tables are output tables.
+_NON_INPUT_TABLE_PATTERNS = re.compile(
+    r"(sensitivity|exposure|population variability|pod|hed|hazard|risk|cancer|point of departure"
+    r"|biomonitoring|observed|predicted vs|predicted versus|goodness.of.fit|results|outcome)",
+    re.IGNORECASE,
+)
 
-    JATS parsing already gives us aligned row, column, and cell evidence. This
-    intentionally conservative fallback only handles parameter tables with both
-    a descriptor column (``Variable``/``Name``) and a numerical estimate column
-    (``Mean``/``Estimate``/``Value``). Outcome tables are left untouched.
-    Recovered records retain cell-level provenance and are marked for review.
+SENSITIVITY_TABLE_RE = re.compile(
+    r"(sensitivity\s+coefficient|normalized\s+sensitivity|morris|efast)", re.I
+)
+EXPOSURE_OR_POD_TABLE_RE = re.compile(
+    r"(point\s+of\s+departure|pod\s*hed|exposure\s+estimate|daily\s+intake)", re.I
+)
+
+def classify_table_role(table_ev: dict) -> str:
+    """Routes each table in table_evidence to its proper top-level JSON array."""
+    title = (table_ev.get("title") or "").lower()
+    col_labels = " ".join(" ".join(c.get("path", [])) for c in table_ev.get("columns", [])).lower()
+    combined = f"{title} {col_labels}"
+
+    if SENSITIVITY_TABLE_RE.search(combined):
+        return "sensitivity_analysis"   # e.g., Loccisano Table 4
+    if EXPOSURE_OR_POD_TABLE_RE.search(combined):
+        return "simulated_data"         # e.g., Dean Table 2 (POD HED comparison), Loccisano Table 5
+    return "model_parameters"           # e.g., Dean Tables 1 & 3, Loccisano Tables 1-3, Riluzole Table I
+
+
+PAREN_UNIT_RE = re.compile(r"\(([^()]+)\)\s*$")
+RANGE_CELL_RE = re.compile(
+    r"^\s*([+-]?\d+(?:\.\d+)?)\s*[\-\u2013\u2014]\s*([+-]?\d+(?:\.\d+)?)\s*(?:\(([^)]+)\))?\s*$"
+)
+
+DIMENSIONLESS_SUBCLASSES = {
+    "bioavailability", "fraction_unbound", "organ_volume_fraction",
+    "blood_flow_fraction", "partition_coefficient", "hematocrit"
+}
+
+def normalize_parameter_units_and_ranges(param: dict) -> dict:
+    """Normalize units, handle time-varying ranges, and fix provenance status."""
+    q = param.setdefault("quantitative_data", {})
+    name_orig = param.get("parameter_name_original") or param.get("parameter_name") or ""
+    subclass = param.get("parameter_subclass") or ""
+
+    # 1. Rescue parenthetical unit from parameter_name_original (e.g., 'Body weight (kg)')
+    if not q.get("unit_original"):
+        m_unit = PAREN_UNIT_RE.search(name_orig)
+        if m_unit and "95%" not in m_unit.group(1) and len(m_unit.group(1).strip()) <= 20:
+            q["unit_original"] = m_unit.group(1).strip()
+            q["unit_standardized"] = m_unit.group(1).strip()
+
+    # 2. Assign 'dimensionless' to known fractions, ratios, bioAv, Free, and Kp values
+    if not q.get("unit_original") or str(q.get("unit_original")).lower() in ("none", "null", "-", "unitless"):
+        if subclass in DIMENSIONLESS_SUBCLASSES or any(
+            w in name_orig.lower() for w in ("fraction", "proportion", "bioavailability", "partition", "ratio", "bioav", "free", "hematocrit")
+        ):
+            q["unit_original"] = "dimensionless"
+            q["unit_standardized"] = "dimensionless"
+
+    # 3. Fix unit standardization (preserve 'L' in L/h/kg^0.74 and standardize 1/h)
+    u_orig = (q.get("unit_original") or "").strip()
+    if u_orig:
+        u_clean = re.sub(r"kg\s+(\d+\.?\d*)", r"kg^\1", u_orig, flags=re.I)
+        u_clean = u_clean.replace("L/Kg", "L/kg").replace("l/kg", "L/kg").replace("l/h", "L/h")
+        if u_clean.lower() in ("1/h", "/h", "h-1"):
+            u_clean = "h^-1"
+        q["unit_standardized"] = u_clean
+
+    # 4. Fix VfilC subclass if unit is L/kg so it doesn't collide with dimensionless organ_volume_fraction
+    if q.get("unit_standardized") in ("L/kg", "mL/kg") and subclass == "organ_volume_fraction":
+        param["parameter_subclass"] = "compartment_volume"
+
+    # 5. Parse time-varying ranges (e.g., '56.9 - 70 (initial)' or '0 - 3.8' in Loccisano)
+    val_text = (q.get("value_text") or "").strip()
+    m_range = RANGE_CELL_RE.match(val_text)
+    if m_range and q.get("value") is None:
+        start_v = float(m_range.group(1))
+        end_v = float(m_range.group(2))
+        q["value"] = start_v
+        q["value_qualifier"] = m_range.group(3) or "time_varying_range"
+        q["uncertainty"] = {
+            "type": "time_varying_range",
+            "lower": start_v,
+            "upper": end_v,
+            "absolute": None,
+            "raw_text": val_text
+        }
+
+    # 6. Fix provenance.status: only mark 'Optimized' as 'fitted'; literature citations are 'literature'
+    prov = param.setdefault("provenance", {})
+    ref = (prov.get("reference") or "").strip()
+    if ref.lower().startswith("optimized") or "optim" in ref.lower():
+        prov["status"] = "fitted"
+    elif ref.lower().startswith("assumed"):
+        prov["status"] = "assumed_default"
+    elif ref:
+        prov["status"] = "literature"
+
+    return param
+
+
+def bind_exact_table_provenance(param: dict, table_ev: dict) -> None:
+    """
+    Fixes the r1/r2 species-block bug by matching the parameter's species + symbol/name
+    to the exact row_id and cell_id in table_evidence.
+    """
+    ctx = param.get("context") or {}
+    target_species = (ctx.get("species") or ctx.get("subject_species") or "").lower()
+    target_symbol = (param.get("symbol_original") or param.get("symbol") or "").strip().lower()
+    target_name = (param.get("parameter_name_original") or param.get("parameter_name") or "").strip().lower()
+    target_compound = (ctx.get("compound") or "").upper()
+
+    # 1. Find the exact row_id in table_evidence.rows
+    matched_row_id = None
+    matched_row_path = None
+    for row in table_ev.get("rows", []):
+        r_path_lower = [str(p).strip().lower() for p in row.get("path", [])]
+        species_ok = (not target_species) or any(target_species in p for p in r_path_lower)
+        symbol_ok = bool(target_symbol and any(target_symbol == p for p in r_path_lower))
+        name_ok = bool(target_name and any(target_name in p or p in target_name for p in r_path_lower))
+
+        if species_ok and (symbol_ok or name_ok):
+            matched_row_id = row.get("row_id")
+            matched_row_path = row.get("path")
+            break
+
+    # If not found with species constraint, try symbol/name match directly
+    if not matched_row_id:
+        for row in table_ev.get("rows", []):
+            r_path_lower = [str(p).strip().lower() for p in row.get("path", [])]
+            symbol_ok = bool(target_symbol and any(target_symbol == p for p in r_path_lower))
+            name_ok = bool(target_name and any(target_name in p or p in target_name for p in r_path_lower))
+            if symbol_ok or name_ok:
+                matched_row_id = row.get("row_id")
+                matched_row_path = row.get("path")
+                break
+
+    # 2. Find the exact column_id for the compound (or default 'Mean (95% CI)' column)
+    matched_col_id = None
+    matched_col_path = None
+    for col in table_ev.get("columns", []):
+        c_path_upper = [str(p).upper() for p in col.get("path", [])]
+        if target_compound and any(target_compound in p for p in c_path_upper):
+            matched_col_id = col.get("column_id")
+            matched_col_path = col.get("path")
+            break
+    if not matched_col_id:
+        for col in table_ev.get("columns", []):
+            if any("mean" in str(p).lower() or "value" in str(p).lower() for p in col.get("path", [])):
+                matched_col_id = col.get("column_id")
+                matched_col_path = col.get("path")
+                break
+
+    prov = param.setdefault("provenance", {})
+    if matched_row_id:
+        prov["row_id"] = matched_row_id
+        prov["row_path"] = matched_row_path
+    if matched_col_id:
+        prov["column_id"] = matched_col_id
+        prov["column_path"] = matched_col_path
+    if matched_row_id and matched_col_id:
+        prov["cell_id"] = f"cell_{matched_row_id}_{matched_col_id}"
+
+
+RATE_OR_CLEARANCE_UNITS = re.compile(r"(/h|/min|h\^-1|l/h|ml/min|mg/h/kg|ug/h/kg)", re.I)
+
+def filter_false_doses(dosing_list: list[dict]) -> list[dict]:
+    """Reject kinetic rate constants (e.g. Tmc in mg/h/kg) mistaken for doses."""
+    valid_doses = []
+    for d in dosing_list or []:
+        unit = d.get("dose_unit") or ""
+        quote = d.get("source_quote") or ""
+        desc = d.get("description") or ""
+        if RATE_OR_CLEARANCE_UNITS.search(unit) and "day" not in unit.lower():
+            continue
+        if re.search(r"\b(Tmc|Vmax|Kt|Km|QCC|k12|k21|ka)\b", f"{quote} {desc}"):
+            continue
+        valid_doses.append(d)
+    return valid_doses
+
+
+def _group_header_unit(group_text: str) -> str | None:
+    """Extract a unit from a group-header like 'Blood flow to organ (fraction)'."""
+    m = re.search(r"\(([^()]{1,30})\)", group_text or "")
+    if not m:
+        return None
+    candidate = m.group(1).strip()
+    # Accept only plausible unit strings (no long sentences)
+    if len(candidate) > 25 or " " in candidate and len(candidate.split()) > 3:
+        return None
+    return candidate
+
+
+def _parameters_from_table_evidence(
+    table_evidences: list[dict],
+    existing_params: list[dict] | None = None,
+    supplement_mode: bool = False,
+) -> list[dict]:
+    """Recover or supplement parameter records from structured JATS table evidence.
+
+    When ``supplement_mode`` is True the function acts as a top-up: it only emits
+    records whose (table_id, row_id, column_id) triple is NOT already covered by
+    ``existing_params``, so it can safely be called even when the LLM already
+    produced *some* parameters (e.g. from Table 3 of Dean et al. but not Table 1).
+
+    Sensitivity analysis, exposure, and outcome tables are automatically skipped.
+    Group-header parenthetical units (e.g. "Blood flow to organ (fraction)") are
+    inherited by child rows that have no parenthetical unit of their own.
+    Descriptor-column cells (Variable, Parameter, Symbol) are never parsed for
+    numeric_value, preventing row-IDs like "r1" from poisoning the value field.
     """
     from pk_pipeline.schemas import (
         BiologicalContext,
@@ -321,6 +522,17 @@ def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
     )
     import hashlib
 
+    # Build a set of already-covered (table_id, row_id, col_id) provenance keys
+    covered: set[tuple] = set()
+    if supplement_mode and existing_params:
+        for ep in existing_params:
+            prov = ep.get("provenance") or {}
+            t = prov.get("source_table") or ""
+            r = prov.get("row_id") or ""
+            c = prov.get("column_id") or ""
+            if t and r and c:
+                covered.add((t, r, c))
+
     recovered = []
     species_terms = (
         "nonhuman primate", "cynomolgus monkey", "rhesus macaque",
@@ -330,6 +542,13 @@ def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
     for table in table_evidences or []:
         if not isinstance(table, dict) or table.get("evidence_status") != "success":
             continue
+
+        # Skip non-input tables (sensitivity analysis, exposure, outcomes, etc.)
+        table_title = table.get("title") or table.get("table_id") or ""
+        if _NON_INPUT_TABLE_PATTERNS.search(table_title) or classify_table_role(table) != "model_parameters":
+            logger.debug("_parameters_from_table_evidence: skipping non-input table '%s'", table_title)
+            continue
+
         columns = table.get("columns") or []
         rows = {row.get("row_id"): row for row in table.get("rows") or []}
         cells = table.get("cells") or []
@@ -340,17 +559,23 @@ def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
             col.get("column_id"): [str(part) for part in col.get("path") or []]
             for col in columns
         }
+        # Identify descriptor columns (first column or explicitly labelled Variable/Name/Symbol)
         descriptor_columns = {
             column_id for column_id, path in column_paths.items()
-            if any(token in " ".join(path).lower() for token in ("variable", "parameter", "name", "symbol"))
+            if any(token in " ".join(path).lower()
+                   for token in ("variable", "parameter", "name", "symbol", "description"))
         }
+        # If no labelled descriptor column, treat the first column as the descriptor
+        if not descriptor_columns and columns:
+            descriptor_columns = {columns[0].get("column_id")}
+
+        # Value columns are non-descriptor, non-reference columns
         value_columns = {
             column_id for column_id, path in column_paths.items()
-            if any(token in " ".join(path).lower() for token in ("mean", "estimate", "value", "fitted", "optimized"))
+            if column_id not in descriptor_columns
+            and not any(token in " ".join(path).lower() for token in ("source", "reference", "ref", "method", "notes"))
         }
-        # A table must explicitly look like a model-parameter table. This
-        # prevents toxicity/outcome tables with numeric result columns from
-        # becoming model parameters.
+        # A table must explicitly have value columns
         if not descriptor_columns or not value_columns:
             continue
 
@@ -359,49 +584,113 @@ def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
             cells_by_row.setdefault(cell.get("row_id"), []).append(cell)
 
         table_compounds = [str(c) for c in table.get("subject_compounds") or []]
+
+        # Track the current group-header unit for inheritance
+        current_group_unit: str | None = None
+
         for row_id, row_cells in cells_by_row.items():
             row = rows.get(row_id)
             if not row:
                 continue
             row_path = [str(part) for part in row.get("path") or []]
             row_text = " ".join(row_path)
-            descriptor_cells = [c for c in row_cells if c.get("column_id") in descriptor_columns]
-            if not descriptor_cells:
+
+            # Detect group-header rows: only first-col populated, no numeric value cells
+            desc_cells = [c for c in row_cells if c.get("column_id") in descriptor_columns]
+            val_cells_present = [
+                c for c in row_cells
+                if c.get("column_id") in value_columns
+                and c.get("numeric_value") is not None
+            ]
+            if desc_cells and not val_cells_present:
+                # This is a group-header row — extract its unit for child rows
+                gh_text = str(desc_cells[0].get("text") or "")
+                gu = _group_header_unit(gh_text)
+                if gu:
+                    current_group_unit = gu
+                continue  # group headers yield no parameter records themselves
+
+            if not desc_cells:
                 continue
-            # Prefer the descriptive cell over a short symbol such as BW.
-            parameter_name = max((str(c.get("text") or "").strip() for c in descriptor_cells), key=len, default="")
+
+            # Prefer the longer descriptive label over short symbol (e.g. BW)
+            # IMPORTANT: Do NOT rely on numeric_value of descriptor cells — those
+            # cells contain labels like 'r1', 'BW', etc., not real numbers.
+            parameter_name = max(
+                (str(c.get("text") or "").strip() for c in desc_cells), key=len, default=""
+            )
             if not parameter_name:
                 continue
-            symbol = min((str(c.get("text") or "").strip() for c in descriptor_cells), key=len, default=None)
+            symbol = min(
+                (str(c.get("text") or "").strip() for c in desc_cells), key=len, default=None
+            )
             if symbol == parameter_name:
                 symbol = None
-            unit = _unit_from_parameter_name(parameter_name)
-            species = next((term for term in species_terms if re.search(rf"\b{re.escape(term)}\b", row_text, re.I)), None)
+
+            # Unit priority: (1) parenthetical in name, (2) inherited group-header unit
+            unit = _unit_from_parameter_name(parameter_name) or current_group_unit
+            species = next(
+                (term for term in species_terms if re.search(rf"\b{re.escape(term)}\b", row_text, re.I)),
+                None,
+            )
 
             for cell in row_cells:
                 column_id = cell.get("column_id")
-                value = cell.get("numeric_value")
-                if column_id not in value_columns or value is None:
+                # Skip descriptor cells — they are labels, not values
+                if column_id in descriptor_columns:
                     continue
+                if column_id not in value_columns:
+                    continue
+                value = cell.get("numeric_value")
+                val_text = str(cell.get("text") or "").strip()
+                m_range = RANGE_CELL_RE.match(val_text)
+                if value is None and m_range:
+                    try:
+                        value = float(m_range.group(1))
+                    except ValueError:
+                        pass
+                if value is None:
+                    continue
+
+                # Supplement-mode gate: skip if this cell already covered by LLM extraction
+                t_id = table.get("table_id") or ""
+                if supplement_mode and (t_id, row_id, column_id) in covered:
+                    continue
+
                 col_path = column_paths.get(column_id, [])
                 header_text = " ".join(col_path)
-                compound = next((c for c in table_compounds if re.search(rf"\b{re.escape(c)}\b", header_text, re.I)), None)
+                all_compounds = list(table_compounds) + [
+                    str(c) for c in (table.get("subject_compounds") or [])
+                ] + ["PFOS", "PFOA", "PFHxS", "PFBS", "PFNA", "PFDA", "GenX", "HFPO-DA", "DINCH", "MINCH", "Riluzole"]
+                compound = next(
+                    (c for c in all_compounds if re.search(rf"\b{re.escape(c)}\b", header_text, re.I)),
+                    None,
+                )
                 if compound is None and len(table_compounds) == 1:
                     compound = table_compounds[0]
-                lower, upper = _parse_cell_uncertainty(str(cell.get("text") or ""))
+                lower, upper = _parse_cell_uncertainty(val_text)
+                if lower is None and m_range:
+                    try:
+                        lower = float(m_range.group(1))
+                        upper = float(m_range.group(2))
+                    except ValueError:
+                        pass
                 source_quote = " | ".join([
-                    str(table.get("title") or table.get("table_id") or ""),
+                    str(table_title),
                     " > ".join(row_path),
                     " > ".join(col_path),
                     str(cell.get("text") or ""),
                 ])
                 source_cell = next(
-                    (c for c in row_cells if "source" in " ".join(column_paths.get(c.get("column_id"), [])).lower()),
+                    (c for c in row_cells
+                     if "source" in " ".join(column_paths.get(c.get("column_id"), [])).lower()),
                     None,
                 )
                 source_text = str(source_cell.get("text") or "").lower() if source_cell else ""
                 status = "fitted" if "optim" in source_text else "literature"
-                identity = f"{table.get('table_id')}|{row_id}|{column_id}|{parameter_name}|{compound}|{species}".lower()
+                identity = (
+                    f"{t_id}|{row_id}|{column_id}|{parameter_name}|{compound}|{species}".lower()
+                )
                 parameter = ExtractedParameter(
                     parameter_id=f"param_{hashlib.sha256(identity.encode('utf-8')).hexdigest()[:16]}",
                     parameter_name_original=parameter_name,
@@ -415,7 +704,7 @@ def _parameters_from_table_evidence(table_evidences: list[dict]) -> list[dict]:
                         unit_standardized=unit,
                     ),
                     provenance=Provenance(
-                        source_table=table.get("table_id"),
+                        source_table=t_id,
                         row_id=row_id,
                         column_id=column_id,
                         cell_id=cell.get("cell_id"),
@@ -559,8 +848,12 @@ def post_process_document(document, pdf_path):
     # XML table parsing can be completely successful while a constrained LLM
     # response returns an empty parameter_blocks list.  Do not silently emit a
     # superficially successful document with no model parameters in that case.
-    if not document.get("model_parameters"):
-        recovered = _parameters_from_table_evidence(document.get("table_evidence", []))
+    existing_params = document.get("model_parameters") or []
+    if not existing_params:
+        recovered = _parameters_from_table_evidence(
+            document.get("table_evidence", []),
+            supplement_mode=False,
+        )
         if recovered:
             document["model_parameters"] = recovered
             logger.warning(
@@ -573,6 +866,22 @@ def post_process_document(document, pdf_path):
                 "LLM extraction returned no model parameters and no safe "
                 "parameter-table fallback was available."
             )
+    else:
+        # Supplement mode: top-up with any cells the LLM missed (e.g. entire
+        # tables that were truncated due to token limits or validation failures).
+        supplemental = _parameters_from_table_evidence(
+            document.get("table_evidence", []),
+            existing_params=existing_params,
+            supplement_mode=True,
+        )
+        if supplemental:
+            logger.info(
+                "Table-evidence supplement: adding %d cell-backed records "
+                "not covered by LLM extraction.",
+                len(supplemental),
+            )
+            print(f"  -> [Supplement] Adding {len(supplemental)} cell-backed params missed by LLM extraction.")
+            document["model_parameters"] = existing_params + supplemental
     # 1. Clean up parameters with no quantitative value, and split multi-formulation comma-separated values
     new_params = []
     for p in document.get("model_parameters", []):
@@ -765,6 +1074,36 @@ def post_process_document(document, pdf_path):
     document["model_parameters"] = apply_pbpk_inheritance(document.get("model_parameters", []))
     document["model_parameters"] = deduplicate_and_format_records(document.get("model_parameters", []))
 
+    # 2.6 Unit normalization, time-varying ranges, and exact table provenance binding
+    print("  -> Normalizing units, time-varying ranges, and binding exact table provenance...")
+    te_map = {t.get("table_id"): t for t in document.get("table_evidence", []) if isinstance(t, dict)}
+    for p in document.get("model_parameters", []):
+        normalize_parameter_units_and_ranges(p)
+        prov = p.get("provenance") or {}
+        st = prov.get("source_table")
+        if st and st in te_map:
+            bind_exact_table_provenance(p, te_map[st])
+
+    # 2.7 Filter false doses (rate constants mistaken for doses)
+    if document.get("dosing"):
+        document["dosing"] = filter_false_doses(document["dosing"])
+
+    # 2.8 Clean up circular scaling rules and ensure equations_provided is set
+    if document.get("model_structure"):
+        ms = document["model_structure"]
+        rules = ms.get("allometric_scaling_rules") or []
+        fixed_rules = []
+        for r in rules:
+            if re.search(r"^\s*QCC\s*=\s*QCC\s*\*", r, re.I):
+                fixed_rules.append("Qfil = QfilC * QCC * BW^0.74")
+            else:
+                fixed_rules.append(r)
+        if fixed_rules:
+            ms["allometric_scaling_rules"] = fixed_rules
+        if ms.get("allometric_scaling_rules") or ms.get("connections"):
+            if not ms.get("equations_provided") or ms.get("equations_provided") == "none":
+                ms["equations_provided"] = "diagram"
+
     # 3. Classify each parameter using the 3-class taxonomy
     print("  -> Classifying parameters into physiological / biochemical / compound_specific...")
     for p in document.get("model_parameters", []):
@@ -891,6 +1230,8 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
 
             diagram_chunks = [c for c in figure_chunks if c.get("is_diagram")]
             caption_chunks = [c for c in figure_chunks if not c.get("is_diagram")]
+            if caption_chunks:
+                print(f"  -> Skipped {len(caption_chunks)} non-diagram figure captions (result plots contain no model parameters).")
 
             # ONLY extract images for chunks that are strictly diagrams
             if diagram_chunks:
@@ -938,11 +1279,11 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 # Keep only diagrams that have a successfully loaded PIL Image
                 diagram_chunks = [c for c in diagram_chunks if "image_obj" in c]
 
-            n_text    = len(text_chunks) + len(caption_chunks)
+            n_text    = len(text_chunks)
             n_visual  = len(diagram_chunks)
             print(f"  -> {n_text} text chunks + {n_visual} visual figure chunks queued for LLM.")
 
-            if text_chunks or caption_chunks or diagram_chunks:
+            if text_chunks or diagram_chunks:
                 print(f"Step 1/1: Running Extraction ({n_text} text + {n_visual} visual)...")
                 # Use concurrency 3 to ensure smooth, non-congested continuous batching on SGLang
                 sem = asyncio.Semaphore(3)
@@ -957,12 +1298,20 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         return cached
                     async with sem:
                         te = chunk.get("table_evidence")
-                        page = await get_extractor().extract_from_text(
-                            chunk["content"], 
-                            role=chunk["role"], 
-                            chunk_title=chunk.get("title", ""),
-                            table_evidence=te
-                        )
+                        try:
+                            page = await get_extractor().extract_from_text(
+                                chunk["content"], 
+                                role=chunk["role"], 
+                                chunk_title=chunk.get("title", ""),
+                                table_evidence=te
+                            )
+                        except Exception as e:
+                            logger.warning(f"Extract from text error for '{chunk_title}': {e}")
+                            if te:
+                                logger.info(f"Fallback to ExtractedPage with table_evidence for '{chunk_title}'.")
+                                page = ExtractedPage(table_evidence=[te])
+                            else:
+                                raise e
                         _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
                         return page
 
@@ -986,7 +1335,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         return page
 
                 tasks = (
-                    [bound_extract_text(c, idx) for idx, c in enumerate(text_chunks + caption_chunks)]
+                    [bound_extract_text(c, idx) for idx, c in enumerate(text_chunks)]
                     + [bound_extract_image(c, idx) for idx, c in enumerate(diagram_chunks)]
                 )
                 results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -1076,422 +1425,205 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         print("  -> Could not extract DOI or Title from local PDF. Proceeding with local file.")
     # -----------------------------
     
-    # 1. Look for MinerU Output
-    print("Step 1/3: Locating MinerU structured layout output...")
-    logger.debug("Step 1: MinerU Parsing")
+    # Extract layout, tables, and narrative via PyMuPDF4LLM + TATR
+    print("Step 1/2: Extracting layout, text, tables, and figures with PyMuPDF4LLM & Table Transformer...")
+    logger.debug("PyMuPDF4LLM extraction.")
     
-    pdf_dir = os.path.dirname(pdf_path)
-    pdf_stem = os.path.splitext(os.path.basename(pdf_path))[0]
+    import pymupdf4llm
+    from PIL import Image, ImageDraw
+    import io
     
-    mineru_json_path = None
-    candidates = [
-        os.path.join(pdf_dir, pdf_stem, "auto", "content_list.json"),
-        os.path.join(pdf_dir, pdf_stem, "auto", "middle.json"),
-        os.path.join(pdf_dir, "output", pdf_stem, "auto", "content_list.json"),
-        os.path.join(pdf_dir, "output", pdf_stem, "auto", "middle.json"),
-        os.path.join(pdf_dir, pdf_stem, "content_list.json"),
-        os.path.join(pdf_dir, pdf_stem, "middle.json")
-    ]
-    for c in candidates:
-        if os.path.exists(c):
-            mineru_json_path = c
-            break
-            
-    if not mineru_json_path:
-        print(f"  -> MinerU structured output not found. Attempting PyMuPDF4LLM fallback extraction...")
-        logger.debug("Falling back to PyMuPDF4LLM extraction.")
-        
-        import pymupdf4llm
-        from PIL import Image, ImageDraw
-        import io
-        
-        md_chunks = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)
-        pdf_doc = pymupdf.open(pdf_path)
-        
-        import torch
-        t_processor, t_model = get_tatr()
-        
-        llm_payloads = []
-        
-        for i, chunk in enumerate(md_chunks):
-            page_num = i + 1
-            text = chunk.get("text", "")
-            page = pdf_doc[i]
-            has_image = len(page.get_images()) > 0
-            
-            pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
-            full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
-            
-            # --- TATR Detection on EVERY page ---
-            inputs = t_processor(images=full_page_img, return_tensors="pt")
-            with torch.no_grad():
-                outputs = t_model(**inputs)
-                
-            target_sizes = torch.tensor([full_page_img.size[::-1]])
-            results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
-            
-            table_boxes = []
-            for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
-                if label.item() == 0:
-                    table_boxes.append(box.tolist())
-                    
-            if table_boxes:
-                # --- Crop each detected table box individually ---
-                # Padding (in pixels at 300 DPI render) to retain sub-headers / footnotes
-                PAD = 30
-                img_w, img_h = full_page_img.size
-
-                from pk_pipeline.ingestion.xml_parser import is_valid_pbpk_input_table, preprocess_table_dataframe
-                pdf_tables = None
-                try:
-                    pdf_tables = page.find_tables()
-                except Exception as e:
-                    logger.debug(f"page.find_tables() note: {e}")
-
-                for t_idx, box in enumerate(table_boxes):
-                    x_min, y_min, x_max, y_max = box
-                    # Apply padding, clamped to image bounds
-                    cx0 = max(0, int(x_min) - PAD)
-                    cy0 = max(0, int(y_min) - PAD)
-                    cx1 = min(img_w, int(x_max) + PAD)
-                    cy1 = min(img_h, int(y_max) + PAD)
-
-                    table_crop_img = full_page_img.crop((cx0, cy0, cx1, cy1))
-
-                    table_context = text  # fallback: native text from pymupdf4llm
-
-                    # Try to match with PyMuPDF find_tables DataFrame
-                    matched_preprocessed_md = None
-                    if pdf_tables and pdf_tables.tables:
-                        for p_tab in pdf_tables.tables:
-                            try:
-                                p_df = p_tab.to_pandas()
-                                tab_rect = p_tab.bbox
-                                caption_rect = pymupdf.Rect(0, max(0, tab_rect[1] - 80), page.rect.width, tab_rect[1])
-                                footnotes_rect = pymupdf.Rect(0, tab_rect[3], page.rect.width, min(page.rect.height, tab_rect[3] + 120))
-                                p_caption = page.get_text("text", clip=caption_rect).strip()
-                                p_footnotes = page.get_text("text", clip=footnotes_rect).strip()
-
-                                # Gate out non-input tables (sensitivity analysis, POD/HED, exposure)
-                                if not is_valid_pbpk_input_table(p_caption, p_df.to_string()):
-                                    print(f"  -> [Table Gating] Gated out non-input table on Page {page_num}: '{p_caption[:40]}'")
-                                    continue
-
-                                matched_preprocessed_md = preprocess_table_dataframe(p_df, caption=p_caption, footnotes=p_footnotes)
-                                break
-                            except Exception as e:
-                                logger.debug(f"PyMuPDF find_tables error: {e}")
-
-                    if use_wevisdoc:
-                        try:
-                            print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} Table {t_idx+1}/{len(table_boxes)} (crop {cx1-cx0}x{cy1-cy0}px)...")
-                            wevisdoc_md = get_wevisdoc().parse_image(table_crop_img)
-                            table_context = wevisdoc_md
-                            wevisdoc_stats["pages_transcribed"] += 1
-                            print(f"  -> [WeVisDoc-4B] Page {page_num} Table {t_idx+1} transcribed ({len(wevisdoc_md)} chars).")
-                        except Exception as e:
-                            print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
-                            table_context = text
-
-                    if matched_preprocessed_md:
-                        table_context = matched_preprocessed_md + "\n\n" + table_context
-
-                    llm_payloads.append({
-                        "role": "page_with_table",
-                        "page": page_num,
-                        "table_index": t_idx + 1,
-                        "img_obj": table_crop_img,        # tight crop, not full page
-                        "markdown_context": table_context,
-                    })
-            elif has_image:
-                laya_stats["evaluated"] += 1
-                keep, prob, mtype = get_laya().is_pk_relevant(text)
-                if keep:
-                    laya_stats["retained"] += 1
-                    llm_payloads.append({
-                        "role": "page_with_figure",
-                        "page": page_num,
-                        "img_obj": full_page_img,
-                        "markdown_context": text,
-                    })
-                else:
-                    laya_stats["discarded"] += 1
-                    print(f"  -> [Laya Filter] Page {page_num} figure skipped (no PK model or parameters, p={prob:.2f})")
-            elif len(text.strip()) > 50:
-                laya_stats["evaluated"] += 1
-                keep, prob, mtype = get_laya().is_pk_relevant(text)
-                if keep:
-                    laya_stats["retained"] += 1
-                    llm_payloads.append({
-                        "role": "narrative_xml",
-                        "page": page_num,
-                        "markdown_context": text.strip()
-                    })
-                else:
-                    laya_stats["discarded"] += 1
-                    print(f"  -> [Laya Filter] Page {page_num} narrative skipped (no PK parameters detected, p={prob:.2f})")
-            
-        print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks. Running LLM extraction concurrently...")
-        
-        sem = asyncio.Semaphore(5)
-        async def bound_extract(p, idx):
-            role = p.get("role")
-            if role == "page_with_table":
-                t_idx = p.get("table_index", 1)
-                chunk_title = f"Page {p['page']} Table {t_idx}"
-                chunk_key = f"pdf_table_p{p['page']}_t{t_idx}_{idx}"
-                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
-                if cached:
-                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
-                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
-                    return cached
-                async with sem:
-                    table_evidence = await get_extractor().extract_table_evidence(
-                        p["img_obj"],
-                        markdown_context=p["markdown_context"],
-                        chunk_title=chunk_title
-                    )
-                    page = await get_extractor().extract_data(
-                        p["img_obj"],
-                        role="table_crop",
-                        evidence_text=p["markdown_context"],
-                        chunk_title=chunk_title,
-                        table_evidence=table_evidence
-                    )
-                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
-                    return page
-            elif role == "page_with_figure":
-                chunk_title = f"Page {p['page']} figure"
-                chunk_key = f"pdf_figure_p{p['page']}_{idx}"
-                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
-                if cached:
-                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
-                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
-                    return cached
-                async with sem:
-                    page = await get_extractor().extract_data(
-                        p["img_obj"],
-                        role="full_page",
-                        evidence_text=p["markdown_context"],
-                        chunk_title=chunk_title
-                    )
-                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
-                    return page
-            else:
-                chunk_title = f"Page {p['page']} Text"
-                chunk_key = f"pdf_narrative_p{p['page']}_{idx}"
-                cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
-                if cached:
-                    n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
-                    print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
-                    return cached
-                async with sem:
-                    page = await get_extractor().extract_from_text(
-                        p["markdown_context"],
-                        role=role,
-                        chunk_title=chunk_title
-                    )
-                    _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
-                    return page
-                    
-        tasks = [bound_extract(p, idx) for idx, p in enumerate(llm_payloads)]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-        
-        final_document = {
-            "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
-            "model_classification": {"model_type": "not_applicable", "evidence_quote": None},
-            "model_context": None,
-            "biological_basis": None,
-            "model_structure": None,
-            "metabolic_pathways": [],
-            "model_parameters": [],
-            "observed_data": [],
-            "simulated_data": [],
-            "formulation_characterization": [],
-            "qualitative_findings": [],
-            "parameter_mentions_without_values": [],
-            "table_evidence": [],
-        }
-        
-        for chunk_idx, res_item in enumerate(results):
-            if isinstance(res_item, Exception):
-                print(f"Warning: Page {chunk_idx+1} failed extraction: {res_item}")
-            else:
-                extracted_page = res_item
-                if extracted_page and extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
-                    if final_document["model_classification"]["model_type"] == "not_applicable":
-                        final_document["model_classification"] = extracted_page.model_classification.model_dump()
-                if extracted_page and extracted_page.model_context and not final_document["model_context"]:
-                    final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
-                _merge_biological_basis(final_document, extracted_page)
-                _merge_model_structure(final_document, extracted_page)
-                if extracted_page and extracted_page.metabolic_pathways:
-                    final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
-                if extracted_page and extracted_page.parameter_blocks:
-                    flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
-                    final_document["model_parameters"].extend(flat_params)
-                if extracted_page and extracted_page.observed_data:
-                    final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
-                if extracted_page and extracted_page.simulated_data:
-                    final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
-                if extracted_page and extracted_page.formulation_characterization:
-                    final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
-                if extracted_page and extracted_page.qualitative_findings:
-                    final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
-                if extracted_page and extracted_page.parameter_mentions_without_values:
-                    final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
-                if extracted_page and extracted_page.table_evidence:
-                    final_document["table_evidence"].extend([t.model_dump() for t in extracted_page.table_evidence])
-                    
-        if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
-            final_document["model_classification"]["model_type"] = doc_triage_type
-            final_document["model_classification"]["evidence_quote"] = "Classified via Laya System-1 triage."
-            
-        final_document["laya_filter_summary"] = {
-            "model_type_triage": doc_triage_type,
-            "evaluated_chunks": laya_stats["evaluated"],
-            "discarded_chunks": laya_stats["discarded"],
-            "retained_chunks": laya_stats["retained"]
-        }
-        print_laya_summary(laya_stats, doc_triage_type)
-
-        final_document["wevisdoc_summary"] = {
-            "enabled": use_wevisdoc,
-            "pages_transcribed": wevisdoc_stats["pages_transcribed"]
-        }
-        print_wevisdoc_summary(wevisdoc_stats)
-
-        logger.info("Successfully completed PyMuPDF fallback extraction.")
-        processed = post_process_document(final_document, pdf_path)
-        if verify:
-            from pk_pipeline.verifier import verify_document
-            verify_document(processed)
-        return finalize_extracted_document(processed)
-        
-    print(f"Found MinerU structured output: {mineru_json_path}")
-    
-    with open(mineru_json_path, "r", encoding="utf-8") as f:
-        mineru_data = json.load(f)
-        
-    # Handle both VLM backend (list of blocks) and Pipeline backend (dict with pdf_info)
-    blocks = []
-    if isinstance(mineru_data, list):
-        blocks = mineru_data
-    elif isinstance(mineru_data, dict) and "pdf_info" in mineru_data:
-        for page in mineru_data["pdf_info"]:
-            blocks.extend(page.get("blocks", []))
-    else:
-        # Generic fallback if structure differs slightly
-        blocks = mineru_data.get("blocks", [])
-
-    print(f"MinerU identified {len(blocks)} total document blocks.")
-
-    # 2. Filter blocks for Tables and Figures using Relevance Keywords
-    print("Step 2/3: Filtering for Pharmacokinetic tables and figures...")
-    logger.debug("Step 2: Candidate Relevance Filtering")
-    
-    table_keywords = ["pharmacokinetic", "parameter", "pk", "clearance", "volume of distribution", "half-life"]
-    if target_compounds:
-        table_keywords.extend([c.lower() for c in target_compounds])
-        
-    diagram_keywords = ["pharmacokinetic", "model structure", "diagram", "mass balance", "pbpk"]
-    
+    md_chunks = pymupdf4llm.to_markdown(pdf_path, page_chunks=True)
     pdf_doc = pymupdf.open(pdf_path)
-    vlm_inputs = []
     
-    def normalize_bbox(bbox, page_width, page_height):
-        # MinerU bboxes might be [x0, y0, x1, y1]
-        return bbox
+    import torch
+    t_processor, t_model = get_tatr()
+    
+    llm_payloads = []
+    
+    for i, chunk in enumerate(md_chunks):
+        page_num = i + 1
+        text = chunk.get("text", "")
+        page = pdf_doc[i]
+        has_image = len(page.get_images()) > 0
         
-    for block in blocks:
-        block_type = block.get("type", "")
-        if block_type not in ["table", "image", "figure"]:
-            continue
+        pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72))
+        full_page_img = Image.open(io.BytesIO(pix.tobytes())).convert("RGB")
+        
+        # --- TATR Detection on EVERY page ---
+        inputs = t_processor(images=full_page_img, return_tensors="pt")
+        with torch.no_grad():
+            outputs = t_model(**inputs)
             
-        # Extract metadata flexibly
-        # VLM backend might use 'page_idx', pipeline might use 'page_no'
-        page_idx = block.get("page_idx", block.get("page_no", 0))
-        if isinstance(page_idx, str):
-            page_idx = int(page_idx)
-            
-        bbox = block.get("bbox")
-        if not bbox or len(bbox) != 4:
-            continue
-            
-        # Extract evidence text via PyMuPDF around the bbox
-        try:
-            page = pdf_doc[page_idx]
-        except IndexError:
-            # MinerU might 1-index pages?
-            try:
-                page = pdf_doc[page_idx - 1]
-                page_idx -= 1
-            except IndexError:
-                continue
-                
-        # Get caption from MinerU or fallback to extracting text directly around bbox
-        caption = block.get("text", block.get("caption", "")).lower()
+        target_sizes = torch.tensor([full_page_img.size[::-1]])
+        results = t_processor.post_process_object_detection(outputs, threshold=0.7, target_sizes=target_sizes)[0]
         
-        # PyMuPDF uses points. We assume MinerU bbox is in points. 
-        # If it's normalized, this will fail, but we assume points for now.
-        x0, y0, x1, y1 = bbox
-        rect = pymupdf.Rect(x0, y0, x1, y1)
-        evidence_text = page.get_text("text", clip=rect)
-        
-        # Expand rect slightly to capture nearby caption if MinerU missed it
-        expanded_rect = pymupdf.Rect(max(0, x0 - 20), max(0, y0 - 40), x1 + 20, y1 + 40)
-        surrounding_text = page.get_text("text", clip=expanded_rect).lower()
-        
-        search_text = caption + " " + surrounding_text
-        
-        if block_type == "table":
-            if any(kw in search_text for kw in table_keywords):
-                # We have a relevant table!
-                # Render the crop at 300 DPI
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72), clip=rect)
-                from PIL import Image
-                import io
-                img = Image.open(io.BytesIO(pix.tobytes()))
+        table_boxes = []
+        for score, label, box in zip(results["scores"], results["labels"], results["boxes"]):
+            if label.item() == 0:
+                table_boxes.append(box.tolist())
                 
-                vlm_inputs.append({
-                    "img": img, 
-                    "page_index": page_idx + 1, 
-                    "role": "table_crop", 
-                    "evidence_text": evidence_text
-                })
-                
-        elif block_type in ["image", "figure"]:
-            if any(kw in search_text for kw in diagram_keywords):
-                # Render the crop at 300 DPI
-                pix = page.get_pixmap(matrix=pymupdf.Matrix(300/72, 300/72), clip=rect)
-                from PIL import Image
-                import io
-                crop_img = Image.open(io.BytesIO(pix.tobytes()))
-                
-                # We optionally send the full page as well if needed, but for now we send the precise crop
-                # The user's plan: "Primary image: a fresh crop... Secondary image: full page (optional)"
-                # To keep it simple and avoid modifying SGLang extractor signature, we pass the crop.
-                vlm_inputs.append({
-                    "img": crop_img, 
-                    "page_index": page_idx + 1, 
-                    "role": "figure_crop", 
-                    "evidence_text": surrounding_text,
-                    "chunk_title": caption[:50]
-                })
+        if table_boxes:
+            # --- Crop each detected table box individually ---
+            # Padding (in pixels at 300 DPI render) to retain sub-headers / footnotes
+            PAD = 30
+            img_w, img_h = full_page_img.size
 
-    print(f"Queued {len(vlm_inputs)} filtered regions for LLM extraction.")
+            from pk_pipeline.ingestion.xml_parser import is_valid_pbpk_input_table, preprocess_table_dataframe
+            pdf_tables = None
+            try:
+                pdf_tables = page.find_tables()
+            except Exception as e:
+                logger.debug(f"page.find_tables() note: {e}")
+
+            for t_idx, box in enumerate(table_boxes):
+                x_min, y_min, x_max, y_max = box
+                # Apply padding, clamped to image bounds
+                cx0 = max(0, int(x_min) - PAD)
+                cy0 = max(0, int(y_min) - PAD)
+                cx1 = min(img_w, int(x_max) + PAD)
+                cy1 = min(img_h, int(y_max) + PAD)
+
+                table_crop_img = full_page_img.crop((cx0, cy0, cx1, cy1))
+
+                table_context = text  # fallback: native text from pymupdf4llm
+
+                # Try to match with PyMuPDF find_tables DataFrame
+                matched_preprocessed_md = None
+                if pdf_tables and pdf_tables.tables:
+                    for p_tab in pdf_tables.tables:
+                        try:
+                            p_df = p_tab.to_pandas()
+                            tab_rect = p_tab.bbox
+                            caption_rect = pymupdf.Rect(0, max(0, tab_rect[1] - 80), page.rect.width, tab_rect[1])
+                            footnotes_rect = pymupdf.Rect(0, tab_rect[3], page.rect.width, min(page.rect.height, tab_rect[3] + 120))
+                            p_caption = page.get_text("text", clip=caption_rect).strip()
+                            p_footnotes = page.get_text("text", clip=footnotes_rect).strip()
+
+                            # Gate out non-input tables (sensitivity analysis, POD/HED, exposure)
+                            if not is_valid_pbpk_input_table(p_caption, p_df.to_string()):
+                                print(f"  -> [Table Gating] Gated out non-input table on Page {page_num}: '{p_caption[:40]}'")
+                                continue
+
+                            matched_preprocessed_md = preprocess_table_dataframe(p_df, caption=p_caption, footnotes=p_footnotes)
+                            break
+                        except Exception as e:
+                            logger.debug(f"PyMuPDF find_tables error: {e}")
+
+                if use_wevisdoc:
+                    try:
+                        print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} Table {t_idx+1}/{len(table_boxes)} (crop {cx1-cx0}x{cy1-cy0}px)...")
+                        wevisdoc_md = get_wevisdoc().parse_image(table_crop_img)
+                        table_context = wevisdoc_md
+                        wevisdoc_stats["pages_transcribed"] += 1
+                        print(f"  -> [WeVisDoc-4B] Page {page_num} Table {t_idx+1} transcribed ({len(wevisdoc_md)} chars).")
+                    except Exception as e:
+                        print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
+                        table_context = text
+
+                if matched_preprocessed_md:
+                    table_context = matched_preprocessed_md + "\n\n" + table_context
+
+                llm_payloads.append({
+                    "role": "page_with_table",
+                    "page": page_num,
+                    "table_index": t_idx + 1,
+                    "img_obj": table_crop_img,        # tight crop, not full page
+                    "markdown_context": table_context,
+                })
+        elif has_image:
+            laya_stats["evaluated"] += 1
+            keep, prob, mtype = get_laya().is_pk_relevant(text)
+            if keep:
+                laya_stats["retained"] += 1
+                llm_payloads.append({
+                    "role": "page_with_figure",
+                    "page": page_num,
+                    "img_obj": full_page_img,
+                    "markdown_context": text,
+                })
+            else:
+                laya_stats["discarded"] += 1
+                print(f"  -> [Laya Filter] Page {page_num} figure skipped (no PK model or parameters, p={prob:.2f})")
+        elif len(text.strip()) > 50:
+            laya_stats["evaluated"] += 1
+            keep, prob, mtype = get_laya().is_pk_relevant(text)
+            if keep:
+                laya_stats["retained"] += 1
+                llm_payloads.append({
+                    "role": "narrative_xml",
+                    "page": page_num,
+                    "markdown_context": text.strip()
+                })
+            else:
+                laya_stats["discarded"] += 1
+                print(f"  -> [Laya Filter] Page {page_num} narrative skipped (no PK parameters detected, p={prob:.2f})")
+        
+    print(f"  -> Separated {len(md_chunks)} pages into {len(llm_payloads)} distinct chunks. Running LLM extraction concurrently...")
     
-    # Save images to a debug folder for inspection
-    debug_dir = os.path.join(pdf_dir, f"{pdf_stem}_vlm_inputs")
-    os.makedirs(debug_dir, exist_ok=True)
-    for idx, item in enumerate(vlm_inputs):
-        img_path = os.path.join(debug_dir, f"candidate_{idx:02d}_page_{item['page_index']}_{item['role']}.png")
-        item['img'].save(img_path)
-    print(f"Saved {len(vlm_inputs)} VLM input images to: {debug_dir}")
-    
-    # 3. Extract data using SGLang with schema enforcement
-    print(f"Step 3/3: Running VLM extraction on {len(vlm_inputs)} images concurrently...")
-    logger.debug("Step 3: Targeted Extraction across multiple pages")
+    sem = asyncio.Semaphore(5)
+    async def bound_extract(p, idx):
+        role = p.get("role")
+        if role == "page_with_table":
+            t_idx = p.get("table_index", 1)
+            chunk_title = f"Page {p['page']} Table {t_idx}"
+            chunk_key = f"pdf_table_p{p['page']}_t{t_idx}_{idx}"
+            cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+            if cached:
+                n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                return cached
+            async with sem:
+                table_evidence = await get_extractor().extract_table_evidence(
+                    p["img_obj"],
+                    markdown_context=p["markdown_context"],
+                    chunk_title=chunk_title
+                )
+                page = await get_extractor().extract_data(
+                    p["img_obj"],
+                    role="table_crop",
+                    evidence_text=p["markdown_context"],
+                    chunk_title=chunk_title,
+                    table_evidence=table_evidence
+                )
+                _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                return page
+        elif role == "page_with_figure":
+            chunk_title = f"Page {p['page']} figure"
+            chunk_key = f"pdf_figure_p{p['page']}_{idx}"
+            cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+            if cached:
+                n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                return cached
+            async with sem:
+                page = await get_extractor().extract_data(
+                    p["img_obj"],
+                    role="full_page",
+                    evidence_text=p["markdown_context"],
+                    chunk_title=chunk_title
+                )
+                _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                return page
+        else:
+            chunk_title = f"Page {p['page']} Text"
+            chunk_key = f"pdf_narrative_p{p['page']}_{idx}"
+            cached = _load_chunk_checkpoint(checkpoint_dir, chunk_key)
+            if cached:
+                n_p = sum(len(b.parameters) for b in cached.parameter_blocks or [])
+                print(f"  -> [Resume] Loaded cached extraction for '{chunk_title}' ({n_p} params)")
+                return cached
+            async with sem:
+                page = await get_extractor().extract_from_text(
+                    p["markdown_context"],
+                    role=role,
+                    chunk_title=chunk_title
+                )
+                _save_chunk_checkpoint(checkpoint_dir, chunk_key, page)
+                return page
+                
+    tasks = [bound_extract(p, idx) for idx, p in enumerate(llm_payloads)]
+    results = await asyncio.gather(*tasks, return_exceptions=True)
     
     final_document = {
         "page_metadata": {"title": None, "authors": None, "journal": None, "year": None},
@@ -1506,85 +1638,71 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         "formulation_characterization": [],
         "qualitative_findings": [],
         "parameter_mentions_without_values": [],
-        "dosing": []
+        "table_evidence": [],
     }
-    # Use a Semaphore to limit concurrency to 2 pages at a time to prevent GPU OOM deadlocks
-    sem = asyncio.Semaphore(2)
-    async def bound_extract(item):
-        async with sem:
-            return await get_extractor().extract_data(item["img"], role=item["role"], evidence_text=item.get("evidence_text", ""))
-            
-    tasks = [bound_extract(item) for item in vlm_inputs]
-    extracted_pages = await asyncio.gather(*tasks)
     
-    for extracted_page in extracted_pages:
+    for chunk_idx, res_item in enumerate(results):
+        if isinstance(res_item, Exception):
+            print(f"Warning: Page {chunk_idx+1} failed extraction: {res_item}")
+        else:
+            extracted_page = res_item
+            if extracted_page and extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
+                if final_document["model_classification"]["model_type"] == "not_applicable":
+                    final_document["model_classification"] = extracted_page.model_classification.model_dump()
+            if extracted_page and extracted_page.model_context and not final_document["model_context"]:
+                final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
+            _merge_biological_basis(final_document, extracted_page)
+            _merge_model_structure(final_document, extracted_page)
+            if extracted_page and extracted_page.metabolic_pathways:
+                final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
+            if extracted_page and extracted_page.parameter_blocks:
+                flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
+                final_document["model_parameters"].extend(flat_params)
+            if extracted_page and extracted_page.observed_data:
+                final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
+            if extracted_page and extracted_page.simulated_data:
+                final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
+            if extracted_page and extracted_page.formulation_characterization:
+                final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
+            if extracted_page and extracted_page.qualitative_findings:
+                final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
+            if extracted_page and extracted_page.parameter_mentions_without_values:
+                final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
+            if extracted_page and extracted_page.table_evidence:
+                final_document["table_evidence"].extend([t.model_dump() for t in extracted_page.table_evidence])
+                
+    if final_document["model_classification"]["model_type"] == "not_applicable" and doc_triage_type in ["pbpk", "compartmental", "nca"]:
+        final_document["model_classification"]["model_type"] = doc_triage_type
+        final_document["model_classification"]["evidence_quote"] = "Classified via Laya System-1 triage."
         
-        # Merge metadata
-        if extracted_page.page_metadata:
-            pm = extracted_page.page_metadata
-            if not final_document["page_metadata"]["title"] and pm.title:
-                final_document["page_metadata"]["title"] = pm.title
-            if not final_document["page_metadata"]["authors"] and pm.authors:
-                final_document["page_metadata"]["authors"] = pm.authors
-            if not final_document["page_metadata"]["journal"] and pm.journal:
-                final_document["page_metadata"]["journal"] = pm.journal
-            if not final_document["page_metadata"]["year"] and pm.year:
-                final_document["page_metadata"]["year"] = pm.year
-        
-        # Merge model_classification (take the first meaningful one)
-        if extracted_page.model_classification and extracted_page.model_classification.model_type != "not_applicable":
-            if final_document["model_classification"]["model_type"] == "not_applicable":
-                final_document["model_classification"] = extracted_page.model_classification.model_dump()
-        
-        # Merge model_context, biological_basis, structure, pathways
-        if extracted_page.model_context and not final_document["model_context"]:
-            final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
-        _merge_biological_basis(final_document, extracted_page)
-        _merge_model_structure(final_document, extracted_page)
-        if extracted_page.metabolic_pathways:
-            final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
-            
-        # Aggregate all parameters
-        if extracted_page.parameter_blocks:
-            flat_params = flatten_parameter_blocks(extracted_page.parameter_blocks)
-            final_document["model_parameters"].extend(flat_params)
-        if extracted_page.observed_data:
-            final_document["observed_data"].extend([r.model_dump() for r in extracted_page.observed_data])
-        if extracted_page.simulated_data:
-            final_document["simulated_data"].extend([r.model_dump() for r in extracted_page.simulated_data])
-        if extracted_page.formulation_characterization:
-            final_document["formulation_characterization"].extend([m.model_dump() for m in extracted_page.formulation_characterization])
-        if extracted_page.qualitative_findings:
-            final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
-        if extracted_page.parameter_mentions_without_values:
-            final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
-            
-    print("Step: Extracting Dosing Events from Methods...")
-    try:
-        doc = pymupdf.open(pdf_path)
-        methods_text = ""
-        for i in range(min(15, len(doc))):
-            methods_text += doc[i].get_text() + "\n"
-        dosing_data = await get_extractor().extract_dosing_from_text(methods_text)
-        if dosing_data and dosing_data.dosing:
-            final_document["dosing"] = [d.model_dump() for d in dosing_data.dosing]
-    except Exception as e:
-        print(f"  -> Failed to extract dosing: {e}")
-    
-    logger.info("Successfully completed extraction pipeline.")
+    final_document["laya_filter_summary"] = {
+        "model_type_triage": doc_triage_type,
+        "evaluated_chunks": laya_stats["evaluated"],
+        "discarded_chunks": laya_stats["discarded"],
+        "retained_chunks": laya_stats["retained"]
+    }
+    print_laya_summary(laya_stats, doc_triage_type)
+
+    final_document["wevisdoc_summary"] = {
+        "enabled": use_wevisdoc,
+        "pages_transcribed": wevisdoc_stats["pages_transcribed"]
+    }
+    print_wevisdoc_summary(wevisdoc_stats)
+
+    logger.info("Successfully completed PyMuPDF fallback extraction.")
     processed = post_process_document(final_document, pdf_path)
     if verify:
         from pk_pipeline.verifier import verify_document
         verify_document(processed)
-        
     print("Step: Running Tier 2 Evaluation Pass...")
     try:
         judgments = await get_extractor().evaluate_extracted_model(json.dumps(processed))
         processed["evaluator_judgments"] = judgments.model_dump()
     except Exception as e:
         print(f"  -> Failed to run Tier 2 evaluation: {e}")
-        
+
     return finalize_extracted_document(processed)
+    
 
 import time
 import glob
