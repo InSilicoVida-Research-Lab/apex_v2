@@ -494,6 +494,51 @@ def _merge_biological_basis(final_doc: dict, extracted_page) -> None:
             existing_mech.add(m)
 
 
+def _merge_model_structure(final_doc: dict, extracted_page) -> None:
+    """Merge model structure, compartments, connections, and scaling rules from visual diagram and text."""
+    if not extracted_page or not getattr(extracted_page, "model_structure", None):
+        return
+    ms_dict = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+    if not final_doc.get("model_structure"):
+        final_doc["model_structure"] = ms_dict
+        return
+
+    curr_ms = final_doc["model_structure"]
+    new_conns = ms_dict.get("connections", [])
+    curr_conns = curr_ms.get("connections", [])
+    if len(new_conns) > len(curr_conns):
+        curr_ms["connections"] = new_conns
+    elif new_conns and curr_conns:
+        # Merge any connections not already present
+        existing_conn_keys = {(c.get("source"), c.get("target")) for c in curr_conns}
+        for c in new_conns:
+            if (c.get("source"), c.get("target")) not in existing_conn_keys:
+                curr_conns.append(c)
+
+    new_comps = ms_dict.get("compartments", [])
+    curr_comps = curr_ms.get("compartments", [])
+    if len(new_comps) > len(curr_comps) or not curr_comps:
+        curr_ms["compartments"] = new_comps
+    elif new_comps and curr_comps:
+        existing_comp_ids = {c.get("id") for c in curr_comps}
+        for c in new_comps:
+            if c.get("id") not in existing_comp_ids:
+                curr_comps.append(c)
+
+    for k in ["allometric_scaling_rules", "scaling_equations"]:
+        if ms_dict.get(k):
+            existing = set(curr_ms.get(k, []))
+            for item in ms_dict[k]:
+                if item not in existing:
+                    curr_ms.setdefault(k, []).append(item)
+
+    if ms_dict.get("absorption") and not curr_ms.get("absorption"):
+        curr_ms["absorption"] = ms_dict["absorption"]
+    if ms_dict.get("elimination") and not curr_ms.get("elimination"):
+        curr_ms["elimination"] = ms_dict["elimination"]
+
+
+
 def finalize_extracted_document(document: dict) -> dict:
     """Validate and serialize the canonical output contract before persistence."""
     return ExtractedDocument.model_validate(document).model_dump(mode="json")
@@ -710,6 +755,15 @@ def post_process_document(document, pdf_path):
                             
     except Exception as e:
         print(f"  -> Error in post-processing text sweep: {e}")
+
+    # 2.5 PBPK Inheritance, Dimensionless Unit Whitelist, and Deduplication
+    print("  -> Applying PBPK inheritance, dimensionless unit whitelist, and deduplication...")
+    from pk_pipeline.compartmental_assembler import (
+        apply_pbpk_inheritance,
+        deduplicate_and_format_records
+    )
+    document["model_parameters"] = apply_pbpk_inheritance(document.get("model_parameters", []))
+    document["model_parameters"] = deduplicate_and_format_records(document.get("model_parameters", []))
 
     # 3. Classify each parameter using the 3-class taxonomy
     print("  -> Classifying parameters into physiological / biochemical / compound_specific...")
@@ -953,8 +1007,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                     if extracted_page and extracted_page.model_context and not final_document["model_context"]:
                         final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
                     _merge_biological_basis(final_document, extracted_page)
-                    if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
-                        final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+                    _merge_model_structure(final_document, extracted_page)
                     if extracted_page and extracted_page.metabolic_pathways:
                         final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
 
@@ -1088,6 +1141,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 PAD = 30
                 img_w, img_h = full_page_img.size
 
+                from pk_pipeline.ingestion.xml_parser import is_valid_pbpk_input_table, preprocess_table_dataframe
+                pdf_tables = None
+                try:
+                    pdf_tables = page.find_tables()
+                except Exception as e:
+                    logger.debug(f"page.find_tables() note: {e}")
+
                 for t_idx, box in enumerate(table_boxes):
                     x_min, y_min, x_max, y_max = box
                     # Apply padding, clamped to image bounds
@@ -1099,6 +1159,29 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                     table_crop_img = full_page_img.crop((cx0, cy0, cx1, cy1))
 
                     table_context = text  # fallback: native text from pymupdf4llm
+
+                    # Try to match with PyMuPDF find_tables DataFrame
+                    matched_preprocessed_md = None
+                    if pdf_tables and pdf_tables.tables:
+                        for p_tab in pdf_tables.tables:
+                            try:
+                                p_df = p_tab.to_pandas()
+                                tab_rect = p_tab.bbox
+                                caption_rect = pymupdf.Rect(0, max(0, tab_rect[1] - 80), page.rect.width, tab_rect[1])
+                                footnotes_rect = pymupdf.Rect(0, tab_rect[3], page.rect.width, min(page.rect.height, tab_rect[3] + 120))
+                                p_caption = page.get_text("text", clip=caption_rect).strip()
+                                p_footnotes = page.get_text("text", clip=footnotes_rect).strip()
+
+                                # Gate out non-input tables (sensitivity analysis, POD/HED, exposure)
+                                if not is_valid_pbpk_input_table(p_caption, p_df.to_string()):
+                                    print(f"  -> [Table Gating] Gated out non-input table on Page {page_num}: '{p_caption[:40]}'")
+                                    continue
+
+                                matched_preprocessed_md = preprocess_table_dataframe(p_df, caption=p_caption, footnotes=p_footnotes)
+                                break
+                            except Exception as e:
+                                logger.debug(f"PyMuPDF find_tables error: {e}")
+
                     if use_wevisdoc:
                         try:
                             print(f"  -> [WeVisDoc-4B] Transcribing Page {page_num} Table {t_idx+1}/{len(table_boxes)} (crop {cx1-cx0}x{cy1-cy0}px)...")
@@ -1109,6 +1192,9 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         except Exception as e:
                             print(f"  -> [WeVisDoc-4B] Notice: transcription fallback to native text ({e})")
                             table_context = text
+
+                    if matched_preprocessed_md:
+                        table_context = matched_preprocessed_md + "\n\n" + table_context
 
                     llm_payloads.append({
                         "role": "page_with_table",
@@ -1238,8 +1324,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 if extracted_page and extracted_page.model_context and not final_document["model_context"]:
                     final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
                 _merge_biological_basis(final_document, extracted_page)
-                if extracted_page and extracted_page.model_structure and not final_document["model_structure"]:
-                    final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+                _merge_model_structure(final_document, extracted_page)
                 if extracted_page and extracted_page.metabolic_pathways:
                     final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
                 if extracted_page and extracted_page.parameter_blocks:
@@ -1455,9 +1540,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         if extracted_page.model_context and not final_document["model_context"]:
             final_document["model_context"] = extracted_page.model_context.model_dump(by_alias=True, exclude_none=True)
         _merge_biological_basis(final_document, extracted_page)
-        # Merge structure (take the first one we find)
-        if extracted_page.model_structure and not final_document["model_structure"]:
-            final_document["model_structure"] = extracted_page.model_structure.model_dump(by_alias=True, exclude_none=True)
+        _merge_model_structure(final_document, extracted_page)
         if extracted_page.metabolic_pathways:
             final_document["metabolic_pathways"].extend([m.model_dump(by_alias=True, exclude_none=True) for m in extracted_page.metabolic_pathways])
             

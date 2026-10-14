@@ -1,12 +1,12 @@
 {
   "page_metadata": {
-    "title": null,
+    "title": "Fig. 2.",
     "authors": null,
     "journal": null,
     "year": null
   },
   "model_classification": {
-    "model_type": "not_applicable",
+    "model_type": "pbpk",
     "evidence_quote": null
   },
   "model_context": null,

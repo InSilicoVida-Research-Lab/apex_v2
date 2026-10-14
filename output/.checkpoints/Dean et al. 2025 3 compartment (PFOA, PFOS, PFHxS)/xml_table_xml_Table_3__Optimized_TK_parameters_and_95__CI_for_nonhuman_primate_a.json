@@ -66,208 +66,6 @@
         {
           "row_id": "r1",
           "path": [
-            "Nonhuman primate"
-          ],
-          "index": 0
-        },
-        {
-          "row_id": "r2",
-          "path": [
-            "Human"
-          ],
-          "index": 1
-        }
-      ],
-      "cells": [
-        {
-          "cell_id": "cell_r1_c1",
-          "row_id": "r1",
-          "column_id": "c1",
-          "text": "Nonhuman primate",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r1_c2",
-          "row_id": "r1",
-          "column_id": "c2",
-          "text": "Physiological",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r1_c3",
-          "row_id": "r1",
-          "column_id": "c3",
-          "text": "Body weight (kg)",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r1_c4",
-          "row_id": "r1",
-          "column_id": "c4",
-          "text": "BW",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r1_c5",
-          "row_id": "r1",
-          "column_id": "c5",
-          "text": "5",
-          "numeric_value": 5.0,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r1_c6",
-          "row_id": "r1",
-          "column_id": "c6",
-          "text": "Chang (2020d)",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c1",
-          "row_id": "r2",
-          "column_id": "c1",
-          "text": "Human",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c2",
-          "row_id": "r2",
-          "column_id": "c2",
-          "text": "Physiological",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c3",
-          "row_id": "r2",
-          "column_id": "c3",
-          "text": "Body weight (kg)",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c4",
-          "row_id": "r2",
-          "column_id": "c4",
-          "text": "BW",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c5",
-          "row_id": "r2",
-          "column_id": "c5",
-          "text": "70",
-          "numeric_value": 70.0,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        },
-        {
-          "cell_id": "cell_r2_c6",
-          "row_id": "r2",
-          "column_id": "c6",
-          "text": "Loccisano et al. (2011)",
-          "numeric_value": null,
-          "unit": null,
-          "qualifier": null,
-          "uncertainty_text": null
-        }
-      ],
-      "subject_compounds": [
-        "PFHxS"
-      ],
-      "footnote_compounds": [],
-      "referenced_compounds": [],
-      "species": [
-        "Nonhuman primate",
-        "Human"
-      ],
-      "populations": [],
-      "footnotes": [],
-      "source_page": null,
-      "source_image_path": null
-    },
-    {
-      "evidence_status": "success",
-      "needs_review": false,
-      "error": null,
-      "table_id": "Table 3",
-      "title": "Table 3: Optimized TK parameters and 95% CI for nonhuman primate and human models of PFHxS.",
-      "columns": [
-        {
-          "column_id": "c1",
-          "path": [
-            "Species"
-          ],
-          "index": 0
-        },
-        {
-          "column_id": "c2",
-          "path": [
-            "Type of variable"
-          ],
-          "index": 1
-        },
-        {
-          "column_id": "c3",
-          "path": [
-            "Variable"
-          ],
-          "index": 2
-        },
-        {
-          "column_id": "c4",
-          "path": [
-            "Name"
-          ],
-          "index": 3
-        },
-        {
-          "column_id": "c5",
-          "path": [
-            "Mean (95% CI)"
-          ],
-          "index": 4
-        },
-        {
-          "column_id": "c6",
-          "path": [
-            "Source"
-          ],
-          "index": 5
-        }
-      ],
-      "rows": [
-        {
-          "row_id": "r1",
-          "path": [
             "Nonhuman primate",
             "Physiological",
             "Body weight (kg)",
@@ -1124,15 +922,22 @@
           "parameter_id": null,
           "parameter_class": "physiological",
           "parameter_subclass": "body_weight",
+          "parameter_name": "Body weight (kg)",
           "parameter_name_original": "Body weight (kg)",
           "parameter_name_standardized": "body_weight",
+          "symbol": "BW",
           "symbol_original": "BW",
           "symbol_standardized": "BW",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
-            "compound": "PFHxS",
-            "formulation": null,
+            "compound": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1140,17 +945,26 @@
           "quantitative_data": {
             "value_text": "5",
             "value": 5.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
+            "unit": "kg",
+            "unit_original": "kg",
+            "unit_standardized": "kg",
+            "unit_inherited": false,
             "value_qualifier": null,
-            "unit_original": null,
-            "unit_standardized": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
             "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "column_id": "c4",
+            "cell_id": "cell_r1_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1163,33 +977,34 @@
             "source_quote": "5",
             "reference": "Chang (2020d)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "physiological",
           "parameter_subclass": "cardiac_output",
+          "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
           "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
           "parameter_name_standardized": "cardiac_output",
+          "symbol": "QCC",
           "symbol_original": "QCC",
           "symbol_standardized": "QCC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
-            "compound": "PFHxS",
-            "formulation": null,
+            "compound": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1197,17 +1012,26 @@
           "quantitative_data": {
             "value_text": "19.8",
             "value": 19.8,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "L/h/kg 0.74 ",
             "unit_original": "L/h/kg 0.74 ",
-            "unit_standardized": "h^-1 kg^-0.74",
+            "unit_standardized": "L/h/kg^0.74",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r2",
+            "column_id": "c4",
+            "cell_id": "cell_r2_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1220,33 +1044,34 @@
             "source_quote": "19.8",
             "reference": "Wambaugh et al. (2013)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "physiological",
-          "parameter_subclass": "organ_volume_fraction",
+          "parameter_subclass": "organ_blood_flow_fraction",
+          "parameter_name": "Fraction of cardiac output to filtrate",
           "parameter_name_original": "Fraction of cardiac output to filtrate",
           "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+          "symbol": "QfilC",
           "symbol_original": "QfilC",
           "symbol_standardized": "QfilC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
-            "compound": "PFHxS",
-            "formulation": null,
+            "compound": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1254,17 +1079,26 @@
           "quantitative_data": {
             "value_text": "0.15",
             "value": 0.15,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": null,
             "unit_original": null,
             "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r3",
+            "column_id": "c4",
+            "cell_id": "cell_r3_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1277,33 +1111,34 @@
             "source_quote": "0.15",
             "reference": "Wambaugh et al. (2013)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "physiological",
           "parameter_subclass": "organ_volume_fraction",
+          "parameter_name": "Volume of filtrate compartment (L/Kg)",
           "parameter_name_original": "Volume of filtrate compartment (L/Kg)",
           "parameter_name_standardized": "filtrate_compartment_volume_fraction",
+          "symbol": "VfilC",
           "symbol_original": "VfilC",
           "symbol_standardized": "VfilC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
-            "compound": "PFHxS",
-            "formulation": null,
+            "compound": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1311,17 +1146,26 @@
           "quantitative_data": {
             "value_text": "4.00E-04",
             "value": 0.0004,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "L/Kg",
             "unit_original": "L/Kg",
             "unit_standardized": "L/kg",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r4",
+            "column_id": "c4",
+            "cell_id": "cell_r4_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1334,33 +1178,34 @@
             "source_quote": "4.00E-04",
             "reference": "Loccisano et al. (2011)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "bioavailability",
+          "parameter_name": "Bioavailability",
           "parameter_name_original": "Bioavailability",
           "parameter_name_standardized": "oral_bioavailability",
+          "symbol": "bioAv",
           "symbol_original": "bioAv",
           "symbol_standardized": "bioAv",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1368,17 +1213,26 @@
           "quantitative_data": {
             "value_text": "0.9",
             "value": 0.9,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": null,
             "unit_original": null,
             "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": "Assumed (PFOS)",
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r5",
+            "column_id": "c4",
+            "cell_id": "cell_r5_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1391,33 +1245,34 @@
             "source_quote": "0.9",
             "reference": "Assumed (PFOS)",
             "status": "assumed_default",
-            "status_raw": "assumed_default",
+            "parameter_status": "assumed_default",
+            "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "distribution_volume",
+          "parameter_name": "Volume of distribution central compartment (L/kg)",
           "parameter_name_original": "Volume of distribution central compartment (L/kg)",
           "parameter_name_standardized": "central_compartment_volume",
+          "symbol": "VCC",
           "symbol_original": "VCC",
           "symbol_standardized": "VCC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1425,23 +1280,32 @@
           "quantitative_data": {
             "value_text": "0.17 (0.16, 0.20)",
             "value": 0.17,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": 0.16,
+            "ci_high": 0.2,
+            "variance": null,
+            "variance_type": "95% CI",
             "uncertainty": {
               "type": "95% CI",
               "lower": 0.16,
               "upper": 0.2,
               "absolute": null,
-              "raw_text": "0.17 (0.16, 0.20)"
+              "raw_text": "0.16, 0.20"
             },
-            "value_qualifier": null,
+            "unit": "L/kg",
             "unit_original": "L/kg",
             "unit_standardized": "L/kg",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r6",
+            "column_id": "c4",
+            "cell_id": "cell_r6_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1454,33 +1318,34 @@
             "source_quote": "0.17 (0.16, 0.20)",
             "reference": "Optimized",
             "status": "fitted",
+            "parameter_status": "fitted",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "maximal_velocity",
+          "parameter_name": "Saturable resorption rate (mg/h/kg)",
           "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
           "parameter_name_standardized": "maximal_resorption_rate",
+          "symbol": "Tmc",
           "symbol_original": "Tmc",
           "symbol_standardized": "Tmc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1488,23 +1353,32 @@
           "quantitative_data": {
             "value_text": "0.21 (0.18, 0.25)",
             "value": 0.21,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": 0.18,
+            "ci_high": 0.25,
+            "variance": null,
+            "variance_type": "95% CI",
             "uncertainty": {
               "type": "95% CI",
               "lower": 0.18,
               "upper": 0.25,
               "absolute": null,
-              "raw_text": "0.21 (0.18, 0.25)"
+              "raw_text": "0.18, 0.25"
             },
-            "value_qualifier": null,
+            "unit": "mg/h/kg",
             "unit_original": "mg/h/kg",
             "unit_standardized": "mg/h/kg",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r7",
+            "column_id": "c4",
+            "cell_id": "cell_r7_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1517,33 +1391,34 @@
             "source_quote": "0.21 (0.18, 0.25)",
             "reference": "Optimized",
             "status": "fitted",
+            "parameter_status": "fitted",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "michaelis_menten_constant",
+          "parameter_name": "Saturable resorption affinity (mg/L)",
           "parameter_name_original": "Saturable resorption affinity (mg/L)",
           "parameter_name_standardized": "michaelis_menten_constant",
+          "symbol": "K t",
           "symbol_original": "K t",
           "symbol_standardized": "Kt",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1551,17 +1426,26 @@
           "quantitative_data": {
             "value_text": "0.004",
             "value": 0.004,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "mg/L",
             "unit_original": "mg/L",
             "unit_standardized": "mg/L",
+            "unit_inherited": false,
+            "value_qualifier": "Assumed (PFOS)",
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r8",
+            "column_id": "c4",
+            "cell_id": "cell_r8_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1574,33 +1458,34 @@
             "source_quote": "0.004",
             "reference": "Assumed (PFOS)",
             "status": "assumed_default",
-            "status_raw": "assumed_default",
+            "parameter_status": "assumed_default",
+            "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "fraction_unbound",
+          "parameter_name": "Proportion of free compound in serum",
           "parameter_name_original": "Proportion of free compound in serum",
           "parameter_name_standardized": "fraction_unbound_in_plasma",
+          "symbol": "Free",
           "symbol_original": "Free",
-          "symbol_standardized": "Free",
+          "symbol_standardized": "fu",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1608,17 +1493,26 @@
           "quantitative_data": {
             "value_text": "0.0009",
             "value": 0.0009,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": null,
             "unit_original": null,
             "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r9",
+            "column_id": "c4",
+            "cell_id": "cell_r9_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1631,33 +1525,34 @@
             "source_quote": "0.0009",
             "reference": "Smeltz et al. (2023)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "distribution_rate",
+          "parameter_name": "Rate from central to second compartment (1/h)",
           "parameter_name_original": "Rate from central to second compartment (1/h)",
           "parameter_name_standardized": "intercompartmental_rate_k12",
+          "symbol": "k 12",
           "symbol_original": "k 12",
           "symbol_standardized": "k12",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1665,17 +1560,26 @@
           "quantitative_data": {
             "value_text": "3.3",
             "value": 3.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "1/h",
             "unit_original": "1/h",
             "unit_standardized": "h^-1",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r10",
+            "column_id": "c4",
+            "cell_id": "cell_r10_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1688,33 +1592,34 @@
             "source_quote": "3.3",
             "reference": "Andersen et al. (2006)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "distribution_rate",
+          "parameter_name": "Rate from second to central compartment (1/h)",
           "parameter_name_original": "Rate from second to central compartment (1/h)",
           "parameter_name_standardized": "intercompartmental_rate_k21",
+          "symbol": "k 21",
           "symbol_original": "k 21",
           "symbol_standardized": "k21",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1722,17 +1627,26 @@
           "quantitative_data": {
             "value_text": "3.4",
             "value": 3.4,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "1/h",
             "unit_original": "1/h",
             "unit_standardized": "h^-1",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r11",
+            "column_id": "c4",
+            "cell_id": "cell_r11_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1745,33 +1659,34 @@
             "source_quote": "3.4",
             "reference": "Andersen et al. (2006)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "absorption_rate_constant",
+          "parameter_name": "Rate from gut to central compartment (1/h)",
           "parameter_name_original": "Rate from gut to central compartment (1/h)",
           "parameter_name_standardized": "absorption_rate_constant",
+          "symbol": "k a",
           "symbol_original": "k a",
           "symbol_standardized": "ka",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Nonhuman primate",
+            "subject_species": "Nonhuman primate",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1779,17 +1694,26 @@
           "quantitative_data": {
             "value_text": "132",
             "value": 132.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "1/h",
             "unit_original": "1/h",
             "unit_standardized": "h^-1",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r1",
-            "column_id": "c5",
-            "cell_id": "cell_r1_c5",
+            "row_id": "r12",
+            "column_id": "c4",
+            "cell_id": "cell_r12_c4",
             "row_path": [
               "Nonhuman primate"
             ],
@@ -1802,18 +1726,12 @@
             "source_quote": "132",
             "reference": "Wambaugh et al. (2013)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         }
       ]
@@ -1828,15 +1746,22 @@
           "parameter_id": null,
           "parameter_class": "physiological",
           "parameter_subclass": "body_weight",
+          "parameter_name": "Body weight (kg)",
           "parameter_name_original": "Body weight (kg)",
           "parameter_name_standardized": "body_weight",
+          "symbol": "BW",
           "symbol_original": "BW",
           "symbol_standardized": "BW",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
-            "compound": "PFHxS",
-            "formulation": null,
+            "compound": null,
             "species": "Human",
+            "subject_species": "Human",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1844,17 +1769,26 @@
           "quantitative_data": {
             "value_text": "70",
             "value": 70.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
+            "unit": "kg",
+            "unit_original": "kg",
+            "unit_standardized": "kg",
+            "unit_inherited": false,
             "value_qualifier": null,
-            "unit_original": null,
-            "unit_standardized": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r2",
-            "column_id": "c5",
-            "cell_id": "cell_r2_c5",
+            "row_id": "r13",
+            "column_id": "c4",
+            "cell_id": "cell_r13_c4",
             "row_path": [
               "Human"
             ],
@@ -1867,33 +1801,101 @@
             "source_quote": "70",
             "reference": "Loccisano et al. (2011)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
+          "confidence": null,
+          "needs_review": false
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "cardiac_output",
+          "parameter_name": "Cardiac blood output (L/h/kg 0.74 )",
+          "parameter_name_original": "Cardiac blood output (L/h/kg 0.74 )",
+          "parameter_name_standardized": "cardiac_output",
+          "symbol": "QCC",
+          "symbol_original": "QCC",
+          "symbol_standardized": "QCC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
           },
+          "quantitative_data": {
+            "value_text": "12.5",
+            "value": 12.5,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "L/h/kg 0.74 ",
+            "unit_original": "L/h/kg 0.74 ",
+            "unit_standardized": "L/h/kg^0.74",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 3",
+            "row_id": "r14",
+            "column_id": "c4",
+            "cell_id": "cell_r14_c4",
+            "row_path": [
+              "Human"
+            ],
+            "column_path": [
+              "Mean (95% CI)"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": "Table 3",
+            "source_quote": "12.5",
+            "reference": "Loccisano et al. (2011)",
+            "status": "measured_here",
+            "parameter_status": "measured_here",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "maximal_velocity",
+          "parameter_name": "Saturable resorption rate (mg/h/kg)",
           "parameter_name_original": "Saturable resorption rate (mg/h/kg)",
           "parameter_name_standardized": "maximal_resorption_rate",
+          "symbol": "Tmc",
           "symbol_original": "Tmc",
           "symbol_standardized": "Tmc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Human",
+            "subject_species": "Human",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1901,17 +1903,26 @@
           "quantitative_data": {
             "value_text": "0.47",
             "value": 0.47,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "mg/h/kg",
             "unit_original": "mg/h/kg",
             "unit_standardized": "mg/h/kg",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r2",
-            "column_id": "c5",
-            "cell_id": "cell_r2_c5",
+            "row_id": "r15",
+            "column_id": "c4",
+            "cell_id": "cell_r15_c4",
             "row_path": [
               "Human"
             ],
@@ -1924,33 +1935,34 @@
             "source_quote": "0.47",
             "reference": "Optimized",
             "status": "fitted",
+            "parameter_status": "fitted",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         },
         {
           "parameter_id": null,
           "parameter_class": "biochemical",
           "parameter_subclass": "elimination_half_life",
+          "parameter_name": "Half-life (years)",
           "parameter_name_original": "Half-life (years)",
           "parameter_name_standardized": "elimination_half_life",
+          "symbol": "T 1/2",
           "symbol_original": "T 1/2",
           "symbol_standardized": "t1/2",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
           "context": {
             "compound": "PFHxS",
-            "formulation": null,
             "species": "Human",
+            "subject_species": "Human",
             "life_stage": null,
+            "formulation": null,
+            "compartment": null,
             "organ": null,
             "route": null,
             "population": null
@@ -1958,17 +1970,26 @@
           "quantitative_data": {
             "value_text": "5.3",
             "value": 5.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
             "uncertainty": null,
-            "value_qualifier": null,
+            "unit": "years",
             "unit_original": "years",
             "unit_standardized": "years",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
             "normalization_basis": null
           },
           "provenance": {
             "source_table": "Table 3",
-            "row_id": "r2",
-            "column_id": "c5",
-            "cell_id": "cell_r2_c5",
+            "row_id": "r16",
+            "column_id": "c4",
+            "cell_id": "cell_r16_c4",
             "row_path": [
               "Human"
             ],
@@ -1981,18 +2002,12 @@
             "source_quote": "5.3",
             "reference": "Li et al. (2018)",
             "status": "measured_here",
+            "parameter_status": "measured_here",
             "status_raw": null,
             "derivation": null,
             "evidence_directness": "direct"
           },
-          "confidence": {
-            "value_confidence": null,
-            "unit_confidence": null,
-            "species_confidence": null,
-            "formulation_confidence": null,
-            "parameter_class_confidence": null,
-            "provenance_confidence": null
-          },
+          "confidence": null,
           "needs_review": false
         }
       ]

@@ -70,13 +70,49 @@ class EliminationModel(BaseModel):
 # ─── Nested Parameter Sub-Models ───────────────────────────────────────────────
 
 class BiologicalContext(BaseModel):
-    compound: Optional[str] = Field(None, description="Active chemical entity (e.g., 'riluzole', 'PFOS'). NOT a formulation name.")
-    formulation: Optional[List[str]] = Field(None, description="Specific formulations (e.g., ['Rilutor', 'ASD']). Separate from compound.")
-    species: Optional[str] = Field(None, description="Animal or human subject (e.g., 'rat', 'human').")
-    life_stage: Optional[str] = Field(None, description="Age or life stage only if explicitly stated.")
-    organ: Optional[str] = Field(None, description="Biological organ (e.g., 'liver', 'plasma').")
-    route: Optional[str] = Field(None, description="Route of administration if stated.")
-    population: Optional[str] = Field(None, description="Named patient group or population.")
+    compound: Optional[str] = Field(
+        None, description="Chemical or drug entity (e.g., PFOS, PFOA, PFHxS, DINCH, MINCH, Riluzole). Leave null for compound-independent physiological parameters."
+    )
+    species: Optional[str] = Field(
+        None, description="Explicitly stated species (e.g., Human, Nonhuman primate, Rat, Monkey)."
+    )
+    subject_species: Optional[str] = Field(
+        None, description="Alias for species (e.g., Human, Nonhuman primate, Rat, Monkey)."
+    )
+    life_stage: Optional[str] = Field(
+        None, description="Life stage or physiological state (e.g., Mother, Fetus, Infant, Gestation, Lactation, Adult)."
+    )
+    formulation: Optional[Union[str, List[str]]] = Field(
+        None, description="Specific drug formulation if stated (e.g., Rilutor, ASD). Never merge two formulations into a numeric range."
+    )
+    compartment: Optional[str] = Field(
+        None, description="Target organ, tissue, or fluid compartment (e.g., Liver, Kidney, Filtrate, Plasma, Gut, Fat, Placenta, Milk)."
+    )
+    organ: Optional[str] = Field(
+        None, description="Biological organ (alias for compartment)."
+    )
+    route: Optional[str] = Field(
+        None, description="Route of administration (e.g., Oral, IV, Dermal)."
+    )
+    population: Optional[str] = Field(
+        None, description="Specific cohort or sub-population if stated."
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_context_fields(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        d = dict(data)
+        if d.get("subject_species") and not d.get("species"):
+            d["species"] = d["subject_species"]
+        elif d.get("species") and not d.get("subject_species"):
+            d["subject_species"] = d["species"]
+        if d.get("compartment") and not d.get("organ"):
+            d["organ"] = d["compartment"]
+        elif d.get("organ") and not d.get("compartment"):
+            d["compartment"] = d["organ"]
+        return d
 
 class Uncertainty(BaseModel):
     type: Optional[str] = Field(None, description="e.g., '95% CI', 'SD', 'SE', '+/-'")
@@ -86,13 +122,80 @@ class Uncertainty(BaseModel):
     raw_text: Optional[str] = Field(None, description="The original unparsed uncertainty text.")
 
 class QuantitativeData(BaseModel):
-    value_text: Optional[str] = Field(None, description="Exact printed value text verbatim, e.g. '5a', '0.174', '0.69, 2.19', '0.24 (0.24, 0.25)'.")
-    value: Optional[float] = Field(None, description="Primary numerical value as a pure float (the estimate).")
-    uncertainty: Optional[Uncertainty] = Field(None, description="Confidence interval, standard deviation, or other uncertainty metrics.")
-    value_qualifier: Optional[str] = Field(None, description="Qualifiers like 'Fixed', 'Assumed', 'Optimized', '<', '~'.")
-    unit_original: Optional[str] = Field(None, description="Unit exactly as printed in the source (e.g., '1/h/kg^0.25'). NEVER convert or interpret.")
-    unit_standardized: Optional[str] = Field(None, description="Standardized/normalized unit (e.g., 'h^-1 kg^-0.25'). MUST STRICTLY PRESERVE all SI prefixes (e.g. 'nmol' stays 'nmol', 'μL' stays 'μL', NEVER convert to 'mol' or 'L'). Null if not normalized.")
-    normalization_basis: Optional[str] = Field(None, description="E.g., 'cardiac_output', 'body_weight', 'tissue_plasma_ratio'.")
+    value_text: Optional[str] = Field(
+        None, description="Exact verbatim string printed in the table cell or text (e.g., '0.21 (0.18, 0.25)', '56.9 - 70', '0.008b', '4.00E-04')."
+    )
+    value: Optional[float] = Field(
+        None, description="Primary point estimate as a pure float. Leave null if the cell is purely a dynamic start-to-end range or symbolic equation."
+    )
+    start_value: Optional[float] = Field(
+        None, description="Initial numerical value for time-varying physiological parameters (e.g., 56.9 in '56.9 - 70' during gestation)."
+    )
+    end_value: Optional[float] = Field(
+        None, description="Final numerical value for time-varying physiological parameters (e.g., 70.0 in '56.9 - 70' or 2.4 in '3.2 - 2.4')."
+    )
+    ci_low: Optional[float] = Field(
+        None, description="Lower bound of confidence interval or uncertainty range (e.g., 0.18 in '0.21 (0.18, 0.25)')."
+    )
+    ci_high: Optional[float] = Field(
+        None, description="Upper bound of confidence interval or uncertainty range (e.g., 0.25 in '0.21 (0.18, 0.25)')."
+    )
+    variance: Optional[float] = Field(
+        None, description="Standard deviation (SD), standard error (SE), or CV% if reported."
+    )
+    variance_type: Optional[str] = Field(
+        None, description="Type of variance reported (e.g., 'SD', 'SE', 'CV%', '95% CI')."
+    )
+    uncertainty: Optional[Uncertainty] = Field(
+        None, description="Confidence interval, standard deviation, or other uncertainty metrics."
+    )
+    unit: Optional[str] = Field(
+        None, description="Exact unit of measurement (e.g., 'kg', 'L/h/kg^0.74', 'fraction of BW', 'fraction of QC', 'dimensionless')."
+    )
+    unit_original: Optional[str] = Field(
+        None, description="Unit exactly as printed in the source (e.g., '1/h/kg^0.25'). NEVER convert or interpret."
+    )
+    unit_standardized: Optional[str] = Field(
+        None, description="Standardized/normalized unit (e.g., 'h^-1 kg^-0.25')."
+    )
+    unit_inherited: bool = Field(
+        False, description="True if the unit was inherited from a group subheader or table caption."
+    )
+    value_qualifier: Optional[str] = Field(
+        None, description="Qualifier printed with the value (e.g., 'Optimized', 'Assumed (PFOS)', 'Fixed', 'initial', 'increasing across gestation')."
+    )
+    footnote_marker: Optional[str] = Field(
+        None, description="Trailing footnote symbol or letter stripped from the number (e.g., 'a', 'b', '*')."
+    )
+    normalization_basis: Optional[str] = Field(
+        None, description="E.g., 'cardiac_output', 'body_weight', 'tissue_plasma_ratio'."
+    )
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_quantitative_fields(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        d = dict(data)
+        if d.get("unit") and not d.get("unit_original"):
+            d["unit_original"] = d["unit"]
+        elif d.get("unit_original") and not d.get("unit"):
+            d["unit"] = d["unit_original"]
+        if (d.get("ci_low") is not None or d.get("ci_high") is not None) and not d.get("uncertainty"):
+            d["uncertainty"] = {
+                "lower": d.get("ci_low"),
+                "upper": d.get("ci_high"),
+                "type": d.get("variance_type") or "95% CI"
+            }
+        elif d.get("uncertainty") and isinstance(d["uncertainty"], dict):
+            u = d["uncertainty"]
+            if d.get("ci_low") is None and u.get("lower") is not None:
+                d["ci_low"] = u.get("lower")
+            if d.get("ci_high") is None and u.get("upper") is not None:
+                d["ci_high"] = u.get("upper")
+            if d.get("variance_type") is None and u.get("type"):
+                d["variance_type"] = u.get("type")
+        return d
 
 class Derivation(BaseModel):
     method: Optional[str] = Field(None, description="e.g. 'allometric_scaling', 'rodgers_rowland', 'literature', 'optimized'")
@@ -144,6 +247,7 @@ class Provenance(BaseModel):
     source_quote: Optional[str] = Field(None, description="Verbatim quote from the source cell/sentence.")
     reference: Optional[str] = Field(None, description="Literature citation like '[17]'.")
     status: Optional[ProvenanceStatus] = Field(None, description="Controlled vocabulary describing how the value was obtained.")
+    parameter_status: Optional[str] = Field(None, description="How the parameter was obtained ('Measured', 'Fitted', 'Optimized', 'Fixed', 'Assumed', 'Scaled', 'Literature').")
     status_raw: Optional[str] = Field(None, description="Original legacy/source status label before canonical normalization.")
     derivation: Optional[Derivation] = Field(None, description="Detailed derivation metadata when the parameter was fitted or derived.")
     evidence_directness: Optional[str] = Field(None, description="'direct' or 'inferred'")
@@ -155,6 +259,13 @@ class Provenance(BaseModel):
         if not isinstance(data, dict):
             return data
         normalized = dict(data)
+        if not normalized.get("status") and normalized.get("parameter_status"):
+            p_status = str(normalized["parameter_status"]).strip().lower()
+            normalized["status"] = _LEGACY_PROVENANCE_STATUS_MAP.get(p_status, p_status)
+        elif normalized.get("status") and not normalized.get("parameter_status"):
+            st_val = normalized["status"].value if isinstance(normalized["status"], ProvenanceStatus) else str(normalized["status"])
+            normalized["parameter_status"] = st_val.replace("_", " ").capitalize()
+
         status = normalized.get("status")
         if isinstance(status, ProvenanceStatus):
             status = status.value
@@ -233,12 +344,18 @@ class BiologicalBasis(BaseModel):
     stated_assumptions: List[Assumption] = Field(description="Explicit list of assumptions stated by the authors with direct quotes.")
     specialized_mechanisms: List[str] = Field(description="e.g., renal reabsorption, enterohepatic recirculation. Or 'not_applicable'.")
 
+class CompartmentConnection(BaseModel):
+    source: str = Field(..., description="Origin compartment name exactly as labeled.")
+    target: str = Field(..., description="Destination compartment name exactly as labeled.")
+    rate_or_flow_symbol: Optional[str] = Field(None, description="Governing rate constant or flow symbol (e.g., 'k12', 'Qfil', 'Tm', 'Kt', 'ka').")
+    equation: Optional[str] = Field(None, description="Mathematical expression if shown on diagram (e.g., 'Vc = Vcc * BW').")
+
 class ModelStructure(BaseModel):
     reported_compartment_count: Union[int, str, None] = Field(None, description="Integer count, or 'not_reported'.")
     listed_compartment_count: Optional[int] = Field(None, description="Actual number of compartments found.")
     count_consistency: Optional[str] = Field(None, description="'consistent' or 'inconsistent_in_source'")
-    compartments: List[Compartment] = Field(default_factory=list, description="List of all specific compartments modeled.")
-    connections: List[Connection] = Field(default_factory=list, description="List of connections between compartments.")
+    compartments: List[Union[str, Compartment]] = Field(default_factory=list, description="List of all specific compartments modeled.")
+    connections: List[Union[CompartmentConnection, Connection]] = Field(default_factory=list, description="List of connections between compartments.")
     absorption: Optional[AbsorptionModel] = None
     metabolism: Optional[MetabolismModel] = None
     elimination: Optional[EliminationModel] = None
@@ -246,6 +363,7 @@ class ModelStructure(BaseModel):
     source_location: Optional[str] = None
     equations_provided: Literal["text", "supplementary_info", "code_repo", "none"] = Field("none", description="Where are the ODEs/equations provided?")
     allometric_scaling_rules: List[str] = Field(default_factory=list, description="Explicit scaling rules stated (e.g., 'QC = QCC * BW^0.75'). Empty list if none.")
+    scaling_equations: List[str] = Field(default_factory=list, description="Symbolic scaling equations without numeric values.")
 
 class MetabolicPathway(BaseModel):
     parent_compound: str = Field(description="The chemical being metabolized.")
@@ -323,7 +441,12 @@ class ExtractedParameter(BaseModel):
             "Use null only if no listed subclass applies."
         )
     )
-    parameter_name_original: str = Field(..., description="Full descriptive name exactly as printed in the source.")
+    parameter_name: Optional[str] = Field(
+        None, description="Full descriptive parameter name. If under a group header, prepend the group header (e.g., 'Blood flow to organ - Liver')."
+    )
+    parameter_name_original: Optional[str] = Field(
+        None, description="Full descriptive name exactly as printed in the source."
+    )
     parameter_name_standardized: Optional[str] = Field(
         None,
         description=(
@@ -341,13 +464,41 @@ class ExtractedParameter(BaseModel):
             "Derive from parameter_name_original if no standard exists."
         )
     )
+    symbol: Optional[str] = Field(
+        None, description="Exact mathematical symbol as printed (e.g., 'BW', 'QCC', 'Tmc', 'Kt', 'VGutC', 'Kabs')."
+    )
     symbol_original: Optional[str] = Field(None, description="Mathematical symbol exactly as printed (e.g., 'QCC', 'Vmax', 'Kp_liver', 'BW'). Null only if no symbol appears in the source.")
     symbol_standardized: Optional[str] = Field(None, description="Standardized symbol in common PBPK notation (e.g., 'QCC', 'Kp_liver', 'fu', 'BW'). Copy from symbol_original if already standard. Null only if symbol_original is null.")
+    pbpko_id: Optional[str] = Field(None, description="Ontology term ID (e.g., PBPKO:0000001).")
+    pbpko_iri: Optional[str] = Field(None, description="Ontology IRI.")
+    ontology_match_type: Optional[str] = Field(None, description="'exact', 'fuzzy', 'unmatched'.")
 
     context: BiologicalContext = Field(..., description="Biological and study context.")
     quantitative_data: QuantitativeData = Field(..., description="Numerical values and units.")
     provenance: Provenance = Field(..., description="Source location and status.")
-    confidence: ConfidenceScores = Field(default_factory=ConfidenceScores)
+    confidence: Optional[Union[str, ConfidenceScores]] = Field(default_factory=ConfidenceScores)
+    needs_review: bool = Field(False)
+
+    @model_validator(mode="before")
+    @classmethod
+    def sync_parameter_names(cls, data: Any) -> Any:
+        if not isinstance(data, dict):
+            return data
+        d = dict(data)
+        if d.get("parameter_name") and not d.get("parameter_name_original"):
+            d["parameter_name_original"] = d["parameter_name"]
+        elif d.get("parameter_name_original") and not d.get("parameter_name"):
+            d["parameter_name"] = d["parameter_name_original"]
+        if d.get("symbol") and not d.get("symbol_original"):
+            d["symbol_original"] = d["symbol"]
+        elif d.get("symbol_original") and not d.get("symbol"):
+            d["symbol"] = d["symbol_original"]
+        return d
+
+class ExtractionResult(BaseModel):
+    model_classification: Literal["pbpk", "simple_empirical_compartmental", "not_applicable"]
+    parameters: List[ExtractedParameter] = Field(default_factory=list)
+    structure: Optional[ModelStructure] = None
     needs_review: bool = Field(False)
 
 # ─── Formulation Characterization (non-PBPK physical measurements) ─────────────

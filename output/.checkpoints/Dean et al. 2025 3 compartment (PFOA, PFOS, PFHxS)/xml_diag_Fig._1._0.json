@@ -7,7 +7,7 @@
   },
   "model_classification": {
     "model_type": "simple_empirical_compartmental",
-    "evidence_quote": "Schematic for the three-compartment model ( V c , V t , V fil ) with a saturable resorption process ( T m , K t ) adapted from Wambaugh et al. (2013 ) and Andersen et al. (2006 ); C Prim , C Deep , and C fil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
+    "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
   },
   "model_context": null,
   "biological_basis": null,
@@ -98,14 +98,20 @@
       "route": "oral",
       "model_type": "first_order",
       "site": "gut",
-      "evidence_quote": "Schematic for the three-compartment model ( V c , V t , V fil ) with a saturable resorption process ( T m , K t ) adapted from Wambaugh et al. (2013 ) and Andersen et al. (2006 ); C Prim , C Deep , and C fil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
+      "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
     },
     "metabolism": null,
-    "elimination": null,
+    "elimination": {
+      "routes": [
+        "renal"
+      ],
+      "evidence_quote": "Schematic for the three-compartment model ( Vc, Vt, Vfil ) with a saturable resorption process ( Tm, Kt ) adapted from Wambaugh et al. (2013) and Andersen et al. (2006); CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments."
+    },
     "unresolved": null,
     "source_location": "Fig. 1",
     "equations_provided": "none",
-    "allometric_scaling_rules": []
+    "allometric_scaling_rules": [],
+    "scaling_equations": []
   },
   "metabolic_pathways": [],
   "parameter_blocks": [],

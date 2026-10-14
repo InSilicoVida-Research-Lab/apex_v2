@@ -1,10 +1,11 @@
+import asyncio
 import torch
 from typing import List
 from PIL import Image
 import json
 import os
 
-from .schemas import ExtractedPage, ExtractedParameter, TableEvidence
+from .schemas import ExtractedPage, ExtractedParameter, TableEvidence, ExtractionResult
 from .config import logger, Config
 from pydantic import ValidationError
 
@@ -131,6 +132,83 @@ class ColQwenRetriever:
         
         return [images[i] for i in top_indices]
 
+    def score_pages(self, query: str, images: List[Image.Image]) -> List[float]:
+        """Score all page images against a query text using ColQwen MaxSim."""
+        if not images:
+            return []
+        if not self.is_loaded:
+            raise RuntimeError("ColQwenRetriever model is not loaded. Ensure colpali-engine is installed and GPU is available.")
+        with torch.no_grad():
+            batch_images = self.processor.process_images(images).to(self.model.device)
+            image_embeddings = self.model(**batch_images)
+            batch_queries = self.processor.process_queries([query]).to(self.model.device)
+            query_embeddings = self.model(**batch_queries)
+            scores = self.processor.score_multi_vector(query_embeddings, image_embeddings)[0]
+            return [s.item() for s in scores]
+
+    def find_top_pages_ensemble(self, images: List[Image.Image], top_k_per_query: int = 3) -> dict:
+        """
+        Multi-query ensemble retrieval to ensure prose pages, split tables,
+        and compartmental diagrams are all retrieved.
+        """
+        queries = {
+            "tables": "Table of physiological parameters blood flow tissue volumes partition coefficients Vmax Km clearance",
+            "narrative": "pharmacokinetic values estimated half-life clearance volume bioavailability body weight cardiac output",
+            "diagram": "Pharmacokinetic model structure schematic diagram compartments flow chart arrows"
+        }
+        selected = {"table_pages": set(), "narrative_pages": set(), "diagram_pages": set()}
+
+        for role, query_text in queries.items():
+            scores = self.score_pages(query_text, images)
+            ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
+            top_indices = ranked_indices[:top_k_per_query]
+            if role == "tables":
+                selected["table_pages"].update(top_indices)
+            elif role == "narrative":
+                selected["narrative_pages"].update(top_indices)
+            elif role == "diagram":
+                if ranked_indices:
+                    selected["diagram_pages"].add(ranked_indices[0])
+
+        return selected
+
+
+PBPK_SYSTEM_PROMPT = """You are an expert PBPK/TK data extraction engine. Extract every physiological, biochemical, physicochemical, and formulation parameter into the required JSON schema.
+
+### STEP 1 — MODEL CLASSIFICATION
+- Classify `model_classification` as `'pbpk'` or `'simple_empirical_compartmental'`. Only use `'not_applicable'` if the text/image contains zero PK/PBPK model inputs or structure.
+
+### STEP 2 — MULTI-COLUMN, MULTI-FORMULATION & RANGE RULES (CRITICAL)
+1. **Cartesian Column Unrolling (Never Skip Columns)**:
+   - If a table has columns for multiple compounds (e.g., `PFOS`, `PFOA`, `PFHxS`), species (`Nonhuman primate`, `Human`, `Rat`), or life stages (`Mother`, `Fetus`, `Infant`), emit a SEPARATE `ExtractedParameter` object for EVERY populated column in that row.
+2. **Comma-Separated Formulations (NEVER Map to Ranges)**:
+   - If a column header specifies multiple formulations (e.g., `Value in rat for Rilutor, ASD` with cell `0.69, 2.19` or `0.013, 0.011`), emit TWO separate `ExtractedParameter` entries: one with `context.formulation = "Rilutor"` (`value = 0.69`) and one with `context.formulation = "ASD"` (`value = 2.19`). NEVER place comma-separated formulations into `ci_low`/`ci_high` or `start_value`/`end_value`.
+3. **Confidence Intervals vs. Time-Varying Physiological Ranges**:
+   - **Confidence Intervals**: When a cell reports a point estimate with parentheses like `0.21 (0.18, 0.25)` under a `(95% CI)` header, set `value = 0.21`, `ci_low = 0.18`, `ci_high = 0.25`, `variance_type = "95% CI"`.
+   - **Time-Varying Growth Ranges**: When a physiological parameter changes over gestation/lactation/age (e.g., `56.9 - 70 (initial)`, `65.3 - 79.6 (increasing)`, `0 - 3.8`, `3.2 - 2.4`), set `start_value` to the first number (e.g., `56.9` or `3.2`) and `end_value` to the second number (e.g., `70.0` or `2.4`), and record the descriptor in `value_qualifier`.
+4. **Dual-Symbol Rows**:
+   - If a row defines two symbols for different life stages (e.g., `urinary elimination rate constant, kurinec (/h/kg^-0.25); keliml for infant (/h)`), emit TWO separate parameter entries with their respective symbol, unit, and `context.life_stage` (`Mother` vs. `Infant`).
+5. **Footnotes & Inline Numbers with Letters**:
+   - Always record the exact string in `value_text` (e.g., `'0.008[b]'` or `'5a'`). Strip the footnote letter to parse the pure float into `value` (`0.008`, `5.0`) and put `'b'` or `'a'` in `footnote_marker`.
+   - Read all `Table Footnotes` carefully and extract any numeric constants stated in the footnotes (e.g., `liver:blood partition coefficient = 2.0`, `blood to plasma ratio = 1.1`, or forced bioavailability overrides) as standalone `ExtractedParameter` objects!
+6. **Group Headers & Units**:
+   - Never emit a spanning group header (e.g., `Blood flow to organ (fraction)`) as a parameter with `value: null`. Prepend the group header to each row below it (e.g., `parameter_name = "Blood flow to organ - Liver"`) and propagate its unit with `unit_inherited = true`.
+
+### STEP 3 — MODEL STRUCTURE / TOPOLOGY
+- When given a compartmental diagram or equations, extract all compartment names and directional flow connections into `structure`. Symbolic equations without numbers (e.g., `Vc = Vcc * BW`) belong in `structure.scaling_equations`, never as fake numeric parameters.
+"""
+
+def build_table_user_prompt(markdown_table_string: str, source_location: str) -> str:
+    return f"""Extract all PBPK/TK parameters from `{source_location}` strictly into the JSON schema.
+
+CRITICAL INSTRUCTIONS FOR THIS TABLE:
+1. This is a confirmed PK/PBPK input table. Set `model_classification` to `'pbpk'` or `'simple_empirical_compartmental'`. Do NOT output `'not_applicable'`.
+2. Unroll EVERY data column (every compound, species, life stage, and formulation) into its own parameter object.
+3. Extract all numeric constants mentioned in the Table Footnotes section at the bottom.
+
+Document Table ({source_location}):
+{markdown_table_string}"""
+
 
 from .schemas import ExtractedPage, ExtractedParameter
 
@@ -236,20 +314,14 @@ shared.
 ==================================================
 4. MULTIPLE COMPOUNDS OR CONDITIONS IN COLUMNS
 ==================================================
+4. MULTIPLE COMPOUNDS, FORMULATIONS, SPECIES, LIFE STAGES IN COLUMNS
+==================================================
 
-If a table contains multiple compound-specific or condition-specific columns,
-each value must be mapped to the correct column header.
-
-For example:
-
-Parameter | Compound A | Compound B
-
-must become two independent parameter records:
-
-Parameter + Compound A + Value A
-Parameter + Compound B + Value B
-
-Never combine multiple compounds into a single parameter record.
+1. Cartesian Column Unrolling (Never Skip Columns):
+If a table contains columns for multiple compounds (e.g., PFOS, PFOA, PFHxS),
+species (Nonhuman primate, Human, Rat), or life stages (Mother, Fetus, Infant),
+emit a SEPARATE ExtractedParameter object for EVERY populated column in that row.
+Never combine multiple compounds or species into a single parameter record.
 
 For multi-level headers such as:
 
@@ -259,16 +331,17 @@ Mean (95% CI)
 
 the complete column path must be preserved.
 
-Example:
+2. Comma-Separated Formulations (NEVER Map to Ranges):
+If a column header specifies multiple formulations (e.g., 'Value in rat for Rilutor, ASD'
+with cell '0.69, 2.19' or '0.013, 0.011'), emit TWO separate ExtractedParameter entries:
+one with context.formulation = "Rilutor" (value = 0.69) and one with
+context.formulation = "ASD" (value = 2.19). NEVER place comma-separated formulations into
+ranges or confidence intervals!
 
-column_path = ["Mean (95% CI)", "Compound A"]
-
-and
-
-column_path = ["Mean (95% CI)", "Compound B"]
-
-Never assign a value to a compound merely because that compound is mentioned
-elsewhere in the row, footnote, citation, or surrounding paragraph.
+3. Dual-Symbol Rows:
+If a row defines two symbols for different life stages (e.g., 'urinary elimination rate constant,
+kurinec (/h/kg^-0.25); keliml for infant (/h)'), emit TWO separate parameter entries with
+their respective symbol, unit, and context.life_stage ('Mother' vs. 'Infant').
 
 ==================================================
 5. TABLE TITLE VS LOCAL TEXT / FOOTNOTES
@@ -295,67 +368,47 @@ Do not treat such a mention as the identity of the extracted value unless the
 table explicitly establishes that relationship.
 
 ==================================================
-6. FOOTNOTES
+6. FOOTNOTES AND INLINE LETTERS IN NUMBERS
 ==================================================
 
 Read all footnotes associated with the table.
 
-Determine whether each footnote:
+1. Inline Numbers with Letters:
+Always record the verbatim string in value_text (e.g., '0.008[b]' or '5a'). Strip the footnote
+letter to parse the pure float into value (0.008, 5.0) and put 'b' or 'a' in footnote_marker.
 
-- modifies a specific cell
-- modifies a row
-- modifies a column
-- modifies a species
-- modifies a compound
-- defines a symbol
-- explains an assumption
-- explains a transformation
-- provides a source
-- describes an exception
+2. Constants in Footnotes:
+Read all Table Footnotes section carefully and extract any numeric constants stated in the
+footnotes (e.g., 'liver:blood partition coefficient = 2.0', 'blood to plasma ratio = 1.1',
+or forced bioavailability overrides) as standalone ExtractedParameter objects!
+
+3. Group Headers & Subheaders:
+Never emit a spanning group header (e.g., 'Blood flow to organ (fraction)') as a parameter with
+value: null. Prepend the group header to each row below it (e.g., parameter_name = 'Blood flow to organ - Liver')
+and propagate its unit with unit_inherited = true.
 
 Do not discard footnotes.
-
-Do not allow a footnote to overwrite the primary table hierarchy unless the
-footnote explicitly states that it changes the interpretation of the value.
 
 ==================================================
 7. ESTIMATES, RANGES, AND UNCERTAINTY
 ==================================================
 
-Preserve the reported numerical structure exactly.
+Distinguish Confidence Intervals from Time-Varying Physiological Ranges:
 
-Examples:
+A. Confidence Intervals / Uncertainty:
+When a cell reports a point estimate with uncertainty like '0.21 (0.18, 0.25)' under a '(95% CI)' header,
+set value = 0.21, ci_low = 0.18, ci_high = 0.25, variance_type = "95% CI".
+Similarly for '10 ± 2', set value = 10.0, variance = 2.0, variance_type = "SD".
 
-10
-0.24 (0.20, 0.30)
-10 ± 2
-< 5
-> 10
-10–20
-10 [95% CI: 8–12]
-
-Do not reduce:
-
-0.24 (0.20, 0.30)
-
-to only:
-
-0.24
-
-Store:
-
-estimate = 0.24
-uncertainty_type = "95% CI"
-lower = 0.20
-upper = 0.30
+B. Time-Varying Growth Ranges:
+When a physiological parameter changes over gestation/lactation/growth (e.g., '56.9 - 70 (initial)',
+'65.3 - 79.6 (increasing)', '0 - 3.8', '3.2 - 2.4'), set start_value to the first number (e.g., 56.9 or 3.2),
+end_value to the second number (e.g., 70.0 or 2.4), and record the descriptor in value_qualifier.
+Leave value = null if there is no single point estimate.
 
 Similarly preserve qualifiers such as:
-
 <, >, approximately, median, mean, geometric mean, range, SD, SE, CI, IQR,
 credible interval, confidence interval, etc.
-
-Do not convert a range into a point estimate unless explicitly required by the
-schema.
 
 ==================================================
 8. UNITS
@@ -1207,7 +1260,8 @@ class SGLangExtractor:
                 f"2. If page metadata (Title, Authors, Journal) is not visible in this specific table block, output null for those fields as instructed in Step 5.\n"
                 f"3. Map the column headers to their respective parameter entries (e.g., values under 'Mean (95% CI) - PFOS' get compound='PFOS', values under 'Mean (95% CI) - PFOA' get compound='PFOA').\n"
                 f"4. If multiple compounds appear in distinct columns, generate separate parameter records for each compound.\n"
-                f"5. A numerical parameter table MUST produce a non-empty `parameter_blocks` list. Create one record for every numeric parameter-value cell; do not return only `table_evidence`.\n\n"
+                f"5. A numerical parameter table MUST produce a non-empty `parameter_blocks` list. Create one record for every numeric parameter-value cell.\n"
+                f"6. CRITICAL FOR TOKEN BUDGET: Set `\"table_evidence\": []`. Do NOT generate cells, columns, or rows in `table_evidence` because the system automatically attaches the pre-computed table structure. Dedicate all token capacity exclusively to `parameter_blocks`!\n\n"
                 f"Document Text:\n{text.strip()}"
             )
             if table_evidence:
@@ -1259,7 +1313,7 @@ class SGLangExtractor:
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
         
-        max_tokens = 6000 if role == "table_xml" else 16000
+        max_tokens = 16384
         extracted_text = ""
         if getattr(self, "use_server", False):
             import aiohttp
@@ -1468,7 +1522,104 @@ class SGLangExtractor:
             return judgments
         except Exception as e:
             logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
-            raise
+
+
+
+class PBPKExtractorService:
+    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct"):
+        self.model_id = model_id
+        self.use_sglang = False
+        self.server_url = "http://127.0.0.1:30000"
+        
+        # Check if external SGLang server is running
+        try:
+            import requests
+            resp = requests.get(f"{self.server_url}/health", timeout=2)
+            if resp.status_code == 200:
+                self.use_sglang = True
+                logger.info("PBPKExtractorService: Connected to running SGLang server on port 30000.")
+        except Exception:
+            self.use_sglang = False
+
+        self.llm = None
+        self.sampling_params = None
+        if not self.use_sglang:
+            try:
+                from vllm import LLM, SamplingParams
+                self.llm = LLM(
+                    model=model_id,
+                    tensor_parallel_size=1,
+                    trust_remote_code=True,
+                    max_model_len=16384,
+                    enable_prefix_caching=True
+                )
+                self.sampling_params = SamplingParams(
+                    temperature=0.0,
+                    repetition_penalty=1.0,
+                    max_tokens=8192,
+                    guided_json=ExtractionResult.model_json_schema()
+                )
+            except Exception as e:
+                logger.warning(f"PBPKExtractorService: vLLM initialization note: {e}")
+
+    def find_top_pages(self, retriever, pdf_images: list, top_k_per_query: int = 3) -> dict:
+        """
+        Multi-query ensemble retrieval to ensure prose pages, split tables,
+        and compartmental diagrams are all retrieved.
+        """
+        queries = {
+            "tables": "Table of physiological parameters blood flow tissue volumes partition coefficients Vmax Km clearance",
+            "narrative": "pharmacokinetic values estimated half-life clearance volume bioavailability body weight cardiac output",
+            "diagram": "Pharmacokinetic model structure schematic diagram compartments flow chart arrows"
+        }
+        selected = {"table_pages": set(), "narrative_pages": set(), "diagram_pages": set()}
+
+        for role, query_text in queries.items():
+            if hasattr(retriever, "score_pages"):
+                scores = retriever.score_pages(query_text, pdf_images)
+            else:
+                continue
+            ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
+            top_indices = ranked_indices[:top_k_per_query]
+            if role == "tables":
+                selected["table_pages"].update(top_indices)
+            elif role == "narrative":
+                selected["narrative_pages"].update(top_indices)
+            elif role == "diagram":
+                if ranked_indices:
+                    selected["diagram_pages"].add(ranked_indices[0])
+
+        return selected
+
+    def extract_text_table(self, markdown_table: str, source_location: str) -> dict:
+        user_prompt = build_table_user_prompt(markdown_table, source_location)
+        full_prompt = (
+            f"<|im_start|>system\n{PBPK_SYSTEM_PROMPT}<|im_end|>\n"
+            f"<|im_start|>user\n{user_prompt}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        if self.use_sglang:
+            import requests
+            schema_json = json.dumps(ExtractionResult.model_json_schema())
+            payload = {
+                "text": full_prompt,
+                "sampling_params": {
+                    "max_new_tokens": 8192,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0,
+                    "json_schema": schema_json
+                }
+            }
+            resp = requests.post(f"{self.server_url}/generate", json=payload, timeout=3600)
+            res_data = resp.json()
+            raw_text = res_data.get("text", "")
+            return ExtractionResult.model_validate_json(raw_text).model_dump()
+        elif self.llm is not None:
+            outputs = self.llm.generate([{"prompt": full_prompt}], sampling_params=self.sampling_params)
+            raw_json = outputs[0].outputs[0].text
+            return ExtractionResult.model_validate_json(raw_json).model_dump()
+        else:
+            raise RuntimeError("Neither SGLang server nor vLLM is available for PBPKExtractorService.")
 
 
 

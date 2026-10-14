@@ -12,7 +12,7 @@ from pk_pipeline.ingestion.xml_parser import parse_jats_xml
 async def main():
     print("1. Parsing XML...", flush=True)
     xml_data = parse_jats_xml('/home/gautam/Desktop/project/apex_v2/dean_pmc.xml', filter_narrative=True)
-    chunks = [c for c in xml_data['chunks'] if c.get('title') == 'Table 1.']
+    chunks = [c for c in xml_data['chunks'] if c.get('title', '').startswith('Table 1')]
     print(f"2. Found {len(chunks)} Table 1 chunks", flush=True)
     if not chunks:
         return
