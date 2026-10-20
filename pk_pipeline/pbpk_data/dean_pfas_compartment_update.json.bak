@@ -1,0 +1,5976 @@
+{
+  "page_metadata": {
+    "title": "Adapting existing toxicokinetic models to relate perfluoroalkyl and polyfluoroalkyl intake to biomarkers in humans",
+    "authors": [
+      "Kara J. Dean",
+      "Régis Pouillot",
+      "Jane M. Van Doren",
+      "Sofia M. Santillana Farakos"
+    ],
+    "journal": "Toxicological Sciences",
+    "year": 2025
+  },
+  "model_classification": {
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "Fig. 1. Schematic for the three-compartment model (Vc, Vt, Vfil) with a saturable resorption process (Tm, Kt)."
+  },
+  "model_context": {
+    "model_origin": "adapted from Wambaugh et al. (2013) nonhuman-primate three-compartment model and scaled to humans",
+    "stated_purpose": "Relate PFAS intake/exposure to human serum biomarkers and support forward/reverse dosimetry and risk assessment for PFOS, PFOA, and PFHxS",
+    "dose_metric": "serum concentration and risk-assessment exposure metric (PODHED)"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "cardiac output",
+      "filtrate compartment volume",
+      "central and second compartment volumes",
+      "saturable renal resorption",
+      "serum protein binding/free fraction",
+      "oral absorption"
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Human scaling uses body weight 70 kg and cardiac output 12.5 L/h/kg^0.74.",
+        "evidence_quote": "We scaled the reparametrized Wambaugh model ... to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg0.74)",
+        "source_location": "Methods, p.2"
+      },
+      {
+        "description": "For human models, the Tmc value was fit to representative human half-lives.",
+        "evidence_quote": "adjusted the maximum rate of the saturable resorption parameter (Tm, mg/h) to match the half-life estimated in humans",
+        "source_location": "Methods, p.2"
+      },
+      {
+        "description": "Human bioavailability was set to 90% for PFOS and PFOA.",
+        "evidence_quote": "assuming a bioavailability of 90% for application in the human model",
+        "source_location": "Results, p.4"
+      },
+      {
+        "description": "PFHxS bioavailability and saturable resorption affinity were assumed equal to PFOS.",
+        "evidence_quote": "Assumed (PFOS)",
+        "source_location": "Table 3, p.7"
+      }
+    ],
+    "specialized_mechanisms": [
+      "saturable renal resorption"
+    ]
+  },
+  "model_structure": {
+    "reported_compartment_count": 3,
+    "listed_compartment_count": 3,
+    "count_consistency": "consistent",
+    "compartments": [
+      {
+        "id": "central",
+        "label_raw": "Central compartment",
+        "confidence": 0.99
+      },
+      {
+        "id": "second",
+        "label_raw": "Second compartment",
+        "confidence": 0.99
+      },
+      {
+        "id": "filtrate",
+        "label_raw": "Filtrate compartment",
+        "confidence": 0.99
+      }
+    ],
+    "connections": [
+      {
+        "source": "external",
+        "target": "central",
+        "label_raw": "Oral dose / ka",
+        "direction": "forward",
+        "edge_type": "absorption",
+        "evidence": "Figure 1",
+        "confidence": 0.95
+      },
+      {
+        "source": "central",
+        "target": "second",
+        "label_raw": "k12",
+        "direction": "forward",
+        "edge_type": "distribution",
+        "evidence": "Rate from central to second compartment",
+        "confidence": 0.99
+      },
+      {
+        "source": "second",
+        "target": "central",
+        "label_raw": "k21",
+        "direction": "forward",
+        "edge_type": "distribution",
+        "evidence": "Rate from second to central compartment",
+        "confidence": 0.99
+      },
+      {
+        "source": "central",
+        "target": "filtrate",
+        "label_raw": "Qfil",
+        "direction": "forward",
+        "edge_type": "filtration",
+        "evidence": "Fraction of cardiac output to filtrate",
+        "confidence": 0.9
+      },
+      {
+        "source": "filtrate",
+        "target": "central",
+        "label_raw": "Tm, Kt",
+        "direction": "forward",
+        "edge_type": "resorption",
+        "evidence": "Saturable resorption process",
+        "confidence": 0.9
+      }
+    ],
+    "absorption": {
+      "route": "oral",
+      "model_type": "first_order",
+      "site": "central compartment input",
+      "evidence_quote": "The figure labels the oral input with ka; the model description identifies ka as the rate from gut to central compartment."
+    },
+    "metabolism": null,
+    "elimination": {
+      "routes": [
+        "renal filtration",
+        "saturable renal resorption"
+      ],
+      "evidence_quote": "The model contains a filtrate compartment and a saturable resorption process parameterized by Tm and Kt."
+    },
+    "unresolved": [
+      {
+        "description": "Human models inherit several parameters unchanged from the nonhuman-primate model and those values are not repeated in the human columns.",
+        "reason": "The text states that the remaining parameters were held constant, so the inherited values are represented explicitly rather than copied as new human fits."
+      }
+    ],
+    "source_location": "Figure 1, page 3",
+    "equations_provided": "text",
+    "allometric_scaling_rules": [
+      "Vt = k12/k21 * Vc",
+      "Vfil = VfilC * BW",
+      "Qfil = QfilC * QCC * BW^0.74",
+      "Human BW = 70 kg; QCC = 12.5 L/h/kg^0.74"
+    ]
+  },
+  "metabolic_pathways": [],
+  "model_parameters": [
+    {
+      "parameter_id": "param_47433e86a091b20e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Body weight",
+        "source_quote": "5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_4a1e7de93e09ea20",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_d23757809951424c",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ecdb4a775e11a24e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_9fa1c815cc91a11b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5193ec25b5e58af2",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.24 (0.24, 0.25)",
+        "value": 0.24,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.24,
+          "upper": 0.25
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Volume of distribution, central compartment",
+        "source_quote": "0.24 (0.24, 0.25)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8ae91030569db87e",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.5 (2.31, 2.80)",
+        "value": 2.5,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 2.31,
+          "upper": 2.8
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Saturable resorption rate",
+        "source_quote": "2.5 (2.31, 2.80)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0e59e88f96b748de",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004 (0.003, 0.004)",
+        "value": 0.004,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.003,
+          "upper": 0.004
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Saturable resorption affinity",
+        "source_quote": "0.004 (0.003, 0.004)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_03d2b771f235956a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.50E-03",
+        "value": 0.0045,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Proportion of free compound in serum",
+        "source_quote": "4.50E-03",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_1ad269c4bdd46f9a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a478577a6f9c6818",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5871aec6faaa987a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 132,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from gut to central compartment",
+        "source_quote": "132",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_7cb1078047d2eebc",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.1",
+        "value": 4.1,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Body weight",
+        "source_quote": "4.1",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8dbeb9b217846be0",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_d8c08af16235da26",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e0ae9d5abce31598",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_eda56c791285f746",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_1c202d93dc2508f0",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.23 (0.18, 0.29)",
+        "value": 0.23,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.18,
+          "upper": 0.29
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Volume of distribution, central compartment",
+        "source_quote": "0.23 (0.18, 0.29)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_64388b6353cee881",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.28 (0.17, 0.53)",
+        "value": 0.28,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.17,
+          "upper": 0.53
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Saturable resorption rate",
+        "source_quote": "0.28 (0.17, 0.53)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_707ace3263ea1477",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.017 (0.010, 0.041)",
+        "value": 0.017,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.01,
+          "upper": 0.041
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Saturable resorption affinity",
+        "source_quote": "0.017 (0.010, 0.041)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a81d5fe16c87d849",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.20E-03",
+        "value": 0.0012,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Proportion of free compound in serum",
+        "source_quote": "1.20E-03",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_587910d55d0254d1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5e6ed81132610b4e",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_73c00dbebc8ee6d3",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "230",
+        "value": 230,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from gut to central compartment",
+        "source_quote": "230",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0705eef2cafdb58e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Body weight",
+        "source_quote": "70",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_198801b762799a85",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_bd4b57e099eaa204",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15 (held constant)",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b586107aa2555df1",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04 (held constant)",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_09125b9d83e10eea",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a, 2024b)",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_cfe30053eb36d92a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.07",
+        "value": 1.07,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Saturable resorption rate",
+        "source_quote": "1.07",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_6f0cdb69b69c725b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Saturable resorption affinity",
+        "source_quote": "0.004",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ea3d4abca370b357",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Half-life",
+        "source_quote": "3.4",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a09bcb1fe29d5ff5",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Body weight",
+        "source_quote": "70",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f5baea1678207c6b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8872c7a62e354463",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15 (held constant)",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_cbd0191a20c2d51f",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04 (held constant)",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Volume of filtrate compartment",
+        "source_quote": "4.00E-04 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_226692b239e6c169",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a, 2024b)",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ef637c8b8c6b71e9",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.54",
+        "value": 0.54,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Saturable resorption rate",
+        "source_quote": "0.54",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_12577572fefd57c0",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.008",
+        "value": 0.008,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Saturable resorption affinity",
+        "source_quote": "0.008",
+        "reference": "Optimized (nonhuman primate)",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_603183991a852782",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.7",
+        "value": 2.7,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Half-life",
+        "source_quote": "2.7",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_7e9c29983bc73416",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Body weight",
+        "source_quote": "5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_00a31d416cea4142",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_22abd28a1dee0f6d",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_6696a82fd2f62359",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0d0f425f92a6b735",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "PFOS",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "assumed_same_as_parent"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3ef11ecd7a005005",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.17 (0.16, 0.20)",
+        "value": 0.17,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Volume of distribution, central compartment",
+        "source_quote": "0.17 (0.16, 0.20)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_66a1b68b0eac4c7f",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.21 (0.18, 0.25)",
+        "value": 0.21,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Saturable resorption rate",
+        "source_quote": "0.21 (0.18, 0.25)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8deb19c89b76debb",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Saturable resorption affinity",
+        "source_quote": "0.004",
+        "reference": "PFOS",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "assumed_same_as_parent"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0ce68ea1bf7a41bc",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0009",
+        "value": 0.0009,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Proportion of free compound in serum",
+        "source_quote": "0.0009",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_c9657eb7d39339c1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8d01af8626875848",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_af90672fd4b9f9af",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 132,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from gut to central compartment",
+        "source_quote": "132",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b75e32c38f73f765",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Body weight",
+        "source_quote": "70",
+        "reference": "Loccisano et al. (2011)",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_718bb8cce4812fbb",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": "Loccisano et al. (2011)",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_44e5b01bc74e51af",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.47",
+        "value": 0.47,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Saturable resorption rate",
+        "source_quote": "0.47",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0a4cee955497fba9",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.3",
+        "value": 5.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Half-life",
+        "source_quote": "5.3",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [
+    {
+      "finding_type": "model_validation",
+      "metric": "serum concentration",
+      "formulation": null,
+      "comparator": "observed animal serum levels",
+      "species": "nonhuman primate",
+      "relative_change": "within 2-fold for 98% of PFOS data points",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Model validation",
+        "source_quote": "For PFOS, the model predictions were within a factor of 2 of the observed serum levels for 98% of the data points.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "model_validation",
+      "metric": "serum concentration",
+      "formulation": null,
+      "comparator": "observed animal serum levels",
+      "species": "nonhuman primate",
+      "relative_change": "within 2-fold for 71% of PFOA data points",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Model validation",
+        "source_quote": "For PFOA, the model predictions were within a factor of 2 of the observed serum levels for 71% of the data.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_trend",
+      "metric": "serum PFOS",
+      "formulation": null,
+      "comparator": "NHANES",
+      "species": "human",
+      "relative_change": "trend matched",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Human models",
+        "source_quote": "The models were able to match the trends for change in PFOS serum levels.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_trend",
+      "metric": "serum PFOA",
+      "formulation": null,
+      "comparator": "NHANES",
+      "species": "human",
+      "relative_change": "trend matched",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Human models",
+        "source_quote": "The models were able to match the trends for change in PFOA serum levels.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_scenario",
+      "metric": "PFOS exposure model",
+      "formulation": null,
+      "comparator": "calendar-time exposure",
+      "species": "human",
+      "relative_change": "14.9 ng/kg BW/day in 1990 → 2.5 in 1998 → 0.24 in 2017",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Human models",
+        "source_quote": "The PFOS model ... peaked in 1990 at 14.9 ng PFOS/kg BW/day, fell to 2.5 ng PFOS/kg BW/day in 1998, and continued decreasing to 0.24 ng PFOS/kg BW/day in 2017.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_scenario",
+      "metric": "PFOA exposure model",
+      "formulation": null,
+      "comparator": "calendar-time exposure",
+      "species": "human",
+      "relative_change": "0.45 ng/kg BW/day in 1990 → 1.1 in 1998 → 0.13 in 2017",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": "Results",
+        "source_location": "Human models",
+        "source_quote": "The PFOA model ... increased from 0.45 ng/kg BW/day in 1990 to 1.1 ng/kg BW/day in 1998 and fell to 0.13 ng/kg BW/day in 2017.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    }
+  ],
+  "parameter_mentions_without_values": [],
+  "dosing": [],
+  "ingestion_source": "user_uploaded_pdf",
+  "ingestion_source_type": "published_pdf",
+  "laya_filter_summary": {
+    "model_type_triage": "not_run",
+    "evaluated_chunks": 0,
+    "discarded_chunks": 0,
+    "retained_chunks": 0
+  },
+  "system_specific_parameters": [
+    {
+      "parameter_id": "param_47433e86a091b20e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Body weight",
+        "source_quote": "5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_4a1e7de93e09ea20",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_d23757809951424c",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ecdb4a775e11a24e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_7cb1078047d2eebc",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.1",
+        "value": 4.1,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Body weight",
+        "source_quote": "4.1",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8dbeb9b217846be0",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_d8c08af16235da26",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e0ae9d5abce31598",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0705eef2cafdb58e",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Body weight",
+        "source_quote": "70",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_198801b762799a85",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_bd4b57e099eaa204",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15 (held constant)",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b586107aa2555df1",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04 (held constant)",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a09bcb1fe29d5ff5",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Body weight",
+        "source_quote": "70",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f5baea1678207c6b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8872c7a62e354463",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15 (held constant)",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_cbd0191a20c2d51f",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04 (held constant)",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Volume of filtrate compartment",
+        "source_quote": "4.00E-04 (held constant)",
+        "reference": null,
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_7e9c29983bc73416",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5",
+        "value": 5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Body weight",
+        "source_quote": "5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_00a31d416cea4142",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "19.8",
+        "value": 19.8,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Cardiac blood output",
+        "source_quote": "19.8",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_22abd28a1dee0f6d",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction of cardiac output to filtrate",
+      "parameter_name_standardized": "fraction_cardiac_output_to_filtrate",
+      "symbol_original": "QfilC",
+      "symbol_standardized": "QfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.15",
+        "value": 0.15,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction of cardiac output",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Fraction of cardiac output to filtrate",
+        "source_quote": "0.15",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_6696a82fd2f62359",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Volume of filtrate compartment",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.00E-04",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Volume of filtrate compartment",
+        "source_quote": "4.00E-04",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b75e32c38f73f765",
+      "parameter_class": "physiological",
+      "parameter_subclass": "body_weight",
+      "parameter_name_original": "Body weight",
+      "parameter_name_standardized": "body_weight",
+      "symbol_original": "BW",
+      "symbol_standardized": "BW",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "70",
+        "value": 70,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "kg",
+        "unit_standardized": "kg",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Body weight",
+        "source_quote": "70",
+        "reference": "Loccisano et al. (2011)",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_718bb8cce4812fbb",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac blood output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.74",
+        "unit_standardized": "L h^-1 kg^-0.74",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Cardiac blood output",
+        "source_quote": "12.5",
+        "reference": "Loccisano et al. (2011)",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "human_specific"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "compound_specific_parameters": [
+    {
+      "parameter_id": "param_9fa1c815cc91a11b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5193ec25b5e58af2",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.24 (0.24, 0.25)",
+        "value": 0.24,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.24,
+          "upper": 0.25
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Volume of distribution, central compartment",
+        "source_quote": "0.24 (0.24, 0.25)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8ae91030569db87e",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.5 (2.31, 2.80)",
+        "value": 2.5,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 2.31,
+          "upper": 2.8
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Saturable resorption rate",
+        "source_quote": "2.5 (2.31, 2.80)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0e59e88f96b748de",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004 (0.003, 0.004)",
+        "value": 0.004,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.003,
+          "upper": 0.004
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Saturable resorption affinity",
+        "source_quote": "0.004 (0.003, 0.004)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_03d2b771f235956a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "4.50E-03",
+        "value": 0.0045,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Proportion of free compound in serum",
+        "source_quote": "4.50E-03",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_1ad269c4bdd46f9a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a478577a6f9c6818",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5871aec6faaa987a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 132,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOS, Rate from gut to central compartment",
+        "source_quote": "132",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_eda56c791285f746",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_1c202d93dc2508f0",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.23 (0.18, 0.29)",
+        "value": 0.23,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.18,
+          "upper": 0.29
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Volume of distribution, central compartment",
+        "source_quote": "0.23 (0.18, 0.29)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_64388b6353cee881",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.28 (0.17, 0.53)",
+        "value": 0.28,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.17,
+          "upper": 0.53
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Saturable resorption rate",
+        "source_quote": "0.28 (0.17, 0.53)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_707ace3263ea1477",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.017 (0.010, 0.041)",
+        "value": 0.017,
+        "uncertainty": {
+          "type": "95% CI",
+          "lower": 0.01,
+          "upper": 0.041
+        },
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Saturable resorption affinity",
+        "source_quote": "0.017 (0.010, 0.041)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a81d5fe16c87d849",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.20E-03",
+        "value": 0.0012,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Proportion of free compound in serum",
+        "source_quote": "1.20E-03",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_587910d55d0254d1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_5e6ed81132610b4e",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_73c00dbebc8ee6d3",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "230",
+        "value": 230,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Nonhuman primate, PFOA, Rate from gut to central compartment",
+        "source_quote": "230",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_09125b9d83e10eea",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a, 2024b)",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_cfe30053eb36d92a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.07",
+        "value": 1.07,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Saturable resorption rate",
+        "source_quote": "1.07",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_6f0cdb69b69c725b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Saturable resorption affinity",
+        "source_quote": "0.004",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ea3d4abca370b357",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFOS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOS, Half-life",
+        "source_quote": "3.4",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_226692b239e6c169",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "US EPA (2024a, 2024b)",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ef637c8b8c6b71e9",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.54",
+        "value": 0.54,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Saturable resorption rate",
+        "source_quote": "0.54",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_12577572fefd57c0",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.008",
+        "value": 0.008,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Saturable resorption affinity",
+        "source_quote": "0.008",
+        "reference": "Optimized (nonhuman primate)",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_603183991a852782",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.7",
+        "value": 2.7,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 4,
+        "source_section": null,
+        "source_location": "Table 1, Human, PFOA, Half-life",
+        "source_quote": "2.7",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0d0f425f92a6b735",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "bioavailability",
+      "parameter_name_original": "Bioavailability",
+      "parameter_name_standardized": "bioavailability",
+      "symbol_original": "bioAv",
+      "symbol_standardized": "bioAv",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.9",
+        "value": 0.9,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "fraction",
+        "unit_standardized": "fraction",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Bioavailability",
+        "source_quote": "0.9",
+        "reference": "PFOS",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "assumed_same_as_parent"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3ef11ecd7a005005",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_volume",
+      "parameter_name_original": "Volume of distribution, central compartment",
+      "parameter_name_standardized": "central_compartment_volume",
+      "symbol_original": "VCC",
+      "symbol_standardized": "VCC",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.17 (0.16, 0.20)",
+        "value": 0.17,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "L/kg",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Volume of distribution, central compartment",
+        "source_quote": "0.17 (0.16, 0.20)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_66a1b68b0eac4c7f",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.21 (0.18, 0.25)",
+        "value": 0.21,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Saturable resorption rate",
+        "source_quote": "0.21 (0.18, 0.25)",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8deb19c89b76debb",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Saturable resorption affinity",
+      "parameter_name_standardized": "saturable_resorption_affinity",
+      "symbol_original": "Kt",
+      "symbol_standardized": "Kt",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "mg/L",
+        "unit_standardized": "mg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Saturable resorption affinity",
+        "source_quote": "0.004",
+        "reference": "PFOS",
+        "status": "assumed_default",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "assumed_same_as_parent"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0ce68ea1bf7a41bc",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Proportion of free compound in serum",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0009",
+        "value": 0.0009,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Proportion of free compound in serum",
+        "source_quote": "0.0009",
+        "reference": "Smeltz et al. (2023)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_c9657eb7d39339c1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from central to second compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c12",
+      "symbol_original": "k12",
+      "symbol_standardized": "k12",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.3",
+        "value": 3.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from central to second compartment",
+        "source_quote": "3.3",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8d01af8626875848",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "distribution_rate",
+      "parameter_name_original": "Rate from second to central compartment",
+      "parameter_name_standardized": "intercompartmental_rate_c21",
+      "symbol_original": "k21",
+      "symbol_standardized": "k21",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "3.4",
+        "value": 3.4,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from second to central compartment",
+        "source_quote": "3.4",
+        "reference": "Andersen et al. (2006)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_af90672fd4b9f9af",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate from gut to central compartment",
+      "parameter_name_standardized": "absorption_rate_constant",
+      "symbol_original": "ka",
+      "symbol_standardized": "ka",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "nonhuman primate",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "132",
+        "value": 132,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "1/h",
+        "unit_standardized": "h^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Nonhuman primate, PFHxS, Rate from gut to central compartment",
+        "source_quote": "132",
+        "reference": "Wambaugh et al. (2013)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_44e5b01bc74e51af",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Saturable resorption rate",
+      "parameter_name_standardized": "saturable_resorption_rate",
+      "symbol_original": "Tmc",
+      "symbol_standardized": "Tmc",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.47",
+        "value": 0.47,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "mg/h/kg",
+        "unit_standardized": "mg h^-1 kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Saturable resorption rate",
+        "source_quote": "0.47",
+        "reference": "Optimized",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_0a4cee955497fba9",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "elimination_half_life",
+      "parameter_name_original": "Half-life",
+      "parameter_name_standardized": "elimination_half_life",
+      "symbol_original": "T1/2",
+      "symbol_standardized": "T1/2",
+      "context": {
+        "compound": "PFHxS",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "5.3",
+        "value": 5.3,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "years",
+        "unit_standardized": "years",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 3",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 7,
+        "source_section": null,
+        "source_location": "Table 3, Human, PFHxS, Half-life",
+        "source_quote": "5.3",
+        "reference": "Li et al. (2018)",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.0,
+    "total_parameters": 56,
+    "parameters_with_flags": 0,
+    "total_flags": 2,
+    "error_count": 0,
+    "warning_count": 2,
+    "clean": false,
+    "summary": "Updated audited extraction: corrected the structure to three compartments and moved calendar-time PFOS/PFOA exposure levels out of dosing because they are exposure-model outputs, not administered dose events.",
+    "flags": [
+      {
+        "code": "HUMAN_FIXED_PARAMS",
+        "severity": "warning",
+        "message": "Human Table 1 does not repeat all fixed parameters; the text states that remaining parameters were held constant from the animal model.",
+        "source_location": "Results, p.4"
+      },
+      {
+        "code": "EXPOSURE_NOT_DOSE_EVENT",
+        "severity": "warning",
+        "message": "Calendar-time PFOS/PFOA exposure levels are exposure-model outputs, not administered dose events; they are retained as qualitative exposure scenarios.",
+        "source_location": "Results, p.4"
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": []
+  }
+}
