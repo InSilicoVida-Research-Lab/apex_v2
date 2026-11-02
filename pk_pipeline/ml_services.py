@@ -1150,6 +1150,80 @@ class SGLangExtractor:
         except Exception as e:
             logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
 
+    async def assess_oecd_compliance(self, full_document_json: str, context_text: Optional[str] = None) -> "OECDAssessment":
+        """Tier 3 Pass: Evaluates extracted PBPK model strictly against OECD GD 331 & Tan et al. checklist."""
+        from pk_pipeline.schemas import OECDAssessment
+        from pk_pipeline.oecd_assessor import build_oecd_assessment_prompt, evaluate_oecd_from_document
+        
+        # If server or engine is not loaded/accessible, use evidence-based deterministic evaluator
+        if not getattr(self, "is_loaded", False):
+            logger.info("SGLang not loaded; running deterministic OECD GD 331 evaluation from extracted evidence.")
+            try:
+                doc_dict = json.loads(full_document_json)
+                return evaluate_oecd_from_document(doc_dict)
+            except Exception as e:
+                logger.error(f"Deterministic OECD evaluation failed: {e}")
+                return OECDAssessment(checklist_version="OECD GD 331", items=[])
+
+        import time
+        start_t = time.time()
+        logger.info("SGLang: [START] Running Tier 3 OECD GD 331 Assessment Pass...")
+        
+        schema_json = json.dumps(OECDAssessment.model_json_schema(), indent=2)
+        prompt_text = build_oecd_assessment_prompt(full_document_json, context_text=context_text)
+        
+        try:
+            if getattr(self, "use_server", False):
+                import aiohttp
+                timeout = aiohttp.ClientTimeout(total=3600)
+                async with aiohttp.ClientSession(timeout=timeout) as session:
+                    payload = {
+                        "text": prompt_text,
+                        "sampling_params": {
+                            "max_new_tokens": 8000,
+                            "temperature": 0.0,
+                            "repetition_penalty": 1.0,
+                            "json_schema": schema_json
+                        }
+                    }
+                    async with session.post("http://127.0.0.1:30000/generate", json=payload) as resp:
+                        result = await resp.json()
+                        extracted_text = result["text"]
+            else:
+                response = await self.engine.async_generate(
+                    prompt=prompt_text,
+                    sampling_params={
+                        "max_new_tokens": 8000,
+                        "temperature": 0.0,
+                        "repetition_penalty": 1.0,
+                        "json_schema": schema_json
+                    }
+                )
+                extracted_text = response["text"] if isinstance(response, dict) else response.text
+
+            if "</think>" in extracted_text:
+                extracted_text = extracted_text.split("</think>")[-1].strip()
+                
+            import re
+            match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
+            if match:
+                extracted_text = match.group(1).strip()
+            else:
+                extracted_text = extracted_text.strip()
+                
+            json_data = json.loads(extracted_text)
+            assessment = OECDAssessment(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Tier 3 OECD Assessment complete in {duration:.2f}s.")
+            return assessment
+        except Exception as e:
+            logger.warning(f"SGLang Tier 3 OECD generation issue: {e}. Falling back to deterministic evidence evaluator.")
+            try:
+                doc_dict = json.loads(full_document_json)
+                return evaluate_oecd_from_document(doc_dict)
+            except Exception:
+                raise
+
 
 
 class PBPKExtractorService:

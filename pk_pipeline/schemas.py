@@ -342,6 +342,15 @@ class ModelContext(BaseModel):
     model_origin: str = Field(description="Is this 'new', 'adapted from [cite]', or 'reused unchanged'? Use 'not_reported' if unclear.")
     stated_purpose: str = Field(description="The authors' stated context of use (e.g., risk assessment). Use 'not_reported' if unclear.")
     dose_metric: str = Field(description="What metric links to toxicity? (e.g., liver AUC of metabolite). Use 'not_reported' if unclear.")
+    target_populations: List[str] = Field(default_factory=list, description="Target population groups modeled (e.g. general adult, occupationally exposed).")
+    age_groups: List[str] = Field(default_factory=list, description="Age groups considered: e.g., 'children', 'teenagers', 'adults', 'older adults', 'infants'.")
+    life_stages: List[str] = Field(default_factory=list, description="Specific life stages: e.g., 'pregnancy', 'lactation', 'gestation', 'adult'.")
+    sex_or_gender: Optional[str] = Field(None, description="'male', 'female', 'both', 'unspecified'")
+    health_status: Optional[str] = Field(None, description="'healthy', 'diseased', 'renal_impaired', etc.")
+    geographic_population: Optional[str] = Field(None, description="'European', 'Asian', 'American', 'global', etc.")
+    original_application: Optional[str] = Field(None, description="Original intended use of the model.")
+    current_application: Optional[str] = Field(None, description="Current application in this paper.")
+    repurposed: Optional[bool] = Field(None, description="Whether the model was repurposed from a previous study.")
     
 class Assumption(BaseModel):
     description: str = Field(description="The stated assumption (e.g., 'well-stirred compartment', 'flow-limited kinetics')")
@@ -407,6 +416,75 @@ class EvaluatorJudgments(BaseModel):
     missing_standard_assumptions: List[str] = Field(description="Standard assumptions that should be present but are missing from the text.")
     data_independence_assessment: str = Field(description="Were the evaluation datasets truly independent of the calibration data? Provide rationale.")
     overall_confidence: Literal["high", "medium", "low"] = Field(description="Overall confidence in the reproducibility of this model.")
+
+
+# ─── Software & Reproducibility Metadata ───────────────────────────────────────
+
+class SoftwareMetadata(BaseModel):
+    name: Optional[str] = Field(None, description="Software platform name (e.g. Berkeley Madonna, MATLAB, Simcyp, GastroPlus, R/mrgsolve, MCSim).")
+    version: Optional[str] = Field(None, description="Software version.")
+    platform_type: Optional[str] = Field(None, description="Platform type: commercial, open_source, in_house, script.")
+    solver: Optional[str] = Field(None, description="ODE solver algorithm (e.g., lsoda, stiff, RK4, Euler).")
+    optimization_method: Optional[str] = Field(None, description="Parameter optimization/fitting algorithm (e.g., Nelder-Mead, Levenberg-Marquardt, MCMC).")
+    statistical_methods: Optional[str] = Field(None, description="Statistical evaluation methods used.")
+    qualification_status: Optional[str] = Field(None, description="Whether software qualification or verification is reported.")
+    source_quote: Optional[str] = Field(None, description="Verbatim quote stating software details.")
+    provenance: Optional[Provenance] = None
+
+class ReproducibilityMetadata(BaseModel):
+    equations_available: Optional[bool] = Field(None, description="Whether mathematical equations/ODEs are published in paper or supplement.")
+    equations_location: Optional[str] = Field(None, description="Location of equations: text, supplementary_info, code_repo, diagram, none.")
+    code_available: Optional[bool] = Field(None, description="Whether model simulation code is available.")
+    code_location: Optional[str] = Field(None, description="Specific location of code (URL, GitHub repository, supplement file, Zenodo).")
+    supplementary_information_available: Optional[bool] = Field(None, description="Whether supplementary documentation or data files are available.")
+    public_repository: Optional[str] = Field(None, description="Public code repository link if available.")
+    reproducibility_notes: Optional[str] = Field(None, description="Reviewer or author notes on reproducibility.")
+
+
+# ─── Mode of Action (Toxicodynamics) ───────────────────────────────────────────
+
+class ModeOfAction(BaseModel):
+    available: bool = Field(False, description="Whether mode of action / toxicodynamics is described.")
+    description: Optional[str] = Field(None, description="Description of the mode of action.")
+    toxic_moiety: Optional[str] = Field(None, description="Chemical form exerting toxicity (parent chemical or metabolite).")
+    target_tissue: Optional[str] = Field(None, description="Target organ or tissue of toxic action.")
+    parent_or_metabolite: Optional[Literal["parent", "metabolite", "both", "unclear"]] = Field(None)
+    evidence: Optional[str] = Field(None, description="Evidence or citation supporting the MoA.")
+    graphical_representation_present: Optional[bool] = Field(False, description="Whether a graphical diagram of the MoA is present.")
+
+
+# ─── OECD GD 331 Checklist Assessment Schema ───────────────────────────────────
+
+class ResponseOption(str, Enum):
+    YES = "yes"
+    PARTIALLY = "partially"
+    NO = "no"
+    I_CANNOT_ANSWER = "i_cannot_answer"
+    NOT_APPLICABLE = "not_applicable"
+
+class EvidenceReference(BaseModel):
+    source_page: Optional[int] = None
+    source_section: Optional[str] = None
+    source_location: Optional[str] = None
+    source_quote: Optional[str] = None
+
+class OECDChecklistItem(BaseModel):
+    item_id: str = Field(..., description="Checklist item identifier (e.g., 'OECD_01', 'OECD_09')")
+    category: Optional[str] = Field(None, description="Evaluation domain / category")
+    question: str = Field(..., description="The checklist question text")
+    response: ResponseOption = Field(..., description="Controlled response: yes, partially, no, i_cannot_answer, not_applicable")
+    rationale: str = Field(..., description="Detailed justification for the rating")
+    evidence: List[EvidenceReference] = Field(default_factory=list, description="Verbatim quotes and source citations supporting this answer")
+    confidence: Literal["high", "medium", "low"] = Field("medium", description="Evaluator confidence in this judgment")
+
+class OECDAssessment(BaseModel):
+    checklist_version: str = Field("OECD GD 331 / Tan et al. Harmonized Checklist D", description="Standard checklist version")
+    assessment_date: Optional[str] = None
+    items: List[OECDChecklistItem] = Field(default_factory=list)
+    overall_fit_for_purpose: Optional[str] = Field(None, description="Overall assessment of regulatory fit-for-purpose")
+    key_gaps: List[str] = Field(default_factory=list, description="Key gaps, limitations, or missing information")
+    reviewer_notes: List[str] = Field(default_factory=list, description="Reviewer summary and notes")
+
 
 
 
@@ -552,6 +630,30 @@ class ParameterMentionWithoutValue(BaseModel):
 
 # ─── Other Extractions ─────────────────────────────────────────────────────────
 
+# ─── Calibration vs Independent Validation Dataset Enums ───────────────────────
+
+class DatasetRole(str, Enum):
+    CALIBRATION = "calibration"
+    INDEPENDENT_EVALUATION = "independent_evaluation"
+    EXTERNAL_VALIDATION = "external_validation"
+    APPLICATION = "application"
+    UNKNOWN = "unknown"
+
+class DatasetType(str, Enum):
+    ANIMAL = "animal"
+    HUMAN = "human"
+    IN_VITRO = "in_vitro"
+    IN_SILICO = "in_silico"
+    BIOMONITORING = "biomonitoring"
+    CLINICAL = "clinical"
+    ANALOGUE = "analogue"
+
+class IndependenceStatus(str, Enum):
+    INDEPENDENT = "independent"
+    NOT_INDEPENDENT = "not_independent"
+    UNCLEAR = "unclear"
+
+
 class ValidationResult(BaseModel):
     metric: str = Field(..., description="e.g., 'Cmax', 'AUC', 'Tmax'")
     formulation: Optional[str] = Field(None)
@@ -559,6 +661,10 @@ class ValidationResult(BaseModel):
     value: Optional[float] = Field(None)
     unit: Optional[str] = Field(None)
     source_type: str = Field(..., description="Must be 'observed' or 'simulated'")
+    dataset_role: Optional[DatasetRole] = Field(DatasetRole.UNKNOWN, description="Role: calibration, independent_evaluation, external_validation, application, unknown")
+    dataset_type: Optional[DatasetType] = Field(None, description="Type: animal, human, in_vitro, in_silico, biomonitoring, clinical, analogue")
+    independence_status: Optional[IndependenceStatus] = Field(IndependenceStatus.UNCLEAR, description="Independence: independent, not_independent, unclear")
+    dataset_description: Optional[str] = Field(None, description="Description or study citation for this dataset.")
     provenance: Provenance
 
 class QualitativeFinding(BaseModel):
@@ -586,13 +692,31 @@ class DoseEvent(BaseModel):
 class DosingExtraction(BaseModel):
     dosing: List[DoseEvent] = Field(default_factory=list, description="All dosing events described in the text.")
 
+class ExtendedSensitivityUncertainty(BaseModel):
+    analysis_type: Optional[Literal["local", "global", "both", "not_reported"]] = Field(None, description="local vs global sensitivity")
+    method: Optional[str] = Field(None, description="Method: e.g., Morris, eFAST, Monte Carlo, OAT (one-at-a-time), Sobol")
+    design: Optional[Literal["one_at_a_time", "all_at_once", "sampled"]] = Field(None, description="one-at-a-time vs all-at-once")
+    criterion: Optional[str] = Field(None, description="Sensitivity threshold or ranking criterion")
+    sampling_approach: Optional[str] = Field(None, description="e.g., Latin Hypercube Sampling (LHS), random uniform, log-normal")
+    iterations: Optional[int] = Field(None, description="Number of iterations or Monte Carlo runs")
+    dose_metric_evaluated: Optional[str] = Field(None, description="Target dose metric (e.g. maternal plasma AUC)")
+    uncertainty_distributions: Optional[str] = Field(None, description="Uncertainty distributions documented")
+    individual_variability_modeled: Optional[bool] = Field(None, description="Whether individual variability was modeled")
+    experimental_reproducibility: Optional[str] = Field(None, description="Experimental reproducibility assessment")
+    key_sensitive_parameters: List[str] = Field(default_factory=list)
+    overall_impact_on_dose_metric: Optional[str] = Field(None, description="Overall impact of uncertainty on dose metric")
+
 class SensitivityCoefficient(BaseModel):
     parameter_name: str = Field(..., description="Name of the parameter being perturbed.")
     model_output: str = Field(..., description="The model output metric being evaluated (e.g. 'maternal plasma AUC').")
     compound: Optional[str] = Field(None)
     population: Optional[str] = Field(None, description="e.g. 'Fetus', 'Infant'")
     value: float = Field(..., description="The normalized sensitivity coefficient (can be negative).")
+    analysis_type: Optional[str] = Field(None, description="'local' or 'global'")
+    method: Optional[str] = Field(None, description="'OAT', 'Morris', 'Sobol', etc.")
+    criterion: Optional[str] = Field(None, description="Ranking or threshold criterion")
     provenance: Optional[Provenance] = None
+
 
 # ─── Page Output ───────────────────────────────────────────────────────────────
 
@@ -618,7 +742,11 @@ class ExtractedPage(BaseModel):
     qualitative_findings: List[QualitativeFinding] = Field(default_factory=list, description="Relative comparisons or qualitative statements.")
     parameter_mentions_without_values: List[ParameterMentionWithoutValue] = Field(default_factory=list, description="Named PBPK parameters mentioned in text but without numerical values.")
     sensitivity_analysis: List[SensitivityCoefficient] = Field(default_factory=list, description="Sensitivity analysis coefficients.")
+    extended_sensitivity: Optional[ExtendedSensitivityUncertainty] = Field(None, description="Extended uncertainty and sensitivity analysis details.")
     dosing: Optional[List[DoseEvent]] = Field(default=None, description="Dosing events extracted from the methods section.")
+    software: Optional[SoftwareMetadata] = Field(None, description="Software platform and solver metadata.")
+    reproducibility: Optional[ReproducibilityMetadata] = Field(None, description="Code, equation, and data availability metadata.")
+    mode_of_action: Optional[ModeOfAction] = Field(None, description="Toxicodynamic mode-of-action metadata.")
 
 
 # ─── Lightweight Table Extraction Schema (for Table Prompts) ────────────────────
@@ -739,6 +867,11 @@ class ExtractedDocument(BaseModel):
     system_specific_parameters: List[ExtractedParameter] = Field(default_factory=list)
     compound_specific_parameters: List[ExtractedParameter] = Field(default_factory=list)
     evaluator_judgments: Optional[EvaluatorJudgments] = None
+    software: Optional[SoftwareMetadata] = None
+    reproducibility: Optional[ReproducibilityMetadata] = None
+    mode_of_action: Optional[ModeOfAction] = None
+    extended_sensitivity: Optional[ExtendedSensitivityUncertainty] = None
+    oecd_assessment: Optional[OECDAssessment] = None
     verification: Optional[Dict[str, Any]] = None
     llm_verification: Optional[Dict[str, Any]] = None
     laya_filter_summary: Optional[Dict[str, Any]] = None

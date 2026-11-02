@@ -1195,8 +1195,14 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 "formulation_characterization": [],
                 "qualitative_findings": [],
                 "parameter_mentions_without_values": [],
+                "sensitivity_analysis": [],
+                "extended_sensitivity": None,
                 "table_evidence": [],
                 "dosing": [],
+                "software": None,
+                "reproducibility": None,
+                "mode_of_action": None,
+                "oecd_assessment": None,
                 "ingestion_source": res.get("source"),
                 "ingestion_source_type": res.get("source_type", "published"),
             }
@@ -1373,6 +1379,16 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
                     if extracted_page.parameter_mentions_without_values:
                         final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
+                    if extracted_page.sensitivity_analysis:
+                        final_document["sensitivity_analysis"].extend([s.model_dump() for s in extracted_page.sensitivity_analysis])
+                    if extracted_page.extended_sensitivity and not final_document.get("extended_sensitivity"):
+                        final_document["extended_sensitivity"] = extracted_page.extended_sensitivity.model_dump(exclude_none=True)
+                    if extracted_page.software and not final_document.get("software"):
+                        final_document["software"] = extracted_page.software.model_dump(exclude_none=True)
+                    if extracted_page.reproducibility and not final_document.get("reproducibility"):
+                        final_document["reproducibility"] = extracted_page.reproducibility.model_dump(exclude_none=True)
+                    if extracted_page.mode_of_action and not final_document.get("mode_of_action"):
+                        final_document["mode_of_action"] = extracted_page.mode_of_action.model_dump(exclude_none=True)
                     if extracted_page.table_evidence:
                         for te_item in extracted_page.table_evidence:
                             te_dict = te_item.model_dump()
@@ -1414,6 +1430,12 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 processed["evaluator_judgments"] = judgments.model_dump()
             except Exception as e:
                 print(f"  -> Failed to run Tier 2 evaluation: {e}")
+            print("Step: Running Tier 3 OECD GD 331 Checklist Assessment...")
+            try:
+                oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(processed))
+                processed["oecd_assessment"] = oecd_assessment.model_dump()
+            except Exception as e:
+                print(f"  -> Failed to run Tier 3 OECD assessment: {e}")
             return finalize_extracted_document(processed)
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
@@ -1638,7 +1660,14 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         "formulation_characterization": [],
         "qualitative_findings": [],
         "parameter_mentions_without_values": [],
+        "sensitivity_analysis": [],
+        "extended_sensitivity": None,
         "table_evidence": [],
+        "dosing": [],
+        "software": None,
+        "reproducibility": None,
+        "mode_of_action": None,
+        "oecd_assessment": None,
     }
     
     for chunk_idx, res_item in enumerate(results):
@@ -1668,6 +1697,16 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 final_document["qualitative_findings"].extend([q.model_dump() for q in extracted_page.qualitative_findings])
             if extracted_page and extracted_page.parameter_mentions_without_values:
                 final_document["parameter_mentions_without_values"].extend([m.model_dump() for m in extracted_page.parameter_mentions_without_values])
+            if extracted_page and extracted_page.sensitivity_analysis:
+                final_document["sensitivity_analysis"].extend([s.model_dump() for s in extracted_page.sensitivity_analysis])
+            if extracted_page and extracted_page.extended_sensitivity and not final_document.get("extended_sensitivity"):
+                final_document["extended_sensitivity"] = extracted_page.extended_sensitivity.model_dump(exclude_none=True)
+            if extracted_page and extracted_page.software and not final_document.get("software"):
+                final_document["software"] = extracted_page.software.model_dump(exclude_none=True)
+            if extracted_page and extracted_page.reproducibility and not final_document.get("reproducibility"):
+                final_document["reproducibility"] = extracted_page.reproducibility.model_dump(exclude_none=True)
+            if extracted_page and extracted_page.mode_of_action and not final_document.get("mode_of_action"):
+                final_document["mode_of_action"] = extracted_page.mode_of_action.model_dump(exclude_none=True)
             if extracted_page and extracted_page.table_evidence:
                 final_document["table_evidence"].extend([t.model_dump() for t in extracted_page.table_evidence])
                 
@@ -1700,6 +1739,13 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         processed["evaluator_judgments"] = judgments.model_dump()
     except Exception as e:
         print(f"  -> Failed to run Tier 2 evaluation: {e}")
+
+    print("Step: Running Tier 3 OECD GD 331 Checklist Assessment...")
+    try:
+        oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(processed))
+        processed["oecd_assessment"] = oecd_assessment.model_dump()
+    except Exception as e:
+        print(f"  -> Failed to run Tier 3 OECD assessment: {e}")
 
     return finalize_extracted_document(processed)
     
