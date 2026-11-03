@@ -96,15 +96,46 @@ def convert_pdf_to_images(pdf_path: str):
     if not os.path.exists(pdf_path):
         logger.error(f"File not found: {pdf_path}")
         raise FileNotFoundError(f"File not found: {pdf_path}")
-    
+
     try:
         # 300 DPI for sharper table crops — critical for tiny subscripts (e.g. kg^0.74)
         images = convert_from_path(pdf_path, dpi=300)
         logger.info(f"Successfully converted PDF to {len(images)} images.")
         return images
-    except Exception as e:
-        logger.error(f"Failed to convert PDF: {str(e)}")
-        raise
+    except Exception as pdf2image_error:
+        # pdf2image depends on the external Poppler binaries.  They are often
+        # unavailable on Windows, while PyMuPDF is already a project
+        # dependency and can render the same pages without PATH configuration.
+        logger.warning(
+            "pdf2image could not render '%s' (%s); falling back to PyMuPDF. "
+            "Install Poppler only if pdf2image rendering is specifically required.",
+            pdf_path,
+            pdf2image_error,
+        )
+        try:
+            from PIL import Image
+            rendered = []
+            with pymupdf.open(pdf_path) as document:
+                scale = 300 / 72
+                matrix = pymupdf.Matrix(scale, scale)
+                for page in document:
+                    pixmap = page.get_pixmap(matrix=matrix, alpha=False)
+                    rendered.append(
+                        Image.frombytes("RGB", (pixmap.width, pixmap.height), pixmap.samples)
+                    )
+            logger.info("PyMuPDF fallback rendered %d PDF pages.", len(rendered))
+            return rendered
+        except Exception as pymupdf_error:
+            logger.error(
+                "Both pdf2image and PyMuPDF failed for '%s': %s",
+                pdf_path,
+                pymupdf_error,
+            )
+            raise RuntimeError(
+                f"Could not render PDF '{pdf_path}'. "
+                f"pdf2image error: {pdf2image_error}; "
+                f"PyMuPDF error: {pymupdf_error}"
+            ) from pymupdf_error
 
 import copy
 import re

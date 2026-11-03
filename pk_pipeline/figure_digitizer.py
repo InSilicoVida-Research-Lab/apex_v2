@@ -6,7 +6,10 @@ from PIL import Image
 
 logger = logging.getLogger(__name__)
 
-async def digitize_figure(image_path: str, server_url: str = "http://127.0.0.1:30000") -> List[Dict]:
+async def digitize_figure(image_path: str, server_url: str = None) -> List[Dict]:
+    from pk_pipeline.config import Config
+    if server_url is None:
+        server_url = Config.DGX_SGLANG_URL if getattr(Config, "FORCE_BACKEND", "") in ("dgx", "remote") else Config.SGLANG_LOCAL_URL
     """
     Uses the Vision-Language Model to extract data points from a figure.
     Returns a list of dicts: [{'series': 'PFOA', 'data': [{'time': 1.0, 'concentration': 2.5}, ...]}]

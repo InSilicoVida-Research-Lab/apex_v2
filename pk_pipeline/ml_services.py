@@ -1,13 +1,29 @@
 import asyncio
-import torch
-from typing import List
-from PIL import Image
+import base64
+from io import BytesIO
 import json
 import os
+import re
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+from PIL import Image
+import torch
 
-from .schemas import ExtractedPage, ExtractedParameter, TableEvidence, ExtractionResult, TableExtractionPage, DiagramExtractionPage
+from .schemas import (
+    ExtractedPage,
+    ExtractedParameter,
+    TableEvidence,
+    ExtractionResult,
+    TableExtractionPage,
+    DiagramExtractionPage,
+)
 from .config import logger, Config
 from pydantic import ValidationError
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 
 # Note: These imports will require a GPU environment with sglang and colpali_engine installed.
 try:
@@ -387,89 +403,328 @@ Your task is to reconstruct the explicit visual structure and cell-level data of
 
 class SGLangExtractor:
     """
-    Implementation of Qwen3-VL-8B served via SGLang inference engine.
-    Enforces structured JSON generation via FSM-constrained decoding (json_schema).
-    Uses nested ExtractedParameter schema: BiologicalContext, QuantitativeData, Provenance.
+    Multimodal parameter extraction engine with tiered backend failover:
+      1. Local SGLang server (http://127.0.0.1:30000)
+      2. Direct Network Access to DGX SGLang server (http://100.85.128.70:30001 via Tailscale/VPN)
+      3. OpenAI-Compatible API / Cloud Endpoints (OPENAI_BASE_URL + OPENAI_API_KEY)
+      4. Embedded local SGLang engine (GPU / sgl.Engine)
     """
     def __init__(self, use_4bit=True):
-        logger.info("Initializing SGLangExtractor...")
+        logger.info("Initializing SGLangExtractor backend...")
         self.use_4bit = use_4bit
-        self.model_path = "Qwen/Qwen3-VL-8B-Instruct"
-        
-        # Check if an external SGLang server is already running
-        try:
-            import requests
-            # Use 127.0.0.1 instead of localhost to avoid IPv6 resolution issues in requests
-            resp = requests.get("http://127.0.0.1:30000/health", timeout=2)
-            if resp.status_code == 200:
-                logger.info("Detected running SGLang server on port 30000. Will use server instead of loading embedded engine.")
+        self.backend_mode = "unknown"
+        self.server_url = None
+        self.model_name = "Qwen/Qwen3-VL-8B-Instruct"
+        self.use_server = False
+        self.is_loaded = False
+        self.engine = None
+        self.openai_client = None
+
+        force = getattr(Config, "FORCE_BACKEND", "auto").lower().strip()
+
+        # 1. Priority 1: Check Local SGLang Server
+        if force in ("auto", "local", "server"):
+            if self._check_sglang_server(Config.SGLANG_LOCAL_URL, label="Local SGLang server"):
+                self.backend_mode = "local_server"
+                self.server_url = Config.SGLANG_LOCAL_URL
                 self.use_server = True
-                self.server_url = "http://127.0.0.1:30000"
+                self.is_loaded = True
+                self._detect_model_name()
+                logger.info(f"Using Local SGLang server at {self.server_url} (model: {self.model_name}).")
+                return
+
+        # 2. Priority 2: Direct Network Access to DGX SGLang Server
+        if force in ("auto", "dgx", "remote"):
+            if self._check_sglang_server(Config.DGX_SGLANG_URL, label="DGX SGLang server (Tailscale/VPN)"):
+                self.backend_mode = "dgx_server"
+                self.server_url = Config.DGX_SGLANG_URL
+                self.use_server = True
+                self.is_loaded = True
+                self._detect_model_name()
+                logger.info(f"Local server not detected; using DGX SGLang server at {self.server_url} (model: {self.model_name}).")
+                return
+
+        # 3. Priority 3: OpenAI-Compatible API / Cloud API
+        if force in ("auto", "api", "openai") or (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY != "EMPTY"):
+            if self._check_openai_api(Config.OPENAI_BASE_URL, Config.OPENAI_API_KEY):
+                self.backend_mode = "openai_api"
+                self.server_url = Config.OPENAI_BASE_URL
+                self.model_name = Config.OPENAI_MODEL
+                self.use_server = True
+                self.is_loaded = True
+                logger.info(f"Using OpenAI-compatible API at {self.server_url} with model {self.model_name}.")
+                return
+
+        # 4. Priority 4: Fallback to Embedded Local SGLang Engine
+        if force in ("auto", "engine", "embedded"):
+            try:
+                import sglang as sgl
+                quant_mode = "awq" if use_4bit else None
+                actual_model = self.model_name
+                dtype = "float16" if use_4bit else "auto"
+                if use_4bit and "AWQ" not in self.model_name:
+                    if "Qwen3" in self.model_name:
+                        logger.warning("AWQ version does not exist on HF yet, falling back to unquantized bfloat16.")
+                        quant_mode = None
+                        dtype = "bfloat16"
+                    else:
+                        actual_model = f"{self.model_name}-AWQ"
+
+                logger.info(f"Loading embedded SGLang Engine for {actual_model}...")
+                self.engine = sgl.Engine(
+                    model_path=actual_model,
+                    quantization=quant_mode,
+                    dtype=dtype,
+                    mem_fraction_static=0.5
+                )
+                self.backend_mode = "embedded_engine"
                 self.is_loaded = True
                 return
-        except Exception as e:
-            logger.info(f"External SGLang server not detected or unreachable: {e}")
-            self.use_server = False
-        
+            except Exception as e:
+                logger.warning(f"Failed to load embedded SGLang engine: {e}")
+
+        err_msg = (
+            "No inference backend available!\n"
+            f"  - Local server checked: {Config.SGLANG_LOCAL_URL} (unreachable)\n"
+            f"  - DGX server checked:   {Config.DGX_SGLANG_URL} (unreachable)\n"
+            f"  - OpenAI API checked:   {Config.OPENAI_BASE_URL}\n"
+            "Please start your local SGLang instance, ensure Tailscale/VPN is connected to DGX, or configure .env."
+        )
+        logger.error(err_msg)
+        self.is_loaded = False
+
+    def _check_sglang_server(self, url: str, label: str = "server", timeout: float = 2.0) -> bool:
+        """Probes if an SGLang server is active at url."""
+        if not url:
+            return False
+        import requests
         try:
-            quant_mode = "awq" if use_4bit else None
-            actual_model = self.model_path
-            dtype = "float16" if use_4bit else "auto"
-            
-            if use_4bit and "AWQ" not in self.model_path:
-                if "Qwen3" in self.model_path:
-                    logger.warning("AWQ version doesn't exist on HF yet, falling back to unquantized bfloat16.")
-                    actual_model = self.model_path
-                    quant_mode = None
-                    dtype = "bfloat16"
-                else:
-                    logger.warning(f"For SGLang with 4-bit, switching to AWQ model.")
-                    actual_model = f"{self.model_path}-AWQ"
-                
-            logger.info(f"Loading SGLang Engine for {actual_model}...")
-            # SGLang Engine configuration with memory limits
-            self.engine = sgl.Engine(
-                model_path=actual_model,
-                quantization=quant_mode,
-                dtype=dtype,
-                mem_fraction_static=0.5 # Restrict KV cache to 50% to leave room for ColQwen
-            )
-            self.is_loaded = True
+            resp = requests.get(f"{url}/health", timeout=timeout)
+            if resp.status_code == 200:
+                logger.info(f"Detected running {label} at {url} (/health -> 200).")
+                return True
+        except Exception:
+            pass
+
+        try:
+            resp = requests.get(f"{url}/v1/models", timeout=timeout)
+            if resp.status_code == 200:
+                logger.info(f"Detected running {label} at {url} (/v1/models -> 200).")
+                return True
+        except Exception:
+            pass
+        return False
+
+    def _detect_model_name(self):
+        """Attempts to discover active model from /v1/models on server."""
+        if not self.server_url:
+            return
+        import requests
+        try:
+            resp = requests.get(f"{self.server_url}/v1/models", timeout=3.0)
+            if resp.status_code == 200:
+                data = resp.json().get("data", [])
+                if data and "id" in data[0]:
+                    self.model_name = data[0]["id"]
+                    logger.debug(f"Discovered active server model: {self.model_name}")
         except Exception as e:
-            logger.error(f"Failed to load SGLang engine: {e}")
-            self.is_loaded = False
+            logger.debug(f"Could not auto-detect model name from /v1/models: {e}")
+
+    def _check_openai_api(self, base_url: str, api_key: str, timeout: float = 3.0) -> bool:
+        """Checks if OpenAI-compatible endpoint responds to /v1/models."""
+        if not base_url or OpenAI is None:
+            return False
+        try:
+            client = OpenAI(base_url=base_url, api_key=api_key or "EMPTY", timeout=timeout)
+            models = client.models.list()
+            if models.data:
+                self.openai_client = client
+                if not Config.OPENAI_MODEL or Config.OPENAI_MODEL == "Qwen/Qwen3.8-27B-FP8":
+                    self.model_name = models.data[0].id
+                else:
+                    self.model_name = Config.OPENAI_MODEL
+                return True
+        except Exception as e:
+            logger.debug(f"OpenAI API check failed at {base_url}: {e}")
+        return False
+
+    @staticmethod
+    def _image_to_base64_data_uri(image: Image.Image) -> str:
+        """Converts a PIL Image to a PNG base64 data URI."""
+        buffer = BytesIO()
+        image.save(buffer, format="PNG")
+        b64_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        return f"data:image/png;base64,{b64_str}"
+
+    @staticmethod
+    def _image_path_to_base64_data_uri(path: str) -> str:
+        """Reads an image file and returns a base64 data URI."""
+        with open(path, "rb") as f:
+            b64_str = base64.b64encode(f.read()).decode("utf-8")
+        return f"data:image/png;base64,{b64_str}"
+
+    @staticmethod
+    def _strip_think_and_fences(text: str) -> str:
+        """Strips <think>...</think> tags and markdown code blocks."""
+        if not text:
+            return ""
+        if "</think>" in text:
+            text = text.split("</think>")[-1].strip()
+        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        if m:
+            return m.group(1).strip()
+        return text.strip()
+
+    async def _generate(
+        self,
+        prompt_text: str,
+        image: Optional[Image.Image] = None,
+        image_path: Optional[str] = None,
+        schema_json: Optional[str] = None,
+        max_new_tokens: int = 8000,
+        temperature: float = 0.0,
+        timeout_seconds: int = 3600
+    ) -> str:
+        """
+        Unified asynchronous generation handler across:
+          - SGLang server (/generate) with json_schema constraint
+          - OpenAI-compatible API (/v1/chat/completions)
+          - Embedded SGLang engine (engine.async_generate)
+        """
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor is not loaded. Check server connectivity or .env.")
+
+        # Prepare base64 image data if image is provided
+        img_data_uri = None
+        if image is not None:
+            img_data_uri = self._image_to_base64_data_uri(image)
+        elif image_path and os.path.exists(image_path):
+            img_data_uri = self._image_path_to_base64_data_uri(image_path)
+
+        # Mode A: SGLang Server (/generate) — Local or DGX
+        if self.backend_mode in ("local_server", "dgx_server", "sglang_server") or (self.use_server and self.backend_mode != "openai_api"):
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=timeout_seconds)
+            payload = {
+                "text": prompt_text,
+                "sampling_params": {
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": temperature,
+                    "repetition_penalty": 1.0,
+                }
+            }
+            if schema_json:
+                payload["sampling_params"]["json_schema"] = schema_json
+            if img_data_uri:
+                payload["image_data"] = [img_data_uri]
+
+            max_retries = 2
+            for attempt in range(max_retries + 1):
+                try:
+                    async with aiohttp.ClientSession(timeout=timeout) as session:
+                        async with session.post(f"{self.server_url}/generate", json=payload) as resp:
+                            if resp.status != 200:
+                                err_body = await resp.text()
+                                raise RuntimeError(f"Server error {resp.status}: {err_body}")
+                            result = await resp.json()
+                            return result.get("text", "")
+                except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+                    if attempt < max_retries:
+                        logger.warning(f"SGLang connection error on attempt {attempt+1}: {err}. Retrying in 2s...")
+                        await asyncio.sleep(2.0)
+                    else:
+                        raise
+
+        # Mode B: OpenAI-Compatible API (/v1/chat/completions)
+        elif self.backend_mode == "openai_api":
+            client = self.openai_client
+            if client is None:
+                if OpenAI is None:
+                    raise RuntimeError("OpenAI package not installed. Run 'pip install openai'.")
+                client = OpenAI(
+                    base_url=self.server_url,
+                    api_key=Config.OPENAI_API_KEY or "EMPTY"
+                )
+
+            content_items = []
+            if img_data_uri:
+                content_items.append({"type": "image_url", "image_url": {"url": img_data_uri}})
+            content_items.append({"type": "text", "text": prompt_text})
+
+            def _call_openai():
+                kwargs = {
+                    "model": self.model_name,
+                    "messages": [{"role": "user", "content": content_items if img_data_uri else prompt_text}],
+                    "max_tokens": max_new_tokens,
+                    "temperature": temperature,
+                }
+                if schema_json:
+                    kwargs["response_format"] = {"type": "json_object"}
+                return client.chat.completions.create(**kwargs)
+
+            completion = await asyncio.to_thread(_call_openai)
+            return completion.choices[0].message.content or ""
+
+        # Mode C: Embedded SGLang Engine
+        elif self.backend_mode == "embedded_engine":
+            gen_kwargs = {
+                "prompt": prompt_text,
+                "sampling_params": {
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": temperature,
+                    "repetition_penalty": 1.0,
+                }
+            }
+            if schema_json:
+                gen_kwargs["sampling_params"]["json_schema"] = schema_json
+            if image_path:
+                gen_kwargs["image_data"] = image_path
+            elif image:
+                import uuid
+                temp_path = f"{Config.TEMP_IMAGE_DIR}/sglang_emb_{uuid.uuid4().hex}.png"
+                image.save(temp_path, "PNG")
+                gen_kwargs["image_data"] = temp_path
+                try:
+                    response = await self.engine.async_generate(**gen_kwargs)
+                finally:
+                    if os.path.exists(temp_path):
+                        try:
+                            os.remove(temp_path)
+                        except Exception:
+                            pass
+                return response["text"] if isinstance(response, dict) else response.text
+
+            response = await self.engine.async_generate(**gen_kwargs)
+            return response["text"] if isinstance(response, dict) else response.text
+
+        else:
+            raise RuntimeError(f"Unknown backend mode: {self.backend_mode}")
 
     async def extract_table_evidence(self, image: Image.Image, markdown_context: str, chunk_title: str = "") -> TableEvidence:
         """Pass 1: Extract structural TableEvidence from table crop and markdown."""
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load.")
-            
-        import time
+
         start_t = time.time()
         logger.info(f"SGLang: [START] Pass 1 - Table Reconstruction for {chunk_title}...")
-        
-        import uuid
-        import os
-        temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_evidence_{uuid.uuid4().hex}.png"
-        image.save(temp_img_path, "PNG")
-        
+
         try:
             schema_json = json.dumps(TableEvidence.model_json_schema(), indent=2)
             system_prompt = TABLE_RECONSTRUCTION_PROMPT_TEMPLATE.format(schema=schema_json)
-            
+
             user_instruction = (
                 f"Reconstruct this table into the JSON schema. "
                 f"Extract all metadata, column headers, row headers, and every individual populated data cell. "
                 f"Use the Markdown text provided below as primary transcription evidence and the image as authoritative layout source.\n\n"
                 f"Markdown:\n{markdown_context}"
             )
-            
+
             prompt_text = (
                 f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
                 f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
                 f"<|im_start|>assistant\n"
             )
-            
+
             try:
                 debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
                 os.makedirs(debug_dir, exist_ok=True)
@@ -478,48 +733,19 @@ class SGLangExtractor:
                     f.write(prompt_text)
             except Exception:
                 pass
-                
-            if getattr(self, "use_server", False):
-                import aiohttp
-                timeout = aiohttp.ClientTimeout(total=1800)
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    payload = {
-                        "text": prompt_text,
-                        "image_data": temp_img_path,
-                        "sampling_params": {
-                            "max_new_tokens": 8000,
-                            "temperature": 0.0,
-                            "repetition_penalty": 1.0,
-                            "json_schema": schema_json
-                        }
-                    }
-                    async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                        result = await resp.json()
-                        extracted_text = result["text"]
-            else:
-                response = await self.engine.async_generate(
-                    prompt=prompt_text,
-                    image_data=temp_img_path,
-                    sampling_params={
-                        "max_new_tokens": 8000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": schema_json
-                    }
-                )
-                extracted_text = response["text"] if isinstance(response, dict) else response.text
 
-            if "</think>" in extracted_text:
-                extracted_text = extracted_text.split("</think>")[-1].strip()
-            import re
-            m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
-            if m:
-                extracted_text = m.group(1).strip()
-            else:
-                extracted_text = extracted_text.strip()
+            extracted_text = await self._generate(
+                prompt_text=prompt_text,
+                image=image,
+                schema_json=schema_json,
+                max_new_tokens=8000,
+                temperature=0.0,
+                timeout_seconds=1800
+            )
 
+            clean_text = self._strip_think_and_fences(extracted_text)
             try:
-                json_data = json.loads(extracted_text)
+                json_data = json.loads(clean_text)
                 table_evidence = TableEvidence(**json_data)
                 table_evidence.evidence_status = "success"
                 logger.info(f"SGLang: [END] Pass 1 complete in {time.time() - start_t:.2f}s.")
@@ -530,12 +756,6 @@ class SGLangExtractor:
         except Exception as e:
             logger.error(f"Error during extract_table_evidence: {e}")
             return TableEvidence(evidence_status="failed", needs_review=True, table_id=None, error=str(e))
-        finally:
-            if os.path.exists(temp_img_path):
-                try:
-                    os.remove(temp_img_path)
-                except Exception:
-                    pass
 
     def _compact_validation_error(self, exc: Exception) -> str:
         """Format validation errors into a compact, actionable prompt instruction (Factor 9)."""
@@ -565,7 +785,6 @@ class SGLangExtractor:
             clean = clean[3:]
         clean = clean.rstrip("`").strip()
 
-        # Progressively backtrack to the last closing brace '}'
         last_brace_idx = len(clean)
         while True:
             last_brace_idx = clean.rfind("}", 0, last_brace_idx)
@@ -573,7 +792,6 @@ class SGLangExtractor:
                 break
             candidate = clean[:last_brace_idx + 1]
 
-            # Calculate unclosed brackets and braces in candidate
             in_string = False
             escape = False
             open_stack = []
@@ -599,7 +817,6 @@ class SGLangExtractor:
             if in_string:
                 continue
 
-            # Close all open braces/brackets in reverse order
             closing = "".join("}" if op == "{" else "]" for op in reversed(open_stack))
             test_candidate = candidate + closing
             try:
@@ -613,19 +830,10 @@ class SGLangExtractor:
 
     def _parse_and_validate_page(self, text: str, table_evidence: TableEvidence = None, chunk_title: str = "", start_t: float = None) -> ExtractedPage:
         """Sanitize output, parse JSON, and validate against ExtractedPage schema."""
-        if "</think>" in text:
-            text = text.split("</think>")[-1].strip()
-        import re
-        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
-        if m:
-            clean_text = m.group(1).strip()
-        else:
-            clean_text = text.strip()
-
+        clean_text = self._strip_think_and_fences(text)
         try:
             json_data = json.loads(clean_text)
         except json.JSONDecodeError as exc:
-            # Deterministic fast-repair: recover all complete parameter blocks before truncation
             repaired = self._repair_truncated_json(clean_text)
             if repaired is not None:
                 logger.info(f"SGLang: Successfully repaired truncated JSON locally for '{chunk_title}'.")
@@ -633,11 +841,12 @@ class SGLangExtractor:
             else:
                 raise exc
 
+        if isinstance(json_data, dict) and json_data.get("page_metadata") is None:
+            json_data["page_metadata"] = {}
         extracted_page = ExtractedPage(**json_data)
         if table_evidence:
             extracted_page.table_evidence.append(table_evidence)
         if start_t:
-            import time
             duration = time.time() - start_t
             title_log = f" ({chunk_title})" if chunk_title else ""
             n_params = sum(len(b.parameters) for b in extracted_page.parameter_blocks or [])
@@ -656,7 +865,6 @@ class SGLangExtractor:
         table_evidence: TableEvidence = None
     ) -> ExtractedPage:
         """Factor 9: Feed compacted validation error back into context window for a 1-turn repair."""
-        # Check if local repair resolves truncated JSON first
         repaired_dict = self._repair_truncated_json(bad_output)
         if repaired_dict is not None:
             try:
@@ -669,7 +877,6 @@ class SGLangExtractor:
             except Exception as e:
                 logger.debug(f"Factor-9 local repair failed ExtractedPage validation: {e}")
 
-        # Limit bad_output to prevent context window explosion and server deadlock
         clipped_bad = bad_output if len(bad_output) <= 3000 else ("...[earlier records omitted for length]...\n" + bad_output[-2500:])
 
         repair_msg = (
@@ -685,41 +892,15 @@ class SGLangExtractor:
             f"<|im_start|>user\n{repair_msg}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        repaired_text = ""
-        if getattr(self, "use_server", False):
-            import aiohttp
-            # Set a 3-minute timeout for repair to prevent deadlock
-            timeout = aiohttp.ClientTimeout(total=180)
-            payload = {
-                "text": repair_prompt,
-                "sampling_params": {
-                    "max_new_tokens": 4096,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": schema_json
-                }
-            }
-            if is_image and image_path:
-                payload["image_data"] = image_path
 
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                    result = await resp.json()
-                    repaired_text = result.get("text", "")
-        else:
-            gen_kwargs = {
-                "prompt": repair_prompt,
-                "sampling_params": {
-                    "max_new_tokens": 4096,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": schema_json
-                }
-            }
-            if is_image and image_path:
-                gen_kwargs["image_data"] = image_path
-            response = await self.engine.async_generate(**gen_kwargs)
-            repaired_text = response["text"] if isinstance(response, dict) else response.text
+        repaired_text = await self._generate(
+            prompt_text=repair_prompt,
+            image_path=image_path if is_image else None,
+            schema_json=schema_json,
+            max_new_tokens=4096,
+            temperature=0.0,
+            timeout_seconds=180
+        )
 
         repaired_page = self._parse_and_validate_page(repaired_text, table_evidence=table_evidence, chunk_title=chunk_title)
         n_params = sum(len(b.parameters) for b in repaired_page.parameter_blocks or [])
@@ -730,142 +911,105 @@ class SGLangExtractor:
         """Extract table data from image strictly enforcing Pydantic schema"""
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
         logger.info(f"SGLang: [START] Extracting data from {role} image{title_log}...")
-        
-        import uuid
-        import os
-        temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.png"
-        image.save(temp_img_path, "PNG")
-        
-        try:
-            if role in ("table_crop", "table_xml"):
-                schema_cls = TableExtractionPage
-                schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
-                system_prompt = TABLE_SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
-            elif role == "figure_crop":
-                schema_cls = DiagramExtractionPage
-                schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
-                system_prompt = DIAGRAM_PROMPT_TEMPLATE.format(schema=schema_json)
-            else:
-                schema_cls = ExtractedPage
-                schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
-                system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
-            
-            user_instruction = "Extract parameters from this image strictly into the JSON schema."
-            if role == "table_crop":
-                user_instruction += " This image contains a table with its title and footnotes. Focus on exact transcription of table values into parameter_blocks. Set model_classification to 'pbpk' or 'simple_empirical_compartmental'."
-            elif role == "figure_crop":
-                user_instruction = "Extract the compartmental model structure, compartments, and connections from this diagram strictly into the JSON schema."
-            elif role == "page_with_table":
-                user_instruction += " This is a full page image containing a table. Use the Markdown text provided below as the primary transcription evidence and the image as the authoritative visual-layout source. If the Markdown and image differ, inspect the image and flag the discrepancy rather than silently ignoring it."
-            elif role == "full_page":
-                user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
 
-            if evidence_text and evidence_text.strip():
-                user_instruction += (
-                    f"\n\nUse the following native PDF text extracted from this region as evidence hints "
-                    f"to avoid hallucinating names or values:\n\n{evidence_text.strip()}"
-                )
-                
-            if table_evidence:
-                user_instruction += (
-                    f"\n\nCRITICAL: Use the following pre-computed table structure to guide your extraction. "
-                    f"Ensure that compounds and species match this structure. "
-                    f"All extracted parameters MUST trace back to these row/column headers:\n"
-                    f"{table_evidence.model_dump_json(indent=2)}"
-                )
+        if role in ("table_crop", "table_xml"):
+            schema_cls = TableExtractionPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = TABLE_SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        elif role == "figure_crop":
+            schema_cls = DiagramExtractionPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = DIAGRAM_PROMPT_TEMPLATE.format(schema=schema_json)
+        else:
+            schema_cls = ExtractedPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
 
-            # Construct the conversation for Qwen-VL manually using its chat template
-            prompt_text = (
-                f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
-                f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
-                f"<|im_start|>assistant\n"
+        user_instruction = "Extract parameters from this image strictly into the JSON schema."
+        if role == "table_crop":
+            user_instruction += " This image contains a table with its title and footnotes. Focus on exact transcription of table values into parameter_blocks. Set model_classification to 'pbpk' or 'simple_empirical_compartmental'."
+        elif role == "figure_crop":
+            user_instruction = "Extract the compartmental model structure, compartments, and connections from this diagram strictly into the JSON schema."
+        elif role == "page_with_table":
+            user_instruction += " This is a full page image containing a table. Use the Markdown text provided below as the primary transcription evidence and the image as the authoritative visual-layout source. If the Markdown and image differ, inspect the image and flag the discrepancy rather than silently ignoring it."
+        elif role == "full_page":
+            user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
+
+        if evidence_text and evidence_text.strip():
+            user_instruction += (
+                f"\n\nUse the following native PDF text extracted from this region as evidence hints "
+                f"to avoid hallucinating names or values:\n\n{evidence_text.strip()}"
             )
-            
-            # Debug: Save the exact prompt to the test folder
+
+        if table_evidence:
+            user_instruction += (
+                f"\n\nCRITICAL: Use the following pre-computed table structure to guide your extraction. "
+                f"Ensure that compounds and species match this structure. "
+                f"All extracted parameters MUST trace back to these row/column headers:\n"
+                f"{table_evidence.model_dump_json(indent=2)}"
+            )
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+
+        try:
+            debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+            os.makedirs(debug_dir, exist_ok=True)
+            safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "image"
+            debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
+            with open(debug_file, "w", encoding="utf-8") as f:
+                f.write(prompt_text)
+        except Exception as e:
+            logger.warning(f"Failed to save debug prompt: {e}")
+
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            image=image,
+            schema_json=json.dumps(schema_cls.model_json_schema()),
+            max_new_tokens=16000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        try:
+            return self._parse_and_validate_page(extracted_text, table_evidence=table_evidence, chunk_title=chunk_title, start_t=start_t)
+        except Exception as e:
+            compact_err = self._compact_validation_error(e)
+            logger.warning(f"SGLang: Image schema validation failed on {role}{title_log}: {compact_err}. Attempting Factor-9 self-healing retry...")
             try:
-                debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
-                os.makedirs(debug_dir, exist_ok=True)
-                safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "image"
-                debug_file = os.path.join(debug_dir, f"{int(time.time()*1000)}_{role}_{safe_title.replace(' ', '_')}.txt")
-                with open(debug_file, "w", encoding="utf-8") as f:
-                    f.write(prompt_text)
-            except Exception as e:
-                logger.warning(f"Failed to save debug prompt: {e}")
-            
-            if getattr(self, "use_server", False):
-                import aiohttp
-                timeout = aiohttp.ClientTimeout(total=3600)
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    payload = {
-                        "text": prompt_text,
-                        "image_data": temp_img_path,
-                        "sampling_params": {
-                            "max_new_tokens": 16000,
-                            "temperature": 0.0,
-                            "repetition_penalty": 1.0,
-                            "json_schema": json.dumps(schema_cls.model_json_schema())
-                        }
-                    }
-                    async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                        result = await resp.json()
-                        extracted_text = result["text"]
-            else:
-                response = await self.engine.async_generate(
-                    prompt=prompt_text,
-                    image_data=temp_img_path,
-                    sampling_params={
-                        "max_new_tokens": 16000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": json.dumps(schema_cls.model_json_schema())
-                    }
+                return await self._attempt_repair(
+                    base_prompt=prompt_text,
+                    bad_output=extracted_text,
+                    compact_err=compact_err,
+                    schema_json=json.dumps(schema_cls.model_json_schema()),
+                    is_image=True,
+                    image_path=None,
+                    chunk_title=chunk_title,
+                    table_evidence=table_evidence
                 )
-                extracted_text = response["text"] if isinstance(response, dict) else response.text
-            
-            try:
-                return self._parse_and_validate_page(extracted_text, table_evidence=table_evidence, chunk_title=chunk_title, start_t=start_t)
-            except Exception as e:
-                compact_err = self._compact_validation_error(e)
-                logger.warning(f"SGLang: Image schema validation failed on {role}{title_log}: {compact_err}. Attempting Factor-9 self-healing retry...")
-                try:
-                    return await self._attempt_repair(
-                        base_prompt=prompt_text,
-                        bad_output=extracted_text,
-                        compact_err=compact_err,
-                        schema_json=json.dumps(schema_cls.model_json_schema()),
-                        is_image=True,
-                        image_path=temp_img_path,
-                        chunk_title=chunk_title,
-                        table_evidence=table_evidence
-                    )
-                except Exception as repair_err:
-                    logger.error(f"Factor-9 image repair also failed for {role}{title_log}: {repair_err}\nRaw Output: {extracted_text}")
-                    if table_evidence:
-                        logger.warning(f"Using structured table_evidence fallback for '{chunk_title}' after repair failure.")
-                        return ExtractedPage(table_evidence=[table_evidence])
-                    raise e
-        finally:
-            if os.path.exists(temp_img_path):
-                try:
-                    os.remove(temp_img_path)
-                except Exception:
-                    pass
+            except Exception as repair_err:
+                logger.error(f"Factor-9 image repair also failed for {role}{title_log}: {repair_err}\nRaw Output: {extracted_text}")
+                if table_evidence:
+                    logger.warning(f"Using structured table_evidence fallback for '{chunk_title}' after repair failure.")
+                    return ExtractedPage(table_evidence=[table_evidence])
+                raise e
 
     async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "", table_evidence: TableEvidence = None) -> ExtractedPage:
         """Extract table data from text/XML strictly enforcing Pydantic schema"""
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
         logger.info(f"SGLang: [START] Extracting data from {role}{title_log}...")
-        
+
         if role in ("table_crop", "table_xml"):
             schema_cls = TableExtractionPage
             schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
@@ -874,7 +1018,7 @@ class SGLangExtractor:
             schema_cls = ExtractedPage
             schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
             system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
-        
+
         if role == "table_xml":
             user_instruction = (
                 f"Extract parameters from this document section strictly into the JSON schema. "
@@ -925,8 +1069,7 @@ class SGLangExtractor:
             f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        
-        # Debug: Save the exact prompt to the test folder
+
         try:
             debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
             os.makedirs(debug_dir, exist_ok=True)
@@ -936,48 +1079,16 @@ class SGLangExtractor:
                 f.write(prompt_text)
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
-        
+
         max_tokens = 16384
-        extracted_text = ""
-        if getattr(self, "use_server", False):
-            import aiohttp
-            # Set a 1-hour timeout to prevent long extractions from hitting default timeout
-            timeout = aiohttp.ClientTimeout(total=3600)
-            payload = {
-                "text": prompt_text,
-                "sampling_params": {
-                    "max_new_tokens": max_tokens,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": json.dumps(schema_cls.model_json_schema())
-                }
-            }
-            max_retries = 2
-            for attempt in range(max_retries + 1):
-                try:
-                    async with aiohttp.ClientSession(timeout=timeout) as session:
-                        async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                            result = await resp.json()
-                            extracted_text = result["text"]
-                            break
-                except (aiohttp.ClientError, asyncio.TimeoutError) as err:
-                    if attempt < max_retries:
-                        logger.warning(f"SGLang text extraction connection error on attempt {attempt+1}: {err}. Retrying in 2s...")
-                        await asyncio.sleep(2.0)
-                    else:
-                        raise
-        else:
-            response = await self.engine.async_generate(
-                prompt=prompt_text,
-                sampling_params={
-                    "max_new_tokens": max_tokens,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": json.dumps(schema_cls.model_json_schema())
-                }
-            )
-            extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=json.dumps(schema_cls.model_json_schema()),
+            max_new_tokens=max_tokens,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
         try:
             return self._parse_and_validate_page(extracted_text, table_evidence=table_evidence, chunk_title=chunk_title, start_t=start_t)
         except Exception as e:
@@ -1006,11 +1117,10 @@ class SGLangExtractor:
         from pk_pipeline.schemas import DosingExtraction
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         logger.info(f"SGLang: [START] Extracting dosing from Methods text...")
-        
+
         schema_json = json.dumps(DosingExtraction.model_json_schema(), indent=2)
         system_prompt = (
             "You are an expert pharmacokinetic data extractor. Your task is to extract the dosing administration details "
@@ -1019,7 +1129,7 @@ class SGLangExtractor:
             f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
             "Output ONLY the JSON object, with no markdown formatting or extra text."
         )
-        
+
         user_instruction = f"Extract dosing parameters from this document text strictly into the JSON schema:\n\n{text.strip()}"
 
         prompt_text = (
@@ -1027,47 +1137,18 @@ class SGLangExtractor:
             f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        
-        if getattr(self, "use_server", False):
-            import aiohttp
-            timeout = aiohttp.ClientTimeout(total=3600)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                payload = {
-                    "text": prompt_text,
-                    "sampling_params": {
-                        "max_new_tokens": 8000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": schema_json
-                    }
-                }
-                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                    result = await resp.json()
-                    extracted_text = result["text"]
-        else:
-            response = await self.engine.async_generate(
-                prompt=prompt_text,
-                sampling_params={
-                    "max_new_tokens": 8000,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": schema_json
-                }
-            )
-            extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
-        if "</think>" in extracted_text:
-            extracted_text = extracted_text.split("</think>")[-1].strip()
-            
-        import re
-        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
-        if match:
-            extracted_text = match.group(1).strip()
-        else:
-            extracted_text = extracted_text.strip()
-            
+
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=schema_json,
+            max_new_tokens=8000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        clean_json_str = self._strip_think_and_fences(extracted_text)
         try:
-            json_data = json.loads(extracted_text)
+            json_data = json.loads(clean_json_str)
             dosing_data = DosingExtraction(**json_data)
             duration = time.time() - start_t
             logger.info(f"SGLang: [END] Dosing extraction complete in {duration:.2f}s. Found {len(dosing_data.dosing)} events.")
@@ -1081,11 +1162,10 @@ class SGLangExtractor:
         from pk_pipeline.schemas import EvaluatorJudgments
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         logger.info(f"SGLang: [START] Running Tier 2 Evaluation Pass...")
-        
+
         schema_json = json.dumps(EvaluatorJudgments.model_json_schema(), indent=2)
         system_prompt = (
             "You are an expert pharmacokinetic (PK) model evaluator working for a regulatory agency (like the FDA or EPA). "
@@ -1094,7 +1174,7 @@ class SGLangExtractor:
             f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
             "Output ONLY the JSON object, with no markdown formatting or extra text."
         )
-        
+
         user_instruction = f"Evaluate the following extracted PBPK model data strictly into the EvaluatorJudgments JSON schema:\n\n{full_document_json}"
 
         prompt_text = (
@@ -1102,60 +1182,31 @@ class SGLangExtractor:
             f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        
-        if getattr(self, "use_server", False):
-            import aiohttp
-            timeout = aiohttp.ClientTimeout(total=3600)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                payload = {
-                    "text": prompt_text,
-                    "sampling_params": {
-                        "max_new_tokens": 8000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": schema_json
-                    }
-                }
-                async with session.post("http://127.0.0.1:30000/generate", json=payload) as resp:
-                    result = await resp.json()
-                    extracted_text = result["text"]
-        else:
-            response = await self.engine.async_generate(
-                prompt=prompt_text,
-                sampling_params={
-                    "max_new_tokens": 8000,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": schema_json
-                }
-            )
-            extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
-        if "</think>" in extracted_text:
-            extracted_text = extracted_text.split("</think>")[-1].strip()
-            
-        import re
-        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
-        if match:
-            extracted_text = match.group(1).strip()
-        else:
-            extracted_text = extracted_text.strip()
-            
+
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=schema_json,
+            max_new_tokens=8000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        clean_json_str = self._strip_think_and_fences(extracted_text)
         try:
-            json_data = json.loads(extracted_text)
+            json_data = json.loads(clean_json_str)
             judgments = EvaluatorJudgments(**json_data)
             duration = time.time() - start_t
             logger.info(f"SGLang: [END] Tier 2 Evaluation complete in {duration:.2f}s.")
             return judgments
         except Exception as e:
             logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
+            raise
 
     async def assess_oecd_compliance(self, full_document_json: str, context_text: Optional[str] = None) -> "OECDAssessment":
         """Tier 3 Pass: Evaluates extracted PBPK model strictly against OECD GD 331 & Tan et al. checklist."""
         from pk_pipeline.schemas import OECDAssessment
         from pk_pipeline.oecd_assessor import build_oecd_assessment_prompt, evaluate_oecd_from_document
-        
-        # If server or engine is not loaded/accessible, use evidence-based deterministic evaluator
+
         if not getattr(self, "is_loaded", False):
             logger.info("SGLang not loaded; running deterministic OECD GD 331 evaluation from extracted evidence.")
             try:
@@ -1165,53 +1216,23 @@ class SGLangExtractor:
                 logger.error(f"Deterministic OECD evaluation failed: {e}")
                 return OECDAssessment(checklist_version="OECD GD 331", items=[])
 
-        import time
         start_t = time.time()
         logger.info("SGLang: [START] Running Tier 3 OECD GD 331 Assessment Pass...")
-        
+
         schema_json = json.dumps(OECDAssessment.model_json_schema(), indent=2)
         prompt_text = build_oecd_assessment_prompt(full_document_json, context_text=context_text)
-        
-        try:
-            if getattr(self, "use_server", False):
-                import aiohttp
-                timeout = aiohttp.ClientTimeout(total=3600)
-                async with aiohttp.ClientSession(timeout=timeout) as session:
-                    payload = {
-                        "text": prompt_text,
-                        "sampling_params": {
-                            "max_new_tokens": 8000,
-                            "temperature": 0.0,
-                            "repetition_penalty": 1.0,
-                            "json_schema": schema_json
-                        }
-                    }
-                    async with session.post("http://127.0.0.1:30000/generate", json=payload) as resp:
-                        result = await resp.json()
-                        extracted_text = result["text"]
-            else:
-                response = await self.engine.async_generate(
-                    prompt=prompt_text,
-                    sampling_params={
-                        "max_new_tokens": 8000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": schema_json
-                    }
-                )
-                extracted_text = response["text"] if isinstance(response, dict) else response.text
 
-            if "</think>" in extracted_text:
-                extracted_text = extracted_text.split("</think>")[-1].strip()
-                
-            import re
-            match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
-            if match:
-                extracted_text = match.group(1).strip()
-            else:
-                extracted_text = extracted_text.strip()
-                
-            json_data = json.loads(extracted_text)
+        try:
+            extracted_text = await self._generate(
+                prompt_text=prompt_text,
+                schema_json=schema_json,
+                max_new_tokens=8000,
+                temperature=0.0,
+                timeout_seconds=3600
+            )
+
+            clean_json_str = self._strip_think_and_fences(extracted_text)
+            json_data = json.loads(clean_json_str)
             assessment = OECDAssessment(**json_data)
             duration = time.time() - start_t
             logger.info(f"SGLang: [END] Tier 3 OECD Assessment complete in {duration:.2f}s.")
@@ -1225,22 +1246,24 @@ class SGLangExtractor:
                 raise
 
 
-
 class PBPKExtractorService:
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct"):
         self.model_id = model_id
         self.use_sglang = False
-        self.server_url = "http://127.0.0.1:30000"
-        
-        # Check if external SGLang server is running
-        try:
-            import requests
-            resp = requests.get(f"{self.server_url}/health", timeout=2)
-            if resp.status_code == 200:
-                self.use_sglang = True
-                logger.info("PBPKExtractorService: Connected to running SGLang server on port 30000.")
-        except Exception:
-            self.use_sglang = False
+        self.server_url = Config.SGLANG_LOCAL_URL
+
+        # Check local SGLang server first, then DGX SGLang server
+        for probe_url in [Config.SGLANG_LOCAL_URL, Config.DGX_SGLANG_URL]:
+            try:
+                import requests
+                resp = requests.get(f"{probe_url}/health", timeout=2)
+                if resp.status_code == 200:
+                    self.use_sglang = True
+                    self.server_url = probe_url
+                    logger.info(f"PBPKExtractorService: Connected to running SGLang server at {probe_url}.")
+                    break
+            except Exception:
+                continue
 
         self.llm = None
         self.sampling_params = None

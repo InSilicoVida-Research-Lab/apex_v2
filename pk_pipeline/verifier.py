@@ -883,10 +883,13 @@ class Tier2LLMCritic:
 
     def __init__(
         self,
-        server_url: str = "http://127.0.0.1:30000",
+        server_url: str = None,
         max_new_tokens: int = 512,
         concurrency: int = 4,
     ):
+        if server_url is None:
+            from pk_pipeline.config import Config
+            server_url = Config.DGX_SGLANG_URL if getattr(Config, "FORCE_BACKEND", "") in ("dgx", "remote") else Config.SGLANG_LOCAL_URL
         self.server_url = server_url
         self.max_new_tokens = max_new_tokens
         self.concurrency = concurrency
@@ -1089,7 +1092,7 @@ def verify_document(document: dict, verbose: bool = True) -> "VerificationReport
 async def verify_document_with_llm(
     document: dict,
     verbose: bool = True,
-    server_url: str = "http://127.0.0.1:30000",
+    server_url: str = None,
     max_params: int = 15,
     include_warnings: bool = False,
 ) -> tuple:

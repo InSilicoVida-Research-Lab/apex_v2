@@ -27,7 +27,12 @@ At its core, APEX utilizes **Qwen3-VL-8B-Instruct** (hosted via SGLang) to perfo
    source .venv/bin/activate
    pip install -r requirements.txt
    ```
-2. *(Optional but recommended)* Start the SGLang backend server on port 30000:
+   On Windows, GPU-only packages are skipped automatically. FlashInfer is a
+   Linux/CUDA dependency and its build currently requests the unavailable
+   `apache-tvm-ffi==0.1.0b15`. Use WSL/Linux for the GPU server and configure
+   `SGLANG_LOCAL_URL`/`DGX_SGLANG_URL` to point to that server.
+
+2. *(Optional but recommended on Linux + CUDA)* Start the SGLang backend server on port 30000:
    ```bash
    python -m sglang.launch_server --model-path Qwen/Qwen3-VL-8B-Instruct --port 30000
    ```
