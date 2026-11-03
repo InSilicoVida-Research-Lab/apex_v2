@@ -1,11 +1,29 @@
-import torch
-from typing import List
-from PIL import Image
+import asyncio
+import base64
+from io import BytesIO
 import json
 import os
+import re
+import time
+from typing import Any, Dict, List, Optional, Tuple, Union
+from PIL import Image
+import torch
 
-from .schemas import ExtractedPage, ExtractedParameter
+from .schemas import (
+    ExtractedPage,
+    ExtractedParameter,
+    TableEvidence,
+    ExtractionResult,
+    TableExtractionPage,
+    DiagramExtractionPage,
+)
 from .config import logger, Config
+from pydantic import ValidationError
+
+try:
+    from openai import OpenAI
+except ImportError:
+    OpenAI = None
 
 # Note: These imports will require a GPU environment with sglang and colpali_engine installed.
 try:
@@ -130,106 +148,205 @@ class ColQwenRetriever:
         
         return [images[i] for i in top_indices]
 
+    def score_pages(self, query: str, images: List[Image.Image]) -> List[float]:
+        """Score all page images against a query text using ColQwen MaxSim."""
+        if not images:
+            return []
+        if not self.is_loaded:
+            raise RuntimeError("ColQwenRetriever model is not loaded. Ensure colpali-engine is installed and GPU is available.")
+        with torch.no_grad():
+            batch_images = self.processor.process_images(images).to(self.model.device)
+            image_embeddings = self.model(**batch_images)
+            batch_queries = self.processor.process_queries([query]).to(self.model.device)
+            query_embeddings = self.model(**batch_queries)
+            scores = self.processor.score_multi_vector(query_embeddings, image_embeddings)[0]
+            return [s.item() for s in scores]
 
-from .schemas import ExtractedPage, ExtractedParameter
+    def find_top_pages_ensemble(self, images: List[Image.Image], top_k_per_query: int = 3) -> dict:
+        """
+        Multi-query ensemble retrieval to ensure prose pages, split tables,
+        and compartmental diagrams are all retrieved.
+        """
+        queries = {
+            "tables": "Table of physiological parameters blood flow tissue volumes partition coefficients Vmax Km clearance",
+            "narrative": "pharmacokinetic values estimated half-life clearance volume bioavailability body weight cardiac output",
+            "diagram": "Pharmacokinetic model structure schematic diagram compartments flow chart arrows"
+        }
+        selected = {"table_pages": set(), "narrative_pages": set(), "diagram_pages": set()}
 
-SYSTEM_PROMPT_TEMPLATE = """You are a pharmacokinetic (PK) data extraction system. You are provided with a section of a scientific paper (which may be a page image, a raw XML/Markdown table, or narrative text). Your task is to extract pharmacokinetic parameters, model structure, and study metadata that are EXPLICITLY PRESENT on this page, and return them in the exact JSON schema provided below. You are not being asked to know pharmacology — you are being asked to transcribe faithfully what is printed on this page.
+        for role, query_text in queries.items():
+            scores = self.score_pages(query_text, images)
+            ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
+            top_indices = ranked_indices[:top_k_per_query]
+            if role == "tables":
+                selected["table_pages"].update(top_indices)
+            elif role == "narrative":
+                selected["narrative_pages"].update(top_indices)
+            elif role == "diagram":
+                if ranked_indices:
+                    selected["diagram_pages"].add(ranked_indices[0])
 
-## THE SINGLE MOST IMPORTANT RULE
+        return selected
 
-Extract only what is visually present on this page. Never supply a parameter, value, species, compound, or metadata field from general pharmacological knowledge, typical values, or what similar papers usually report. If a piece of information is not legible on this page, the correct output is to omit it or set it to null — not to estimate it, not to infer it, not to borrow a "typical" value from your training data.
 
-Concretely: if this page does not contain the words "cardiac output" (or an unambiguous synonym) attached to a number and a unit, you must not output a cardiac output parameter — even though cardiac output is one of the most common PBPK parameters in the literature. The same applies to every parameter type. You have seen thousands of PBPK papers reporting cardiac output, fraction unbound, and tissue partition coefficients — resist the pull to reproduce that pattern here. This specific paper may not report any of those, and may not even be a physiologically based model at all.
+PBPK_SYSTEM_PROMPT = """You are an expert PBPK/TK data extraction engine. Extract every physiological, biochemical, physicochemical, and formulation parameter into the required JSON schema.
 
-## STEP 0 — CLASSIFY THE MODEL TYPE BEFORE EXTRACTING ANYTHING
+### STEP 1 — MODEL CLASSIFICATION
+- Classify `model_classification` as `'pbpk'` or `'simple_empirical_compartmental'`. Only use `'not_applicable'` if the text/image contains zero PK/PBPK model inputs or structure.
 
-Before extracting any parameter, determine from the page text which of the following the paper is describing:
+### STEP 2 — MULTI-COLUMN, MULTI-FORMULATION & RANGE RULES (CRITICAL)
+1. **Cartesian Column Unrolling (Never Skip Columns)**:
+   - If a table has columns for multiple compounds (e.g., `PFOS`, `PFOA`, `PFHxS`), species (`Nonhuman primate`, `Human`, `Rat`), or life stages (`Mother`, `Fetus`, `Infant`), emit a SEPARATE `ExtractedParameter` object for EVERY populated column in that row.
+2. **Comma-Separated Formulations (NEVER Map to Ranges)**:
+   - If a column header specifies multiple formulations (e.g., `Value in rat for Rilutor, ASD` with cell `0.69, 2.19` or `0.013, 0.011`), emit TWO separate `ExtractedParameter` entries: one with `context.formulation = "Rilutor"` (`value = 0.69`) and one with `context.formulation = "ASD"` (`value = 2.19`). NEVER place comma-separated formulations into `ci_low`/`ci_high` or `start_value`/`end_value`.
+3. **Confidence Intervals vs. Time-Varying Physiological Ranges**:
+   - **Confidence Intervals**: When a cell reports a point estimate with parentheses like `0.21 (0.18, 0.25)` under a `(95% CI)` header, set `value = 0.21`, `ci_low = 0.18`, `ci_high = 0.25`, `variance_type = "95% CI"`.
+   - **Time-Varying Growth Ranges**: When a physiological parameter changes over gestation/lactation/age (e.g., `56.9 - 70 (initial)`, `65.3 - 79.6 (increasing)`, `0 - 3.8`, `3.2 - 2.4`), set `start_value` to the first number (e.g., `56.9` or `3.2`) and `end_value` to the second number (e.g., `70.0` or `2.4`), and record the descriptor in `value_qualifier`.
+4. **Dual-Symbol Rows**:
+   - If a row defines two symbols for different life stages (e.g., `urinary elimination rate constant, kurinec (/h/kg^-0.25); keliml for infant (/h)`), emit TWO separate parameter entries with their respective symbol, unit, and `context.life_stage` (`Mother` vs. `Infant`).
+5. **Footnotes & Inline Numbers with Letters**:
+   - Always record the exact string in `value_text` (e.g., `'0.008[b]'` or `'5a'`). Strip the footnote letter to parse the pure float into `value` (`0.008`, `5.0`) and put `'b'` or `'a'` in `footnote_marker`.
+   - Read all `Table Footnotes` carefully and extract any numeric constants stated in the footnotes (e.g., `liver:blood partition coefficient = 2.0`, `blood to plasma ratio = 1.1`, or forced bioavailability overrides) as standalone `ExtractedParameter` objects!
+6. **Group Headers & Units**:
+   - Never emit a spanning group header (e.g., `Blood flow to organ (fraction)`) as a parameter with `value: null`. Prepend the group header to each row below it (e.g., `parameter_name = "Blood flow to organ - Liver"`) and propagate its unit with `unit_inherited = true`.
 
-- **pbpk**: A true physiologically based PK (PBPK) model where compartments correspond to real organs or tissues (liver, kidney, fat, muscle, kidney filtrate/tubule). Parameters include organ blood flows, tissue volumes, or tissue:plasma partition coefficients. A renal filtration/resorption model (Tm, Kt, GFR) is a hallmark of PBPK.
-- **simple_empirical_compartmental**: The authors explicitly state the model is not physiologically rigorous. Compartments carry generic names ("central", "peripheral", "deep") and parameters are generic first-order rate constants (k10, k12, k21) or apparent volumes (Vd, CL/F) with no physiological meaning assigned. Keywords: "apparent", "not intended to be physiologically rigorous", "empirical".
-- **not_applicable**: No PK model on this page at all (discussion, references, abstract only).
+### STEP 3 — MODEL STRUCTURE / TOPOLOGY
+- When given a compartmental diagram or equations, extract all compartment names and directional flow connections into `structure`. Symbolic equations without numbers (e.g., `Vc = Vcc * BW`) belong in `structure.scaling_equations`, never as fake numeric parameters.
+"""
 
-IMPORTANT: A model that names compartments after organs AND uses saturable tubular resorption parameters (Tm, Kt, GFR, filtrate volume) IS a PBPK model, even if called a "compartmental" model by the authors for brevity. Do not classify as simple_empirical just because the paper uses the word "compartment".
+def build_table_user_prompt(markdown_table_string: str, source_location: str) -> str:
+    return f"""Extract all PBPK/TK parameters from `{source_location}` strictly into the JSON schema.
 
-Watch for explicit author disclaimers. Only classify as simple_empirical if the authors themselves say the structure is not physiologically rigorous.
+CRITICAL INSTRUCTIONS FOR THIS TABLE:
+1. This is a confirmed PK/PBPK input table. Set `model_classification` to `'pbpk'` or `'simple_empirical_compartmental'`. Do NOT output `'not_applicable'`.
+2. Unroll EVERY data column (every compound, species, life stage, and formulation) into its own parameter object.
+3. Extract all numeric constants mentioned in the Table Footnotes section at the bottom.
 
-## STEP 1 — LOCATE PK-RELEVANT CONTENT; EXCLUDE EVERYTHING ELSE
+Document Table ({source_location}):
+{markdown_table_string}"""
 
-Identify which regions of the page are genuine candidate sources of PK parameter data: results text, a labeled table of model or PK parameters, or a table caption/footnote.
 
-The following regions must NEVER be treated as a source of parameter data, even if they contain numbers that superficially resemble a schema field:
+from .schemas import ExtractedPage, ExtractedParameter, TableExtractionPage, DiagramExtractionPage
 
-- Author correspondence blocks (address, telephone, fax, email)
-- Article identifiers: DOI, PMID, ISSN, page numbers, volume/issue numbers
-- Running headers/footers and journal name banners
-- Funding statements, conflict-of-interest statements, publisher disclaimers
-- The reference list / bibliography
-- Sensitivity Analysis, Validation, and Results tables. Extract only intrinsic Model Input Parameters.
-- Any other bibliographic or administrative metadata
+TABLE_SYSTEM_PROMPT_TEMPLATE = """You are an OECD GD 331 compliant pharmacokinetic (PK) and PBPK table data extraction engine.
+Your task is to faithfully extract model parameters, experimental values, and model outputs from scientific tables into the strict JSON schema provided below.
 
-If you see a number next to a label like "Fax," "Tel," "DOI," or "Vol.," it is not a pharmacokinetic parameter under any circumstances, regardless of what unit or symbol it superficially resembles.
+==================================================
+1. CORE ANTI-HALLUCINATION & FIDELITY RULES
+==================================================
+- Extract ONLY what is explicitly printed in the table. Never guess, infer, calculate, or supply parameters from general pharmacological knowledge or typical values.
+- Never extract a value in isolation: associate every value with its complete semantic context (compound, species, life stage, formulation, compartment, parameter, unit, and uncertainty).
+- Interpret every table independently: NEVER leak context (compounds, species, or units) from other tables or surrounding text unless explicitly shared.
+- If a value or context field cannot be identified with high confidence, set needs_review=true rather than guessing.
+- Distinguish model input parameters (which belong in `parameter_blocks`) from observed/simulated clinical PK outputs (e.g., observed Cmax, AUC, which belong in `observed_data`).
 
-## STEP 2 — EXTRACT PARAMETERS
+==================================================
+2. PRE-COMPUTED TABLE STRUCTURE & CELL BINDING
+==================================================
+The document table layout has already been mapped for you (see the markdown table and pre-computed column/row summary in the user prompt).
+- Bind every parameter to its `source_table` (e.g. "Table 1", "Table 3"), `row_id` (e.g. "r1"), and `column_id` (e.g. "c1").
+- Populate `row_path` and `column_path` reflecting the hierarchical headers.
+- Record the exact, unedited printed cell text in `source_quote`.
 
-For each PK parameter explicitly reported on the page, capture:
+==================================================
+3. CARTESIAN COLUMN UNROLLING & MULTI-CONDITION HEADERS
+==================================================
+- Multi-Compound / Multi-Species / Multi-Life-Stage Columns: If a table has distinct columns for multiple compounds (e.g. PFOS, PFOA, PFHxS), species (Nonhuman primate, Human), or life stages (Mother, Fetus, Infant), emit a SEPARATE parameter record for EVERY populated cell in that row. Never skip columns or merge compounds.
+- Comma-Separated Formulations (Never Map to Ranges): If a cell contains comma-separated values for multiple formulations (e.g. '0.69, 2.19' for 'Rilutor, ASD'), emit separate parameter records: one with context.formulation="Rilutor" (value=0.69) and one with context.formulation="ASD" (value=2.19). NEVER place comma-separated formulations into ranges or confidence intervals.
+- Dual-Symbol Rows: If a row defines two symbols for different life stages (e.g. 'kurinec (/h/kg^-0.25); keliml for infant (/h)'), emit separate parameter records with their respective symbol, unit, and life stage ('Mother' vs. 'Infant').
 
-- **parameter_name**: The full descriptive name exactly as printed in the table row label or surrounding text (e.g., "Volume of distribution central compartment", "Saturable resorption rate"). This field is REQUIRED. If the table only prints the symbol with no accompanying descriptive label, use the symbol as the parameter name. Do NOT invent a name.
-- **symbol**: transcribed exactly as printed (e.g., "VCC", "Tmc", "k12", "CL/F"). If the parameter is printed ONLY with a descriptive name and NO mathematical symbol (e.g., "Half-life (years)"), leave this field null. Do not expand, standardize, or "clean up" the symbol.
-- **value_text**: The exact printed text of the value, verbatim (e.g., '5a', '0.008b', '<1', '~3'). You MUST always populate this if a value exists.
-- **value / range_low / range_high**: The primary value and bounds. ONLY populate `value` if the `value_text` can be safely parsed as a pure float (e.g., '5.0', '0.008'). If it contains letters (e.g. '0.008b') leave `value` null.
-- **value_qualifier**: any qualifier word or phrase printed with the value beyond the number itself (e.g., "Fixed", "Assumed", "Optimized", "Assumed (PFOS)"). Never drop it or fold it into the numeric value.
-- **parameter_status**: How the parameter was obtained, using exactly one of these terms if stated by the authors: "Measured", "Fitted", "Optimized", "Fixed", "Assumed", "Scaled", "Literature". Look for this in a dedicated "Source" or "Method" column in the table. If a table column provides a literature citation (e.g., "Wambaugh et al. (2013)") that is the source of the value, set parameter_status to "Literature". If not stated anywhere, leave null.
-- **unit**: exactly as printed. If a unit is stated once for a group of rows (e.g., a section header reading "Elimination constants (1/min)"), apply that inherited unit and set unit_inherited to true.
-- **compound**: the specific chemical entity exactly as named on the page. **Extract parameters for ALL compounds present — if a table reports data for PFOS, PFOA, and PFHxS, you must capture entries for all three.**
-- **subject_species**: only if explicitly stated. Do not default to "human".
-- **population**: only if explicitly stated. Leave null otherwise.
-- **source_location**: the table, figure, or section (e.g., "Table 1", "Table 3").
-- **source_quote**: a short, exact transcription of the specific cell(s). If you cannot produce a directly-traceable quote, omit the parameter.
+==================================================
+4. FOOTNOTES, QUALIFIERS & INLINE NUMBERS WITH LETTERS
+==================================================
+- Verbatim Transcription: Always capture the exact cell text in `value_text` (e.g. '0.008b', '5a', '4.00E-04').
+- Number & Marker Separation: Strip the footnote letter to parse the pure float into `value` (e.g. 0.008, 5.0) and put the isolated symbol/letter into `footnote_marker` ('b', 'a').
+- Constants in Footnotes: Inspect all table footnotes. Extract any explicitly stated numeric constants (e.g. 'liver:blood partition coefficient = 2.0', 'bioavailability fixed to 90%') as standalone parameter records!
+- Spanning Group Headers: Never emit a spanning group header as a parameter with value=null. Prepend the group header to each child row (e.g. 'Blood flow to organ - Liver') and propagate its unit with `unit_inherited=true`.
 
-## STEP 3 — HANDLE TABLE STRUCTURE CAREFULLY
+==================================================
+5. POINT ESTIMATES, UNCERTAINTY & PHYSIOLOGICAL RANGES
+==================================================
+- Point Estimates with Uncertainty: When a cell reports a point estimate with confidence interval or error (e.g. '0.21 (0.18, 0.25)' under 'Mean (95% CI)'), set `value=0.21`, `ci_low=0.18`, and `ci_high=0.25`.
+- Time-Varying Physiological Ranges: When a parameter changes dynamically across gestation or growth (e.g. '56.9 - 70 (initial)', '3.2 - 2.4'), set `start_value` to the initial value (56.9 or 3.2), `end_value` to the final value (70.0 or 2.4), and put the qualifier in `value_qualifier`. Leave `value=null`.
 
-- **Group headers**: a row spanning the full table width and styled differently from data rows (italic, bold, or otherwise set apart) is a group header, not a parameter — e.g., "Fractional constants" or "Elimination constants (1/min)" as its own row above several parameter rows. Never extract the group header itself as a parameter; apply any unit or context it carries down to the rows beneath it.
-- **Multi-row column headers**: if column headers span two or more rows, read down through all header rows before interpreting any data row.
-- **Split columns**: some tables place a parameter's descriptive name, symbol, and value in three separate columns. Match them strictly by row position.
-- **Per-species or per-population columns**: If a table has columns for different groups (e.g., 'Mother' vs 'Fetus', 'Human' vs 'Rat'), extract each column as a SEPARATE parameter entry. Map the column header to the appropriate `subject_species`, `life_stage`, or `population` field in the Biological Context. Never average, merge, or combine values across columns.
-- **Multiple Formulations in Columns**: If a column header specifies multiple formulations (e.g., 'Rilutor, ASD') and a cell contains comma-separated values (e.g., '0.69, 2.19'), DO NOT map these to range_low and range_high. Instead, create two distinct ExtractedParameter entries and map the values to their respective formulations in the BiologicalContext.
-- **Section Headers**: Pay strict attention to sub-headers spanning the table (e.g., 'Rat' vs. 'Human'). Ensure that all parameters following a species sub-header are assigned the correct subject_species until a new sub-header appears.
-- **Footnotes**: Extract specific mathematical constants (e.g., Blood-to-plasma ratio = 1.1) hidden in table footnotes as standalone parameters.
+==================================================
+6. PARAMETER CLASSIFICATION & PROVENANCE
+==================================================
+- `parameter_class`: Must be exactly one of:
+  * `physiological`: Organisms' biological parameters independent of drug (body weight, organ volumes, blood flows, cardiac output, GFR, hematocrit).
+  * `biochemical`: Drug interaction with physiology (partition coefficients Kp, fraction unbound fu, clearances, absorption rate ka, Vmax, Km, distribution volume Vc/Vd, transfer rates, bioavailability, half-life).
+  * `compound_specific`: Pure physicochemical properties (MW, logP, solubility, pKa).
+- `status`: Must match provenance: `measured_here`, `literature`, `fitted`, `derived`, `assumed_default`, `in_vitro_ivive`, `predicted_qsar`, or `not_reported`.
 
-## STEP 4 — MODEL STRUCTURE / TOPOLOGY
+==================================================
+7. OUTPUT FORMAT
+==================================================
+Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
-If the page shows a compartmental diagram (boxes and arrows) or mass-balance equations, extract the compartment names and their connections into the structure field, using the names EXACTLY as labeled — never substitute standard PBPK compartment names ("Central," "Peripheral," "Deep") for whatever the authors actually wrote, even if the topology looks similar in shape. Equations or diagrams containing no explicit numeric values belong in this structure field, not forced into parameter entries with fabricated values.
+{schema}
+"""
 
-## STEP 5 — METADATA
+SYSTEM_PROMPT_TEMPLATE = """You are an OECD GD 331 compliant pharmacokinetic (PK) and PBPK narrative & document extraction engine.
+Your task is to extract scientifically meaningful model parameters, experimental values, model structure, and modeling assumptions from research papers into the strict JSON schema provided below.
 
-Populate title, authors, journal, and year ONLY if clearly legible on this specific page. Never infer the year from context elsewhere, and never substitute a generic placeholder ("Research Team", "Peer-Reviewed Journal") for a field you cannot read — use null instead. If this is not the title page, most or all metadata fields will correctly be null; that is expected, not a failure.
+==================================================
+1. CORE ANTI-HALLUCINATION & FIDELITY RULES
+==================================================
+- Extract ONLY what is explicitly stated in the document. Never guess, infer, calculate, or supply parameters from general pharmacological knowledge or typical values.
+- Never extract a value in isolation: associate every value with its complete semantic context (compound, species, life stage, compartment, parameter, unit, and uncertainty).
+- Interpret sections independently: do not carry context from one section into another unless the document explicitly indicates that it is shared.
+- If information is absent or ambiguous, use null or set needs_review=true rather than guessing.
+- Distinguish model input parameters from observed/simulated experimental outputs.
 
-## STEP 6 — CONFIDENCE
+==================================================
+2. MODEL STRUCTURE & BIOLOGICAL ASSUMPTIONS
+==================================================
+When analyzing narrative text, methods, or model descriptions:
+1. Identify explicit modeling assumptions stated by the authors:
+   - Compartmental structure (e.g., well-stirred, perfusion-limited, membrane-limited).
+   - Distribution kinetics (e.g., instantaneous mixing, deep tissue equilibrium).
+   - Clearance & elimination mechanisms (e.g., saturable reabsorption via Michaelis-Menten, biliary excretion).
+   - Binding and partitioning (e.g., constant unbound fraction, linear tissue partitioning).
+   - Bioavailability and absorption (e.g., 100% absorption, fixed oral bioavailability).
+   - Scaling & extrapolations (e.g., allometric exponent 0.75, in vitro to in vivo extrapolation).
+2. For each assumption, populate `biological_basis.stated_assumptions`:
+   - `description`: Clear summary of the assumption.
+   - `evidence_quote`: Exact verbatim quote from the text where the assumption is stated.
+   - `source_location`: Section name or paragraph.
+3. Populate `biological_basis.adme_determinants` with physiological/physicochemical determinants.
+4. Populate `biological_basis.specialized_mechanisms` with non-standard mechanisms (e.g., "saturable_reabsorption").
+5. Populate `model_structure` with compartment names, differential equations, and allometric scaling rules.
 
-Assign confidence using these concrete criteria, not a general impression of certainty:
+==================================================
+3. CARTESIAN UNROLLING & MULTI-CONDITION HEADERS
+==================================================
+- If tables or text report parameters across multiple compounds, species, or life stages, emit a SEPARATE parameter record for EVERY condition.
+- Comma-Separated Formulations: Emit separate parameter records per formulation; never merge into ranges.
+- Dual-Symbol Rows: Emit separate parameter records per life stage with their respective symbol and unit.
 
-- **HIGH**: value, unit, and symbol are all printed together, unambiguously, in a single cell or sentence, with no inheritance or inference required.
-- **MEDIUM**: part of the entry required inheriting information from elsewhere on the page (a unit from a group header, a compound from table context several rows above).
-- **LOW**: any interpretive judgment was required (degraded text, ambiguous cell boundaries, an abbreviation you are not fully certain of).
-- **needs_review**: Set this boolean to `true` if a table cell is merged, if a range is highly ambiguous, if there are multiple conflicting footnotes, or if you are unsure how to bind the value to a specific species/compartment. Otherwise, set it to `false`.
+==================================================
+4. FOOTNOTES, QUALIFIERS & CONSTANTS
+==================================================
+- Record verbatim cell text in `value_text`. Strip footnote letters to parse pure floats into `value` and isolate markers into `footnote_marker`.
+- Extract numeric constants stated in footnotes or methods as standalone parameter records.
+- Prepend spanning group headers to child row names (e.g., 'Blood flow - Liver') and set `unit_inherited=true`.
 
-Never assign HIGH to an entry that required any inference beyond direct transcription.
+==================================================
+5. ESTIMATES, UNCERTAINTY & TIME-VARYING RANGES
+==================================================
+- Point estimates with uncertainty: `value` = point estimate, `ci_low` = lower bound, `ci_high` = upper bound.
+- Time-varying dynamic ranges: `start_value` = initial, `end_value` = final, qualifier in `value_qualifier`. Leave `value=null`.
 
-## STEP 7 — KNOWN FAILURE PATTERNS: DO NOT REPEAT THESE
-- Do not extract a fax number, phone number, or DOI as a parameter value.
-- Do not invent typical PBPK parameters if they are not explicitly printed on the page. However, you MUST extract ALL physiological parameters (e.g., cardiac output, tissue volumes, blood flows, fraction-unbound) that ARE explicitly printed in the table. 
-- If a parameter is a physiological constant (like liver volume) and does not specify a chemical compound, extract it and set the compound field to "Physiological".
-- Do not report multiple species (e.g., "Human, Rat") when only one appears on the page.
-- Do not rename the paper's own compartment names to generic equivalents.
-- Do not fill metadata gaps with a placeholder string — use null.
+==================================================
+6. PARAMETER CLASSIFICATION & PROVENANCE
+==================================================
+- `parameter_class`: `physiological`, `biochemical`, or `compound_specific`.
+- `status`: `measured_here`, `literature`, `fitted`, `derived`, `assumed_default`, `in_vitro_ivive`, `predicted_qsar`, or `not_reported`.
 
-## STEP 8 — SELF-CHECK BEFORE RETURNING
-
-Re-read every entry you are about to return and confirm you can point to the specific words or numbers on the page that produced it. Delete any entry you cannot directly justify this way. It is correct and expected to return an empty parameters list if the page contains no PK data — do not manufacture content to avoid an empty result.
-
-## OUTPUT FORMAT
-
-Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary, no explanation text before or after the JSON.
+==================================================
+7. OUTPUT FORMAT
+==================================================
+Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
 {schema}
 """
@@ -240,96 +357,585 @@ Your task is strictly to extract the model structure, compartments, and connecti
 
 ## INSTRUCTIONS
 1. Do NOT attempt to extract numerical pharmacokinetic parameters (like half-life, clearance, or volumes) from this diagram, even if a number is written next to an arrow. 
-2. Set the `model_classification` based on the diagram. If the boxes represent physical organs (Liver, Kidney, Gut), it is `pbpk`. If they are generic (Central, Peripheral), it is `simple_empirical_compartmental`.
-3. Fill out the `structure` object with `compartments` and `connections`:
+2. Classify the model using the paper's explicit terminology whenever available. Do not infer PBPK solely from compartment names.
+   - If the paper explicitly describes physiological organ-based compartments, blood flows, tissue volumes, or physiologically based scaling, classify as `pbpk`.
+   - If the paper explicitly describes an empirical 1-, 2-, or 3-compartment model, classify as `simple_empirical_compartmental`.
+   - If classification cannot be established, return `not_applicable`.
+3. Fill out the `model_structure` object with `compartments` and `connections`:
    - **compartments**: Extract every box in the diagram as a compartment. Set `label_raw` to exactly what is written in the box (e.g., "Liver", "Fat", "Slowly perfused"). Set `id` to a short unique string (e.g., "liver", "c1").
    - **connections**: Extract every arrow as a connection. Set `source` and `target` to the `id` of the respective compartments. Set `direction` based on the arrowhead ("forward", "bidirectional"). If an arrow goes to/from outside the model (e.g., an excretion arrow leaving the Liver with no target box), use "external" as the missing `id`. If a label is written on the arrow (e.g., "Q_liver", "CL_int", "IV dose"), put it in `label_raw`.
-4. Return an EMPTY `parameters` array (`"parameters": []`). Your only goal is to fill out the `structure` field and `model_classification`.
+4. Return ONLY the `model_classification` and `model_structure` fields matching the schema below.
 5. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{schema}
+"""
+
+TABLE_RECONSTRUCTION_PROMPT_TEMPLATE = """You are a scientific table structural and data cell parser. 
+Your task is to reconstruct the explicit visual structure and cell-level data of the table provided in the image and markdown into a strict JSON schema.
+
+## INSTRUCTIONS
+1. Extract the full table title into `title` and table identifier into `table_id` (e.g. "Table 1", "Table 3").
+2. Categorize all compounds mentioned in the table:
+   - `subject_compounds`: All primary chemical substances that this table's columns/rows measure or model.
+   - `footnote_compounds`: Chemicals mentioned only in footnotes, citations, or assumptions (e.g. "assumed from PFOS").
+   - `referenced_compounds`: Chemicals listed for external comparison or secondary references.
+3. Extract all distinct species and populations explicitly mentioned in the table structure.
+4. Parse the column headers hierarchically with `column_id` (e.g. "c1", "c2") and `path` (e.g. ["PFHxS", "Mean"]).
+5. Parse the row headers hierarchically with `row_id` (e.g. "r1", "r2") and `path` (e.g. ["Nonhuman primate", "Tmc"]).
+6. Extract every table cell required to establish an auditable mapping into `cells: List[TableCell]`.
+   For every populated data cell record:
+   - `cell_id`: Unique identifier (e.g., "cell_r1_c1")
+   - `row_id`: Corresponding row ID
+   - `column_id`: Corresponding column ID
+   - `text`: Exact printed text verbatim (e.g., "0.21 (0.18–0.25)")
+   - `numeric_value`: Numeric estimate as float when numeric (e.g., 0.21)
+   - `unit`: Unit if explicitly attached to cell or header (e.g., "mg/L")
+   - `qualifier`: Qualifiers like '<', '~', 'Fixed', 'Optimized'
+   - `uncertainty_text`: Uncertainty substring if present (e.g., "0.18–0.25", "+/- 0.04")
+   Do NOT calculate or normalize values.
+   Do NOT infer missing values.
+   Preserve the cell text exactly.
+7. Extract all footnotes verbatim into the `footnotes` array.
+8. Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
 
 {schema}
 """
 
 class SGLangExtractor:
     """
-    Implementation of Qwen3-VL-8B served via SGLang inference engine.
-    Enforces structured JSON generation via FSM-constrained decoding (json_schema).
-    Uses nested ExtractedParameter schema: BiologicalContext, QuantitativeData, Provenance.
+    Multimodal parameter extraction engine with tiered backend failover:
+      1. Local SGLang server (http://127.0.0.1:30000)
+      2. Direct Network Access to DGX SGLang server (http://100.85.128.70:30001 via Tailscale/VPN)
+      3. OpenAI-Compatible API / Cloud Endpoints (OPENAI_BASE_URL + OPENAI_API_KEY)
+      4. Embedded local SGLang engine (GPU / sgl.Engine)
     """
     def __init__(self, use_4bit=True):
-        logger.info("Initializing SGLangExtractor...")
+        logger.info("Initializing SGLangExtractor backend...")
         self.use_4bit = use_4bit
-        self.model_path = "Qwen/Qwen3-VL-8B-Instruct"
-        
-        # Check if an external SGLang server is already running
-        try:
-            import requests
-            # Use 127.0.0.1 instead of localhost to avoid IPv6 resolution issues in requests
-            resp = requests.get("http://127.0.0.1:30000/health", timeout=2)
-            if resp.status_code == 200:
-                logger.info("Detected running SGLang server on port 30000. Will use server instead of loading embedded engine.")
+        self.backend_mode = "unknown"
+        self.server_url = None
+        self.model_name = "Qwen/Qwen3-VL-8B-Instruct"
+        self.use_server = False
+        self.is_loaded = False
+        self.engine = None
+        self.openai_client = None
+
+        force = getattr(Config, "FORCE_BACKEND", "auto").lower().strip()
+
+        # 1. Priority 1: Check Local SGLang Server
+        if force in ("auto", "local", "server"):
+            if self._check_sglang_server(Config.SGLANG_LOCAL_URL, label="Local SGLang server"):
+                self.backend_mode = "local_server"
+                self.server_url = Config.SGLANG_LOCAL_URL
                 self.use_server = True
-                self.server_url = "http://127.0.0.1:30000"
+                self.is_loaded = True
+                self._detect_model_name()
+                logger.info(f"Using Local SGLang server at {self.server_url} (model: {self.model_name}).")
+                return
+
+        # 2. Priority 2: Direct Network Access to DGX SGLang Server
+        if force in ("auto", "dgx", "remote"):
+            if self._check_sglang_server(Config.DGX_SGLANG_URL, label="DGX SGLang server (Tailscale/VPN)"):
+                self.backend_mode = "dgx_server"
+                self.server_url = Config.DGX_SGLANG_URL
+                self.use_server = True
+                self.is_loaded = True
+                self._detect_model_name()
+                logger.info(f"Local server not detected; using DGX SGLang server at {self.server_url} (model: {self.model_name}).")
+                return
+
+        # 3. Priority 3: OpenAI-Compatible API / Cloud API
+        if force in ("auto", "api", "openai") or (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY != "EMPTY"):
+            if self._check_openai_api(Config.OPENAI_BASE_URL, Config.OPENAI_API_KEY):
+                self.backend_mode = "openai_api"
+                self.server_url = Config.OPENAI_BASE_URL
+                self.model_name = Config.OPENAI_MODEL
+                self.use_server = True
+                self.is_loaded = True
+                logger.info(f"Using OpenAI-compatible API at {self.server_url} with model {self.model_name}.")
+                return
+
+        # 4. Priority 4: Fallback to Embedded Local SGLang Engine
+        if force in ("auto", "engine", "embedded"):
+            try:
+                import sglang as sgl
+                quant_mode = "awq" if use_4bit else None
+                actual_model = self.model_name
+                dtype = "float16" if use_4bit else "auto"
+                if use_4bit and "AWQ" not in self.model_name:
+                    if "Qwen3" in self.model_name:
+                        logger.warning("AWQ version does not exist on HF yet, falling back to unquantized bfloat16.")
+                        quant_mode = None
+                        dtype = "bfloat16"
+                    else:
+                        actual_model = f"{self.model_name}-AWQ"
+
+                logger.info(f"Loading embedded SGLang Engine for {actual_model}...")
+                self.engine = sgl.Engine(
+                    model_path=actual_model,
+                    quantization=quant_mode,
+                    dtype=dtype,
+                    mem_fraction_static=0.5
+                )
+                self.backend_mode = "embedded_engine"
                 self.is_loaded = True
                 return
-        except Exception as e:
-            logger.info(f"External SGLang server not detected or unreachable: {e}")
-            self.use_server = False
-        
-        try:
-            quant_mode = "awq" if use_4bit else None
-            actual_model = self.model_path
-            dtype = "float16" if use_4bit else "auto"
-            
-            if use_4bit and "AWQ" not in self.model_path:
-                if "Qwen3" in self.model_path:
-                    logger.warning("Qwen3-VL AWQ version doesn't exist on HF yet, falling back to unquantized bfloat16.")
-                    actual_model = self.model_path
-                    quant_mode = None
-                    dtype = "bfloat16"
-                else:
-                    logger.warning(f"For SGLang with 4-bit, switching to AWQ model.")
-                    actual_model = f"{self.model_path}-AWQ"
-                
-            logger.info(f"Loading SGLang Engine for {actual_model}...")
-            # SGLang Engine configuration with memory limits
-            self.engine = sgl.Engine(
-                model_path=actual_model,
-                quantization=quant_mode,
-                dtype=dtype,
-                mem_fraction_static=0.5 # Restrict KV cache to 50% to leave room for ColQwen
-            )
-            self.is_loaded = True
-        except Exception as e:
-            logger.error(f"Failed to load SGLang engine: {e}")
-            self.is_loaded = False
+            except Exception as e:
+                logger.warning(f"Failed to load embedded SGLang engine: {e}")
 
-    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "", chunk_title: str = "") -> ExtractedPage:
+        err_msg = (
+            "No inference backend available!\n"
+            f"  - Local server checked: {Config.SGLANG_LOCAL_URL} (unreachable)\n"
+            f"  - DGX server checked:   {Config.DGX_SGLANG_URL} (unreachable)\n"
+            f"  - OpenAI API checked:   {Config.OPENAI_BASE_URL}\n"
+            "Please start your local SGLang instance, ensure Tailscale/VPN is connected to DGX, or configure .env."
+        )
+        logger.error(err_msg)
+        self.is_loaded = False
+
+    def _check_sglang_server(self, url: str, label: str = "server", timeout: float = 2.0) -> bool:
+        """Probes if an SGLang server is active at url."""
+        if not url:
+            return False
+        import requests
+        try:
+            resp = requests.get(f"{url}/health", timeout=timeout)
+            if resp.status_code == 200:
+                logger.info(f"Detected running {label} at {url} (/health -> 200).")
+                return True
+        except Exception:
+            pass
+
+        try:
+            resp = requests.get(f"{url}/v1/models", timeout=timeout)
+            if resp.status_code == 200:
+                logger.info(f"Detected running {label} at {url} (/v1/models -> 200).")
+                return True
+        except Exception:
+            pass
+        return False
+
+    def _detect_model_name(self):
+        """Attempts to discover active model from /v1/models on server."""
+        if not self.server_url:
+            return
+        import requests
+        try:
+            resp = requests.get(f"{self.server_url}/v1/models", timeout=3.0)
+            if resp.status_code == 200:
+                data = resp.json().get("data", [])
+                if data and "id" in data[0]:
+                    self.model_name = data[0]["id"]
+                    logger.debug(f"Discovered active server model: {self.model_name}")
+        except Exception as e:
+            logger.debug(f"Could not auto-detect model name from /v1/models: {e}")
+
+    def _check_openai_api(self, base_url: str, api_key: str, timeout: float = 3.0) -> bool:
+        """Checks if OpenAI-compatible endpoint responds to /v1/models."""
+        if not base_url or OpenAI is None:
+            return False
+        try:
+            client = OpenAI(base_url=base_url, api_key=api_key or "EMPTY", timeout=timeout)
+            models = client.models.list()
+            if models.data:
+                self.openai_client = client
+                if not Config.OPENAI_MODEL or Config.OPENAI_MODEL == "Qwen/Qwen3.8-27B-FP8":
+                    self.model_name = models.data[0].id
+                else:
+                    self.model_name = Config.OPENAI_MODEL
+                return True
+        except Exception as e:
+            logger.debug(f"OpenAI API check failed at {base_url}: {e}")
+        return False
+
+    @staticmethod
+    def _image_to_base64_data_uri(image: Image.Image) -> str:
+        """Converts a PIL Image to a PNG base64 data URI."""
+        buffer = BytesIO()
+        image.save(buffer, format="PNG")
+        b64_str = base64.b64encode(buffer.getvalue()).decode("utf-8")
+        return f"data:image/png;base64,{b64_str}"
+
+    @staticmethod
+    def _image_path_to_base64_data_uri(path: str) -> str:
+        """Reads an image file and returns a base64 data URI."""
+        with open(path, "rb") as f:
+            b64_str = base64.b64encode(f.read()).decode("utf-8")
+        return f"data:image/png;base64,{b64_str}"
+
+    @staticmethod
+    def _strip_think_and_fences(text: str) -> str:
+        """Strips <think>...</think> tags and markdown code blocks."""
+        if not text:
+            return ""
+        if "</think>" in text:
+            text = text.split("</think>")[-1].strip()
+        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        if m:
+            return m.group(1).strip()
+        return text.strip()
+
+    async def _generate(
+        self,
+        prompt_text: str,
+        image: Optional[Image.Image] = None,
+        image_path: Optional[str] = None,
+        schema_json: Optional[str] = None,
+        max_new_tokens: int = 8000,
+        temperature: float = 0.0,
+        timeout_seconds: int = 3600
+    ) -> str:
+        """
+        Unified asynchronous generation handler across:
+          - SGLang server (/generate) with json_schema constraint
+          - OpenAI-compatible API (/v1/chat/completions)
+          - Embedded SGLang engine (engine.async_generate)
+        """
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor is not loaded. Check server connectivity or .env.")
+
+        # Prepare base64 image data if image is provided
+        img_data_uri = None
+        if image is not None:
+            img_data_uri = self._image_to_base64_data_uri(image)
+        elif image_path and os.path.exists(image_path):
+            img_data_uri = self._image_path_to_base64_data_uri(image_path)
+
+        # Mode A: SGLang Server (/generate) — Local or DGX
+        if self.backend_mode in ("local_server", "dgx_server", "sglang_server") or (self.use_server and self.backend_mode != "openai_api"):
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=timeout_seconds)
+            payload = {
+                "text": prompt_text,
+                "sampling_params": {
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": temperature,
+                    "repetition_penalty": 1.0,
+                }
+            }
+            if schema_json:
+                payload["sampling_params"]["json_schema"] = schema_json
+            if img_data_uri:
+                payload["image_data"] = [img_data_uri]
+
+            max_retries = 2
+            for attempt in range(max_retries + 1):
+                try:
+                    async with aiohttp.ClientSession(timeout=timeout) as session:
+                        async with session.post(f"{self.server_url}/generate", json=payload) as resp:
+                            if resp.status != 200:
+                                err_body = await resp.text()
+                                raise RuntimeError(f"Server error {resp.status}: {err_body}")
+                            result = await resp.json()
+                            return result.get("text", "")
+                except (aiohttp.ClientError, asyncio.TimeoutError) as err:
+                    if attempt < max_retries:
+                        logger.warning(f"SGLang connection error on attempt {attempt+1}: {err}. Retrying in 2s...")
+                        await asyncio.sleep(2.0)
+                    else:
+                        raise
+
+        # Mode B: OpenAI-Compatible API (/v1/chat/completions)
+        elif self.backend_mode == "openai_api":
+            client = self.openai_client
+            if client is None:
+                if OpenAI is None:
+                    raise RuntimeError("OpenAI package not installed. Run 'pip install openai'.")
+                client = OpenAI(
+                    base_url=self.server_url,
+                    api_key=Config.OPENAI_API_KEY or "EMPTY"
+                )
+
+            content_items = []
+            if img_data_uri:
+                content_items.append({"type": "image_url", "image_url": {"url": img_data_uri}})
+            content_items.append({"type": "text", "text": prompt_text})
+
+            def _call_openai():
+                kwargs = {
+                    "model": self.model_name,
+                    "messages": [{"role": "user", "content": content_items if img_data_uri else prompt_text}],
+                    "max_tokens": max_new_tokens,
+                    "temperature": temperature,
+                }
+                if schema_json:
+                    kwargs["response_format"] = {"type": "json_object"}
+                return client.chat.completions.create(**kwargs)
+
+            completion = await asyncio.to_thread(_call_openai)
+            return completion.choices[0].message.content or ""
+
+        # Mode C: Embedded SGLang Engine
+        elif self.backend_mode == "embedded_engine":
+            gen_kwargs = {
+                "prompt": prompt_text,
+                "sampling_params": {
+                    "max_new_tokens": max_new_tokens,
+                    "temperature": temperature,
+                    "repetition_penalty": 1.0,
+                }
+            }
+            if schema_json:
+                gen_kwargs["sampling_params"]["json_schema"] = schema_json
+            if image_path:
+                gen_kwargs["image_data"] = image_path
+            elif image:
+                import uuid
+                temp_path = f"{Config.TEMP_IMAGE_DIR}/sglang_emb_{uuid.uuid4().hex}.png"
+                image.save(temp_path, "PNG")
+                gen_kwargs["image_data"] = temp_path
+                try:
+                    response = await self.engine.async_generate(**gen_kwargs)
+                finally:
+                    if os.path.exists(temp_path):
+                        try:
+                            os.remove(temp_path)
+                        except Exception:
+                            pass
+                return response["text"] if isinstance(response, dict) else response.text
+
+            response = await self.engine.async_generate(**gen_kwargs)
+            return response["text"] if isinstance(response, dict) else response.text
+
+        else:
+            raise RuntimeError(f"Unknown backend mode: {self.backend_mode}")
+
+    async def extract_table_evidence(self, image: Image.Image, markdown_context: str, chunk_title: str = "") -> TableEvidence:
+        """Pass 1: Extract structural TableEvidence from table crop and markdown."""
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load.")
+
+        start_t = time.time()
+        logger.info(f"SGLang: [START] Pass 1 - Table Reconstruction for {chunk_title}...")
+
+        try:
+            schema_json = json.dumps(TableEvidence.model_json_schema(), indent=2)
+            system_prompt = TABLE_RECONSTRUCTION_PROMPT_TEMPLATE.format(schema=schema_json)
+
+            user_instruction = (
+                f"Reconstruct this table into the JSON schema. "
+                f"Extract all metadata, column headers, row headers, and every individual populated data cell. "
+                f"Use the Markdown text provided below as primary transcription evidence and the image as authoritative layout source.\n\n"
+                f"Markdown:\n{markdown_context}"
+            )
+
+            prompt_text = (
+                f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+                f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
+                f"<|im_start|>assistant\n"
+            )
+
+            try:
+                debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
+                os.makedirs(debug_dir, exist_ok=True)
+                safe_title = "".join(c for c in chunk_title if c.isalnum() or c in (' ', '_')).strip()[:30] or "evidence"
+                with open(os.path.join(debug_dir, f"{int(time.time()*1000)}_evidence_{safe_title}.txt"), "w", encoding="utf-8") as f:
+                    f.write(prompt_text)
+            except Exception:
+                pass
+
+            extracted_text = await self._generate(
+                prompt_text=prompt_text,
+                image=image,
+                schema_json=schema_json,
+                max_new_tokens=8000,
+                temperature=0.0,
+                timeout_seconds=1800
+            )
+
+            clean_text = self._strip_think_and_fences(extracted_text)
+            try:
+                json_data = json.loads(clean_text)
+                table_evidence = TableEvidence(**json_data)
+                table_evidence.evidence_status = "success"
+                logger.info(f"SGLang: [END] Pass 1 complete in {time.time() - start_t:.2f}s.")
+                return table_evidence
+            except Exception as e:
+                logger.error(f"Failed to parse TableEvidence: {e}\nRaw Output: {extracted_text}")
+                return TableEvidence(evidence_status="failed", needs_review=True, table_id=None, error=str(e))
+        except Exception as e:
+            logger.error(f"Error during extract_table_evidence: {e}")
+            return TableEvidence(evidence_status="failed", needs_review=True, table_id=None, error=str(e))
+
+    def _compact_validation_error(self, exc: Exception) -> str:
+        """Format validation errors into a compact, actionable prompt instruction (Factor 9)."""
+        if isinstance(exc, ValidationError):
+            err_lines = []
+            for e in exc.errors()[:5]:
+                loc = " -> ".join(str(p) for p in e.get("loc", []))
+                msg = e.get("msg", "")
+                inp = e.get("input", "")
+                inp_str = f" (received: '{str(inp)[:40]}')" if inp is not None and not isinstance(inp, (dict, list)) else ""
+                err_lines.append(f"- Location '{loc}': {msg}{inp_str}")
+            return "\n".join(err_lines)
+        elif isinstance(exc, json.JSONDecodeError):
+            return f"- JSON syntax error at line {exc.lineno}, column {exc.colno}: {exc.msg}"
+        else:
+            return f"- Error: {str(exc)[:200]}"
+
+    @staticmethod
+    def _repair_truncated_json(text: str) -> dict | None:
+        """Deterministic fast-repair for JSON truncated by token limits (e.g. unterminated strings)."""
+        if not text:
+            return None
+        clean = text.strip()
+        if clean.startswith("```json"):
+            clean = clean[7:]
+        elif clean.startswith("```"):
+            clean = clean[3:]
+        clean = clean.rstrip("`").strip()
+
+        last_brace_idx = len(clean)
+        while True:
+            last_brace_idx = clean.rfind("}", 0, last_brace_idx)
+            if last_brace_idx == -1:
+                break
+            candidate = clean[:last_brace_idx + 1]
+
+            in_string = False
+            escape = False
+            open_stack = []
+            for ch in candidate:
+                if escape:
+                    escape = False
+                    continue
+                if ch == '\\':
+                    escape = True
+                    continue
+                if ch == '"':
+                    in_string = not in_string
+                    continue
+                if not in_string:
+                    if ch in ('{', '['):
+                        open_stack.append(ch)
+                    elif ch in ('}', ']'):
+                        if open_stack:
+                            top = open_stack[-1]
+                            if (top == '{' and ch == '}') or (top == '[' and ch == ']'):
+                                open_stack.pop()
+
+            if in_string:
+                continue
+
+            closing = "".join("}" if op == "{" else "]" for op in reversed(open_stack))
+            test_candidate = candidate + closing
+            try:
+                parsed = json.loads(test_candidate)
+                if isinstance(parsed, dict):
+                    return parsed
+            except json.JSONDecodeError:
+                continue
+
+        return None
+
+    def _parse_and_validate_page(self, text: str, table_evidence: TableEvidence = None, chunk_title: str = "", start_t: float = None) -> ExtractedPage:
+        """Sanitize output, parse JSON, and validate against ExtractedPage schema."""
+        clean_text = self._strip_think_and_fences(text)
+        try:
+            json_data = json.loads(clean_text)
+        except json.JSONDecodeError as exc:
+            repaired = self._repair_truncated_json(clean_text)
+            if repaired is not None:
+                logger.info(f"SGLang: Successfully repaired truncated JSON locally for '{chunk_title}'.")
+                json_data = repaired
+            else:
+                raise exc
+
+        if isinstance(json_data, dict) and json_data.get("page_metadata") is None:
+            json_data["page_metadata"] = {}
+        extracted_page = ExtractedPage(**json_data)
+        if table_evidence:
+            extracted_page.table_evidence.append(table_evidence)
+        if start_t:
+            duration = time.time() - start_t
+            title_log = f" ({chunk_title})" if chunk_title else ""
+            n_params = sum(len(b.parameters) for b in extracted_page.parameter_blocks or [])
+            logger.info(f"SGLang: Extraction{title_log} complete in {duration:.2f}s. Found {n_params} parameters.")
+        return extracted_page
+
+    async def _attempt_repair(
+        self,
+        base_prompt: str,
+        bad_output: str,
+        compact_err: str,
+        schema_json: str,
+        is_image: bool = False,
+        image_path: str = None,
+        chunk_title: str = "",
+        table_evidence: TableEvidence = None
+    ) -> ExtractedPage:
+        """Factor 9: Feed compacted validation error back into context window for a 1-turn repair."""
+        repaired_dict = self._repair_truncated_json(bad_output)
+        if repaired_dict is not None:
+            try:
+                page = ExtractedPage(**repaired_dict)
+                if table_evidence:
+                    page.table_evidence.append(table_evidence)
+                n_params = sum(len(b.parameters) for b in page.parameter_blocks or [])
+                logger.info(f"SGLang: Factor-9 fast local repair SUCCEEDED for '{chunk_title}'. Recovered {n_params} parameters.")
+                return page
+            except Exception as e:
+                logger.debug(f"Factor-9 local repair failed ExtractedPage validation: {e}")
+
+        clipped_bad = bad_output if len(bad_output) <= 3000 else ("...[earlier records omitted for length]...\n" + bad_output[-2500:])
+
+        repair_msg = (
+            f"Your previous JSON output failed schema validation with these specific error(s):\n"
+            f"{compact_err}\n\n"
+            f"CRITICAL FIX RULES:\n"
+            f"1. Fix the indicated fields to strictly comply with the schema.\n"
+            f"2. Ensure all numbers in 'quantitative_data.value' are floats; textual ranges or CI belong in 'uncertainty' or 'value_text'.\n"
+            f"3. Return the COMPLETE, valid JSON object with all parameter records."
+        )
+        repair_prompt = (
+            f"{base_prompt}{clipped_bad}<|im_end|>\n"
+            f"<|im_start|>user\n{repair_msg}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+
+        repaired_text = await self._generate(
+            prompt_text=repair_prompt,
+            image_path=image_path if is_image else None,
+            schema_json=schema_json,
+            max_new_tokens=4096,
+            temperature=0.0,
+            timeout_seconds=180
+        )
+
+        repaired_page = self._parse_and_validate_page(repaired_text, table_evidence=table_evidence, chunk_title=chunk_title)
+        n_params = sum(len(b.parameters) for b in repaired_page.parameter_blocks or [])
+        logger.info(f"SGLang: Factor-9 self-healing SUCCEEDED for '{chunk_title}'. Recovered {n_params} parameters.")
+        return repaired_page
+
+    async def extract_data(self, image: Image.Image, role: str = "table_crop", evidence_text: str = "", chunk_title: str = "", table_evidence: TableEvidence = None) -> ExtractedPage:
         """Extract table data from image strictly enforcing Pydantic schema"""
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
         logger.info(f"SGLang: [START] Extracting data from {role} image{title_log}...")
-        
-        import uuid
-        temp_img_path = f"{Config.TEMP_IMAGE_DIR}/sglang_input_{uuid.uuid4().hex}.jpg"
-        image.save(temp_img_path, "JPEG")
-        
-        schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
-        
-        if role == "figure_crop":
+
+        if role in ("table_crop", "table_xml"):
+            schema_cls = TableExtractionPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = TABLE_SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        elif role == "figure_crop":
+            schema_cls = DiagramExtractionPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
             system_prompt = DIAGRAM_PROMPT_TEMPLATE.format(schema=schema_json)
         else:
+            schema_cls = ExtractedPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
             system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
-        
+
         user_instruction = "Extract parameters from this image strictly into the JSON schema."
         if role == "table_crop":
-            user_instruction += " This is a tightly cropped table image. Focus on exact transcription of table values. BYPASS STEP 0: This is a confirmed PK table, so do NOT classify as 'not_applicable'. Extract the parameters directly."
+            user_instruction += " This image contains a table with its title and footnotes. Focus on exact transcription of table values into parameter_blocks. Set model_classification to 'pbpk' or 'simple_empirical_compartmental'."
+        elif role == "figure_crop":
+            user_instruction = "Extract the compartmental model structure, compartments, and connections from this diagram strictly into the JSON schema."
         elif role == "page_with_table":
-            user_instruction += " This is a full page image containing a table. Focus ONLY on extracting the parameters that are present in the provided Markdown text snippet below. Use the image purely for visual layout context to correctly read the table rows/columns."
+            user_instruction += " This is a full page image containing a table. Use the Markdown text provided below as the primary transcription evidence and the image as the authoritative visual-layout source. If the Markdown and image differ, inspect the image and flag the discrepancy rather than silently ignoring it."
         elif role == "full_page":
             user_instruction += " This is a full page image. Extract any pharmacokinetic parameters you find in tables, text, or diagrams, using the surrounding text for biological context."
 
@@ -339,14 +945,20 @@ class SGLangExtractor:
                 f"to avoid hallucinating names or values:\n\n{evidence_text.strip()}"
             )
 
-        # Construct the conversation for Qwen-VL manually using its chat template
+        if table_evidence:
+            user_instruction += (
+                f"\n\nCRITICAL: Use the following pre-computed table structure to guide your extraction. "
+                f"Ensure that compounds and species match this structure. "
+                f"All extracted parameters MUST trace back to these row/column headers:\n"
+                f"{table_evidence.model_dump_json(indent=2)}"
+            )
+
         prompt_text = (
             f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
             f"<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        
-        # Debug: Save the exact prompt to the test folder
+
         try:
             debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
             os.makedirs(debug_dir, exist_ok=True)
@@ -356,69 +968,97 @@ class SGLangExtractor:
                 f.write(prompt_text)
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
-        
-        if getattr(self, "use_server", False):
-            import aiohttp
-            timeout = aiohttp.ClientTimeout(total=3600)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                payload = {
-                    "text": prompt_text,
-                    "image_data": temp_img_path,
-                    "sampling_params": {
-                        "max_new_tokens": 16000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0,
-                        "json_schema": json.dumps(ExtractedPage.model_json_schema())
-                    }
-                }
-                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                    result = await resp.json()
-                    extracted_text = result["text"]
-        else:
-            response = await self.engine.async_generate(
-                prompt=prompt_text,
-                image_data=temp_img_path,
-                sampling_params={
-                    "max_new_tokens": 16000,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0,
-                    "json_schema": json.dumps(ExtractedPage.model_json_schema())
-                }
-            )
-            extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
-        try:
-            json_data = json.loads(extracted_text)
-            extracted_page = ExtractedPage(**json_data)
-            duration = time.time() - start_t
-            title_log = f" ({chunk_title})" if chunk_title else ""
-            logger.info(f"SGLang: [END] Image extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
-            return extracted_page
-        except Exception as e:
-            logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
-            raise
 
-    async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "") -> ExtractedPage:
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            image=image,
+            schema_json=json.dumps(schema_cls.model_json_schema()),
+            max_new_tokens=16000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        try:
+            return self._parse_and_validate_page(extracted_text, table_evidence=table_evidence, chunk_title=chunk_title, start_t=start_t)
+        except Exception as e:
+            compact_err = self._compact_validation_error(e)
+            logger.warning(f"SGLang: Image schema validation failed on {role}{title_log}: {compact_err}. Attempting Factor-9 self-healing retry...")
+            try:
+                return await self._attempt_repair(
+                    base_prompt=prompt_text,
+                    bad_output=extracted_text,
+                    compact_err=compact_err,
+                    schema_json=json.dumps(schema_cls.model_json_schema()),
+                    is_image=True,
+                    image_path=None,
+                    chunk_title=chunk_title,
+                    table_evidence=table_evidence
+                )
+            except Exception as repair_err:
+                logger.error(f"Factor-9 image repair also failed for {role}{title_log}: {repair_err}\nRaw Output: {extracted_text}")
+                if table_evidence:
+                    logger.warning(f"Using structured table_evidence fallback for '{chunk_title}' after repair failure.")
+                    return ExtractedPage(table_evidence=[table_evidence])
+                raise e
+
+    async def extract_from_text(self, text: str, role: str = "table_xml", chunk_title: str = "", table_evidence: TableEvidence = None) -> ExtractedPage:
         """Extract table data from text/XML strictly enforcing Pydantic schema"""
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
-            
-        import time
+
         start_t = time.time()
         title_log = f" ({chunk_title})" if chunk_title else ""
         logger.info(f"SGLang: [START] Extracting data from {role}{title_log}...")
-        
-        schema_json = json.dumps(ExtractedPage.model_json_schema(), indent=2)
-        system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
-        
+
+        if role in ("table_crop", "table_xml"):
+            schema_cls = TableExtractionPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = TABLE_SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+        else:
+            schema_cls = ExtractedPage
+            schema_json = json.dumps(schema_cls.model_json_schema(), indent=2)
+            system_prompt = SYSTEM_PROMPT_TEMPLATE.format(schema=schema_json)
+
         if role == "table_xml":
             user_instruction = (
                 f"Extract parameters from this document section strictly into the JSON schema. "
-                f"This is a raw HTML/XML table. Focus on exact transcription of table values.\n\n"
+                f"This is a structured scientific table. Focus on exact transcription of table values into parameter_blocks.\n\n"
                 f"CRITICAL INSTRUCTIONS FOR THIS TABLE:\n"
-                f"1. For STEP 0, this is a confirmed PK table. You MUST classify `model_type` as either 'pbpk' or 'simple_empirical_compartmental' based on the parameters shown. Do not use 'not_applicable'.\n"
-                f"2. If page metadata (Title, Authors, Journal) is not visible in this specific table block, output null for those fields as instructed in Step 5.\n"
-                f"3. Map the column headers to their respective parameter entries (e.g., values under 'Mother' get life_stage='Mother').\n\n"
+                f"1. This is a confirmed PK table. Classify `model_type` as 'pbpk' or 'simple_empirical_compartmental' based on the parameters shown. Do not use 'not_applicable'.\n"
+                f"2. If page metadata (title, authors, journal) is not visible in this specific table, leave it null.\n"
+                f"3. Map column headers to their respective parameter entries (e.g., values under 'Mean (95% CI) - PFOS' get compound='PFOS', values under 'Mean (95% CI) - PFOA' get compound='PFOA').\n"
+                f"4. Cartesian Column Unrolling: If multiple compounds or species appear in distinct columns, emit separate parameter records for each populated cell.\n"
+                f"5. A numerical parameter table MUST produce a non-empty `parameter_blocks` list. Create one record for every numeric parameter-value cell.\n"
+                f"6. Use the pre-computed table structure and footnotes below to guide exact provenance and cell binding.\n\n"
+                f"Document Text:\n{text.strip()}"
+            )
+            if table_evidence:
+                col_summaries = [" > ".join(c.path) for c in table_evidence.columns]
+                struct_summary = {
+                    "table_id": table_evidence.table_id or chunk_title,
+                    "title": table_evidence.title,
+                    "subject_compounds": table_evidence.subject_compounds,
+                    "species": table_evidence.species,
+                    "columns": col_summaries,
+                    "footnotes": table_evidence.footnotes,
+                }
+                user_instruction += (
+                    f"\n\nCRITICAL: Use the following pre-computed table structure to guide your extraction. "
+                    f"Ensure that compounds and species match this structure. "
+                    f"All extracted parameters MUST trace back to these row/column headers:\n"
+                    f"{json.dumps(struct_summary, indent=2)}"
+                )
+        elif role in ["narrative_xml", "narrative"]:
+            user_instruction = (
+                f"Extract PK model information, parameters, and modeling assumptions from this narrative text strictly into the JSON schema.\n\n"
+                f"CRITICAL INSTRUCTIONS FOR NARRATIVE/METHODS SECTIONS:\n"
+                f"1. MODEL ASSUMPTIONS: Identify all explicit assumptions stated by the authors about model structure, distribution, absorption, binding, clearance, or kinetics. Populate `biological_basis.stated_assumptions` with:\n"
+                f"   - `description`: Clear statement of the assumption (e.g., 'Instantaneous distribution in central compartment', 'Saturable renal reabsorption via Michaelis-Menten kinetics', 'Oral bioavailability fixed to 90%').\n"
+                f"   - `evidence_quote`: Direct verbatim quote from the text where the assumption is stated.\n"
+                f"   - `source_location`: Section title or paragraph.\n"
+                f"2. BIOLOGICAL BASIS & ADME: List physiological/physicochemical factors driving kinetics in `biological_basis.adme_determinants` and specialized processes in `biological_basis.specialized_mechanisms`.\n"
+                f"3. MODEL STRUCTURE & SCALING: If compartment names, connections, differential equations, or allometric scaling rules (e.g., scaling exponent 0.75) are stated, populate `model_structure`.\n"
+                f"4. MODEL PARAMETERS: Extract any explicitly reported numerical parameters, baseline physiological values, or fitted values mentioned in the text.\n\n"
                 f"Document Text:\n{text.strip()}"
             )
         else:
@@ -429,8 +1069,7 @@ class SGLangExtractor:
             f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
             f"<|im_start|>assistant\n"
         )
-        
-        # Debug: Save the exact prompt to the test folder
+
         try:
             debug_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "test", "llm_inputs", "prompts")
             os.makedirs(debug_dir, exist_ok=True)
@@ -440,54 +1079,476 @@ class SGLangExtractor:
                 f.write(prompt_text)
         except Exception as e:
             logger.warning(f"Failed to save debug prompt: {e}")
-        
-        if getattr(self, "use_server", False):
-            import aiohttp
-            # Set a 1-hour timeout to prevent long extractions (like Page 6) from hitting aiohttp's 5-min default timeout
-            timeout = aiohttp.ClientTimeout(total=3600)
-            async with aiohttp.ClientSession(timeout=timeout) as session:
-                payload = {
-                    "text": prompt_text,
-                    "sampling_params": {
-                        "max_new_tokens": 16000,
-                        "temperature": 0.0,
-                        "repetition_penalty": 1.0
-                    }
-                }
-                async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                    result = await resp.json()
-                    extracted_text = result["text"]
-        else:
-            response = await self.engine.async_generate(
-                prompt=prompt_text,
-                sampling_params={
-                    "max_new_tokens": 16000,
-                    "temperature": 0.0,
-                    "repetition_penalty": 1.0
-                }
-            )
-            extracted_text = response["text"] if isinstance(response, dict) else response.text
-        
-        # 1. Strip <think> tags if present
-        if "</think>" in extracted_text:
-            extracted_text = extracted_text.split("</think>")[-1].strip()
-            
-        # 2. Extract JSON from markdown blocks if present
-        import re
-        match = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", extracted_text, re.DOTALL)
-        if match:
-            extracted_text = match.group(1).strip()
-        else:
-            # Strip any trailing/leading whitespace just in case
-            extracted_text = extracted_text.strip()
-            
+
+        max_tokens = 16384
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=json.dumps(schema_cls.model_json_schema()),
+            max_new_tokens=max_tokens,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
         try:
-            json_data = json.loads(extracted_text)
-            extracted_page = ExtractedPage(**json_data)
-            duration = time.time() - start_t
-            title_log = f" ({chunk_title})" if chunk_title else ""
-            logger.info(f"SGLang: [END] Text extraction{title_log} complete in {duration:.2f}s. Found {len(extracted_page.parameters)} parameters.")
-            return extracted_page
+            return self._parse_and_validate_page(extracted_text, table_evidence=table_evidence, chunk_title=chunk_title, start_t=start_t)
         except Exception as e:
-            logger.error(f"Failed to parse SGLang output into Pydantic schema: {e}\nRaw Output: {extracted_text}")
+            compact_err = self._compact_validation_error(e)
+            logger.warning(f"SGLang: Text schema validation failed on {role}{title_log}: {compact_err}. Attempting Factor-9 self-healing retry...")
+            try:
+                return await self._attempt_repair(
+                    base_prompt=prompt_text,
+                    bad_output=extracted_text,
+                    compact_err=compact_err,
+                    schema_json=json.dumps(schema_cls.model_json_schema()),
+                    is_image=False,
+                    image_path=None,
+                    chunk_title=chunk_title,
+                    table_evidence=table_evidence
+                )
+            except Exception as repair_err:
+                logger.error(f"Factor-9 text repair also failed for {role}{title_log}: {repair_err}\nRaw Output: {extracted_text}")
+                if table_evidence:
+                    logger.warning(f"Using structured table_evidence fallback for '{chunk_title}' after repair failure.")
+                    return ExtractedPage(table_evidence=[table_evidence])
+                raise e
+
+    async def extract_dosing_from_text(self, text: str) -> "DosingExtraction":
+        """Extract dosing events from methods section strictly enforcing Pydantic schema"""
+        from pk_pipeline.schemas import DosingExtraction
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+
+        start_t = time.time()
+        logger.info(f"SGLang: [START] Extracting dosing from Methods text...")
+
+        schema_json = json.dumps(DosingExtraction.model_json_schema(), indent=2)
+        system_prompt = (
+            "You are an expert pharmacokinetic data extractor. Your task is to extract the dosing administration details "
+            "from the provided Methods section text into a strict JSON format.\n"
+            "Extract every distinct dosing event mentioned (e.g., if there are multiple doses, routes, or compounds).\n"
+            f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
+            "Output ONLY the JSON object, with no markdown formatting or extra text."
+        )
+
+        user_instruction = f"Extract dosing parameters from this document text strictly into the JSON schema:\n\n{text.strip()}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=schema_json,
+            max_new_tokens=8000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        clean_json_str = self._strip_think_and_fences(extracted_text)
+        try:
+            json_data = json.loads(clean_json_str)
+            dosing_data = DosingExtraction(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Dosing extraction complete in {duration:.2f}s. Found {len(dosing_data.dosing)} events.")
+            return dosing_data
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang dosing output: {e}\nRaw Output: {extracted_text}")
             raise
+
+    async def evaluate_extracted_model(self, full_document_json: str) -> "EvaluatorJudgments":
+        """Tier 2 Pass: Evaluates the extracted JSON to derive regulatory judgments."""
+        from pk_pipeline.schemas import EvaluatorJudgments
+        if not getattr(self, "is_loaded", False):
+            raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
+
+        start_t = time.time()
+        logger.info(f"SGLang: [START] Running Tier 2 Evaluation Pass...")
+
+        schema_json = json.dumps(EvaluatorJudgments.model_json_schema(), indent=2)
+        system_prompt = (
+            "You are an expert pharmacokinetic (PK) model evaluator working for a regulatory agency (like the FDA or EPA). "
+            "Your task is to evaluate the provided extracted PBPK model data (JSON format) and derive expert judgments "
+            "about the model's quality, assumptions, limitations, and reproducibility based on the OECD GD 331 framework.\n"
+            f"You MUST output valid JSON matching this schema:\n```json\n{schema_json}\n```\n"
+            "Output ONLY the JSON object, with no markdown formatting or extra text."
+        )
+
+        user_instruction = f"Evaluate the following extracted PBPK model data strictly into the EvaluatorJudgments JSON schema:\n\n{full_document_json}"
+
+        prompt_text = (
+            f"<|im_start|>system\n{system_prompt}<|im_end|>\n"
+            f"<|im_start|>user\n{user_instruction}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+
+        extracted_text = await self._generate(
+            prompt_text=prompt_text,
+            schema_json=schema_json,
+            max_new_tokens=8000,
+            temperature=0.0,
+            timeout_seconds=3600
+        )
+
+        clean_json_str = self._strip_think_and_fences(extracted_text)
+        try:
+            json_data = json.loads(clean_json_str)
+            judgments = EvaluatorJudgments(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Tier 2 Evaluation complete in {duration:.2f}s.")
+            return judgments
+        except Exception as e:
+            logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
+            raise
+
+    async def assess_oecd_compliance(self, full_document_json: str, context_text: Optional[str] = None) -> "OECDAssessment":
+        """Tier 3 Pass: Evaluates extracted PBPK model strictly against OECD GD 331 & Tan et al. checklist."""
+        from pk_pipeline.schemas import OECDAssessment
+        from pk_pipeline.oecd_assessor import build_oecd_assessment_prompt, evaluate_oecd_from_document
+
+        if not getattr(self, "is_loaded", False):
+            logger.info("SGLang not loaded; running deterministic OECD GD 331 evaluation from extracted evidence.")
+            try:
+                doc_dict = json.loads(full_document_json)
+                return evaluate_oecd_from_document(doc_dict)
+            except Exception as e:
+                logger.error(f"Deterministic OECD evaluation failed: {e}")
+                return OECDAssessment(checklist_version="OECD GD 331", items=[])
+
+        start_t = time.time()
+        logger.info("SGLang: [START] Running Tier 3 OECD GD 331 Assessment Pass...")
+
+        schema_json = json.dumps(OECDAssessment.model_json_schema(), indent=2)
+        prompt_text = build_oecd_assessment_prompt(full_document_json, context_text=context_text)
+
+        try:
+            extracted_text = await self._generate(
+                prompt_text=prompt_text,
+                schema_json=schema_json,
+                max_new_tokens=8000,
+                temperature=0.0,
+                timeout_seconds=3600
+            )
+
+            clean_json_str = self._strip_think_and_fences(extracted_text)
+            json_data = json.loads(clean_json_str)
+            assessment = OECDAssessment(**json_data)
+            duration = time.time() - start_t
+            logger.info(f"SGLang: [END] Tier 3 OECD Assessment complete in {duration:.2f}s.")
+            return assessment
+        except Exception as e:
+            logger.warning(f"SGLang Tier 3 OECD generation issue: {e}. Falling back to deterministic evidence evaluator.")
+            try:
+                doc_dict = json.loads(full_document_json)
+                return evaluate_oecd_from_document(doc_dict)
+            except Exception:
+                raise
+
+
+class PBPKExtractorService:
+    def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct"):
+        self.model_id = model_id
+        self.use_sglang = False
+        self.server_url = Config.SGLANG_LOCAL_URL
+
+        # Check local SGLang server first, then DGX SGLang server
+        for probe_url in [Config.SGLANG_LOCAL_URL, Config.DGX_SGLANG_URL]:
+            try:
+                import requests
+                resp = requests.get(f"{probe_url}/health", timeout=2)
+                if resp.status_code == 200:
+                    self.use_sglang = True
+                    self.server_url = probe_url
+                    logger.info(f"PBPKExtractorService: Connected to running SGLang server at {probe_url}.")
+                    break
+            except Exception:
+                continue
+
+        self.llm = None
+        self.sampling_params = None
+        if not self.use_sglang:
+            try:
+                from vllm import LLM, SamplingParams
+                self.llm = LLM(
+                    model=model_id,
+                    tensor_parallel_size=1,
+                    trust_remote_code=True,
+                    max_model_len=16384,
+                    enable_prefix_caching=True
+                )
+                self.sampling_params = SamplingParams(
+                    temperature=0.0,
+                    repetition_penalty=1.0,
+                    max_tokens=8192,
+                    guided_json=ExtractionResult.model_json_schema()
+                )
+            except Exception as e:
+                logger.warning(f"PBPKExtractorService: vLLM initialization note: {e}")
+
+    def find_top_pages(self, retriever, pdf_images: list, top_k_per_query: int = 3) -> dict:
+        """
+        Multi-query ensemble retrieval to ensure prose pages, split tables,
+        and compartmental diagrams are all retrieved.
+        """
+        queries = {
+            "tables": "Table of physiological parameters blood flow tissue volumes partition coefficients Vmax Km clearance",
+            "narrative": "pharmacokinetic values estimated half-life clearance volume bioavailability body weight cardiac output",
+            "diagram": "Pharmacokinetic model structure schematic diagram compartments flow chart arrows"
+        }
+        selected = {"table_pages": set(), "narrative_pages": set(), "diagram_pages": set()}
+
+        for role, query_text in queries.items():
+            if hasattr(retriever, "score_pages"):
+                scores = retriever.score_pages(query_text, pdf_images)
+            else:
+                continue
+            ranked_indices = sorted(range(len(scores)), key=lambda i: scores[i], reverse=True)
+            top_indices = ranked_indices[:top_k_per_query]
+            if role == "tables":
+                selected["table_pages"].update(top_indices)
+            elif role == "narrative":
+                selected["narrative_pages"].update(top_indices)
+            elif role == "diagram":
+                if ranked_indices:
+                    selected["diagram_pages"].add(ranked_indices[0])
+
+        return selected
+
+    def extract_text_table(self, markdown_table: str, source_location: str) -> dict:
+        user_prompt = build_table_user_prompt(markdown_table, source_location)
+        full_prompt = (
+            f"<|im_start|>system\n{PBPK_SYSTEM_PROMPT}<|im_end|>\n"
+            f"<|im_start|>user\n{user_prompt}<|im_end|>\n"
+            f"<|im_start|>assistant\n"
+        )
+        if self.use_sglang:
+            import requests
+            schema_json = json.dumps(ExtractionResult.model_json_schema())
+            payload = {
+                "text": full_prompt,
+                "sampling_params": {
+                    "max_new_tokens": 8192,
+                    "temperature": 0.0,
+                    "repetition_penalty": 1.0,
+                    "json_schema": schema_json
+                }
+            }
+            resp = requests.post(f"{self.server_url}/generate", json=payload, timeout=3600)
+            res_data = resp.json()
+            raw_text = res_data.get("text", "")
+            return ExtractionResult.model_validate_json(raw_text).model_dump()
+        elif self.llm is not None:
+            outputs = self.llm.generate([{"prompt": full_prompt}], sampling_params=self.sampling_params)
+            raw_json = outputs[0].outputs[0].text
+            return ExtractionResult.model_validate_json(raw_json).model_dump()
+        else:
+            raise RuntimeError("Neither SGLang server nor vLLM is available for PBPKExtractorService.")
+
+
+
+class LayaFilter:
+    """
+    Fast System-1 decision model (convaiinnovations/laya) for triage,
+    narrative chunk filtering, and document routing.
+    Runs non-autoregressively in ~20-30ms.
+    """
+    def __init__(self, device: str = None, threshold: float = 0.25):
+        self.threshold = threshold
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        try:
+            from laya import Router
+            logger.info("Initializing LayaFilter router...")
+            self.router = Router(preload=False, device=self.device)
+            self.is_loaded = True
+            logger.info("LayaFilter initialized successfully.")
+        except Exception as e:
+            logger.warning(f"Could not initialize LayaFilter: {e}")
+            self.is_loaded = False
+
+    def is_pk_relevant(self, text: str) -> tuple[bool, float, str]:
+        """
+        Evaluates whether a text excerpt contains numerical PK model parameters,
+        rate constants, partition coefficients, or physiological parameters.
+        Returns: (keep_boolean, confidence_score, model_type_choice)
+        """
+        if not self.is_loaded or len(text.strip()) < 50:
+            return True, 1.0, "unknown"
+
+        questions = {
+            "has_pk_parameters": {
+                "type": "noul",
+                "instructions": (
+                    "Does this specific text excerpt contain numerical pharmacokinetic parameter values, "
+                    "equations, rate constants, partition coefficients, half-lives, clearance values, "
+                    "or physiological blood flows and volumes?"
+                )
+            },
+            "model_type": {
+                "type": "choice",
+                "instructions": "What type of pharmacokinetic modeling or data is described?",
+                "criteria": {
+                    "pbpk": "physiologically based pharmacokinetic model with multiple organ compartments and blood flows",
+                    "compartmental": "classical 1, 2, or 3 empirical compartment PK model",
+                    "nca": "non-compartmental analysis (AUC, Cmax, Tmax only)",
+                    "not_applicable": "no pharmacokinetic modeling or parameter estimation"
+                }
+            }
+        }
+        try:
+            # truncate to 3500 chars to avoid exceeding token limit
+            truncated_text = text[:3500]
+            res = self.router.predict(truncated_text, questions)
+            score = float(res["answers"]["has_pk_parameters"]["noul"])
+            choice = res["answers"]["model_type"]["choice"]
+
+            # Keep only if probability meets threshold
+            keep = (score >= self.threshold)
+            return keep, score, choice
+        except Exception as e:
+            logger.warning(f"Laya filter error: {e}. Defaulting to keep chunk.")
+            return True, 1.0, "unknown"
+
+    def classify_model_type(self, text: str) -> str:
+        """
+        Quickly classifies paper or section into: 'pbpk', 'compartmental', 'nca', or 'not_applicable'.
+        """
+        if not self.is_loaded:
+            return "not_applicable"
+
+        questions = {
+            "model_type": {
+                "type": "choice",
+                "instructions": "What type of pharmacokinetic modeling or study is this?",
+                "criteria": {
+                    "pbpk": "physiologically based pharmacokinetic model with multiple organ compartments",
+                    "compartmental": "empirical 1, 2, or 3 compartment PK model",
+                    "nca": "non-compartmental analysis (AUC, Cmax only)",
+                    "not_applicable": "no pharmacokinetic modeling data"
+                }
+            }
+        }
+        try:
+            truncated = text[:3500]
+            res = self.router.predict(truncated, questions)
+            return res["answers"]["model_type"]["choice"]
+        except Exception as e:
+            logger.warning(f"Laya classification error: {e}")
+            return "not_applicable"
+
+
+class WeVisDocParser:
+    """
+    Tencent/WeVisDoc-4B Vision-to-Markdown Document Parser.
+    Fine-tuned from Qwen3-VL to convert PDF document/table images into structured Markdown
+    with LaTeX math formulas and standard HTML tables (preserving rowspan, colspan, hierarchical headers).
+    Reference: https://huggingface.co/tencent/WeVisDoc-4B
+    """
+    DEFAULT_SYSTEM_PROMPT = (
+        "You are an AI assistant specialized in converting PDF images to Markdown format. "
+        "Please follow these instructions for the conversion:\n\n"
+        "1. Text Processing:\n"
+        "- Accurately recognize all text content in the PDF image without guessing or inferring.\n"
+        "- Convert the recognized text into Markdown format.\n"
+        "- Maintain the original document structure, including headings, paragraphs, lists, etc.\n\n"
+        "2. Mathematical Formula Processing:\n"
+        "- Convert all mathematical formulas to LaTeX format.\n"
+        "- Enclose inline formulas with \\( \\). For example: \\( E = mc^2 \\)\n"
+        "- Enclose block formulas with \\[ \\]. For example: \\[ \\frac{-b \\pm \\sqrt{b^2 - 4ac}}{2a} \\]\n\n"
+        "3. Table Processing:\n"
+        "- Convert all tables to standard HTML format using <table>, <thead>, <tbody>, <tr>, <th>, <td>.\n"
+        "- Use rowspan and colspan appropriately for merged headers or cells.\n"
+        "- Preserve exact numerical and textual values in table cells."
+    )
+
+    DEFAULT_USER_PROMPT = "Please transcribe this page image into clean Markdown following the system instructions."
+
+    def __init__(self, model_id: str = "Tencent/WeVisDoc-4B", device: str = None):
+        self.model_id = model_id
+        self.device = device or ("cuda" if torch.cuda.is_available() else "cpu")
+        self.processor = None
+        self.model = None
+        self.is_loaded = False
+
+    def load(self):
+        """Loads processor and model weights into VRAM lazily."""
+        if self.is_loaded:
+            return
+
+        logger.info(f"Loading WeVisDocParser ({self.model_id}) on {self.device}...")
+        dtype = torch.bfloat16 if (self.device and "cuda" in self.device) else torch.float32
+
+        from transformers import AutoProcessor
+        self.processor = AutoProcessor.from_pretrained(self.model_id, trust_remote_code=True)
+
+        device_map = {"": self.device} if (self.device and self.device != "cpu") else None
+        try:
+            from transformers import Qwen3VLForConditionalGeneration
+            self.model = Qwen3VLForConditionalGeneration.from_pretrained(
+                self.model_id,
+                torch_dtype=dtype,
+                device_map=device_map,
+                trust_remote_code=True
+            ).eval()
+        except Exception as e:
+            logger.warning(f"WeVisDoc Qwen3VL direct load note ({e}), falling back to AutoModelForVision2Seq...")
+            from transformers import AutoModelForVision2Seq
+            self.model = AutoModelForVision2Seq.from_pretrained(
+                self.model_id,
+                torch_dtype=dtype,
+                device_map=device_map,
+                trust_remote_code=True
+            ).eval()
+
+        self.is_loaded = True
+        logger.info("WeVisDocParser loaded successfully into VRAM.")
+
+    def parse_image(
+        self,
+        image: Image.Image,
+        max_new_tokens: int = 4096,
+        user_prompt: str = None,
+        system_prompt: str = None
+    ) -> str:
+        """
+        Transcribes a PIL Image into structured Markdown with HTML tables and LaTeX math.
+        """
+        self.load()
+        sys_prompt = system_prompt or self.DEFAULT_SYSTEM_PROMPT
+        u_prompt = user_prompt or self.DEFAULT_USER_PROMPT
+
+        messages = [
+            {"role": "system", "content": sys_prompt},
+            {
+                "role": "user",
+                "content": [
+                    {"type": "image", "image": image},
+                    {"type": "text", "text": u_prompt}
+                ]
+            }
+        ]
+
+        prompt_text = self.processor.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
+        inputs = self.processor(
+            text=[prompt_text],
+            images=[image],
+            padding=True,
+            return_tensors="pt"
+        ).to(self.model.device)
+
+        with torch.no_grad():
+            generated_ids = self.model.generate(
+                **inputs,
+                max_new_tokens=max_new_tokens,
+                do_sample=False
+            )
+
+        generated_ids_trimmed = [
+            out_ids[len(in_ids):] for in_ids, out_ids in zip(inputs.input_ids, generated_ids)
+        ]
+        output_text = self.processor.batch_decode(
+            generated_ids_trimmed,
+            skip_special_tokens=True,
+            clean_up_tokenization_spaces=False
+        )[0]
+        return output_text.strip()

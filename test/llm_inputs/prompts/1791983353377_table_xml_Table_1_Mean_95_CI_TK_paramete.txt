@@ -1,0 +1,877 @@
+<|im_start|>system
+You are an OECD GD 331 compliant pharmacokinetic (PK) and PBPK table data extraction engine.
+Your task is to faithfully extract model parameters, experimental values, and model outputs from scientific tables into the strict JSON schema provided below.
+
+==================================================
+1. CORE ANTI-HALLUCINATION & FIDELITY RULES
+==================================================
+- Extract ONLY what is explicitly printed in the table. Never guess, infer, calculate, or supply parameters from general pharmacological knowledge or typical values.
+- Never extract a value in isolation: associate every value with its complete semantic context (compound, species, life stage, formulation, compartment, parameter, unit, and uncertainty).
+- Interpret every table independently: NEVER leak context (compounds, species, or units) from other tables or surrounding text unless explicitly shared.
+- If a value or context field cannot be identified with high confidence, set needs_review=true rather than guessing.
+- Distinguish model input parameters (which belong in `parameter_blocks`) from observed/simulated clinical PK outputs (e.g., observed Cmax, AUC, which belong in `observed_data`).
+
+==================================================
+2. PRE-COMPUTED TABLE STRUCTURE & CELL BINDING
+==================================================
+The document table layout has already been mapped for you (see the markdown table and pre-computed column/row summary in the user prompt).
+- Bind every parameter to its `source_table` (e.g. "Table 1", "Table 3"), `row_id` (e.g. "r1"), and `column_id` (e.g. "c1").
+- Populate `row_path` and `column_path` reflecting the hierarchical headers.
+- Record the exact, unedited printed cell text in `source_quote`.
+
+==================================================
+3. CARTESIAN COLUMN UNROLLING & MULTI-CONDITION HEADERS
+==================================================
+- Multi-Compound / Multi-Species / Multi-Life-Stage Columns: If a table has distinct columns for multiple compounds (e.g. PFOS, PFOA, PFHxS), species (Nonhuman primate, Human), or life stages (Mother, Fetus, Infant), emit a SEPARATE parameter record for EVERY populated cell in that row. Never skip columns or merge compounds.
+- Comma-Separated Formulations (Never Map to Ranges): If a cell contains comma-separated values for multiple formulations (e.g. '0.69, 2.19' for 'Rilutor, ASD'), emit separate parameter records: one with context.formulation="Rilutor" (value=0.69) and one with context.formulation="ASD" (value=2.19). NEVER place comma-separated formulations into ranges or confidence intervals.
+- Dual-Symbol Rows: If a row defines two symbols for different life stages (e.g. 'kurinec (/h/kg^-0.25); keliml for infant (/h)'), emit separate parameter records with their respective symbol, unit, and life stage ('Mother' vs. 'Infant').
+
+==================================================
+4. FOOTNOTES, QUALIFIERS & INLINE NUMBERS WITH LETTERS
+==================================================
+- Verbatim Transcription: Always capture the exact cell text in `value_text` (e.g. '0.008b', '5a', '4.00E-04').
+- Number & Marker Separation: Strip the footnote letter to parse the pure float into `value` (e.g. 0.008, 5.0) and put the isolated symbol/letter into `footnote_marker` ('b', 'a').
+- Constants in Footnotes: Inspect all table footnotes. Extract any explicitly stated numeric constants (e.g. 'liver:blood partition coefficient = 2.0', 'bioavailability fixed to 90%') as standalone parameter records!
+- Spanning Group Headers: Never emit a spanning group header as a parameter with value=null. Prepend the group header to each child row (e.g. 'Blood flow to organ - Liver') and propagate its unit with `unit_inherited=true`.
+
+==================================================
+5. POINT ESTIMATES, UNCERTAINTY & PHYSIOLOGICAL RANGES
+==================================================
+- Point Estimates with Uncertainty: When a cell reports a point estimate with confidence interval or error (e.g. '0.21 (0.18, 0.25)' under 'Mean (95% CI)'), set `value=0.21`, `ci_low=0.18`, and `ci_high=0.25`.
+- Time-Varying Physiological Ranges: When a parameter changes dynamically across gestation or growth (e.g. '56.9 - 70 (initial)', '3.2 - 2.4'), set `start_value` to the initial value (56.9 or 3.2), `end_value` to the final value (70.0 or 2.4), and put the qualifier in `value_qualifier`. Leave `value=null`.
+
+==================================================
+6. PARAMETER CLASSIFICATION & PROVENANCE
+==================================================
+- `parameter_class`: Must be exactly one of:
+  * `physiological`: Organisms' biological parameters independent of drug (body weight, organ volumes, blood flows, cardiac output, GFR, hematocrit).
+  * `biochemical`: Drug interaction with physiology (partition coefficients Kp, fraction unbound fu, clearances, absorption rate ka, Vmax, Km, distribution volume Vc/Vd, transfer rates, bioavailability, half-life).
+  * `compound_specific`: Pure physicochemical properties (MW, logP, solubility, pKa).
+- `status`: Must match provenance: `measured_here`, `literature`, `fitted`, `derived`, `assumed_default`, `in_vitro_ivive`, `predicted_qsar`, or `not_reported`.
+
+==================================================
+7. OUTPUT FORMAT
+==================================================
+Return ONLY valid JSON matching the schema below. No markdown code fences, no commentary.
+
+{
+  "$defs": {
+    "ModelClassification": {
+      "properties": {
+        "model_type": {
+          "description": "Must be 'pbpk', 'simple_empirical_compartmental', 'nca' or 'not_applicable'",
+          "enum": [
+            "pbpk",
+            "simple_empirical_compartmental",
+            "nca",
+            "not_applicable"
+          ],
+          "title": "Model Type",
+          "type": "string"
+        },
+        "evidence_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Evidence Quote"
+        }
+      },
+      "required": [
+        "model_type"
+      ],
+      "title": "ModelClassification",
+      "type": "object"
+    },
+    "PageMetadata": {
+      "properties": {
+        "title": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "authors": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Authors"
+        },
+        "journal": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Journal"
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Year"
+        }
+      },
+      "title": "PageMetadata",
+      "type": "object"
+    },
+    "ParameterClass": {
+      "enum": [
+        "physiological",
+        "biochemical",
+        "compound_specific"
+      ],
+      "title": "ParameterClass",
+      "type": "string"
+    },
+    "ProvenanceStatus": {
+      "description": "Controlled vocabulary for how a parameter value was obtained.",
+      "enum": [
+        "measured_here",
+        "literature",
+        "in_vitro_ivive",
+        "predicted_qsar",
+        "fitted",
+        "derived",
+        "assumed_default",
+        "not_reported"
+      ],
+      "title": "ProvenanceStatus",
+      "type": "string"
+    },
+    "TableExtractedParameter": {
+      "properties": {
+        "parameter_class": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ParameterClass"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Broad class: 'physiological' (organ volume, blood flow, BW, GFR), 'biochemical' (Kp, fu, clearance, Vmax, Km, Vc, ka, half-life), or 'compound_specific' (logP, MW)."
+        },
+        "parameter_subclass": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Specific canonical subclass (e.g. 'body_weight', 'cardiac_output', 'organ_blood_flow_fraction', 'organ_volume_fraction', 'partition_coefficient', 'fraction_unbound', 'distribution_volume', 'distribution_rate', 'absorption_rate_constant', 'maximal_velocity', 'michaelis_menten_constant', 'bioavailability', 'elimination_half_life').",
+          "title": "Parameter Subclass"
+        },
+        "parameter_name": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Descriptive parameter name. If under a group header, prepend it (e.g. 'Blood flow - Liver').",
+          "title": "Parameter Name"
+        },
+        "parameter_name_standardized": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standardized snake_case name (e.g. 'body_weight', 'cardiac_output', 'partition_coefficient_liver', 'central_compartment_volume').",
+          "title": "Parameter Name Standardized"
+        },
+        "symbol": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Mathematical symbol as printed (e.g. 'BW', 'QCC', 'Tmc', 'Kt', 'k12').",
+          "title": "Symbol"
+        },
+        "symbol_standardized": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Standardized symbol in common PBPK notation (e.g. 'BW', 'QCC', 'Kp_liver').",
+          "title": "Symbol Standardized"
+        },
+        "context": {
+          "$ref": "#/$defs/TableParameterContext"
+        },
+        "quantitative_data": {
+          "$ref": "#/$defs/TableQuantitativeData"
+        },
+        "provenance": {
+          "$ref": "#/$defs/TableProvenance"
+        }
+      },
+      "required": [
+        "context",
+        "quantitative_data",
+        "provenance"
+      ],
+      "title": "TableExtractedParameter",
+      "type": "object"
+    },
+    "TableParameterBlock": {
+      "properties": {
+        "block_name": {
+          "description": "Section/block name (e.g. 'Nonhuman primate', 'Physiological parameters').",
+          "title": "Block Name",
+          "type": "string"
+        },
+        "implied_species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Species shared across this block.",
+          "title": "Implied Species"
+        },
+        "implied_unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Unit shared across this block.",
+          "title": "Implied Unit"
+        },
+        "parameter_class": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Class shared across this block.",
+          "title": "Parameter Class"
+        },
+        "parameters": {
+          "description": "Extracted parameters belonging to this block.",
+          "items": {
+            "$ref": "#/$defs/TableExtractedParameter"
+          },
+          "title": "Parameters",
+          "type": "array"
+        }
+      },
+      "required": [
+        "block_name"
+      ],
+      "title": "TableParameterBlock",
+      "type": "object"
+    },
+    "TableParameterContext": {
+      "properties": {
+        "compound": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Chemical or drug entity (e.g. PFOS, PFOA). Leave null for compound-independent physiological parameters.",
+          "title": "Compound"
+        },
+        "species": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Explicitly stated species (e.g. Human, Nonhuman primate, Rat, Monkey).",
+          "title": "Species"
+        },
+        "life_stage": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Life stage or physiological state (e.g. Mother, Fetus, Infant, Gestation, Adult).",
+          "title": "Life Stage"
+        },
+        "formulation": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Specific drug formulation if stated (e.g. Rilutor, ASD). Never merge two formulations into a range.",
+          "title": "Formulation"
+        },
+        "compartment": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Target organ, tissue, or fluid compartment (e.g. Liver, Kidney, Plasma, Filtrate, Gut, Fat).",
+          "title": "Compartment"
+        },
+        "route": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Route of administration (e.g. Oral, IV, Dermal).",
+          "title": "Route"
+        },
+        "population": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Specific cohort or sub-population if stated.",
+          "title": "Population"
+        }
+      },
+      "title": "TableParameterContext",
+      "type": "object"
+    },
+    "TableProvenance": {
+      "properties": {
+        "source_table": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Explicit table ID (e.g. 'Table 1', 'Table 3'). Crucial for verification.",
+          "title": "Source Table"
+        },
+        "row_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier of the row in TableEvidence (e.g. 'r1').",
+          "title": "Row Id"
+        },
+        "column_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier of the column in TableEvidence (e.g. 'c1').",
+          "title": "Column Id"
+        },
+        "cell_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Identifier of the cell in TableEvidence (e.g. 'cell_r1_c1').",
+          "title": "Cell Id"
+        },
+        "row_path": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hierarchical row context path.",
+          "title": "Row Path"
+        },
+        "column_path": {
+          "anyOf": [
+            {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Hierarchical column context path.",
+          "title": "Column Path"
+        },
+        "source_quote": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Verbatim text from source cell.",
+          "title": "Source Quote"
+        },
+        "reference": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Literature citation or reference (e.g. 'Wambaugh et al. (2013)', '[17]').",
+          "title": "Reference"
+        },
+        "status": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ProvenanceStatus"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Controlled vocabulary: 'measured_here', 'literature', 'fitted', 'derived', 'assumed_default', 'in_vitro_ivive', 'predicted_qsar', 'not_reported'."
+        }
+      },
+      "title": "TableProvenance",
+      "type": "object"
+    },
+    "TableQuantitativeData": {
+      "properties": {
+        "value_text": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact verbatim text printed in the table cell (e.g. '0.21 (0.18, 0.25)', '5a', '4.00E-04').",
+          "title": "Value Text"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Primary point estimate as a pure float.",
+          "title": "Value"
+        },
+        "start_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Initial numerical value for time-varying physiological ranges (e.g. 56.9 in '56.9 - 70').",
+          "title": "Start Value"
+        },
+        "end_value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Final numerical value for time-varying physiological ranges (e.g. 70.0 in '56.9 - 70').",
+          "title": "End Value"
+        },
+        "ci_low": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Lower bound of confidence interval (e.g. 0.18 in '0.21 (0.18, 0.25)').",
+          "title": "Ci Low"
+        },
+        "ci_high": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Upper bound of confidence interval (e.g. 0.25 in '0.21 (0.18, 0.25)').",
+          "title": "Ci High"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Exact unit printed or inherited (e.g. 'L/h/kg^0.74', 'mg/L', 'fraction of BW').",
+          "title": "Unit"
+        },
+        "unit_inherited": {
+          "default": false,
+          "description": "True if unit was inherited from a group header or table caption.",
+          "title": "Unit Inherited",
+          "type": "boolean"
+        },
+        "value_qualifier": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Qualifier printed with value (e.g. 'Optimized', 'Fixed', '<').",
+          "title": "Value Qualifier"
+        },
+        "footnote_marker": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Trailing footnote symbol or letter stripped from the number (e.g. 'a', 'b', '*').",
+          "title": "Footnote Marker"
+        },
+        "normalization_basis": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "description": "Normalization basis (e.g. 'cardiac_output', 'body_weight').",
+          "title": "Normalization Basis"
+        }
+      },
+      "title": "TableQuantitativeData",
+      "type": "object"
+    },
+    "TableValidationResult": {
+      "properties": {
+        "metric": {
+          "description": "Observed PK metric name, e.g. 'Cmax', 'AUC', 'Tmax'",
+          "title": "Metric",
+          "type": "string"
+        },
+        "value": {
+          "anyOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Value"
+        },
+        "unit": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Unit"
+        },
+        "source_type": {
+          "default": "observed",
+          "enum": [
+            "observed",
+            "simulated"
+          ],
+          "title": "Source Type",
+          "type": "string"
+        },
+        "provenance": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/TableProvenance"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "metric"
+      ],
+      "title": "TableValidationResult",
+      "type": "object"
+    }
+  },
+  "properties": {
+    "page_metadata": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/PageMetadata"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "default": null
+    },
+    "model_classification": {
+      "$ref": "#/$defs/ModelClassification",
+      "description": "Model classification: 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'."
+    },
+    "parameter_blocks": {
+      "description": "Parameters grouped by table section/blocks. PBPK input parameters ONLY.",
+      "items": {
+        "$ref": "#/$defs/TableParameterBlock"
+      },
+      "title": "Parameter Blocks",
+      "type": "array"
+    },
+    "observed_data": {
+      "description": "Observed clinical PK metrics if reported in the table.",
+      "items": {
+        "$ref": "#/$defs/TableValidationResult"
+      },
+      "title": "Observed Data",
+      "type": "array"
+    },
+    "simulated_data": {
+      "description": "Simulated PK metrics if reported in the table.",
+      "items": {
+        "$ref": "#/$defs/TableValidationResult"
+      },
+      "title": "Simulated Data",
+      "type": "array"
+    }
+  },
+  "required": [
+    "model_classification"
+  ],
+  "title": "TableExtractionPage",
+  "type": "object"
+}
+<|im_end|>
+<|im_start|>user
+Extract parameters from this document section strictly into the JSON schema. This is a structured scientific table. Focus on exact transcription of table values into parameter_blocks.
+
+CRITICAL INSTRUCTIONS FOR THIS TABLE:
+1. This is a confirmed PK table. Classify `model_type` as 'pbpk' or 'simple_empirical_compartmental' based on the parameters shown. Do not use 'not_applicable'.
+2. If page metadata (title, authors, journal) is not visible in this specific table, leave it null.
+3. Map column headers to their respective parameter entries (e.g., values under 'Mean (95% CI) - PFOS' get compound='PFOS', values under 'Mean (95% CI) - PFOA' get compound='PFOA').
+4. Cartesian Column Unrolling: If multiple compounds or species appear in distinct columns, emit separate parameter records for each populated cell.
+5. A numerical parameter table MUST produce a non-empty `parameter_blocks` list. Create one record for every numeric parameter-value cell.
+6. Use the pre-computed table structure and footnotes below to guide exact provenance and cell binding.
+
+Document Text:
+Table 1: Mean (95% CI) TK parameters for PFOS and PFOA fit to nonhuman primate data and scaled to humans.
+
+| Species | Type of variable | Variable | Name | Mean (95% CI) - PFOS | Mean (95% CI) - PFOA | Source |
+|---|---|---|---|---|---|---|
+| **[Section: Nonhuman primate]** |||||||
+|  | Physiological | Body weight (kg) | BW | 5 [a] | 4.1 [a] | Butenhoff et al. (2004) ; Chang et al. (2012) ; Seacat et al. (2002) |
+|  |  | Cardiac blood output (L/h/kg 0.74 ) | QCC | 19.8 | 19.8 | Wambaugh et al. (2013) |
+|  |  | Fraction of cardiac output to filtrate | QfilC | 0.15 | 0.15 | Wambaugh et al. (2013) |
+|  |  | Volume of filtrate compartment (L/kg) | VfilC | 4.00E-04 | 4.00E-04 | Loccisano et al. (2011) |
+|  | Chemical-specific | Bioavailability | bioAv | 0.9 | 0.32 (0.20, 0.46) | US EPA (2024a) (PFOS) Optimized (PFOA) |
+|  |  | Volume of distribution central compartment (L/kg) | VCC | 0.24 (0.24, 0.25) | 0.23 (0.18, 0.29) | Optimized |
+|  |  | Saturable resorption rate (mg/h/kg) | Tmc | 2.5 (2.31, 2.80) | 0.28 (0.17, 0.53) | Optimized |
+|  |  | Saturable resorption affinity (mg/L) | K t | 0.004 (0.003, 0.004) | 0.017 (0.010, 0.041) | Optimized |
+|  |  | Proportion of free compound in serum | Free | 4.50E-03 | 1.20E-3 | Smeltz et al. (2023) |
+|  |  | Rate from central to second compartment (1/h) | k 12 | 3.3 | 3.3 | Andersen et al. (2006) |
+|  |  | Rate from second to central compartment (1/h) | k 21 | 3.4 | 3.4 | Andersen et al. (2006) |
+|  |  | Rate from gut to central compartment (1/h) | k a | 132 | 230 | Wambaugh et al. (2013) |
+| **[Section: Human]** |||||||
+|  | Physiological | Body weight (kg) | BW | 70 | 70 | Loccisano et al. (2011) |
+|  |  | Cardiac blood output (L/h/kg 0.74 ) | QCC | 12.5 | 12.5 | Loccisano et al. (2011) |
+|  | Chemical-specific | Bioavailability | bioAv | 0.9 | 0.9 | US EPA (2024a , 2024b) |
+|  |  | Saturable resorption rate (mg/h/kg) | Tmc | 1.07 | 0.54 | Optimized |
+|  |  | Saturable resorption affinity (mg/L) | K t | 0.004 | 0.008 [b] | Optimized (nonhuman primate) |
+|  |  | Half-life (years) | T 1/2 | 3.4 | 2.7 | Li et al. (2018) |
+
+### Table Footnotes (EXTRACT CONSTANTS FROM HERE):
+- [a] The code uses the average body weight for each nonhuman primate or group of nonhuman primates as reported in the original studies.
+- [b] If the bioavailability is set to 90% for the nonhuman primate model of PFOA, the Tmc and K t values for the nonhuman primates are 0.15 mg/h/kg and 0.008 mg/L, respectively. For the human model, a set value of 0.008 mg/L for K t was used as it is representative of the higher bioavailability considered more typical for intake of food and water.
+
+CRITICAL: Use the following pre-computed table structure to guide your extraction. Ensure that compounds and species match this structure. All extracted parameters MUST trace back to these row/column headers:
+{
+  "table_id": "Table 1",
+  "title": "Table 1: Mean (95% CI) TK parameters for PFOS and PFOA fit to nonhuman primate data and scaled to humans.",
+  "subject_compounds": [
+    "PFOS",
+    "PFOA"
+  ],
+  "species": [
+    "Nonhuman primate",
+    "Human"
+  ],
+  "columns": [
+    "Species",
+    "Type of variable",
+    "Variable",
+    "Name",
+    "Mean (95% CI) > PFOS",
+    "Mean (95% CI) > PFOA",
+    "Source"
+  ],
+  "footnotes": [
+    "[a] The code uses the average body weight for each nonhuman primate or group of nonhuman primates as reported in the original studies.",
+    "[b] If the bioavailability is set to 90% for the nonhuman primate model of PFOA, the Tmc and K t values for the nonhuman primates are 0.15 mg/h/kg and 0.008 mg/L, respectively. For the human model, a set value of 0.008 mg/L for K t was used as it is representative of the higher bioavailability considered more typical for intake of food and water."
+  ]
+}<|im_end|>
+<|im_start|>assistant

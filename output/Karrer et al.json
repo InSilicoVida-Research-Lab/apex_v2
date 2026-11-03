@@ -49,23 +49,23 @@
         "confidence": 1.0
       },
       {
-        "id": "richly perfused tissue",
+        "id": "richly_perfused_tissue",
         "label_raw": "richly perfused tissue",
         "confidence": 1.0
       },
       {
-        "id": "slowly perfused tissue",
+        "id": "slowly_perfused_tissue",
         "label_raw": "slowly perfused tissue",
         "confidence": 1.0
       },
       {
-        "id": "BPA-g in serum",
-        "label_raw": "BPA-g in serum",
+        "id": "BPA-g",
+        "label_raw": "BPA-g",
         "confidence": 1.0
       },
       {
-        "id": "BPA-s in serum",
-        "label_raw": "BPA-s in serum",
+        "id": "BPA-s",
+        "label_raw": "BPA-s",
         "confidence": 1.0
       }
     ]
@@ -817,7 +817,7 @@
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
@@ -841,14 +841,14 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Liver | 0.730",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Liver | 0.730 | 0.846 | 0.872 | 2.44 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
@@ -872,14 +872,14 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Liver | 0.846",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Liver | 0.730 | 0.846 | 0.872 | 2.44 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
@@ -903,14 +903,14 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Liver | 0.872",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Liver | 0.730 | 0.846 | 0.872 | 2.44 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
@@ -934,20 +934,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Liver | 2.44",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Liver | 0.730 | 0.846 | 0.872 | 2.44 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Slowly perfused tissue",
+        "life_stage": "Slowly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -965,20 +965,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Slowly perfused tissue c | 2.70",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Slowly perfused tissue c | 2.70 | 0.881 | 0.853 | 2.11 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Slowly perfused tissue",
+        "life_stage": "Slowly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -996,20 +996,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Slowly perfused tissue c | 0.881",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Slowly perfused tissue c | 2.70 | 0.881 | 0.853 | 2.11 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Slowly perfused tissue",
+        "life_stage": "Slowly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1027,20 +1027,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Slowly perfused tissue c | 0.853",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Slowly perfused tissue c | 2.70 | 0.881 | 0.853 | 2.11 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Slowly perfused tissue",
+        "life_stage": "Slowly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1058,20 +1058,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Slowly perfused tissue c | 2.11",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Slowly perfused tissue c | 2.70 | 0.881 | 0.853 | 2.11 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Brain",
+        "life_stage": "Brain",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1089,20 +1089,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Brain | 2.80",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Brain | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Brain",
+        "life_stage": "Brain",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1120,20 +1120,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Brain | 0.810",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Brain | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Brain",
+        "life_stage": "Brain",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1151,20 +1151,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Brain | 0.745",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Brain | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Brain",
+        "life_stage": "Brain",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1182,20 +1182,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Brain | 2.04",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Brain | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Richly perfused tissue",
+        "life_stage": "Richly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1213,20 +1213,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Richly perfused tissue d | 2.80",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Richly perfused tissue d | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Richly perfused tissue",
+        "life_stage": "Richly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1244,20 +1244,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Richly perfused tissue d | 0.810",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Richly perfused tissue d | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Richly perfused tissue",
+        "life_stage": "Richly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1275,20 +1275,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Richly perfused tissue d | 0.745",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Richly perfused tissue d | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Richly perfused tissue",
+        "life_stage": "Richly perfused tissue",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1306,20 +1306,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Richly perfused tissue d | 2.04",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Richly perfused tissue d | 2.80 | 0.810 | 0.745 | 2.04 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Fat",
+        "life_stage": "Fat",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1337,20 +1337,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Fat | 5.00",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Fat | 5.00 | 0.435 | 0.884 | 5.73 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Fat",
+        "life_stage": "Fat",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1368,20 +1368,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Fat | 0.435",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Fat | 5.00 | 0.435 | 0.884 | 5.73 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Fat",
+        "life_stage": "Fat",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1399,20 +1399,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Fat | 0.884",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Fat | 5.00 | 0.435 | 0.884 | 5.73 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Fat",
+        "life_stage": "Fat",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1430,20 +1430,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Fat | 5.73",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Fat | 5.00 | 0.435 | 0.884 | 5.73 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Skin",
+        "life_stage": "Skin",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1461,20 +1461,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Skin | 2.15",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Skin | 2.15 | 0.915 | 1.09 | 3.26 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Skin",
+        "life_stage": "Skin",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1492,20 +1492,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Skin | 0.915",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Skin | 2.15 | 0.915 | 1.09 | 3.26 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Skin",
+        "life_stage": "Skin",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1523,20 +1523,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Skin | 1.09",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Skin | 2.15 | 0.915 | 1.09 | 3.26 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Skin",
+        "life_stage": "Skin",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1554,20 +1554,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Skin | 3.26",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Skin | 2.15 | 0.915 | 1.09 | 3.26 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPA",
       "symbol": null,
       "context": {
         "compound": "BPA",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Gonads",
+        "life_stage": "Gonads",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1585,20 +1585,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPA | ... | Gonads | 2.60",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Gonads | 2.60 | 0.843 | 0.778 | 1.86 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPS",
       "symbol": null,
       "context": {
         "compound": "BPS",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Gonads",
+        "life_stage": "Gonads",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1616,20 +1616,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPS a | ... | Gonads | 0.843",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Gonads | 2.60 | 0.843 | 0.778 | 1.86 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPF",
       "symbol": null,
       "context": {
         "compound": "BPF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Gonads",
+        "life_stage": "Gonads",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1647,20 +1647,20 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPF b | ... | Gonads | 0.778",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Gonads | 2.60 | 0.843 | 0.778 | 1.86 |",
         "parameter_status": null,
         "confidence": "high"
       }
     },
     {
       "needs_review": false,
-      "parameter_name": "Tissue partition coefficient",
+      "parameter_name": "Tissue partition coefficient for BPAF",
       "symbol": null,
       "context": {
         "compound": "BPAF",
         "subject_species": null,
-        "life_stage": null,
-        "compartment": "Gonads",
+        "life_stage": "Gonads",
+        "compartment": null,
         "route": null,
         "population": null
       },
@@ -1678,7 +1678,7 @@
       },
       "provenance": {
         "source_location": "Table 6",
-        "source_quote": "Tissue | BPAF | ... | Gonads | 1.86",
+        "source_quote": "Tissue | BPA | BPS a | BPF b | BPAF | Gonads | 2.60 | 0.843 | 0.778 | 1.86 |",
         "parameter_status": null,
         "confidence": "high"
       }
@@ -6859,163 +6859,514 @@
         "parameter_status": null,
         "confidence": "high"
       }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Cardiac output",
-      "symbol": null,
-      "context": {
-        "compound": "BPA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "23%",
-        "value": 0.23,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Uncertainty Analysis",
-        "source_quote": "we used a CV of 23% for the cardiac output",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "P TS",
-      "symbol": null,
-      "context": {
-        "compound": "BPA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "32%",
-        "value": 0.32,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Uncertainty Analysis",
-        "source_quote": "we used a CV of 32% for the P TS",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Organ blood flows",
-      "symbol": null,
-      "context": {
-        "compound": "BPA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "27%",
-        "value": 0.27,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Uncertainty Analysis",
-        "source_quote": "we used a CV of 27% for the organ blood flows",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Tissue volumes",
-      "symbol": null,
-      "context": {
-        "compound": "BPA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "25%",
-        "value": 0.25,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": null
-      },
-      "provenance": {
-        "source_location": "Uncertainty Analysis",
-        "source_quote": "we used a CV of 25% for the tissue volumes",
-        "parameter_status": null,
-        "confidence": "high"
-      }
-    },
-    {
-      "needs_review": false,
-      "parameter_name": "Volume of distribution in the small intestine",
-      "symbol": null,
-      "context": {
-        "compound": "BPA",
-        "subject_species": "human",
-        "life_stage": null,
-        "compartment": null,
-        "route": null,
-        "population": null
-      },
-      "quantitative_data": {
-        "needs_review": false,
-        "value_text": "25%",
-        "value": 0.25,
-        "range_low": null,
-        "range_high": null,
-        "variance": null,
-        "variance_type": null,
-        "unit": "%",
-        "unit_inherited": false,
-        "value_qualifier": "educated guess"
-      },
-      "provenance": {
-        "source_location": "Uncertainty Analysis",
-        "source_quote": "we used a CV of 25% for the tissue volumes , which we also used for the volume of distribution in the small intestine (educated guess)",
-        "parameter_status": null,
-        "confidence": "high"
-      }
     }
   ],
   "ingestion_source": "pmc_xml",
-  "ingestion_source_type": "published"
+  "ingestion_source_type": "published",
+  "laya_filter_summary": {
+    "model_type_triage": "pbpk",
+    "evaluated_chunks": 1,
+    "discarded_chunks": 0,
+    "retained_chunks": 1
+  },
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 5.66,
+    "total_parameters": 219,
+    "flagged_count": 61,
+    "error_count": 0,
+    "warning_count": 61,
+    "clean": false,
+    "summary": "61/219 parameters flagged: 61 warning(s). Elapsed: 5.7ms.",
+    "flags": [
+      {
+        "param_index": 0,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 1,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 2,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 3,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 4,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 5,
+        "param_name": "Substrate concentrations ( μ M )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 6,
+        "param_name": "Enzyme concentration ( mg / mL )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 7,
+        "param_name": "Enzyme concentration ( mg / mL )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 8,
+        "param_name": "Enzyme concentration ( mg / mL )",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 9,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 10,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 11,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 12,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 13,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 14,
+        "param_name": "Incubation time (min)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 15,
+        "param_name": "Absorption fraction (%)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 16,
+        "param_name": "Absorption fraction (%)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 17,
+        "param_name": "Absorption fraction (%)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 18,
+        "param_name": "Absorption half-life (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 18,
+        "param_name": "Absorption half-life (h)",
+        "severity": "warning",
+        "rule": "IMPLAUSIBLE_VALUE",
+        "message": "value=0.0 h is outside the expected plausible range [0.001, 50000.0] for 'Absorption half-life (h)'.",
+        "suggested_fix": "Verify unit conversion or check for a magnitude error (e.g. mL vs L)."
+      },
+      {
+        "param_index": 19,
+        "param_name": "Absorption half-life (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 20,
+        "param_name": "Absorption half-life (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 21,
+        "param_name": "Uptake period (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 22,
+        "param_name": "Uptake period (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 23,
+        "param_name": "Uptake period (h)",
+        "severity": "warning",
+        "rule": "MISSING_COMPOUND",
+        "message": "context.compound is null; cannot attribute this parameter to a chemical.",
+        "suggested_fix": "Infer from paper title/abstract or mark as unknown."
+      },
+      {
+        "param_index": 24,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.730' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 25,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.846' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 26,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.872' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 27,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.44' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 28,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.70' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 29,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.881' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 30,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.853' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 31,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.11' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 32,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.80' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 32,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 36 (same name, compound='BPA', value=2.8).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 33,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.810' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 33,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 37 (same name, compound='BPS', value=0.81).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 34,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.745' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 34,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 38 (same name, compound='BPF', value=0.745).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 35,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.04' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 35,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "DUPLICATE_ENTRY",
+        "message": "Exact duplicate of parameter at index 39 (same name, compound='BPAF', value=2.04).",
+        "suggested_fix": "Deduplicate; keep only the entry with higher provenance confidence."
+      },
+      {
+        "param_index": 36,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.80' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 37,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.810' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 38,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.745' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 39,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.04' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 40,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.00' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 41,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.435' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 42,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.884' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 43,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='5.73' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 44,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.15' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 45,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.915' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 46,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.09' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 47,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='3.26' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 48,
+        "param_name": "Tissue partition coefficient for BPA",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='2.60' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 49,
+        "param_name": "Tissue partition coefficient for BPS",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.843' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 50,
+        "param_name": "Tissue partition coefficient for BPF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.778' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 51,
+        "param_name": "Tissue partition coefficient for BPAF",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.86' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 108,
+        "param_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.9 f' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 109,
+        "param_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.33 c' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 110,
+        "param_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='1.0 g' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      },
+      {
+        "param_index": 111,
+        "param_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+        "severity": "warning",
+        "rule": "MISSING_UNIT",
+        "message": "value_text='0.3 h' present but unit is null.",
+        "suggested_fix": "Check if unit appears in a table column header."
+      }
+    ]
+  }
 }

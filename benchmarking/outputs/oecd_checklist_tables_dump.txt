@@ -1,0 +1,104 @@
+
+=== TABLE 0 ===
+Scope & Background: The scope of this work is to choose the PBPK model based on OECD criteria.
+
+=== TABLE 1 ===
+Field / Question | Response / Inputs
+Name of the PBPK model (Compound name can be written here) | [Enter comments / notes here]
+Model Developer and contact details | [Enter comments / notes here]
+Date of checklist assessment (e.g. January 7, 2019) | [Enter comments / notes here]
+
+=== TABLE 2 ===
+Item / Question | Response / Details
+8. Specific questions related to compound | [Enter comments / notes here]
+9. Has the model considered specific age groups (e.g., teenagers, children, adults, old age)? | Options: ☐ Yes ☐ No ☐ Partially ☐ I cannot answer  [Enter comments / notes here]
+10. Please explain your choice regarding age groups | [Enter comments / notes here]
+11. Which population model has been considered for evaluating or validating the model? | Options: ☐ European Population ☐ Asian Population ☐ American Population ☐ Any other population ☐ More than 1 continent population  [Enter comments / notes here]
+12. Please explain your choice regarding population model | [Enter comments / notes here]
+13. Does the model include specific mechanisms required to explain the long half-life of compound? | Options: ☐ Renal reabsorption ☐ Enterohepatic circulation ☐ Both ☐ Not applicable [Enter comments / notes here]
+14. Please explain your answer regarding long half-life mechanisms | [Enter comments / notes here]
+
+=== TABLE 3 ===
+Item / Question | Response / Details
+19. Clear indication of the chemical, or chemicals, to which the model is applicable? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+20. Comments for the answer | [Enter comments / notes here]
+21. Is the model being applied for the same scientific purpose as it was developed, or has it been repurposed for a different application? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+22. Comments for the above answer | [Enter comments / notes here]
+23. Have all model assumptions been adequately described and supported? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+24. Please write the model assumptions clearly | [Enter comments / notes here]
+25. Graphical representation of the proposed mode of action, if known? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+26. Please include details of graphical representation | [Enter comments / notes here]
+27. Graphical representation of the conceptual model? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+28. Please include details of graphical representation | [Enter comments / notes here]
+29. Supporting tabulation for parameters (names, meanings, values, mean and standard deviations, units, and sources)? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+30. Comments for the answer | [Enter comments / notes here]
+33. Uncertainty and sensitivity analysis adequately documented? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+34. Details about uncertainty and sensitivity analysis | [Enter comments / notes here]
+35. Mathematical equations available? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+36. Write all the mathematical equations | [Enter comments / notes here]
+37. PBK model code available? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+38. Write the code | [Enter comments / notes here]
+39. Qualification of PBK software platform? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+40. Name of software | [Enter comments / notes here]
+
+=== TABLE 4 ===
+Item / Question | Response / Details
+43. Does the model code express the mathematical model? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+44. Explain how it is expressed | [Enter comments / notes here]
+55. Is the mathematical solver a well-established algorithm? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+56. Comments for the answer | [Enter comments / notes here]
+
+=== TABLE 5 ===
+Item / Question | Response / Details
+
+=== TABLE 6 ===
+Item / Question | Response / Details
+71. Is the model consistent with known biology? | [Enter comments / notes here]
+72. Is the biological basis for the model structure provided? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+73. Please explain biological basis of model. | [Enter comments / notes here]
+85. Please explain your rating for biological basis | [Enter comments / notes here]
+
+=== TABLE 7 ===
+Item / Question | Response / Details
+86. Are the underlying equations based on established theories (e.g. Michaelis-Menten kinetics, Fick's laws of diffusion)? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+87. Please write the equation used. | [Enter comments / notes here]
+88. In the case of PBK models for particles, does the model take into consideration particle properties (e.g. particle size ranges, poor solubility, aggregation, partitioning, diffusion/sedimentation)? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+89. Comments for the answer | [Enter comments / notes here]
+
+=== TABLE 8 ===
+Item / Question | Response / Details
+96. Has the impact of uncertainty (individual variability, experimental reproducibility/reliability) in parameters on chosen dose metric been estimated? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+97. Please include details about it | [Enter comments / notes here]
+98. Local sensitivity analysis conducted? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+99. What is the criterion for LSA | [Enter comments / notes here]
+100. Global sensitivity analysis conducted? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer  [Enter comments / notes here]
+101. What is the criterion for GSA | [Enter comments / notes here]
+
+=== TABLE 9 ===
+Item / Question | Response / Details
+106. Suitability as analogue (chemical and biological similarity) assessed (when in vivo data for chemical of interest is lacking)? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+107. Comments for the answer | [Enter comments / notes here]
+108. Reliable estimation of chosen dose metric for analogue? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+109. Comments for the answer | [Enter comments / notes here]
+110. In general, is biological variability of in vivo reference data (from analogue) established? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+111. Please explain the answer | [Enter comments / notes here]
+114. Are quantitative comparisons (e.g., graphical, statistical) of model predictions to experimental data given? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+115. Comments for the answer | [Enter comments / notes here]
+116. Have goodness-of-fit metrics or statistics been given? | Options: ☐ Yes ☐ Partially ☐ No ☐ I cannot answer ☐ Not applicable  [Enter comments / notes here]
+117. Write the details about GOF or other metric | [Enter comments / notes here]
+
+=== TABLE 10 ===
+Section | 
+2.1 Executive summary | 
+2.2 Background | 
+2.3 Model purpose | 
+2.4.1 Modeling strategy | 
+2.4.2 Data summary | 
+2.4.3 Structure | 
+2.4.4 Equations | 
+2.4.5 Parameters | 
+2.4.6 Simulations | 
+2.4.7 Software | 
+2.5.1 Evaluation | 
+2.5.2 Sensitivity | 
+ | 

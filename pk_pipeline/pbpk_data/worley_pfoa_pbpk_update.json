@@ -1,0 +1,3142 @@
+{
+  "page_metadata": {
+    "title": "Physiologically based pharmacokinetic modeling of human exposure to perfluorooctanoic acid suggests historical non drinking-water exposures are important for predicting current serum concentrations",
+    "authors": [
+      "Rachel Rogers Worley",
+      "Xiaoxia Yang",
+      "Jeffrey Fisher"
+    ],
+    "journal": "Toxicol Appl Pharmacol",
+    "year": 2017
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "The objective of this research is to apply physiologically based pharmacokinetic (PBPK) modeling and Monte Carlo analysis to evaluate the impact of historic non-drinking water PFOA exposure on serum PFOA concentrations."
+  },
+  "model_context": {
+    "model_origin": "scaled from previously published PFOA rat PBPK models to adult humans",
+    "stated_purpose": "Evaluate historical non-drinking-water PFOA exposure and explain current human serum PFOA concentrations using PBPK and Monte Carlo analysis",
+    "dose_metric": "serum PFOA concentration"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "cardiac output",
+      "liver/kidney/rest-of-body volumes",
+      "PFOA tissue partition coefficients",
+      "free fraction",
+      "glomerular filtration",
+      "basolateral and apical renal transport",
+      "gastric and small-intestinal absorption",
+      "urinary and biliary elimination"
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Cardiac output and rate constants are body-weight scaled.",
+        "evidence_quote": "The human model was developed with body-weight scaling for physiological flows and rate constants.",
+        "source_location": "Model development, pp.6-8"
+      },
+      {
+        "description": "Renal handling includes basolateral and apical transporter processes.",
+        "evidence_quote": "blood→proximal tubule cells by basolateral transport ... filtrate→PT cells by apical Michaelis-Menten transport",
+        "source_location": "Kidney model description, pp.7-8"
+      },
+      {
+        "description": "Historical non-drinking-water ingestion is included as an exposure source.",
+        "evidence_quote": "Simulation ... successfully predicted 98% of individual serum PFOA concentrations ... when non-drinking water ingestion of PFOA exposure was included.",
+        "source_location": "Abstract, p.1"
+      }
+    ],
+    "specialized_mechanisms": [
+      "active renal transport",
+      "renal reabsorption",
+      "Monte Carlo uncertainty/variability"
+    ]
+  },
+  "model_structure": {
+    "reported_compartment_count": 10,
+    "listed_compartment_count": 10,
+    "count_consistency": "consistent",
+    "compartments": [
+      {
+        "id": "stomach",
+        "label_raw": "Stomach",
+        "confidence": 0.99
+      },
+      {
+        "id": "small_intestines",
+        "label_raw": "Small Intestines",
+        "confidence": 0.99
+      },
+      {
+        "id": "serum",
+        "label_raw": "Serum",
+        "confidence": 0.99
+      },
+      {
+        "id": "liver",
+        "label_raw": "Liver",
+        "confidence": 0.99
+      },
+      {
+        "id": "rest_body",
+        "label_raw": "Rest of Body",
+        "confidence": 0.99
+      },
+      {
+        "id": "kidney_serum",
+        "label_raw": "Kidney Serum",
+        "confidence": 0.99
+      },
+      {
+        "id": "kidney_filtrate",
+        "label_raw": "Kidney Filtrate",
+        "confidence": 0.99
+      },
+      {
+        "id": "proximal_tubule_cells",
+        "label_raw": "Proximal Tubule Cells",
+        "confidence": 0.99
+      },
+      {
+        "id": "feces",
+        "label_raw": "Feces",
+        "confidence": 0.99
+      },
+      {
+        "id": "urine",
+        "label_raw": "Urine",
+        "confidence": 0.99
+      }
+    ],
+    "connections": [
+      {
+        "source": "external",
+        "target": "stomach",
+        "label_raw": "Oral Dose (Drinking Water)",
+        "direction": "forward",
+        "edge_type": "dose_input",
+        "evidence": "Figure 1",
+        "confidence": 0.95
+      },
+      {
+        "source": "external",
+        "target": "stomach",
+        "label_raw": "Oral Dose (Non-Drinking Water)",
+        "direction": "forward",
+        "edge_type": "dose_input",
+        "evidence": "Figure 1",
+        "confidence": 0.95
+      },
+      {
+        "source": "stomach",
+        "target": "small_intestines",
+        "label_raw": "k0c",
+        "direction": "forward",
+        "edge_type": "absorption",
+        "evidence": "Rate of absorption in stomach",
+        "confidence": 0.95
+      },
+      {
+        "source": "small_intestines",
+        "target": "serum",
+        "label_raw": "kabsc",
+        "direction": "forward",
+        "edge_type": "absorption",
+        "evidence": "Rate of absorption in small intestines",
+        "confidence": 0.95
+      },
+      {
+        "source": "small_intestines",
+        "target": "feces",
+        "label_raw": "kunabsc",
+        "direction": "forward",
+        "edge_type": "excretion",
+        "evidence": "Rate of unabsorbed dose to feces",
+        "confidence": 0.95
+      },
+      {
+        "source": "serum",
+        "target": "liver",
+        "label_raw": "blood flow / PL",
+        "direction": "bidirectional",
+        "edge_type": "distribution",
+        "evidence": "Liver partitioning",
+        "confidence": 0.9
+      },
+      {
+        "source": "serum",
+        "target": "rest_body",
+        "label_raw": "blood flow / PR",
+        "direction": "bidirectional",
+        "edge_type": "distribution",
+        "evidence": "Rest-of-body partitioning",
+        "confidence": 0.9
+      },
+      {
+        "source": "serum",
+        "target": "kidney_serum",
+        "label_raw": "kidney blood flow",
+        "direction": "bidirectional",
+        "edge_type": "distribution",
+        "evidence": "Three-compartment kidney",
+        "confidence": 0.95
+      },
+      {
+        "source": "kidney_serum",
+        "target": "kidney_filtrate",
+        "label_raw": "GFR",
+        "direction": "forward",
+        "edge_type": "filtration",
+        "evidence": "Glomerular filtration",
+        "confidence": 0.95
+      },
+      {
+        "source": "kidney_serum",
+        "target": "proximal_tubule_cells",
+        "label_raw": "Vmax_baso / Km_baso",
+        "direction": "forward",
+        "edge_type": "active_transport",
+        "evidence": "Basolateral transporter route",
+        "confidence": 0.95
+      },
+      {
+        "source": "kidney_filtrate",
+        "target": "proximal_tubule_cells",
+        "label_raw": "Vmax_apical / Km_apical",
+        "direction": "forward",
+        "edge_type": "reabsorption",
+        "evidence": "Apical transporter route",
+        "confidence": 0.95
+      },
+      {
+        "source": "proximal_tubule_cells",
+        "target": "kidney_filtrate",
+        "label_raw": "kdif",
+        "direction": "bidirectional",
+        "edge_type": "diffusion",
+        "evidence": "Diffusion between PTCs and filtrate described in text",
+        "confidence": 0.85
+      },
+      {
+        "source": "proximal_tubule_cells",
+        "target": "kidney_serum",
+        "label_raw": "keffluxc",
+        "direction": "forward",
+        "edge_type": "efflux",
+        "evidence": "PFOA clearance from PTC into blood",
+        "confidence": 0.95
+      },
+      {
+        "source": "kidney_filtrate",
+        "target": "urine",
+        "label_raw": "kurinec",
+        "direction": "forward",
+        "edge_type": "excretion",
+        "evidence": "Urinary elimination",
+        "confidence": 0.95
+      },
+      {
+        "source": "liver",
+        "target": "external",
+        "label_raw": "kbilec",
+        "direction": "forward",
+        "edge_type": "biliary_excretion",
+        "evidence": "Biliary elimination",
+        "confidence": 0.95
+      }
+    ],
+    "absorption": {
+      "route": "oral",
+      "model_type": "first_order",
+      "site": "stomach and small intestines",
+      "evidence_quote": "PFOA enters through drinking-water and non-drinking-water oral exposure; gastric and intestinal absorption are modeled."
+    },
+    "metabolism": null,
+    "elimination": {
+      "routes": [
+        "renal",
+        "biliary",
+        "fecal"
+      ],
+      "evidence_quote": "Urinary, biliary and fecal elimination are modeled; renal handling includes active transport and reabsorption."
+    },
+    "unresolved": [
+      {
+        "description": "kdif is described in the kidney model but is not numerically tabulated in the main chemical-specific parameter table.",
+        "reason": "Named model parameter without a numerical value in Table 2."
+      }
+    ],
+    "source_location": "Figure 1, page 24",
+    "equations_provided": "supplementary_info",
+    "allometric_scaling_rules": [
+      "QCC scaled as BW^0.75",
+      "GFR scaled with kidney weight",
+      "k0c, kabsc, kunabsc, keffluxc, kbilec, kurinec and gastric emptying rate scaled as BW^-0.25"
+    ]
+  },
+  "metabolic_pathways": [],
+  "model_parameters": [
+    {
+      "parameter_id": "param_566487e921585d50",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.75",
+        "unit_standardized": "L h^-1 kg^-0.75",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Cardiac output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e9b97888739f188a",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction blood flow to liver",
+      "parameter_name_standardized": "liver_blood_flow_fraction",
+      "symbol_original": "QLC",
+      "symbol_standardized": "QLC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction blood flow to liver",
+        "source_quote": "0.25",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b8266c7988d3cead",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction blood flow to kidney",
+      "parameter_name_standardized": "kidney_blood_flow_fraction",
+      "symbol_original": "QKC",
+      "symbol_standardized": "QKC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.175",
+        "value": 0.175,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction blood flow to kidney",
+        "source_quote": "0.175",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_bad26f3de89ac889",
+      "parameter_class": "physiological",
+      "parameter_subclass": "hematocrit",
+      "parameter_name_original": "Hematocrit",
+      "parameter_name_standardized": "hematocrit",
+      "symbol_original": "Htc",
+      "symbol_standardized": "Htc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.44",
+        "value": 0.44,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Hematocrit",
+        "source_quote": "0.44",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_27b80c411ab9464b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of plasma",
+      "parameter_name_standardized": "plasma_volume_fraction",
+      "symbol_original": "VplasC",
+      "symbol_standardized": "VplasC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0428",
+        "value": 0.0428,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of plasma",
+        "source_quote": "0.0428",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_81d327559f005b37",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of liver",
+      "parameter_name_standardized": "liver_volume_fraction",
+      "symbol_original": "VLC",
+      "symbol_standardized": "VLC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.026",
+        "value": 0.026,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of liver",
+        "source_quote": "0.026",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_057fc726b9d03a69",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of kidney",
+      "parameter_name_standardized": "kidney_volume_fraction",
+      "symbol_original": "VKC",
+      "symbol_standardized": "VKC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of kidney",
+        "source_quote": "0.004",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_fa0d35c039ce6e8b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of filtrate",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of filtrate",
+        "source_quote": "0.0004",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_2c6ec081bfb0bef4",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of proximal tubule cells",
+      "parameter_name_standardized": "ptc_volume_fraction",
+      "symbol_original": "VPTCC",
+      "symbol_standardized": "VPTCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.35 × 10^-4",
+        "value": 0.000135,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/g kidney",
+        "unit_standardized": "L g^-1 kidney",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of proximal tubule cells",
+        "source_quote": "1.35 × 10^-4",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_defd28e488dafe68",
+      "parameter_class": "physiological",
+      "parameter_subclass": "ptc_protein",
+      "parameter_name_original": "Protein amount in proximal tubule cells",
+      "parameter_name_standardized": "ptc_protein_amount",
+      "symbol_original": "Protein",
+      "symbol_standardized": "Protein",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.0 × 10^-6",
+        "value": 2e-06,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "mg protein/PTC",
+        "unit_standardized": "mg protein PTC^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Protein amount in proximal tubule cells",
+        "source_quote": "2.0 × 10^-6",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8332289a51a30028",
+      "parameter_class": "physiological",
+      "parameter_subclass": "glomerular_filtration_rate",
+      "parameter_name_original": "Glomerular filtration rate",
+      "parameter_name_standardized": "glomerular_filtration_rate",
+      "symbol_original": "GFRC",
+      "symbol_standardized": "GFRC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "24.19",
+        "value": 24.19,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg kidney",
+        "unit_standardized": "L h^-1 kg^-1 kidney",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Glomerular filtration rate",
+        "source_quote": "24.19",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_701612f8bd31fc10",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free fraction of PFOA in plasma",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.02",
+        "value": 0.02,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Free fraction of PFOA in plasma",
+        "source_quote": "0.02",
+        "reference": "Loccisano et al., 2011",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e11ad6913ca683a1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax of basolateral transporters (in vitro)",
+      "parameter_name_standardized": "basolateral_vmax",
+      "symbol_original": "Vmax_baso_invitro",
+      "symbol_standardized": "Vmax_baso_invitro",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "439.2",
+        "value": 439.2,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "pmol/mg Protein/min",
+        "unit_standardized": "pmol mg^-1 protein min^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Vmax of basolateral transporters (in vitro)",
+        "source_quote": "439.2",
+        "reference": "Calculated from Nakagawa et al., 2007",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_2798c83a98196ab2",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km of basolateral transporters",
+      "parameter_name_standardized": "basolateral_km",
+      "symbol_original": "Km_baso",
+      "symbol_standardized": "Km_baso",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "20.1",
+        "value": 20.1,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "μg/L",
+        "unit_standardized": "µg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Km of basolateral transporters",
+        "source_quote": "20.1",
+        "reference": "Nakagawa et al., 2007",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3d84e1907e35159a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax of apical transporters (in vitro)",
+      "parameter_name_standardized": "apical_vmax",
+      "symbol_original": "Vmax_apical_invitro",
+      "symbol_standardized": "Vmax_apical_invitro",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "37,400.0",
+        "value": 37400.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "pmol/mg protein/min",
+        "unit_standardized": "pmol mg^-1 protein min^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Vmax of apical transporters (in vitro)",
+        "source_quote": "37,400.0",
+        "reference": "Calculated from Yang et al., 2010",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b81e479bce6a8738",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km of apical transporters",
+      "parameter_name_standardized": "apical_km",
+      "symbol_original": "Km_apical",
+      "symbol_standardized": "Km_apical",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "77.5",
+        "value": 77.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "μg/L",
+        "unit_standardized": "µg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Km of apical transporters",
+        "source_quote": "77.5",
+        "reference": "Calculated from Yang et al., 2010",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_afc11a89c69a3c10",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "Relative activity factor, apical",
+      "parameter_name_standardized": "relative_activity_factor_apical",
+      "symbol_original": "RAFapi",
+      "symbol_standardized": "RAFapi",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0007",
+        "value": 0.0007,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Relative activity factor, apical",
+        "source_quote": "0.0007",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_9d5f15524f456e31",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "Relative activity factor, basolateral",
+      "parameter_name_standardized": "relative_activity_factor_basolateral",
+      "symbol_original": "RAFbaso",
+      "symbol_standardized": "RAFbaso",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1",
+        "value": 1.0,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Relative activity factor, basolateral",
+        "source_quote": "1",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_01e0d855aab2da09",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Liver:blood partition coefficient",
+      "parameter_name_standardized": "liver_blood_partition",
+      "symbol_original": "PL",
+      "symbol_standardized": "PL",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.03",
+        "value": 1.03,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Liver:blood partition coefficient",
+        "source_quote": "1.03",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3db7a4605efdb0c1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Kidney:blood partition coefficient",
+      "parameter_name_standardized": "kidney_blood_partition",
+      "symbol_original": "PK",
+      "symbol_standardized": "PK",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.17",
+        "value": 1.17,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Kidney:blood partition coefficient",
+        "source_quote": "1.17",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_af71a565408fe421",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Rest of body:blood partition coefficient",
+      "parameter_name_standardized": "rest_blood_partition",
+      "symbol_original": "PR",
+      "symbol_standardized": "PR",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.11",
+        "value": 0.11,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rest of body:blood partition coefficient",
+        "source_quote": "0.11",
+        "reference": "Kudo et al., 2007",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_02792a5e6c2711b3",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate of absorption of PFOA in stomach",
+      "parameter_name_standardized": "gastric_absorption_rate",
+      "symbol_original": "k0c",
+      "symbol_standardized": "k0c",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.0",
+        "value": 1.0,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of absorption of PFOA in stomach",
+        "source_quote": "1.0",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f5adad12bfac3a56",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate of absorption in small intestines",
+      "parameter_name_standardized": "intestinal_absorption_rate",
+      "symbol_original": "kabsc",
+      "symbol_standardized": "kabsc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.12",
+        "value": 2.12,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of absorption in small intestines",
+        "source_quote": "2.12",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_64303f6d093f185b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fecal_elimination_rate_constant",
+      "parameter_name_original": "Rate of unabsorbed dose to feces",
+      "parameter_name_standardized": "unabsorbed_fecal_rate",
+      "symbol_original": "kunabsc",
+      "symbol_standardized": "kunabsc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.06 × 10^-5",
+        "value": 7.06e-05,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of unabsorbed dose to feces",
+        "source_quote": "7.06 × 10^-5",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f1bc724d9d3c9a53",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Rate of clearance from proximal tubule cells into blood",
+      "parameter_name_standardized": "ptc_efflux_rate",
+      "symbol_original": "keffluxc",
+      "symbol_standardized": "keffluxc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of clearance from proximal tubule cells into blood",
+        "source_quote": "0.1",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ecfdc967cb1eaefe",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "biliary_elimination_rate",
+      "parameter_name_original": "Biliary elimination rate",
+      "parameter_name_standardized": "biliary_elimination_rate",
+      "symbol_original": "kbilec",
+      "symbol_standardized": "kbilec",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0001",
+        "value": 0.0001,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Biliary elimination rate",
+        "source_quote": "0.0001",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a0118619afbddb45",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Urinary elimination rate",
+      "parameter_name_standardized": "urinary_elimination_rate",
+      "symbol_original": "kurinec",
+      "symbol_standardized": "kurinec",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.062",
+        "value": 0.062,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Urinary elimination rate",
+        "source_quote": "0.062",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [
+    {
+      "finding_type": "model_validation",
+      "metric": "serum PFOA concentration",
+      "formulation": null,
+      "comparator": "North Alabama and Mid-Ohio observations",
+      "species": "human",
+      "relative_change": "within two-fold",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 1,
+        "source_section": "Results",
+        "source_location": "Abstract",
+        "source_quote": "Predicted serum PFOA concentrations were within two-fold of experimental data.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "model_validation",
+      "metric": "individual serum PFOA concentrations",
+      "formulation": null,
+      "comparator": "North Alabama 2010/2016 observations",
+      "species": "human",
+      "relative_change": "98% predicted when historical non-drinking-water exposure was included",
+      "qualifier": "",
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 1,
+        "source_section": "Results",
+        "source_location": "Abstract",
+        "source_quote": "Simulation ... successfully predicted 98% of individual serum PFOA concentrations ... when non-drinking water ingestion of PFOA exposure was included.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_scenario",
+      "metric": "drinking-water PFOA concentration",
+      "formulation": null,
+      "comparator": "Little Hocking",
+      "species": "human",
+      "relative_change": "4.9 → 1.9 µg/L",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 1,
+        "source_section": "Exposure scenarios",
+        "source_location": "Little Hocking",
+        "source_quote": "Little Hocking exposure scenario used PFOA concentrations of 4.9 and 1.9 µg/L.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "exposure_scenario",
+      "metric": "drinking-water PFOA concentration",
+      "formulation": null,
+      "comparator": "Lubeck",
+      "species": "human",
+      "relative_change": "1.0 → 0.41 µg/L",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": 1,
+        "source_section": "Exposure scenarios",
+        "source_location": "Lubeck",
+        "source_quote": "Lubeck exposure scenario used PFOA concentrations of 1.0 and 0.41 µg/L.",
+        "reference": null,
+        "status": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    }
+  ],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "kdif",
+      "symbol": "kdif",
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "main_text",
+      "requires_supplement": true,
+      "context_quote": "Diffusion between proximal tubule cells and the filtrate is described in the kidney model but no numerical value is given in Table 2."
+    },
+    {
+      "parameter_name": "gastric emptying rate",
+      "symbol": "GEc",
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "main_text",
+      "requires_supplement": true,
+      "context_quote": "Gastric emptying rate is discussed/scaled but is not listed as a numerical value in Table 2."
+    }
+  ],
+  "dosing": [],
+  "ingestion_source": "user_uploaded_pdf",
+  "ingestion_source_type": "published_pdf",
+  "laya_filter_summary": {
+    "model_type_triage": "not_run",
+    "evaluated_chunks": 0,
+    "discarded_chunks": 0,
+    "retained_chunks": 0
+  },
+  "system_specific_parameters": [
+    {
+      "parameter_id": "param_566487e921585d50",
+      "parameter_class": "physiological",
+      "parameter_subclass": "cardiac_output",
+      "parameter_name_original": "Cardiac output",
+      "parameter_name_standardized": "cardiac_output",
+      "symbol_original": "QCC",
+      "symbol_standardized": "QCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "12.5",
+        "value": 12.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg^0.75",
+        "unit_standardized": "L h^-1 kg^-0.75",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Cardiac output",
+        "source_quote": "12.5",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e9b97888739f188a",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction blood flow to liver",
+      "parameter_name_standardized": "liver_blood_flow_fraction",
+      "symbol_original": "QLC",
+      "symbol_standardized": "QLC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.25",
+        "value": 0.25,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction blood flow to liver",
+        "source_quote": "0.25",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b8266c7988d3cead",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_blood_flow_fraction",
+      "parameter_name_original": "Fraction blood flow to kidney",
+      "parameter_name_standardized": "kidney_blood_flow_fraction",
+      "symbol_original": "QKC",
+      "symbol_standardized": "QKC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.175",
+        "value": 0.175,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction blood flow to kidney",
+        "source_quote": "0.175",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_bad26f3de89ac889",
+      "parameter_class": "physiological",
+      "parameter_subclass": "hematocrit",
+      "parameter_name_original": "Hematocrit",
+      "parameter_name_standardized": "hematocrit",
+      "symbol_original": "Htc",
+      "symbol_standardized": "Htc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.44",
+        "value": 0.44,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Hematocrit",
+        "source_quote": "0.44",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_27b80c411ab9464b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of plasma",
+      "parameter_name_standardized": "plasma_volume_fraction",
+      "symbol_original": "VplasC",
+      "symbol_standardized": "VplasC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0428",
+        "value": 0.0428,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of plasma",
+        "source_quote": "0.0428",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_81d327559f005b37",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of liver",
+      "parameter_name_standardized": "liver_volume_fraction",
+      "symbol_original": "VLC",
+      "symbol_standardized": "VLC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.026",
+        "value": 0.026,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of liver",
+        "source_quote": "0.026",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_057fc726b9d03a69",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of kidney",
+      "parameter_name_standardized": "kidney_volume_fraction",
+      "symbol_original": "VKC",
+      "symbol_standardized": "VKC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.004",
+        "value": 0.004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of kidney",
+        "source_quote": "0.004",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_fa0d35c039ce6e8b",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of filtrate",
+      "parameter_name_standardized": "filtrate_volume_fraction",
+      "symbol_original": "VfilC",
+      "symbol_standardized": "VfilC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0004",
+        "value": 0.0004,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/kg BW",
+        "unit_standardized": "L kg^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of filtrate",
+        "source_quote": "0.0004",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_2c6ec081bfb0bef4",
+      "parameter_class": "physiological",
+      "parameter_subclass": "organ_volume_fraction",
+      "parameter_name_original": "Fraction volume of proximal tubule cells",
+      "parameter_name_standardized": "ptc_volume_fraction",
+      "symbol_original": "VPTCC",
+      "symbol_standardized": "VPTCC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.35 × 10^-4",
+        "value": 0.000135,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/g kidney",
+        "unit_standardized": "L g^-1 kidney",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Fraction volume of proximal tubule cells",
+        "source_quote": "1.35 × 10^-4",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_defd28e488dafe68",
+      "parameter_class": "physiological",
+      "parameter_subclass": "ptc_protein",
+      "parameter_name_original": "Protein amount in proximal tubule cells",
+      "parameter_name_standardized": "ptc_protein_amount",
+      "symbol_original": "Protein",
+      "symbol_standardized": "Protein",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.0 × 10^-6",
+        "value": 2e-06,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "mg protein/PTC",
+        "unit_standardized": "mg protein PTC^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Protein amount in proximal tubule cells",
+        "source_quote": "2.0 × 10^-6",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_8332289a51a30028",
+      "parameter_class": "physiological",
+      "parameter_subclass": "glomerular_filtration_rate",
+      "parameter_name_original": "Glomerular filtration rate",
+      "parameter_name_standardized": "glomerular_filtration_rate",
+      "symbol_original": "GFRC",
+      "symbol_standardized": "GFRC",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "24.19",
+        "value": 24.19,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "L/h/kg kidney",
+        "unit_standardized": "L h^-1 kg^-1 kidney",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 1",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 31,
+        "source_section": null,
+        "source_location": "Table 1, Glomerular filtration rate",
+        "source_quote": "24.19",
+        "reference": null,
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "compound_specific_parameters": [
+    {
+      "parameter_id": "param_701612f8bd31fc10",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fraction_unbound",
+      "parameter_name_original": "Free fraction of PFOA in plasma",
+      "parameter_name_standardized": "fraction_unbound",
+      "symbol_original": "Free",
+      "symbol_standardized": "Free",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.02",
+        "value": 0.02,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Free fraction of PFOA in plasma",
+        "source_quote": "0.02",
+        "reference": "Loccisano et al., 2011",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_e11ad6913ca683a1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax of basolateral transporters (in vitro)",
+      "parameter_name_standardized": "basolateral_vmax",
+      "symbol_original": "Vmax_baso_invitro",
+      "symbol_standardized": "Vmax_baso_invitro",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "439.2",
+        "value": 439.2,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "pmol/mg Protein/min",
+        "unit_standardized": "pmol mg^-1 protein min^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Vmax of basolateral transporters (in vitro)",
+        "source_quote": "439.2",
+        "reference": "Calculated from Nakagawa et al., 2007",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_2798c83a98196ab2",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km of basolateral transporters",
+      "parameter_name_standardized": "basolateral_km",
+      "symbol_original": "Km_baso",
+      "symbol_standardized": "Km_baso",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "20.1",
+        "value": 20.1,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "μg/L",
+        "unit_standardized": "µg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Km of basolateral transporters",
+        "source_quote": "20.1",
+        "reference": "Nakagawa et al., 2007",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3d84e1907e35159a",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "maximal_velocity",
+      "parameter_name_original": "Vmax of apical transporters (in vitro)",
+      "parameter_name_standardized": "apical_vmax",
+      "symbol_original": "Vmax_apical_invitro",
+      "symbol_standardized": "Vmax_apical_invitro",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "37,400.0",
+        "value": 37400.0,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "pmol/mg protein/min",
+        "unit_standardized": "pmol mg^-1 protein min^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Vmax of apical transporters (in vitro)",
+        "source_quote": "37,400.0",
+        "reference": "Calculated from Yang et al., 2010",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_b81e479bce6a8738",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "michaelis_menten_constant",
+      "parameter_name_original": "Km of apical transporters",
+      "parameter_name_standardized": "apical_km",
+      "symbol_original": "Km_apical",
+      "symbol_standardized": "Km_apical",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "77.5",
+        "value": 77.5,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "μg/L",
+        "unit_standardized": "µg L^-1",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Km of apical transporters",
+        "source_quote": "77.5",
+        "reference": "Calculated from Yang et al., 2010",
+        "status": "derived",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "calculated"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_afc11a89c69a3c10",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "Relative activity factor, apical",
+      "parameter_name_standardized": "relative_activity_factor_apical",
+      "symbol_original": "RAFapi",
+      "symbol_standardized": "RAFapi",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0007",
+        "value": 0.0007,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Relative activity factor, apical",
+        "source_quote": "0.0007",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_9d5f15524f456e31",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "relative_activity_factor",
+      "parameter_name_original": "Relative activity factor, basolateral",
+      "parameter_name_standardized": "relative_activity_factor_basolateral",
+      "symbol_original": "RAFbaso",
+      "symbol_standardized": "RAFbaso",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1",
+        "value": 1.0,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Relative activity factor, basolateral",
+        "source_quote": "1",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_01e0d855aab2da09",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Liver:blood partition coefficient",
+      "parameter_name_standardized": "liver_blood_partition",
+      "symbol_original": "PL",
+      "symbol_standardized": "PL",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.03",
+        "value": 1.03,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Liver:blood partition coefficient",
+        "source_quote": "1.03",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_3db7a4605efdb0c1",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Kidney:blood partition coefficient",
+      "parameter_name_standardized": "kidney_blood_partition",
+      "symbol_original": "PK",
+      "symbol_standardized": "PK",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.17",
+        "value": 1.17,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Kidney:blood partition coefficient",
+        "source_quote": "1.17",
+        "reference": "Fabrega et al., 2014 and Perez et al., 2013",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_af71a565408fe421",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "partition_coefficient",
+      "parameter_name_original": "Rest of body:blood partition coefficient",
+      "parameter_name_standardized": "rest_blood_partition",
+      "symbol_original": "PR",
+      "symbol_standardized": "PR",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.11",
+        "value": 0.11,
+        "uncertainty": null,
+        "value_qualifier": null,
+        "unit_original": "unitless",
+        "unit_standardized": "unitless",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rest of body:blood partition coefficient",
+        "source_quote": "0.11",
+        "reference": "Kudo et al., 2007",
+        "status": "literature",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "literature_derived"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_02792a5e6c2711b3",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate of absorption of PFOA in stomach",
+      "parameter_name_standardized": "gastric_absorption_rate",
+      "symbol_original": "k0c",
+      "symbol_standardized": "k0c",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "1.0",
+        "value": 1.0,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of absorption of PFOA in stomach",
+        "source_quote": "1.0",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f5adad12bfac3a56",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "absorption_rate_constant",
+      "parameter_name_original": "Rate of absorption in small intestines",
+      "parameter_name_standardized": "intestinal_absorption_rate",
+      "symbol_original": "kabsc",
+      "symbol_standardized": "kabsc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "2.12",
+        "value": 2.12,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of absorption in small intestines",
+        "source_quote": "2.12",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_64303f6d093f185b",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "fecal_elimination_rate_constant",
+      "parameter_name_original": "Rate of unabsorbed dose to feces",
+      "parameter_name_standardized": "unabsorbed_fecal_rate",
+      "symbol_original": "kunabsc",
+      "symbol_standardized": "kunabsc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "7.06 × 10^-5",
+        "value": 7.06e-05,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of unabsorbed dose to feces",
+        "source_quote": "7.06 × 10^-5",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_f1bc724d9d3c9a53",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Rate of clearance from proximal tubule cells into blood",
+      "parameter_name_standardized": "ptc_efflux_rate",
+      "symbol_original": "keffluxc",
+      "symbol_standardized": "keffluxc",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.1",
+        "value": 0.1,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Rate of clearance from proximal tubule cells into blood",
+        "source_quote": "0.1",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_ecfdc967cb1eaefe",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "biliary_elimination_rate",
+      "parameter_name_original": "Biliary elimination rate",
+      "parameter_name_standardized": "biliary_elimination_rate",
+      "symbol_original": "kbilec",
+      "symbol_standardized": "kbilec",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.0001",
+        "value": 0.0001,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Biliary elimination rate",
+        "source_quote": "0.0001",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    },
+    {
+      "parameter_id": "param_a0118619afbddb45",
+      "parameter_class": "biochemical",
+      "parameter_subclass": "renal_clearance",
+      "parameter_name_original": "Urinary elimination rate",
+      "parameter_name_standardized": "urinary_elimination_rate",
+      "symbol_original": "kurinec",
+      "symbol_standardized": "kurinec",
+      "context": {
+        "compound": "PFOA",
+        "formulation": null,
+        "species": "human",
+        "life_stage": null,
+        "organ": null,
+        "route": null,
+        "population": null
+      },
+      "quantitative_data": {
+        "value_text": "0.062",
+        "value": 0.062,
+        "uncertainty": null,
+        "value_qualifier": "optimized",
+        "unit_original": "/h/kg^-0.25",
+        "unit_standardized": "h^-1 kg^0.25",
+        "normalization_basis": null
+      },
+      "provenance": {
+        "source_table": "Table 2",
+        "row_path": null,
+        "column_path": null,
+        "source_page": 32,
+        "source_section": null,
+        "source_location": "Table 2, Urinary elimination rate",
+        "source_quote": "0.062",
+        "reference": "Fit to ATSDR, 2016a",
+        "status": "fitted",
+        "derivation": null,
+        "evidence_directness": "direct",
+        "status_raw": "optimized"
+      },
+      "confidence": {
+        "value_confidence": "high",
+        "unit_confidence": "high",
+        "species_confidence": "high",
+        "formulation_confidence": "medium",
+        "parameter_class_confidence": "high",
+        "provenance_confidence": "high"
+      },
+      "needs_review": false
+    }
+  ],
+  "verification": {
+    "tier": 1,
+    "elapsed_ms": 0.0,
+    "total_parameters": 27,
+    "parameters_with_flags": 0,
+    "total_flags": 3,
+    "error_count": 0,
+    "warning_count": 3,
+    "clean": false,
+    "summary": "Updated audited extraction: retains direct Table 1/Table 2 model values, flags the log-scale Monte Carlo table, keeps kdif unquantified, and moves drinking-water concentrations out of dosing because they are exposure concentrations.",
+    "flags": [
+      {
+        "code": "MC_LOGNORMAL_SCALE",
+        "severity": "warning",
+        "message": "Table 3 lognormal means/SDs/bounds are on the log scale and are not direct parameter values.",
+        "source_location": "Table 3, p.33"
+      },
+      {
+        "code": "UNREPORTED_KDIF",
+        "severity": "warning",
+        "message": "kdif is named in the kidney model narrative but no numerical value is reported in Table 2.",
+        "source_location": "Kidney model description / Table 2"
+      },
+      {
+        "code": "EXPOSURE_NOT_DOSE_EVENT",
+        "severity": "warning",
+        "message": "Drinking-water concentrations are exposure concentrations, not administered dose amounts; they are retained as exposure-scenario findings.",
+        "source_location": "Exposure scenarios"
+      }
+    ]
+  },
+  "llm_verification": {
+    "reviewed": 0,
+    "patched": 0,
+    "rejected": 0,
+    "elapsed_s": 0.0,
+    "verdicts": []
+  }
+}

@@ -112,6 +112,184 @@ def is_pk_relevant(text: str, title: str = "") -> bool:
 
 
 # ─────────────────────────────────────────────────────────────
+# PBPK Table Gating, Group Header Preprocessing & Extraction
+# ─────────────────────────────────────────────────────────────
+
+NON_VALUE_COL_NAMES = {
+    "species", "type of variable", "variable", "name", "symbol",
+    "source", "reference", "parameter", "tissue", "organ", "description"
+}
+
+def parse_cell_numeric(text: str, col_path: List[str]) -> Tuple[float | None, str | None, str | None]:
+    """
+    Only parse numeric values in actual value columns.
+    Returns (numeric_value, footnote_marker, uncertainty_or_range_text).
+    """
+    col_str = " ".join(col_path).lower()
+    if any(k in col_str for k in NON_VALUE_COL_NAMES):
+        return None, None, None
+
+    clean = (text or "").strip()
+    if not clean:
+        return None, None, None
+
+    # Match scientific notation or float with optional CI/range and optional footnote letter (e.g., '5 a', '0.008 b', '0.21 (0.18, 0.25)')
+    m = re.match(
+        r"^([+-]?\d+(?:\.\d+)?(?:[eE][+-]?\d+)?)\s*([a-zA-Z\*])?(?:\s*\(([^)]+)\))?$",
+        clean
+    )
+    if m:
+        try:
+            return float(m.group(1)), m.group(2), m.group(3)
+        except ValueError:
+            return None, None, None
+
+    # Also handle ranges like "56.9 - 70" or "0.18 - 0.25"
+    m_range = re.match(r"^([+-]?\d+(?:\.\d+)?)\s*[\-\u2013\u2014]\s*([+-]?\d+(?:\.\d+)?)", clean)
+    if m_range:
+        try:
+            return float(m_range.group(1)), None, clean
+        except ValueError:
+            return None, None, None
+
+    return None, None, None
+
+# ─────────────────────────────────────────────────────────────
+
+import pandas as pd
+
+# 1. Gate out non-input tables (Sensitivity Analysis, POD/HED, Exposure intakes)
+EXCLUDE_TABLE_PATTERNS = re.compile(
+    r"(sensitivity\s+coefficient|normalized\s+sensitivity|morris\s+screening|efast|"
+    r"point\s+of\s+departure|pod\s*hed|exposure\s+estimate|daily\s+intake\s+estimate)",
+    re.IGNORECASE
+)
+
+INCLUDE_PARAM_KEYWORDS = {
+    "bw", "qcc", "qc", "tmc", "kt", "vmax", "km", "k12", "k21", "ka", "kabs",
+    "kfeces", "vcc", "vfilc", "qfilc", "free", "fu", "bioav", "partition",
+    "blood flow", "tissue volume", "organ volume", "clearance", "clint", "raf", "hct"
+}
+
+def is_valid_pbpk_input_table(caption: str, table_text: str) -> bool:
+    """Filter out sensitivity analysis and exposure output tables before LLM extraction."""
+    if EXCLUDE_TABLE_PATTERNS.search(caption):
+        return False
+    combined_lower = f"{caption} {table_text}".lower()
+    matches = sum(1 for kw in INCLUDE_PARAM_KEYWORDS if kw in combined_lower)
+    return matches >= 2
+
+
+# 2. Stateful row preprocessor for Group Headers & Stacked Species (fixes Riluzole & Loccisano)
+GROUP_HEADER_PATTERNS = re.compile(
+    r"^(blood\s+flow|volume\s+of\s+organ|tissue\s+volume|tissue:plasma|tissue:blood|"
+    r"partition\s+coefficient|elimination\s+constant|fractional\s+constant|"
+    r"physiological\s+parameter|biochemical\s+parameter)",
+    re.IGNORECASE
+)
+
+def preprocess_table_dataframe(df: pd.DataFrame, caption: str = "", footnotes: str = "") -> str:
+    """
+    1. Detects full-width group headers (where value columns are empty) and prepends
+       the group name + unit to subsequent rows.
+    2. Detects stacked species transitions (e.g., when 'Blood flow to organ' repeats
+       mid-table in Riluzole Table I, switches context from Rat to Human).
+    """
+    processed_rows = []
+    current_group = None
+    current_species_hint = None
+    blood_flow_section_count = 0
+
+    for idx, row in df.iterrows():
+        cells = [str(c).strip() if pd.notna(c) else "" for c in row.values]
+        if not any(cells):
+            continue
+
+        first_cell = cells[0]
+        other_cells = [c for c in cells[1:] if c not in ("", "None", "nan", "-")]
+
+        # Detect stacked species transition when 'Blood flow to organ' repeats
+        if "blood flow to organ" in first_cell.lower():
+            blood_flow_section_count += 1
+            if blood_flow_section_count == 1 and "rat" in caption.lower() and "human" in caption.lower():
+                current_species_hint = "Rat"
+            elif blood_flow_section_count >= 2 and current_species_hint == "Rat":
+                current_species_hint = "Human"
+
+        # Check if row is a spanning group header (first cell populated, value cells empty)
+        if first_cell and len(other_cells) == 0 and GROUP_HEADER_PATTERNS.search(first_cell):
+            current_group = first_cell
+            continue  # Do NOT emit group header as a data row!
+
+        # Prepend active group header (and inherited unit) to bare organ row labels
+        if current_group and first_cell and not GROUP_HEADER_PATTERNS.search(first_cell):
+            cells[0] = f"{current_group} - {first_cell}"
+
+        if current_species_hint:
+            cells[0] = f"[{current_species_hint}] {cells[0]}"
+
+        processed_rows.append(cells)
+
+    clean_df = pd.DataFrame(processed_rows, columns=df.columns)
+    md_out = f"### Table Caption: {caption}\n\n"
+    try:
+        md_out += clean_df.to_markdown(index=False)
+    except Exception:
+        # Fallback if tabulate is not installed
+        col_header = "| " + " | ".join(str(c) for c in clean_df.columns) + " |"
+        sep_header = "|" + "|".join(["---"] * len(clean_df.columns)) + "|"
+        row_lines = ["| " + " | ".join(str(v) for v in r) + " |" for r in clean_df.values]
+        md_out += "\n".join([col_header, sep_header] + row_lines)
+    if footnotes:
+        md_out += f"\n\n### Table Footnotes (EXTRACT CONSTANTS FROM HERE):\n{footnotes}\n"
+    return md_out
+
+
+# 3. JATS XML Table & Footnote Extractor (preserves <sub>, <sup>, and <table-wrap-foot>)
+def extract_tables_from_pmc_xml(xml_path: str) -> list[dict]:
+    with open(xml_path, "r", encoding="utf-8") as f:
+        soup = BeautifulSoup(f.read(), "xml")
+
+    extracted_tables = []
+    for tw in soup.find_all("table-wrap"):
+        label = tw.find("label").get_text(strip=True) if tw.find("label") else ""
+        caption_el = tw.find("caption")
+        caption = f"{label}: {caption_el.get_text(' ', strip=True)}" if caption_el else label
+
+        # Preserve footnote markers inside cells with explicit brackets so '0.008b' is clear
+        for xref in tw.find_all("xref", {"ref-type": "table-fn"}):
+            xref.replace_with(f"[{xref.get_text(strip=True)}]")
+
+        # Extract all footnotes from <table-wrap-foot>
+        foot_el = tw.find("table-wrap-foot")
+        footnotes = foot_el.get_text("\n", strip=True) if foot_el else ""
+
+        table_el = tw.find("table")
+        if not table_el:
+            continue
+
+        try:
+            from io import StringIO
+            dfs = pd.read_html(StringIO(str(table_el)))
+            if not dfs:
+                continue
+            df = dfs[0]
+        except Exception:
+            continue
+
+        if not is_valid_pbpk_input_table(caption, df.to_string()):
+            continue
+
+        markdown_str = preprocess_table_dataframe(df, caption=caption, footnotes=footnotes)
+        extracted_tables.append({
+            "source_location": label or "XML Table",
+            "caption": caption,
+            "markdown": markdown_str
+        })
+    return extracted_tables
+
+
+# ─────────────────────────────────────────────────────────────
 # JATS XML Parser
 # ─────────────────────────────────────────────────────────────
 
@@ -164,73 +342,257 @@ class JatsXMLParser:
 
         return metadata
 
+    def _parse_table_wrap(self, table_wrap, idx: int) -> Tuple[str, str, Any]:
+        """
+        Parse a JATS <table-wrap> element into:
+        1. full_title: Clean title with label and caption
+        2. content_str: Robust, correctly aligned Markdown preserving multi-level headers,
+                        rowspans, colspans, section dividers, and all footnotes.
+        3. table_evidence: Structured TableEvidence object with cells, columns, rows,
+                           subject_compounds, and footnotes.
+        """
+        label = table_wrap.find("label")
+        t_label = label.get_text(strip=True).rstrip(".") if label else f"Table {idx + 1}"
+        caption = table_wrap.find("caption")
+        t_caption = caption.get_text(separator=" ", strip=True) if caption else ""
+        full_title = f"{t_label}: {t_caption}".strip(": ") if t_caption else t_label
+
+        # Preserve footnote markers inside cells with explicit brackets so '0.008b' is clear
+        for xref in table_wrap.find_all("xref", {"ref-type": "table-fn"}):
+            xref.replace_with(f"[{xref.get_text(strip=True)}]")
+
+        table_node = table_wrap.find("table")
+        if table_node is None:
+            return full_title, f"{full_title}\n\n{str(table_wrap)}", None
+
+        # 2D Grid reconstruction tracking rowspans and colspans
+        grid = {}
+        curr_r = 0
+        max_r, max_c = 0, 0
+        thead = table_node.find("thead")
+        thead_tr_count = len(thead.find_all("tr")) if thead else 0
+
+        for tr in table_node.find_all("tr"):
+            curr_c = 0
+            for cell in tr.find_all(["th", "td"]):
+                while (curr_r, curr_c) in grid:
+                    curr_c += 1
+                try:
+                    rowspan = int(cell.get("rowspan", 1))
+                except (ValueError, TypeError):
+                    rowspan = 1
+                try:
+                    colspan = int(cell.get("colspan", 1))
+                except (ValueError, TypeError):
+                    colspan = 1
+                text = re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
+                for dr in range(rowspan):
+                    for dc in range(colspan):
+                        grid[(curr_r + dr, curr_c + dc)] = text
+                        if curr_r + dr > max_r:
+                            max_r = curr_r + dr
+                        if curr_c + dc > max_c:
+                            max_c = curr_c + dc
+                curr_c += colspan
+            curr_r += 1
+
+        num_rows = max(max_r + 1, curr_r)
+        num_cols = max_c + 1 if num_rows > 0 else 0
+        if num_cols == 0 or num_rows == 0:
+            return full_title, f"{full_title}\n\n{str(table_wrap)}", None
+
+        matrix = [["" for _ in range(num_cols)] for _ in range(num_rows)]
+        for (r, c), val in grid.items():
+            if r < num_rows and c < num_cols:
+                matrix[r][c] = val
+
+        # Handle headers: multi-row thead vs single header row
+        if thead_tr_count > 1:
+            combined_headers = []
+            for c in range(num_cols):
+                hdr_parts = []
+                for r in range(thead_tr_count):
+                    txt = matrix[r][c].strip()
+                    if txt and (not hdr_parts or txt != hdr_parts[-1]):
+                        hdr_parts.append(txt)
+                combined_headers.append(" - ".join(hdr_parts) if hdr_parts else f"Col {c+1}")
+            data_matrix = matrix[thead_tr_count:]
+        else:
+            combined_headers = [c.strip() or f"Col {i+1}" for i, c in enumerate(matrix[0])]
+            data_matrix = matrix[1:]
+
+        md_lines = []
+        md_lines.append(full_title)
+        md_lines.append("")
+        md_lines.append("| " + " | ".join(combined_headers) + " |")
+        md_lines.append("|" + "|".join(["---"] * num_cols) + "|")
+
+        current_group = None
+        current_species_hint = None
+        blood_flow_section_count = 0
+
+        for row in data_matrix:
+            non_empty = [x for x in row if x.strip()]
+            if not non_empty:
+                continue
+
+            first_cell = row[0].strip()
+            other_cells = [c.strip() for c in row[1:] if c.strip() not in ("", "None", "nan", "-")]
+
+            # Detect stacked species transition when 'Blood flow to organ' repeats
+            if "blood flow to organ" in first_cell.lower():
+                blood_flow_section_count += 1
+                if blood_flow_section_count == 1 and "rat" in full_title.lower() and "human" in full_title.lower():
+                    current_species_hint = "Rat"
+                elif blood_flow_section_count >= 2 and current_species_hint == "Rat":
+                    current_species_hint = "Human"
+
+            # Check if row is a spanning group header (first cell populated, other value cells empty)
+            if first_cell and len(other_cells) == 0 and GROUP_HEADER_PATTERNS.search(first_cell):
+                current_group = first_cell
+                md_lines.append(f"| **[Section: {first_cell}]** |" + "|".join([""] * (num_cols - 1)) + "|")
+                continue
+
+            if non_empty and all(x == non_empty[0] for x in non_empty) and len(non_empty) == num_cols:
+                current_group = non_empty[0]
+                md_lines.append(f"| **[Section: {non_empty[0]}]** |" + "|".join([""] * (num_cols - 1)) + "|")
+                continue
+
+            out_row = list(row)
+            if current_group and first_cell and not GROUP_HEADER_PATTERNS.search(first_cell):
+                out_row[0] = f"{current_group} - {first_cell}"
+            if current_species_hint:
+                out_row[0] = f"[{current_species_hint}] {out_row[0]}"
+
+            md_lines.append("| " + " | ".join(out_row) + " |")
+
+        # Extract all footnotes
+        footnotes = []
+        foot = table_wrap.find("table-wrap-foot")
+        if foot:
+            md_lines.append("")
+            md_lines.append("### Table Footnotes (EXTRACT CONSTANTS FROM HERE):")
+            for fn in foot.find_all("fn"):
+                lbl = fn.find("label")
+                lbl_str = lbl.get_text(strip=True) if lbl else "*"
+                fn_txt = re.sub(r'\s+', ' ', fn.get_text(separator=' ', strip=True))
+                if lbl and fn_txt.startswith(lbl_str):
+                    fn_txt = fn_txt[len(lbl_str):].strip()
+                footnotes.append(f"[{lbl_str}] {fn_txt}")
+                md_lines.append(f"- [{lbl_str}] {fn_txt}")
+
+        content_str = "\n".join(md_lines)
+
+        # Build structured TableEvidence object
+        table_evidence = None
+        try:
+            from pk_pipeline.schemas import TableEvidence, TableColumn, TableRow, TableCell
+
+            columns = []
+            for c in range(num_cols):
+                col_path = []
+                for r in range(max(1, thead_tr_count)):
+                    txt = matrix[r][c].strip()
+                    if txt and (not col_path or txt != col_path[-1]):
+                        col_path.append(txt)
+                columns.append(TableColumn(column_id=f"c{c+1}", path=col_path or [f"Col {c+1}"], index=c))
+
+            rows = []
+            cells = []
+            current_section = ""
+            start_data_r = thead_tr_count if thead_tr_count > 0 else 1
+
+            for r_idx, r in enumerate(range(start_data_r, num_rows)):
+                row_vals = matrix[r]
+                non_empty = [x for x in row_vals if x.strip()]
+                if non_empty and all(x == non_empty[0] for x in non_empty) and len(non_empty) == num_cols:
+                    current_section = non_empty[0]
+                    continue
+
+                r_path = [current_section] if current_section else []
+                for c in range(min(4, num_cols)):
+                    v = row_vals[c].strip()
+                    if v and v not in r_path:
+                        r_path.append(v)
+
+                row_id = f"r{len(rows)+1}"
+                rows.append(TableRow(row_id=row_id, path=r_path, index=len(rows)))
+
+                for c_idx in range(num_cols):
+                    cell_txt = row_vals[c_idx].strip()
+                    if cell_txt:
+                        col_id = f"c{c_idx+1}"
+                        cell_id = f"cell_{row_id}_{col_id}"
+                        col_p = columns[c_idx].path if c_idx < len(columns) else []
+                        num_val, qualifier, unc_txt = parse_cell_numeric(cell_txt, col_p)
+                        cells.append(TableCell(
+                            cell_id=cell_id,
+                            row_id=row_id,
+                            column_id=col_id,
+                            text=cell_txt,
+                            numeric_value=num_val,
+                            qualifier=qualifier,
+                            uncertainty_text=unc_txt
+                        ))
+
+            full_table_text = f"{full_title} " + " ".join(" ".join(r) for r in matrix) + " " + " ".join(footnotes)
+            header_and_title_text = f"{full_title} " + " ".join(" ".join(c.path) for c in columns)
+            fn_text = " ".join(footnotes)
+
+            known_compounds = ["PFOS", "PFOA", "PFHxS", "PFBS", "PFNA", "PFDA", "GenX", "HFPO-DA"]
+            subject_compounds = [
+                c for c in known_compounds 
+                if re.search(r'\b' + re.escape(c) + r'\b', header_and_title_text)
+            ]
+            if not subject_compounds:
+                subject_compounds = [
+                    c for c in known_compounds 
+                    if re.search(r'\b' + re.escape(c) + r'\b', full_table_text)
+                ]
+
+            footnote_compounds = [
+                c for c in known_compounds 
+                if re.search(r'\b' + re.escape(c) + r'\b', fn_text) and c not in subject_compounds
+            ]
+
+            known_species = ["Nonhuman primate", "Human", "Rat", "Mouse", "Dog", "Monkey", "Cynomolgus monkey"]
+            species = [
+                s for s in known_species 
+                if re.search(r'\b' + re.escape(s) + r'\b', full_table_text, re.IGNORECASE)
+            ]
+
+            table_evidence = TableEvidence(
+                evidence_status="success",
+                needs_review=False,
+                table_id=t_label,
+                title=full_title,
+                columns=columns,
+                rows=rows,
+                cells=cells,
+                subject_compounds=subject_compounds,
+                footnote_compounds=footnote_compounds,
+                species=species,
+                footnotes=footnotes
+            )
+        except Exception:
+            pass
+
+        return full_title, content_str, table_evidence
+
     def extract_chunks(self, filter_narrative: bool = True) -> List[Dict[str, Any]]:
-        """
-        Chunks the document into LLM-ready elements.
-
-        Rules:
-          - Tables      → always included (role='table_xml')
-          - Equations   → always included (role='equation_xml')
-          - Narrative   → only included if filter_narrative=False OR the section
-                          passes the PK keyword relevance filter
-
-        Each chunk dict carries:
-          {
-            "role":      str,   # table_xml | equation_xml | narrative_xml
-            "content":   str,   # text sent to the LLM
-            "title":     str,   # section title (for narrative), empty for tables/eqs
-            "kept":      bool,  # True = will be dispatched to LLM
-            "skip_reason": str  # populated when kept=False (for inspection/test)
-          }
-        """
         chunks: List[Dict[str, Any]] = []
 
-        # 1. Tables — always keep
+        # 1. Tables — filtered by is_valid_pbpk_input_table
         for idx, table_wrap in enumerate(self.soup.find_all("table-wrap")):
-            label   = table_wrap.find("label")
-            t_title = label.get_text(strip=True) if label else f"Table {idx + 1}"
-            
-            table_node = table_wrap.find("table")
-            content_str = ""
-            if table_node is not None:
-                rows = []
-                for tr in table_node.find_all("tr"):
-                    row = []
-                    for cell in tr.find_all(["th", "td"]):
-                        text = re.sub(r'\s+', ' ', cell.get_text(separator=" ", strip=True))
-                        try:
-                            colspan = int(cell.get('colspan', 1))
-                        except (TypeError, ValueError):
-                            colspan = 1
-                        row.extend([text] * colspan)
-                    if any(row):
-                        rows.append(row)
-                
-                # We need at least one row of headers and one row of data
-                if len(rows) > 1:
-                    # Pad rows if they are uneven
-                    max_cols = max(len(r) for r in rows)
-                    for r in rows:
-                        r.extend([""] * (max_cols - len(r)))
-                    
-                    md = []
-                    md.append("| " + " | ".join(rows[0]) + " |")
-                    md.append("|" + "|".join(["---"] * max_cols) + "|")
-                    for r in rows[1:]:
-                        md.append("| " + " | ".join(r) + " |")
-                    
-                    content_str = "\n".join(md)
-                else:
-                    content_str = str(table_wrap)
-            else:
-                content_str = str(table_wrap)
-                
+            t_title, content_str, table_evidence = self._parse_table_wrap(table_wrap, idx)
+            is_valid = is_valid_pbpk_input_table(t_title, content_str)
             chunks.append({
-                "role":        "table_xml",
-                "content":     f"{t_title}:\n{content_str}",
-                "title":       t_title,
-                "kept":        True,
-                "skip_reason": "",
+                "role":           "table_xml",
+                "content":        content_str,
+                "title":          t_title,
+                "kept":           is_valid,
+                "skip_reason":    "" if is_valid else "Gated out (sensitivity or exposure/output table)",
+                "table_evidence": table_evidence,
             })
 
         # 2. Equations — always keep
