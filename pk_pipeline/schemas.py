@@ -24,6 +24,8 @@ ModelType = Literal[
 ]
 
 class ModelClassification(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     model_type: ModelType = Field(description="Must be 'pbpk', 'simple_empirical_compartmental', 'nca' or 'not_applicable'")
     evidence_quote: Optional[str] = None
 
@@ -48,6 +50,8 @@ class UnresolvedTopology(BaseModel):
     reason: str
 
 class AbsorptionModel(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     route: Optional[str] = Field(None, description="e.g. 'oral', 'iv', 'inhalation'")
     model_type: Optional[str] = Field(None, description="e.g. 'first_order', 'Weibull', 'mechanistic'")
     site: Optional[str] = Field(None, description="e.g. 'gut', 'stomach'")
@@ -339,6 +343,8 @@ class TableEvidence(BaseModel):
     source_image_path: Optional[str] = Field(None)
 
 class ModelContext(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     model_origin: str = Field(description="Is this 'new', 'adapted from [cite]', or 'reused unchanged'? Use 'not_reported' if unclear.")
     stated_purpose: str = Field(description="The authors' stated context of use (e.g., risk assessment). Use 'not_reported' if unclear.")
     dose_metric: str = Field(description="What metric links to toxicity? (e.g., liver AUC of metabolite). Use 'not_reported' if unclear.")
@@ -351,16 +357,124 @@ class ModelContext(BaseModel):
     original_application: Optional[str] = Field(None, description="Original intended use of the model.")
     current_application: Optional[str] = Field(None, description="Current application in this paper.")
     repurposed: Optional[bool] = Field(None, description="Whether the model was repurposed from a previous study.")
-    
+
+    # These fields are deliberately optional because many extraction chunks do
+    # not contain the model-purpose sentence.  They let the Tan assessment
+    # distinguish model evidence from generic introduction/background text.
+    source_quote: Optional[str] = Field(None, description="Verbatim model-specific quote supporting the context.")
+    source_location: Optional[str] = Field(None, description="Section/page/table location of the context quote.")
+    source_page: Optional[int] = Field(None, description="Page number of the context quote, when available.")
+    evidence_directness: Optional[Literal["direct", "inferred"]] = Field(
+        None,
+        description="Whether the context is stated directly or inferred from structured evidence.",
+    )
+
 class Assumption(BaseModel):
     description: str = Field(description="The stated assumption (e.g., 'well-stirred compartment', 'flow-limited kinetics')")
     evidence_quote: str = Field(description="Direct verbatim quote from the text where the assumption is stated.")
     source_location: str = Field(description="Page or section where this assumption is located.")
+    source_page: Optional[int] = Field(None, description="Page number for the quoted assumption, when available.")
+    evidence_directness: Literal["explicit", "inferred", "not_reported"] = Field(
+        "explicit",
+        description="Only explicit author statements can support a high-confidence assumption record.",
+    )
+    evidence_confidence: Literal["high", "medium", "low"] = Field(
+        "low",
+        description="Deterministically assigned by APEX from quote/location completeness; not an LLM self-score.",
+    )
+
+
+class BiologicalDeterminant(BaseModel):
+    """Evidence-backed ADME determinant used by the Tan assessment.
+
+    ``adme_determinants`` remains a list of short labels for backwards
+    compatibility.  This companion record stores the evidence needed to tell
+    an explicit model determinant from a generic statement in the paper.
+    """
+
+    description: str = Field(description="Physiological, biochemical, or physicochemical determinant explicitly tied to model behavior.")
+    evidence_quote: Optional[str] = Field(None, description="Verbatim model-specific quote supporting the determinant.")
+    source_location: Optional[str] = Field(None, description="Section/page/table location of the determinant evidence.")
+    source_page: Optional[int] = Field(None, description="Page number when available.")
+    evidence_directness: Literal["explicit", "inferred", "not_reported"] = Field(
+        "explicit",
+        description="Whether the determinant is explicitly stated or inferred.",
+    )
+    evidence_confidence: Literal["high", "medium", "low"] = Field(
+        "low",
+        description="Deterministically assigned by APEX from evidence completeness; not an LLM self-score.",
+    )
+
+
+class ADMEPhaseEvidence(BaseModel):
+    """Structured mechanistic evidence for one ADME phase in the Tan template."""
+
+    phase: Literal[
+        "absorption",
+        "distribution_binding",
+        "distribution_tissue",
+        "metabolism",
+        "excretion_recirculation",
+        "barrier_life_stage_transfer",
+    ]
+    biological_mechanism: Optional[str] = None
+    mathematical_implementation: Optional[str] = None
+    governing_parameters: List[str] = Field(default_factory=list)
+    compartments: List[str] = Field(default_factory=list)
+    source_location: Optional[str] = None
+    source_page: Optional[int] = None
+    evidence_quote: Optional[str] = None
+    evidence_directness: Literal["explicit", "inferred", "not_reported"] = "explicit"
+    evidence_confidence: Literal["high", "medium", "low"] = "low"
+
+
+class ModelAssumptionEvidence(BaseModel):
+    """An explicit simplifying assumption with its justification and impact."""
+
+    category: Literal[
+        "tissue_perfusion_diffusion_lumping",
+        "protein_binding_free_fraction",
+        "cross_species_cross_chemical_borrowing",
+        "clearance_resorption_ontogeny",
+        "dosing_exposure_steady_state",
+        "other",
+    ]
+    stated_assumption: str
+    authors_justification: Optional[str] = None
+    structural_impact: Optional[str] = None
+    source_location: Optional[str] = None
+    source_page: Optional[int] = None
+    evidence_quote: Optional[str] = None
+    evidence_directness: Literal["explicit", "inferred", "not_reported"] = "explicit"
+    evidence_confidence: Literal["high", "medium", "low"] = "low"
 
 class BiologicalBasis(BaseModel):
-    adme_determinants: List[str] = Field(description="Physiological/physicochemical factors driving kinetics.")
-    stated_assumptions: List[Assumption] = Field(description="Explicit list of assumptions stated by the authors with direct quotes.")
-    specialized_mechanisms: List[str] = Field(description="e.g., renal reabsorption, enterohepatic recirculation. Or 'not_applicable'.")
+    adme_determinants: List[str] = Field(default_factory=list, description="Short labels for physiological/physicochemical factors driving kinetics.")
+    adme_determinant_evidence: List[BiologicalDeterminant] = Field(
+        default_factory=list,
+        description="Evidence-backed ADME determinant records. Do not populate from generic Introduction/Background text.",
+    )
+    adme_phase_evidence: List[ADMEPhaseEvidence] = Field(
+        default_factory=list,
+        description="Mechanism, mathematical implementation, governing parameters, compartments, and source for each ADME phase.",
+    )
+    stated_assumptions: List[Assumption] = Field(
+        default_factory=list,
+        description="Explicit model assumptions with direct quotes. Do not infer standard PBPK assumptions.",
+    )
+    assumption_evidence: List[ModelAssumptionEvidence] = Field(
+        default_factory=list,
+        description="Explicit assumptions with author justification and structural/equation impact.",
+    )
+    specialized_mechanisms: List[str] = Field(default_factory=list, description="e.g., renal reabsorption, enterohepatic recirculation. Or 'not_applicable'.")
+    evidence_confidence: Literal["high", "medium", "low"] = Field(
+        "low",
+        description="Overall evidence confidence calculated by APEX after extraction, not self-scored by the LLM.",
+    )
+    confidence_basis: Optional[str] = Field(
+        None,
+        description="Deterministic explanation of how evidence_confidence was assigned.",
+    )
 
 class CompartmentConnection(BaseModel):
     source: str = Field(..., description="Origin compartment name exactly as labeled.")
@@ -486,6 +600,71 @@ class OECDAssessment(BaseModel):
     reviewer_notes: List[str] = Field(default_factory=list, description="Reviewer summary and notes")
 
 
+# ─── Tan et al. PBPK Reporting Questionnaire ───────────────────────────────────
+
+class TanQuestionnaireItem(BaseModel):
+    item_id: str = Field(..., description="Tan template item identifier, e.g. TAN_2.4.5_PARAMETERS.")
+    section: str = Field(..., description="Tan template section, e.g. 2.4.5 Model parameters.")
+    question: str = Field(..., description="Model-specific reporting/evaluation question.")
+    allowed_source_sections: List[str] = Field(
+        default_factory=list,
+        description="Paper sections allowed as evidence for this item.",
+    )
+    routing_rule: Optional[str] = Field(
+        None,
+        description="Strict routing rule explaining which paper text is excluded.",
+    )
+    response: ResponseOption = Field(..., description="Evidence-grounded response.")
+    details: str = Field(..., description="Concise explanation limited to model-specific evidence.")
+    structured_details: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Structured extracted fields required by the refined Tan prompt.",
+    )
+    evidence: List[EvidenceReference] = Field(default_factory=list, description="Verbatim evidence references supporting the response.")
+    confidence: Literal["high", "medium", "low"] = Field(
+        "low",
+        description="Evidence confidence computed by deterministic APEX rules; never a free-form LLM self-score.",
+    )
+    confidence_basis: str = Field(
+        "No direct model-specific evidence was available.",
+        description="Why APEX assigned the confidence level.",
+    )
+
+
+class TanPBPKAssessment(BaseModel):
+    """Tan et al. PBPK reporting questionnaire.
+
+    Generic Introduction/Background prose is intentionally outside the
+    assessment scope.  Items are answered from model-purpose, methods,
+    structure, equations, parameter, simulation, software, evaluation, and
+    sensitivity evidence extracted from the paper.
+    """
+
+    model_config = ConfigDict(protected_namespaces=())
+
+    template_name: str = Field("Tan et al. PBPK Reporting Template", description="Assessment template name.")
+    template_version: str = Field("Refined-Tan-PBPK-Research-v1", description="Refined Tan template version.")
+    assessment_date: Optional[str] = None
+    reviewer: Optional[str] = None
+    pipeline_version: Optional[str] = None
+    model_identification: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Model name, target compounds/moieties, authors, year, journal, DOI/PMID.",
+    )
+    assessment_scope: str = Field(
+        "Model-specific evidence only; generic Introduction/Background statements are excluded unless explicitly tied to the model.",
+        description="Evidence scope applied during assessment.",
+    )
+    items: List[TanQuestionnaireItem] = Field(default_factory=list)
+    verification_summary: Dict[str, Any] = Field(
+        default_factory=dict,
+        description="Deterministic parameter verification summary; not an LLM confidence score.",
+    )
+    overall_fit_for_purpose: Optional[str] = None
+    key_gaps: List[str] = Field(default_factory=list)
+    reviewer_notes: List[str] = Field(default_factory=list)
+
+
 
 
 # ─── Extracted Parameter ───────────────────────────────────────────────────────
@@ -581,8 +760,25 @@ class ExtractedParameter(BaseModel):
     context: BiologicalContext = Field(..., description="Biological and study context.")
     quantitative_data: QuantitativeData = Field(..., description="Numerical values and units.")
     provenance: Provenance = Field(..., description="Source location and status.")
-    confidence: Optional[Union[str, ConfidenceScores]] = Field(default_factory=ConfidenceScores)
+    confidence: Optional[Union[str, ConfidenceScores]] = Field(
+        default_factory=ConfidenceScores,
+        description="Deprecated LLM self-score retained for backward compatibility; APEX uses verification_score instead.",
+    )
     needs_review: bool = Field(False)
+    verification_score: Optional[float] = Field(
+        None,
+        ge=0.0,
+        le=1.0,
+        description="Deterministic post-extraction verification score (0–1); never self-reported by the LLM.",
+    )
+    verification_checks: Dict[str, bool] = Field(
+        default_factory=dict,
+        description="Results for verbatim source, numeric parse, unit dimension, and provenance checks.",
+    )
+    verification_failures: List[str] = Field(
+        default_factory=list,
+        description="Failed deterministic verification checks.",
+    )
 
     @model_validator(mode="before")
     @classmethod
@@ -601,6 +797,8 @@ class ExtractedParameter(BaseModel):
         return d
 
 class ExtractionResult(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     model_classification: Literal["pbpk", "simple_empirical_compartmental", "not_applicable"]
     parameters: List[ExtractedParameter] = Field(default_factory=list)
     structure: Optional[ModelStructure] = None
@@ -707,6 +905,8 @@ class ExtendedSensitivityUncertainty(BaseModel):
     overall_impact_on_dose_metric: Optional[str] = Field(None, description="Overall impact of uncertainty on dose metric")
 
 class SensitivityCoefficient(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     parameter_name: str = Field(..., description="Name of the parameter being perturbed.")
     model_output: str = Field(..., description="The model output metric being evaluated (e.g. 'maternal plasma AUC').")
     compound: Optional[str] = Field(None)
@@ -728,8 +928,10 @@ class ParameterBlock(BaseModel):
     parameters: List[ExtractedParameter] = Field(default_factory=list, description="Parameters belonging to this block.")
 
 class ExtractedPage(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     page_metadata: PageMetadata = Field(default_factory=PageMetadata)
-    model_classification: ModelClassification
+    model_classification: ModelClassification = Field(default_factory=lambda: ModelClassification(model_type="not_applicable"))
     model_context: Optional[ModelContext] = None
     biological_basis: Optional[BiologicalBasis] = None
     table_evidence: List[TableEvidence] = Field(default_factory=list, description="Reconstructed structured representation of tables on this page.")
@@ -815,6 +1017,8 @@ class TableValidationResult(BaseModel):
     provenance: Optional[TableProvenance] = None
 
 class TableExtractionPage(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     page_metadata: Optional[PageMetadata] = None
     model_classification: ModelClassification = Field(..., description="Model classification: 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'.")
     parameter_blocks: List[TableParameterBlock] = Field(default_factory=list, description="Parameters grouped by table section/blocks. PBPK input parameters ONLY.")
@@ -825,6 +1029,8 @@ class TableExtractionPage(BaseModel):
 # ─── Lightweight Diagram Extraction Schema (for Diagram / Figure Prompts) ─────
 
 class DiagramExtractionPage(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     page_metadata: Optional[PageMetadata] = None
     model_classification: ModelClassification = Field(
         ..., description="Model classification: 'pbpk', 'simple_empirical_compartmental', or 'not_applicable'."
@@ -845,7 +1051,7 @@ class ExtractedDocument(BaseModel):
     with the canonical list.
     """
 
-    model_config = ConfigDict(extra="forbid")
+    model_config = ConfigDict(extra="forbid", protected_namespaces=())
 
     page_metadata: PageMetadata = Field(default_factory=PageMetadata)
     model_classification: ModelClassification = Field(
@@ -871,6 +1077,8 @@ class ExtractedDocument(BaseModel):
     reproducibility: Optional[ReproducibilityMetadata] = None
     mode_of_action: Optional[ModeOfAction] = None
     extended_sensitivity: Optional[ExtendedSensitivityUncertainty] = None
+    parameter_verification_summary: Optional[Dict[str, Any]] = None
+    tan_assessment: Optional[TanPBPKAssessment] = None
     oecd_assessment: Optional[OECDAssessment] = None
     verification: Optional[Dict[str, Any]] = None
     llm_verification: Optional[Dict[str, Any]] = None

@@ -228,7 +228,7 @@ Document Table ({source_location}):
 
 from .schemas import ExtractedPage, ExtractedParameter, TableExtractionPage, DiagramExtractionPage
 
-TABLE_SYSTEM_PROMPT_TEMPLATE = """You are an OECD GD 331 compliant pharmacokinetic (PK) and PBPK table data extraction engine.
+TABLE_SYSTEM_PROMPT_TEMPLATE = """You are an evidence-grounded pharmacokinetic (PK) and PBPK table data extraction engine compatible with the Tan et al. reporting template.
 Your task is to faithfully extract model parameters, experimental values, and model outputs from scientific tables into the strict JSON schema provided below.
 
 ==================================================
@@ -239,6 +239,7 @@ Your task is to faithfully extract model parameters, experimental values, and mo
 - Interpret every table independently: NEVER leak context (compounds, species, or units) from other tables or surrounding text unless explicitly shared.
 - If a value or context field cannot be identified with high confidence, set needs_review=true rather than guessing.
 - Distinguish model input parameters (which belong in `parameter_blocks`) from observed/simulated clinical PK outputs (e.g., observed Cmax, AUC, which belong in `observed_data`).
+- Do not populate or self-score confidence fields. APEX calculates deterministic verification scores after extraction.
 
 ==================================================
 2. PRE-COMPUTED TABLE STRUCTURE & CELL BINDING
@@ -286,7 +287,7 @@ Return ONLY valid JSON matching the schema below. No markdown code fences, no co
 {schema}
 """
 
-SYSTEM_PROMPT_TEMPLATE = """You are an OECD GD 331 compliant pharmacokinetic (PK) and PBPK narrative & document extraction engine.
+SYSTEM_PROMPT_TEMPLATE = """You are an evidence-grounded pharmacokinetic (PK) and PBPK narrative & document extraction engine compatible with the Tan et al. reporting template.
 Your task is to extract scientifically meaningful model parameters, experimental values, model structure, and modeling assumptions from research papers into the strict JSON schema provided below.
 
 ==================================================
@@ -297,12 +298,14 @@ Your task is to extract scientifically meaningful model parameters, experimental
 - Interpret sections independently: do not carry context from one section into another unless the document explicitly indicates that it is shared.
 - If information is absent or ambiguous, use null or set needs_review=true rather than guessing.
 - Distinguish model input parameters from observed/simulated experimental outputs.
+- Generic Introduction/Background statements are not model evidence. Extract them only when the text explicitly connects them to the PBPK model purpose, structure, parameters, simulations, evaluation, or sensitivity analysis.
+- Do not populate or self-score confidence fields. APEX calculates deterministic verification scores after extraction.
 
 ==================================================
 2. MODEL STRUCTURE & BIOLOGICAL ASSUMPTIONS
 ==================================================
 When analyzing narrative text, methods, or model descriptions:
-1. Identify explicit modeling assumptions stated by the authors:
+1. Identify only explicit, model-specific modeling assumptions stated by the authors:
    - Compartmental structure (e.g., well-stirred, perfusion-limited, membrane-limited).
    - Distribution kinetics (e.g., instantaneous mixing, deep tissue equilibrium).
    - Clearance & elimination mechanisms (e.g., saturable reabsorption via Michaelis-Menten, biliary excretion).
@@ -310,12 +313,17 @@ When analyzing narrative text, methods, or model descriptions:
    - Bioavailability and absorption (e.g., 100% absorption, fixed oral bioavailability).
    - Scaling & extrapolations (e.g., allometric exponent 0.75, in vitro to in vivo extrapolation).
 2. For each assumption, populate `biological_basis.stated_assumptions`:
-   - `description`: Clear summary of the assumption.
-   - `evidence_quote`: Exact verbatim quote from the text where the assumption is stated.
-   - `source_location`: Section name or paragraph.
-3. Populate `biological_basis.adme_determinants` with physiological/physicochemical determinants.
-4. Populate `biological_basis.specialized_mechanisms` with non-standard mechanisms (e.g., "saturable_reabsorption").
-5. Populate `model_structure` with compartment names, differential equations, and allometric scaling rules.
+    - `description`: Clear summary of the assumption.
+    - `evidence_quote`: Exact verbatim quote from the text where the assumption is stated.
+    - `source_location`: Section name or paragraph.
+    - Do not create an assumption from general PBPK knowledge. If the quote or location is unavailable, omit the assumption.
+3. Populate `biological_basis.adme_determinants` with short labels only when the factor is explicitly tied to model behavior. For each factor, also populate `biological_basis.adme_determinant_evidence` with `description`, an exact `evidence_quote`, and `source_location`.
+4. Do not self-score biological evidence. APEX assigns evidence confidence deterministically from quote and location completeness after chunk merging.
+5. Populate `biological_basis.specialized_mechanisms` with non-standard mechanisms (e.g., "saturable_reabsorption") only when explicitly reported.
+6. Populate `model_structure` with compartment names, differential equations, and allometric scaling rules.
+7. When the text explicitly states model origin, purpose, application, or dose metric, populate `model_context` and preserve the exact sentence in `source_quote` with its `source_location` and `source_page` when available. Do not populate model context from a generic Introduction statement.
+8. For each explicit ADME phase, populate `biological_basis.adme_phase_evidence` with the biological mechanism, mathematical implementation, governing parameters, compartments, exact source location, and quote. Use the phase values `absorption`, `distribution_binding`, `distribution_tissue`, `metabolism`, `excretion_recirculation`, or `barrier_life_stage_transfer`.
+9. For each explicit simplifying assumption, populate `biological_basis.assumption_evidence` with category, stated assumption, authors' justification, structural/equation impact, exact source location, and quote. Do not infer assumptions from textbook PBPK practice.
 
 ==================================================
 3. CARTESIAN UNROLLING & MULTI-CONDITION HEADERS
@@ -1244,6 +1252,57 @@ class SGLangExtractor:
                 return evaluate_oecd_from_document(doc_dict)
             except Exception:
                 raise
+
+    async def assess_tan_template(self, full_document_json: str, context_text: Optional[str] = None) -> "TanPBPKAssessment":
+        """Run the Tan et al. PBPK reporting questionnaire.
+
+        The parsed response is normalized after generation so that missing
+        evidence becomes ``i_cannot_answer`` and confidence is computed from
+        evidence completeness rather than accepted from the model.
+        """
+        from pk_pipeline.schemas import TanPBPKAssessment
+        from pk_pipeline.tan_assessor import (
+            build_tan_assessment_prompt,
+            evaluate_tan_from_document,
+            normalize_tan_assessment,
+        )
+
+        try:
+            document = json.loads(full_document_json)
+        except json.JSONDecodeError:
+            document = {}
+
+        if not getattr(self, "is_loaded", False):
+            logger.info("SGLang not loaded; running deterministic Tan questionnaire from extracted evidence.")
+            return evaluate_tan_from_document(document)
+
+        start_t = time.time()
+        logger.info("SGLang: [START] Running Tan PBPK reporting questionnaire...")
+        schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
+        prompt_text = build_tan_assessment_prompt(full_document_json, context_text=context_text)
+
+        try:
+            extracted_text = await self._generate(
+                prompt_text=prompt_text,
+                schema_json=schema_json,
+                max_new_tokens=12000,
+                temperature=0.0,
+                timeout_seconds=3600,
+            )
+            clean_json_str = self._strip_think_and_fences(extracted_text)
+            assessment = normalize_tan_assessment(json.loads(clean_json_str), document)
+            logger.info(
+                "SGLang: [END] Tan questionnaire complete in %.2fs.",
+                time.time() - start_t,
+            )
+            return assessment
+        except Exception as exc:
+            logger.warning(
+                "Tan questionnaire generation/validation failed (%s); "
+                "falling back to deterministic evidence evaluation.",
+                exc,
+            )
+            return evaluate_tan_from_document(document)
 
 
 class PBPKExtractorService:
