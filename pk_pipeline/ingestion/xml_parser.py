@@ -46,11 +46,13 @@ _TIER2_KEYWORDS = [
 
 # Section titles that are almost never relevant — skip entirely
 _SKIP_TITLES = {
-    "abstract", "acknowledgment", "acknowledgements", "funding",
+    "acknowledgment", "acknowledgements", "funding",
     "conflict of interest", "abbreviations", "author contribution",
     "data availability", "ethics", "competing interest", "appendix",
     "supplementary", "supporting information",
 }
+
+_PURPOSE_SECTION_TERMS = ("abstract", "introduction", "objective", "aim", "discussion", "conclusion", "summary")
 
 # Figure captions that strongly suggest model diagrams or parameter content
 _FIGURE_DIAGRAM_KEYWORDS = [
@@ -630,6 +632,22 @@ class JatsXMLParser:
                 "skip_reason": "",
             })
 
+        # Abstracts are allowed only for refined Tan purpose/summary items.
+        # Keep them as separately routed evidence instead of discarding them
+        # as generic narrative.
+        for abstract in self.soup.find_all("abstract"):
+            abstract_text = abstract.get_text(separator=" ", strip=True)
+            if len(abstract_text) < 30:
+                continue
+            chunks.append({
+                "role": "narrative_xml",
+                "content": abstract_text,
+                "title": "Abstract",
+                "kept": True,
+                "skip_reason": "",
+                "routing": "purpose_summary",
+            })
+
         # 3. Narrative sections — leaf sections only (no child <sec> tags).
         for sec in self.soup.find_all("sec"):
             # Skip if this sec contains child sections — it will be covered by its leaves
@@ -667,7 +685,16 @@ class JatsXMLParser:
             # Determine if we keep this section
             kept        = True
             skip_reason = ""
-            if filter_narrative:
+            purpose_route = any(term in sec_title_lower for term in _PURPOSE_SECTION_TERMS)
+            if purpose_route and "introduction" in sec_title_lower:
+                # Research-paper introductions contain historical/toxicology
+                # background.  Preserve only the final paragraph, which is
+                # where the study objective normally appears.
+                paragraphs = sec_copy.find_all("p")
+                if paragraphs:
+                    text = paragraphs[-1].get_text(separator=" ", strip=True)
+                    text = re.sub(r"\s{2,}", " ", text)
+            if filter_narrative and not purpose_route:
                 if not is_pk_relevant(text, title=sec_title):
                     kept        = False
                     t1, t2      = _pk_relevance_score(text)
@@ -700,6 +727,7 @@ class JatsXMLParser:
                 "title":       sec_title,
                 "kept":        kept,
                 "skip_reason": skip_reason,
+                "routing": "purpose_summary" if purpose_route else "model_evidence",
             })
 
         return chunks
@@ -744,7 +772,8 @@ def parse_jats_xml(xml_path: str, filter_narrative: bool = True) -> Dict[str, An
             "content": merged_text.strip(),
             "title": "Combined Relevant Narrative",
             "kept": True,
-            "skip_reason": ""
+            "skip_reason": "",
+            "routing": "mixed_purpose_and_model_evidence",
         }
         other_kept.append(merged_chunk)
         

@@ -51,6 +51,32 @@ PYTHONPATH= .venv/bin/python pk_pipeline/main.py "pk_pipeline/test_data/s12249-0
 
 The extracted parameters will be saved as a structured JSON file in the `output/` directory alongside the original PDF.
 
+### Tan PBPK reporting questionnaire
+
+The pipeline uses the **Refined Tan et al. PBPK Model Evaluation & Extraction
+Questionnaire** by default after extraction. It contains 36 routed items for
+model identification, purpose, data, compartmental structure, phase-specific
+ADME mechanisms, assumptions and their structural impact, equations,
+parameters, simulations, software, evaluation, and sensitivity/uncertainty.
+Generic Introduction/Background prose is blocked; only the final study-
+objective paragraph may support purpose items.
+
+```bash
+python -m pk_pipeline.main "pk_pipeline/test_data/Loccisano 2013.pdf" --assessment-template tan
+```
+
+The result is stored in `tan_assessment`. Missing or ambiguous evidence is
+returned as `i_cannot_answer`. Parameter quality uses four deterministic
+post-extraction checks—verbatim source match, numeric parse completeness, unit
+dimension consistency, and provenance/original-citation completeness—with a
+0–1 `verification_score`; LLM self-confidence is not used.
+
+For comparison, the legacy OECD checklist can be selected explicitly:
+
+```bash
+python -m pk_pipeline.main paper.pdf --assessment-template oecd
+```
+
 ## Architecture
 
 * `pk_pipeline/main.py`: The core orchestrator. Handles PDF layout parsing, TATR table detection, and chunks the document into actionable LLM payloads.

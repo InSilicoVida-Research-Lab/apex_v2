@@ -9,7 +9,7 @@ import sys
 # Ensure the root directory is on PYTHONPATH so pk_pipeline modules can be imported
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from pk_pipeline.schemas import ExtractedDocument, ExtractionRequest
+from pk_pipeline.schemas import ExtractedDocument, ExtractionRequest, ExtractedPage
 from pk_pipeline.ml_services import SGLangExtractor
 from pk_pipeline.config import logger, Config
 
@@ -410,7 +410,8 @@ def normalize_parameter_units_and_ranges(param: dict) -> dict:
     if m_range and q.get("value") is None:
         start_v = float(m_range.group(1))
         end_v = float(m_range.group(2))
-        q["value"] = start_v
+        q["start_value"] = start_v
+        q["end_value"] = end_v
         q["value_qualifier"] = m_range.group(3) or "time_varying_range"
         q["uncertainty"] = {
             "type": "time_varying_range",
@@ -729,7 +730,9 @@ def _parameters_from_table_evidence(
                     context=BiologicalContext(compound=compound, species=species),
                     quantitative_data=QuantitativeData(
                         value_text=str(cell.get("text") or ""),
-                        value=float(value),
+                        value=None if m_range else float(value),
+                        start_value=float(m_range.group(1)) if m_range else None,
+                        end_value=float(m_range.group(2)) if m_range else None,
                         uncertainty=Uncertainty(lower=lower, upper=upper) if lower is not None else None,
                         unit_original=unit,
                         unit_standardized=unit,
@@ -813,6 +816,67 @@ def _merge_biological_basis(final_doc: dict, extracted_page) -> None:
             curr_bb.setdefault("specialized_mechanisms", []).append(m)
             existing_mech.add(m)
 
+    existing_determinants = {
+        (
+            str(item.get("description") or "").strip().lower(),
+            str(item.get("evidence_quote") or "").strip().lower(),
+        )
+        for item in curr_bb.get("adme_determinant_evidence", [])
+        if isinstance(item, dict)
+    }
+    for determinant in bb_dict.get("adme_determinant_evidence", []):
+        if not isinstance(determinant, dict):
+            continue
+        key = (
+            str(determinant.get("description") or "").strip().lower(),
+            str(determinant.get("evidence_quote") or "").strip().lower(),
+        )
+        if key not in existing_determinants:
+            curr_bb.setdefault("adme_determinant_evidence", []).append(determinant)
+            existing_determinants.add(key)
+
+    existing_phases = {
+        (
+            str(item.get("phase") or "").lower(),
+            str(item.get("source_location") or "").lower(),
+            str(item.get("evidence_quote") or "").lower(),
+        )
+        for item in curr_bb.get("adme_phase_evidence", [])
+        if isinstance(item, dict)
+    }
+    for phase in bb_dict.get("adme_phase_evidence", []):
+        if not isinstance(phase, dict):
+            continue
+        key = (
+            str(phase.get("phase") or "").lower(),
+            str(phase.get("source_location") or "").lower(),
+            str(phase.get("evidence_quote") or "").lower(),
+        )
+        if key not in existing_phases:
+            curr_bb.setdefault("adme_phase_evidence", []).append(phase)
+            existing_phases.add(key)
+
+    existing_assumptions = {
+        (
+            str(item.get("category") or "").lower(),
+            str(item.get("stated_assumption") or "").lower(),
+            str(item.get("evidence_quote") or "").lower(),
+        )
+        for item in curr_bb.get("assumption_evidence", [])
+        if isinstance(item, dict)
+    }
+    for assumption in bb_dict.get("assumption_evidence", []):
+        if not isinstance(assumption, dict):
+            continue
+        key = (
+            str(assumption.get("category") or "").lower(),
+            str(assumption.get("stated_assumption") or "").lower(),
+            str(assumption.get("evidence_quote") or "").lower(),
+        )
+        if key not in existing_assumptions:
+            curr_bb.setdefault("assumption_evidence", []).append(assumption)
+            existing_assumptions.add(key)
+
 
 def _merge_model_structure(final_doc: dict, extracted_page) -> None:
     """Merge model structure, compartments, connections, and scaling rules from visual diagram and text."""
@@ -876,6 +940,11 @@ def refresh_parameter_views(document: dict) -> None:
 
 def post_process_document(document, pdf_path):
     print("Step 4: Running Python Post-Processing Cleanup...")
+    # ADME determinants and assumptions are factual extraction fields.  Their
+    # evidence quality is assigned deterministically after all chunks have
+    # been merged; it is never accepted as an LLM self-score.
+    from pk_pipeline.tan_assessor import normalize_biological_basis
+    normalize_biological_basis(document)
     # XML table parsing can be completely successful while a constrained LLM
     # response returns an empty parameter_blocks list.  Do not silently emit a
     # superficially successful document with no model parameters in that case.
@@ -1119,6 +1188,11 @@ def post_process_document(document, pdf_path):
     if document.get("dosing"):
         document["dosing"] = filter_false_doses(document["dosing"])
 
+    # Refined Tan verification replaces LLM self-scored confidence with four
+    # deterministic checks and a 0–1 score per canonical parameter.
+    from pk_pipeline.tan_assessor import verify_parameters_deterministically
+    verify_parameters_deterministically(document, pdf_path=pdf_path)
+
     # 2.8 Clean up circular scaling rules and ensure equations_provided is set
     if document.get("model_structure"):
         ms = document["model_structure"]
@@ -1170,7 +1244,46 @@ def post_process_document(document, pdf_path):
 
     return document
 
-async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdoc: bool = True, force_pdf: bool = False, verify: bool = True, output_dir: str = "output"):
+
+async def _run_selected_assessments(document: dict, assessment_template: str = "tan") -> dict:
+    """Run the explicitly selected reporting questionnaire(s).
+
+    Tan is the default because it is the detailed reporting template.  The
+    legacy OECD questionnaire remains available for comparison through
+    ``assessment_template='oecd'`` or ``'both'``.
+    """
+    template = (assessment_template or "tan").lower().strip()
+    if template not in {"tan", "oecd", "both", "none"}:
+        raise ValueError("assessment_template must be one of: tan, oecd, both, none")
+
+    if template in {"tan", "both"}:
+        print("Step: Running Tan PBPK Reporting Questionnaire...")
+        try:
+            tan_assessment = await get_extractor().assess_tan_template(json.dumps(document))
+            document["tan_assessment"] = tan_assessment.model_dump()
+        except Exception as exc:
+            print(f"  -> Failed to run Tan assessment: {exc}")
+
+    if template in {"oecd", "both"}:
+        print("Step: Running OECD GD 331 Checklist Assessment...")
+        try:
+            oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(document))
+            document["oecd_assessment"] = oecd_assessment.model_dump()
+        except Exception as exc:
+            print(f"  -> Failed to run OECD assessment: {exc}")
+
+    return document
+
+
+async def run_pipeline(
+    pdf_path: str,
+    target_compounds: list = None,
+    use_wevisdoc: bool = True,
+    force_pdf: bool = False,
+    verify: bool = True,
+    output_dir: str = "output",
+    assessment_template: str = "tan",
+):
     print(f"Starting PK Extraction Pipeline for: {os.path.basename(pdf_path)}")
     logger.info(f"Received request to extract PK data from: {pdf_path}")
     
@@ -1233,6 +1346,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                 "software": None,
                 "reproducibility": None,
                 "mode_of_action": None,
+                "tan_assessment": None,
                 "oecd_assessment": None,
                 "ingestion_source": res.get("source"),
                 "ingestion_source_type": res.get("source_type", "published"),
@@ -1337,7 +1451,10 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
                         te = chunk.get("table_evidence")
                         try:
                             page = await get_extractor().extract_from_text(
-                                chunk["content"], 
+                                (
+                                    f"[Tan source routing: {chunk.get('routing', 'model_evidence')}]\n"
+                                    f"{chunk['content']}"
+                                ),
                                 role=chunk["role"], 
                                 chunk_title=chunk.get("title", ""),
                                 table_evidence=te
@@ -1455,18 +1572,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
             if verify:
                 from pk_pipeline.verifier import verify_document
                 verify_document(processed)
-            print("Step: Running Tier 2 Evaluation Pass...")
-            try:
-                judgments = await get_extractor().evaluate_extracted_model(json.dumps(processed))
-                processed["evaluator_judgments"] = judgments.model_dump()
-            except Exception as e:
-                print(f"  -> Failed to run Tier 2 evaluation: {e}")
-            print("Step: Running Tier 3 OECD GD 331 Checklist Assessment...")
-            try:
-                oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(processed))
-                processed["oecd_assessment"] = oecd_assessment.model_dump()
-            except Exception as e:
-                print(f"  -> Failed to run Tier 3 OECD assessment: {e}")
+            await _run_selected_assessments(processed, assessment_template)
             return finalize_extracted_document(processed)
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
@@ -1698,6 +1804,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
         "software": None,
         "reproducibility": None,
         "mode_of_action": None,
+        "tan_assessment": None,
         "oecd_assessment": None,
     }
     
@@ -1764,19 +1871,7 @@ async def run_pipeline(pdf_path: str, target_compounds: list = None, use_wevisdo
     if verify:
         from pk_pipeline.verifier import verify_document
         verify_document(processed)
-    print("Step: Running Tier 2 Evaluation Pass...")
-    try:
-        judgments = await get_extractor().evaluate_extracted_model(json.dumps(processed))
-        processed["evaluator_judgments"] = judgments.model_dump()
-    except Exception as e:
-        print(f"  -> Failed to run Tier 2 evaluation: {e}")
-
-    print("Step: Running Tier 3 OECD GD 331 Checklist Assessment...")
-    try:
-        oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(processed))
-        processed["oecd_assessment"] = oecd_assessment.model_dump()
-    except Exception as e:
-        print(f"  -> Failed to run Tier 3 OECD assessment: {e}")
+    await _run_selected_assessments(processed, assessment_template)
 
     return finalize_extracted_document(processed)
     
@@ -1832,6 +1927,36 @@ Examples:
     parser.add_argument(
         "--llm-verify-warnings", action="store_true", default=False,
         help="Also run Tier 2 critic on warning-level flags (not just errors)."
+    )
+    parser.add_argument(
+        "--assessment-template",
+        choices=("tan", "oecd", "both", "none"),
+        default="tan",
+        help=(
+            "Reporting questionnaire to run after extraction: Tan PBPK template "
+            "(default), legacy OECD checklist, both, or none."
+        ),
+    )
+    parser.add_argument(
+        "--tan-assessment",
+        dest="assessment_template",
+        action="store_const",
+        const="tan",
+        help="Alias for --assessment-template tan.",
+    )
+    parser.add_argument(
+        "--oecd-assessment",
+        dest="assessment_template",
+        action="store_const",
+        const="oecd",
+        help="Run the legacy OECD checklist instead of the Tan questionnaire.",
+    )
+    parser.add_argument(
+        "--no-assessment",
+        dest="assessment_template",
+        action="store_const",
+        const="none",
+        help="Skip both reporting questionnaires.",
     )
 
     args = parser.parse_args()
@@ -1897,6 +2022,7 @@ Examples:
                     force_pdf=args.force_pdf,
                     verify=not args.no_verify,
                     output_dir=args.output_dir,
+                    assessment_template=args.assessment_template,
                 )
 
                 # ── Save immediately ─────────────────────────────────────────

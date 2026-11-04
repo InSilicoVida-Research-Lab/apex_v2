@@ -1,21 +1,52 @@
-# Core utilities
+# ==============================================================================
+# APEX v2 Requirements (Cross-Platform: Windows & Linux)
+# ==============================================================================
+
+# --- Core Utilities & Data Contracts ---
 pydantic>=2.0.0
-Pillow>=10.0.0
+python-dotenv>=1.0.0
 requests>=2.31.0
 aiohttp>=3.9.0
+
+# --- Document Parsing & Visual Layout ---
+pymupdf>=1.23.0
+pymupdf4llm>=0.0.10
 pdf2image>=1.16.3
-python-dotenv>=1.0.0
+Pillow>=10.0.0
+beautifulsoup4>=4.12.0
+
+# --- Data Science, Analysis & PK Simulation ---
+numpy>=1.24.0
+pandas>=2.0.0
+scipy>=1.10.0
+matplotlib>=3.7.0
+tellurium>=2.2.0
+
+# --- Computer Vision & Transformers ---
+torch>=2.0.0
+transformers>=4.40.0
+huggingface_hub>=0.20.0
+opencv-python>=4.8.0
+ultralytics>=8.0.0
+
+# --- LLM / VLM API Client (Cross-Platform) ---
+# Used on both Windows and Linux to connect to local or remote DGX SGLang/vLLM servers
 openai>=1.0.0
 
-# Optional: Document Parsers / AI Checkers
-# Required if not using PMC API (fallback path)
+# --- Specialized Routing & Visual Patch Retrieval ---
+laya>=0.3.0
+colpali-engine>=0.3.1
+
+# --- High-Performance GPU Inference Engines (Linux Host / DGX Native) ---
+# NOTE: Neither sglang nor vllm provide native Windows wheels; their dependencies
+# (flashinfer, sglang-kernel, triton) fail to compile under Windows C++ toolchains.
+# On Windows, APEX v2 connects remotely to your DGX server using `openai>=1.0.0`.
+# The `sys_platform == "linux"` marker allows the same requirements.txt to install
+# sglang & vllm automatically on Linux/DGX while safely skipping them on Windows.
+sglang>=0.5.0; sys_platform == "linux"
+vllm>=0.6.0; sys_platform == "linux"
+
+# --- Optional Document Parsers & Benchmarking ---
 docling>=2.0.0
 docling-core>=2.0.0
-
-# GPU extraction dependencies are installed only on supported Linux hosts.
-# SGLang/FlashInfer is Linux + CUDA specific; the platform marker prevents
-# Windows pip from trying to build its incompatible apache-tvm-ffi dependency.
-colpali-engine>=0.3.1; platform_system == "Linux"
-sglang>=0.5.0; platform_system == "Linux"
-laya>=0.3.0; platform_system == "Linux"
-torch>=2.0.0
+gliner>=0.2.0
