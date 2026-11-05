@@ -738,14 +738,22 @@ class SGLangExtractor:
 
             try:
                 completion = await asyncio.to_thread(_call_openai, True)
-                return completion.choices[0].message.content or ""
+                choice = completion.choices[0]
+                content = choice.message.content or ""
+                if not content and getattr(choice.message, "reasoning_content", None):
+                    content = choice.message.reasoning_content
+                return content
             except Exception as e:
                 err_str = str(e)
                 # If server doesn't support multimodal without mmproj (e.g. llama-server without --mmproj)
                 if img_data_uri and ("image input is not supported" in err_str or "mmproj" in err_str or "500" in err_str):
                     logger.warning(f"Server does not support image input (no mmproj loaded). Retrying with text prompt only.")
                     completion = await asyncio.to_thread(_call_openai, False)
-                    return completion.choices[0].message.content or ""
+                    choice = completion.choices[0]
+                    content = choice.message.content or ""
+                    if not content and getattr(choice.message, "reasoning_content", None):
+                        content = choice.message.reasoning_content
+                    return content
                 raise
 
         # Mode C: Embedded SGLang Engine
@@ -1335,6 +1343,153 @@ class SGLangExtractor:
                 exc,
             )
             return evaluate_tan_from_document(document)
+
+    async def assess_tan_from_markdown(
+        self,
+        markdown_text: str,
+        paper_title: Optional[str] = None,
+        mode: str = "single",
+        max_new_tokens: int = 12000,
+    ) -> "TanPBPKAssessment":
+        """Run the Tan et al. PBPK reporting questionnaire directly on a Markdown paper.
+
+        Accepts the complete Markdown text of the paper, prompts the LLM to
+        evaluate Tan questions with strict evidence citations, and
+        normalizes the response into a validated TanPBPKAssessment.
+        """
+        from pk_pipeline.schemas import TanPBPKAssessment
+        from pk_pipeline.tan_assessor import (
+            TAN_QUESTIONNAIRE_ITEMS,
+            TAN_SECTIONS,
+            build_tan_markdown_assessment_prompt,
+            evaluate_tan_from_markdown,
+            normalize_tan_assessment,
+        )
+
+        if not getattr(self, "is_loaded", False):
+            logger.info("LLM backend not loaded; running deterministic Tan evaluation from Markdown.")
+            return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
+
+        start_t = time.time()
+        logger.info(f"LLM: [START] Running Tan PBPK reporting questionnaire on Markdown paper (mode={mode})...")
+        schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
+
+        # Prepend /no_think for Qwen reasoning models to suppress chain-of-thought
+        # and preserve the entire token budget for the JSON response.
+        no_think_prefix = ""
+        if "qwen" in self.model_name.lower():
+            no_think_prefix = "/no_think\n"
+
+        try:
+            if mode == "sections":
+                all_items = []
+                by_id = {item["item_id"]: item for item in TAN_QUESTIONNAIRE_ITEMS}
+
+                # Context budget for a 32 768-token model:
+                #   ~5 000 tokens: 20 000-char markdown clip
+                #   ~1 000 tokens: schema + prompt overhead
+                #   ~4 000 tokens: JSON output for ≤4 items (terse)
+                # → hard cap: 4 items per LLM call.
+                ITEMS_PER_CALL = 4
+                # Markdown is clipped to 20 000 chars (~5 000 tokens).
+                sec_md = markdown_text[:20000] if len(markdown_text) > 20000 else markdown_text
+
+                # Flatten all section item lists into ordered batches of ≤4.
+                all_item_ids: list[str] = []
+                for item_ids in TAN_SECTIONS.values():
+                    all_item_ids.extend(item_ids)
+
+                batches: list[tuple[str, list[dict]]] = []
+                for i in range(0, len(all_item_ids), ITEMS_PER_CALL):
+                    chunk_ids = all_item_ids[i: i + ITEMS_PER_CALL]
+                    chunk_items = [by_id[iid] for iid in chunk_ids if iid in by_id]
+                    batch_label = f"batch_{i // ITEMS_PER_CALL + 1}"
+                    batches.append((batch_label, chunk_items))
+
+                for batch_label, batch_items in batches:
+                    batch_prompt = no_think_prefix + build_tan_markdown_assessment_prompt(
+                        sec_md,
+                        paper_title=paper_title,
+                        items=batch_items,
+                    )
+                    # 4 terse items × ~600 tokens each = 2 400; floor at 3 000 for safety.
+                    batch_max_tokens = max(3000, len(batch_items) * 700)
+                    extracted_text = await self._generate(
+                        prompt_text=batch_prompt,
+                        schema_json=schema_json,
+                        max_new_tokens=batch_max_tokens,
+                        temperature=0.0,
+                        timeout_seconds=600,
+                    )
+                    clean_str = self._strip_think_and_fences(extracted_text)
+                    try:
+                        if not clean_str.strip().startswith("{"):
+                            m = re.search(r"(\{.*\})", clean_str, re.DOTALL)
+                            if m:
+                                clean_str = m.group(1)
+                        # Repair common LLM JSON mistakes before parsing:
+                        #  1. trailing commas before ] or }
+                        #  2. single-quoted strings → double-quoted
+                        repaired = re.sub(r",\s*([\]\}])", r"\1", clean_str)
+                        repaired = re.sub(r"(?<![\\])'", '"', repaired)
+                        parsed = json.loads(repaired)
+                        batch_parsed = parsed.get("items", [])
+                        all_items.extend(batch_parsed)
+                        logger.info(
+                            f"Tan batch {batch_label}: parsed {len(batch_parsed)} items OK."
+                        )
+                    except Exception as parse_err:
+                        # Partial recovery: extract complete {"item_id":...} objects via regex.
+                        recovered = re.findall(
+                            r'\{\s*"item_id"\s*:\s*"[^"]+".+?\}(?=\s*[,\]]|\s*\})',
+                            clean_str,
+                            re.DOTALL,
+                        )
+                        if recovered:
+                            for item_str in recovered:
+                                try:
+                                    all_items.append(json.loads(item_str))
+                                except Exception:
+                                    pass
+                            logger.warning(
+                                f"Tan batch {batch_label}: partial recovery, "
+                                f"got {len(recovered)} items (JSON truncated)."
+                            )
+                        else:
+                            logger.warning(
+                                f"Tan batch {batch_label}: could not parse JSON — {parse_err}"
+                            )
+                raw_assessment = {"items": all_items}
+                assessment = normalize_tan_assessment(raw_assessment)
+            else:
+                prompt_text = no_think_prefix + build_tan_markdown_assessment_prompt(markdown_text, paper_title=paper_title)
+                extracted_text = await self._generate(
+                    prompt_text=prompt_text,
+                    schema_json=schema_json,
+                    max_new_tokens=max_new_tokens,
+                    temperature=0.0,
+                    timeout_seconds=3600,
+                )
+                clean_json_str = self._strip_think_and_fences(extracted_text)
+                if not clean_json_str.strip().startswith("{"):
+                    m = re.search(r"(\{.*\})", clean_json_str, re.DOTALL)
+                    if m:
+                        clean_json_str = m.group(1)
+                assessment = normalize_tan_assessment(json.loads(clean_json_str))
+
+            logger.info(
+                "LLM: [END] Tan Markdown questionnaire complete in %.2fs.",
+                time.time() - start_t,
+            )
+            return assessment
+        except Exception as exc:
+            logger.warning(
+                "Tan Markdown questionnaire generation failed (%s); "
+                "falling back to deterministic Markdown evaluation.",
+                exc,
+            )
+            return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
+
 
 
 class PBPKExtractorService:
