@@ -430,29 +430,37 @@ class SGLangExtractor:
 
         force = getattr(Config, "FORCE_BACKEND", "auto").lower().strip()
 
-        # 1. Priority 1: Check Local SGLang Server
-        if force in ("auto", "local", "server"):
+        # 1. Priority 1: Check Local native SGLang Server (supporting /generate)
+        if force in ("auto", "local", "server", "sglang"):
             if self._check_sglang_server(Config.SGLANG_LOCAL_URL, label="Local SGLang server"):
                 self.backend_mode = "local_server"
                 self.server_url = Config.SGLANG_LOCAL_URL
                 self.use_server = True
                 self.is_loaded = True
                 self._detect_model_name()
-                logger.info(f"Using Local SGLang server at {self.server_url} (model: {self.model_name}).")
+                logger.info(f"Using Local native SGLang server at {self.server_url} (model: {self.model_name}).")
                 return
 
-        # 2. Priority 2: Direct Network Access to DGX SGLang Server
-        if force in ("auto", "dgx", "remote"):
+        # 2. Priority 2: Check DGX native SGLang Server (supporting /generate)
+        if force in ("auto", "dgx", "remote", "sglang"):
             if self._check_sglang_server(Config.DGX_SGLANG_URL, label="DGX SGLang server (Tailscale/VPN)"):
                 self.backend_mode = "dgx_server"
                 self.server_url = Config.DGX_SGLANG_URL
                 self.use_server = True
                 self.is_loaded = True
                 self._detect_model_name()
-                logger.info(f"Local server not detected; using DGX SGLang server at {self.server_url} (model: {self.model_name}).")
+                logger.info(f"Using DGX native SGLang server at {self.server_url} (model: {self.model_name}).")
                 return
 
-        # 3. Priority 3: OpenAI-Compatible API / Cloud API
+        # 3. Priority 3: Check OpenAI-compatible servers (llama-server, vLLM) on DGX or Local
+        if force in ("auto", "dgx", "remote", "api", "openai"):
+            if self._check_openai_server(Config.DGX_SGLANG_URL, label="DGX llama-server / vLLM"):
+                return
+        if force in ("auto", "local", "api", "openai"):
+            if self._check_openai_server(Config.SGLANG_LOCAL_URL, label="Local llama-server / vLLM"):
+                return
+
+        # 4. Priority 4: OpenAI-Compatible API / Cloud API from Config.OPENAI_BASE_URL
         if force in ("auto", "api", "openai") or (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY != "EMPTY"):
             if self._check_openai_api(Config.OPENAI_BASE_URL, Config.OPENAI_API_KEY):
                 self.backend_mode = "openai_api"
@@ -502,22 +510,57 @@ class SGLangExtractor:
         self.is_loaded = False
 
     def _check_sglang_server(self, url: str, label: str = "server", timeout: float = 2.0) -> bool:
-        """Probes if an SGLang server is active at url."""
+        """Probes if a native SGLang server (with /generate endpoint) is active at url."""
         if not url:
             return False
         import requests
         try:
-            resp = requests.get(f"{url}/health", timeout=timeout)
+            resp = requests.get(f"{url}/get_model_info", timeout=timeout)
             if resp.status_code == 200:
-                logger.info(f"Detected running {label} at {url} (/health -> 200).")
+                logger.info(f"Detected running native SGLang {label} at {url} (/get_model_info -> 200).")
                 return True
         except Exception:
             pass
 
         try:
-            resp = requests.get(f"{url}/v1/models", timeout=timeout)
+            # Check if /generate endpoint is present and doesn't 404
+            resp = requests.post(f"{url}/generate", json={}, timeout=timeout)
+            if resp.status_code != 404:
+                logger.info(f"Detected running native SGLang {label} at {url} (/generate -> {resp.status_code}).")
+                return True
+        except Exception:
+            pass
+        return False
+
+    def _check_openai_server(self, url: str, label: str = "server", timeout: float = 2.0) -> bool:
+        """Probes if an OpenAI-compatible server (llama-server, vLLM) is active at url."""
+        if not url:
+            return False
+        import requests
+        base_v1 = f"{url.rstrip('/')}/v1" if not url.endswith("/v1") else url
+        try:
+            resp = requests.get(f"{base_v1}/models", timeout=timeout)
             if resp.status_code == 200:
-                logger.info(f"Detected running {label} at {url} (/v1/models -> 200).")
+                data = resp.json().get("data", [])
+                discovered_model = data[0]["id"] if data and "id" in data[0] else None
+                configured_model = getattr(Config, "OPENAI_MODEL", None)
+                chosen_model = (
+                    configured_model
+                    if configured_model and configured_model != "Qwen/Qwen3.8-27B-FP8"
+                    else (discovered_model or "default")
+                )
+                self.backend_mode = "openai_api"
+                self.server_url = base_v1
+                self.model_name = chosen_model
+                if OpenAI is not None:
+                    self.openai_client = OpenAI(
+                        base_url=self.server_url,
+                        api_key=getattr(Config, "OPENAI_API_KEY", "EMPTY") or "EMPTY",
+                        timeout=3600
+                    )
+                self.use_server = True
+                self.is_loaded = True
+                logger.info(f"Detected running OpenAI-compatible server ({label}) at {self.server_url} (model: {self.model_name}).")
                 return True
         except Exception:
             pass
@@ -627,11 +670,28 @@ class SGLangExtractor:
                 payload["image_data"] = [img_data_uri]
 
             max_retries = 2
+            fallback_to_openai = False
             for attempt in range(max_retries + 1):
                 try:
                     async with aiohttp.ClientSession(timeout=timeout) as session:
                         async with session.post(f"{self.server_url}/generate", json=payload) as resp:
-                            if resp.status != 200:
+                            if resp.status == 404:
+                                logger.info(
+                                    f"Endpoint {self.server_url}/generate returned 404 (server is OpenAI-compatible / llama-server). "
+                                    f"Auto-switching backend to openai_api mode..."
+                                )
+                                self.backend_mode = "openai_api"
+                                base_v1 = f"{self.server_url.rstrip('/')}/v1" if not self.server_url.endswith("/v1") else self.server_url
+                                self.server_url = base_v1
+                                if OpenAI is not None:
+                                    self.openai_client = OpenAI(
+                                        base_url=self.server_url,
+                                        api_key=getattr(Config, "OPENAI_API_KEY", "EMPTY") or "EMPTY",
+                                        timeout=3600
+                                    )
+                                fallback_to_openai = True
+                                break
+                            elif resp.status != 200:
                                 err_body = await resp.text()
                                 raise RuntimeError(f"Server error {resp.status}: {err_body}")
                             result = await resp.json()
@@ -643,26 +703,32 @@ class SGLangExtractor:
                     else:
                         raise
 
+            if not fallback_to_openai:
+                return ""
+
         # Mode B: OpenAI-Compatible API (/v1/chat/completions)
-        elif self.backend_mode == "openai_api":
+        if self.backend_mode == "openai_api":
             client = self.openai_client
             if client is None:
                 if OpenAI is None:
                     raise RuntimeError("OpenAI package not installed. Run 'pip install openai'.")
                 client = OpenAI(
                     base_url=self.server_url,
-                    api_key=Config.OPENAI_API_KEY or "EMPTY"
+                    api_key=getattr(Config, "OPENAI_API_KEY", "EMPTY") or "EMPTY",
+                    timeout=3600
                 )
+                self.openai_client = client
 
             content_items = []
             if img_data_uri:
                 content_items.append({"type": "image_url", "image_url": {"url": img_data_uri}})
             content_items.append({"type": "text", "text": prompt_text})
 
-            def _call_openai():
+            def _call_openai(include_image=True):
+                messages_content = content_items if (include_image and img_data_uri) else prompt_text
                 kwargs = {
                     "model": self.model_name,
-                    "messages": [{"role": "user", "content": content_items if img_data_uri else prompt_text}],
+                    "messages": [{"role": "user", "content": messages_content}],
                     "max_tokens": max_new_tokens,
                     "temperature": temperature,
                 }
@@ -670,8 +736,17 @@ class SGLangExtractor:
                     kwargs["response_format"] = {"type": "json_object"}
                 return client.chat.completions.create(**kwargs)
 
-            completion = await asyncio.to_thread(_call_openai)
-            return completion.choices[0].message.content or ""
+            try:
+                completion = await asyncio.to_thread(_call_openai, True)
+                return completion.choices[0].message.content or ""
+            except Exception as e:
+                err_str = str(e)
+                # If server doesn't support multimodal without mmproj (e.g. llama-server without --mmproj)
+                if img_data_uri and ("image input is not supported" in err_str or "mmproj" in err_str or "500" in err_str):
+                    logger.warning(f"Server does not support image input (no mmproj loaded). Retrying with text prompt only.")
+                    completion = await asyncio.to_thread(_call_openai, False)
+                    return completion.choices[0].message.content or ""
+                raise
 
         # Mode C: Embedded SGLang Engine
         elif self.backend_mode == "embedded_engine":
@@ -1209,49 +1284,6 @@ class SGLangExtractor:
         except Exception as e:
             logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
             raise
-
-    async def assess_oecd_compliance(self, full_document_json: str, context_text: Optional[str] = None) -> "OECDAssessment":
-        """Tier 3 Pass: Evaluates extracted PBPK model strictly against OECD GD 331 & Tan et al. checklist."""
-        from pk_pipeline.schemas import OECDAssessment
-        from pk_pipeline.oecd_assessor import build_oecd_assessment_prompt, evaluate_oecd_from_document
-
-        if not getattr(self, "is_loaded", False):
-            logger.info("SGLang not loaded; running deterministic OECD GD 331 evaluation from extracted evidence.")
-            try:
-                doc_dict = json.loads(full_document_json)
-                return evaluate_oecd_from_document(doc_dict)
-            except Exception as e:
-                logger.error(f"Deterministic OECD evaluation failed: {e}")
-                return OECDAssessment(checklist_version="OECD GD 331", items=[])
-
-        start_t = time.time()
-        logger.info("SGLang: [START] Running Tier 3 OECD GD 331 Assessment Pass...")
-
-        schema_json = json.dumps(OECDAssessment.model_json_schema(), indent=2)
-        prompt_text = build_oecd_assessment_prompt(full_document_json, context_text=context_text)
-
-        try:
-            extracted_text = await self._generate(
-                prompt_text=prompt_text,
-                schema_json=schema_json,
-                max_new_tokens=8000,
-                temperature=0.0,
-                timeout_seconds=3600
-            )
-
-            clean_json_str = self._strip_think_and_fences(extracted_text)
-            json_data = json.loads(clean_json_str)
-            assessment = OECDAssessment(**json_data)
-            duration = time.time() - start_t
-            logger.info(f"SGLang: [END] Tier 3 OECD Assessment complete in {duration:.2f}s.")
-            return assessment
-        except Exception as e:
-            logger.warning(f"SGLang Tier 3 OECD generation issue: {e}. Falling back to deterministic evidence evaluator.")
-            try:
-                doc_dict = json.loads(full_document_json)
-                return evaluate_oecd_from_document(doc_dict)
-            except Exception:
-                raise
 
     async def assess_tan_template(self, full_document_json: str, context_text: Optional[str] = None) -> "TanPBPKAssessment":
         """Run the Tan et al. PBPK reporting questionnaire.

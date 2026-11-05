@@ -1248,29 +1248,23 @@ def post_process_document(document, pdf_path):
 async def _run_selected_assessments(document: dict, assessment_template: str = "tan") -> dict:
     """Run the explicitly selected reporting questionnaire(s).
 
-    Tan is the default because it is the detailed reporting template.  The
-    legacy OECD questionnaire remains available for comparison through
-    ``assessment_template='oecd'`` or ``'both'``.
+    Tan is the default detailed reporting template.
     """
     template = (assessment_template or "tan").lower().strip()
-    if template not in {"tan", "oecd", "both", "none"}:
-        raise ValueError("assessment_template must be one of: tan, oecd, both, none")
+    if template not in {"tan", "none"}:
+        if template in {"oecd", "both"}:
+            print("Note: OECD GD 331 assessor has been removed; running Tan PBPK reporting questionnaire instead.")
+            template = "tan"
+        else:
+            raise ValueError("assessment_template must be one of: tan, none")
 
-    if template in {"tan", "both"}:
+    if template == "tan":
         print("Step: Running Tan PBPK Reporting Questionnaire...")
         try:
             tan_assessment = await get_extractor().assess_tan_template(json.dumps(document))
             document["tan_assessment"] = tan_assessment.model_dump()
         except Exception as exc:
             print(f"  -> Failed to run Tan assessment: {exc}")
-
-    if template in {"oecd", "both"}:
-        print("Step: Running OECD GD 331 Checklist Assessment...")
-        try:
-            oecd_assessment = await get_extractor().assess_oecd_compliance(json.dumps(document))
-            document["oecd_assessment"] = oecd_assessment.model_dump()
-        except Exception as exc:
-            print(f"  -> Failed to run OECD assessment: {exc}")
 
     return document
 
@@ -1930,11 +1924,11 @@ Examples:
     )
     parser.add_argument(
         "--assessment-template",
-        choices=("tan", "oecd", "both", "none"),
+        choices=("tan", "none"),
         default="tan",
         help=(
             "Reporting questionnaire to run after extraction: Tan PBPK template "
-            "(default), legacy OECD checklist, both, or none."
+            "(default) or none."
         ),
     )
     parser.add_argument(
@@ -1945,18 +1939,11 @@ Examples:
         help="Alias for --assessment-template tan.",
     )
     parser.add_argument(
-        "--oecd-assessment",
-        dest="assessment_template",
-        action="store_const",
-        const="oecd",
-        help="Run the legacy OECD checklist instead of the Tan questionnaire.",
-    )
-    parser.add_argument(
         "--no-assessment",
         dest="assessment_template",
         action="store_const",
         const="none",
-        help="Skip both reporting questionnaires.",
+        help="Skip reporting questionnaire.",
     )
 
     args = parser.parse_args()

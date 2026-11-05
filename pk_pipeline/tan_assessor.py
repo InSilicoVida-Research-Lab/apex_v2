@@ -1,7 +1,6 @@
 """Tan et al. PBPK reporting-template questionnaire.
 
-This module is intentionally separate from :mod:`oecd_assessor`.  Tan's
-template is used here as a model-reporting questionnaire covering purpose,
+Tan's template is used here as a model-reporting questionnaire covering purpose,
 strategy, data, structure, equations, parameters, simulations, software,
 evaluation, and sensitivity/uncertainty.
 
