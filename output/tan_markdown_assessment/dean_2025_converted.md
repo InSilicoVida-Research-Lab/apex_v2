@@ -1,3 +1,5 @@
+<!-- PAGE 1 -->
+### [Page 1]
 SOT<sup>Society of</sup> Toxicology O X F OR D academic.oup.com/toxsci 
 
 _Toxicological Sciences_ , 2025, **207(1),** 139–147 
@@ -24,8 +26,10 @@ Toxicokinetic (TK) modeling is used to describe and quantify the relationship be
 
 Detailed reviews of available PFAS TK models have been published elsewhere (Chou and Lin 2021; East et al. 2023; US EPA 2024a, 2024b). Briefly, several TK models, including animal, human, PBTK, as well as compartmental models, have been published for the long-chain PFOA and PFOS compounds (e.g. Andersen et al. 2006; Tan et al. 2008; Wambaugh et al. 2008; Wambaugh et al. 2013; Loccisano et al. 2011; Verner et al. 2016; Ruark et al. 2017; Brochot et al. 2019; Chou and Lin 2019; Goeden 
 
-> © The Author(s) 2025. Published by Oxford University Press on behalf of the Society of Toxicology. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (https://creativecommons.org/licenses/by/4.0/), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited. 
+> © The Author(s) 2025. Published by Oxford University Press on behalf of the Society of Toxicology. This is an Open Access article distributed under the terms of the Creative Commons Attribution License (https://creativecommons.org/licenses/by/4.0/), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited.
 
+<!-- PAGE 2 -->
+### [Page 2]
 140 | Dean et al. 
 
 et al. 2019). A few of these compartment and PBTK models have been applied for regulatory purposes (Loccisano et al. 2011; Wambaugh et al. 2013; Verner et al. 2016; Goeden et al. 2019). There are fewer TK models (e.g. Fabrega et al. 2015; Kim et al. 2018, 2019; Sweeney 2022) available, however, for the large number of additional compounds that can be found in foods (e.g. PFDA, PFHxS, PFNA, PFBS), and the implementation of compartment developmental and PBTK models for compounds such as PFHxS, PFBS, and PFNA has shown inconsistencies with empirical data, which has limited their utility for risk assessments (Fabrega et al. 2015; Verner et al. 2016; Kim et al. 2018; Sweeney 2022; US EPA 2023, 2024c). 
@@ -64,8 +68,10 @@ Not all the parameters were able to be independently estimated from the availabl
 
 Model performance was evaluated with mean square log errors (MSLE) and by visually comparing the commonalities between the observed and predicted data. Predictions that were on average within a factor of 2 of the experimental data were considered adequate (World Health Organization 2010). For the human models specifically, the performance of the resulting models was assessed by (i) simulating biomonitoring data in the NHANES and (ii) predicting point of departure human equivalent doses (PODHED). 
 
-For validation with NHANES biomonitoring data, the observed PFOS and PFOA serum levels were extracted from the NHANES data files (1999 to 2000, 2003 to 2004 and 2017 to 2018 surveys) with the respective date of birth. Data for individuals _<_ 20 years 
+For validation with NHANES biomonitoring data, the observed PFOS and PFOA serum levels were extracted from the NHANES data files (1999 to 2000, 2003 to 2004 and 2017 to 2018 surveys) with the respective date of birth. Data for individuals _<_ 20 years
 
+<!-- PAGE 3 -->
+### [Page 3]
 _Toxicological Sciences_ , 2025, Vol 207, Issue 1 | 141 
 
 
@@ -89,8 +95,10 @@ Nonhuman primate data were also shared for PFBS and PFHxS (Chang 2020c; Chang 20
 
 The Wambaugh model was fitted to the available nonhuman primate data for PFOS (Seacat et al. 2002; Chang et al. 2012) and PFOA (Butenhoff et al. 2004). Of the 8 chemical-specific parameters in the model ( _bioAv_ , _VCC_ , _Tmc_ , _Kt, Free_ , _k12_ , _k21_ , and _ka_ ), 6 and 8 parameters were a priori identifiable for PFOA and PFOS, respectively, from the “collin” function. However, further MCMC tries clearly indicated additional collinearities in the estimates. As such, the proportion of free compound in the serum ( _Free_ ), the rate of absorption from the gut ( _ka_ ), and the rate to and from the second compartment ( _k12_ , _k21_ ) were assigned set values from the iterative evaluation of the starting parameters (Table S1). The impact of parameter changes was evaluated with a sensitivity analysis. 
 
-The _VCC_ , _Tmc_ , _Kt_ , and _bioAv_ (PFOA) parameters were estimated from the data. The mean and MCMC 95% credible interval 
+The _VCC_ , _Tmc_ , _Kt_ , and _bioAv_ (PFOA) parameters were estimated from the data. The mean and MCMC 95% credible interval
 
+<!-- PAGE 4 -->
+### [Page 4]
 142 | Dean et al. 
 
 for each parameter are shown in Table 1. Changing the value of _ka_ , _k12_ , or _k12_ by up to 2 orders of magnitude resulted in an average change in value for _VCC_ , _Tmc_ , _Kt_ , and _bioAv_ (PFOA) of less than 10% (Tables S2 and S3), suggesting a robustness of the inference process given the available data. Increasing the ratio _k12_ / _k21_ to values equal to or greater than 100 resulted in changes in _VCC_ of greater than 10%, as noted in Wambaugh et al. (2013). The _Free_ parameter was found to be highly correlated to the resorption parameters; changing _Free_ will then result in a change in _Tmc_ and _Kt_ . 
@@ -143,8 +151,10 @@ The human models were also used to calculate the PODHED for the cardiovascular a
 
 > a The code uses the average body weight for each nonhuman primate or group of nonhuman primates as reported in the original studies. 
 
-> b If the bioavailability is set to 90% for the nonhuman primate model of PFOA, the _Tmc_ and _Kt_ values for the nonhuman primates are 0.15 mg/h/kg and 0.008 mg/ L, respectively. For the human model, a set value of 0.008 mg/L for _Kt_ was used as it is representative of the higher bioavailability considered more typical for intake of food and water. 
+> b If the bioavailability is set to 90% for the nonhuman primate model of PFOA, the _Tmc_ and _Kt_ values for the nonhuman primates are 0.15 mg/h/kg and 0.008 mg/ L, respectively. For the human model, a set value of 0.008 mg/L for _Kt_ was used as it is representative of the higher bioavailability considered more typical for intake of food and water.
 
+<!-- PAGE 5 -->
+### [Page 5]
 _Toxicological Sciences_ , 2025, Vol 207, Issue 1 | 143 
 
 
@@ -166,8 +176,10 @@ We developed an approach that improves our ability to connect PFAS exposures to 
 
 nonhuman primates for use in humans over the age of 20. Our results suggest that only a few key parameters ( _BW_ , _QCC_ , _T1/2_ ) are needed to adapt the Wambaugh nonhuman primate compartment model to be useful for human inferences, minimizing the reliance on human-specific data for new TK model development. A nonhuman primate PBTK model was similarly adapted in Loccisano et al. (2011), and although PBTK models are generally preferred over compartment approaches, a compartment modelbased approach is an attractive alternative herein considering the need for simplicity when conducting dosimetry calculations for PFAS compounds with minimal human TK data. The Wambaugh model was the foundation of our approach because of its simplicity and its demonstrated use in regulatory works (US EPA 2024a, 2024b). Although PBTK models have been developed for PFOA, PFOS, and PFHxS, and these models can estimate additional tissue concentrations beyond the serum, serum contains the major proportion of the compounds in question (Forsthuber et al. 2020). Furthermore, our knowledge of dietary exposure to PFAS is primarily informed by serum data (Calafat et al. 2007 2019). Thus, the simplicity of a multi-compartment model for this approach makes it fit for use. 
 
-A specific effort was made in this study to identify correlations among parameters that would impair the inference process. These correlations can lead to extremely large credible intervals in the estimates of the MCMC inference process, as can be observed in Wambaugh et al. (2013). The parameters deemed identifiable were associated with much narrower credible intervals. Sensitivity analyses were conducted for the parameters held constant in the fitting process, and although some parameters ( _k12, k21, ka_ ) were found to have a minimal impact on model outputs for the tested values (Tables S2 and S3), the values for _Free_ and bioavailability for each compound were found to have a strong influence on results. The _Free_ parameters in these models were selected based on protein binding assay findings (Smeltz et al. 2023). An advantage of this approach is the availability of compound-specific _Free_ values for multiple PFAS compounds of interest. However, the binding efficacy may be higher in vitro than in vivo. Different _Free_ values will correspond to different 
+A specific effort was made in this study to identify correlations among parameters that would impair the inference process. These correlations can lead to extremely large credible intervals in the estimates of the MCMC inference process, as can be observed in Wambaugh et al. (2013). The parameters deemed identifiable were associated with much narrower credible intervals. Sensitivity analyses were conducted for the parameters held constant in the fitting process, and although some parameters ( _k12, k21, ka_ ) were found to have a minimal impact on model outputs for the tested values (Tables S2 and S3), the values for _Free_ and bioavailability for each compound were found to have a strong influence on results. The _Free_ parameters in these models were selected based on protein binding assay findings (Smeltz et al. 2023). An advantage of this approach is the availability of compound-specific _Free_ values for multiple PFAS compounds of interest. However, the binding efficacy may be higher in vitro than in vivo. Different _Free_ values will correspond to different
 
+<!-- PAGE 6 -->
+### [Page 6]
 144 | Dean et al. 
 
 
@@ -187,8 +199,10 @@ models’ ability to simulate general biomonitoring data trends over time, the f
 
 We also calculated the PODHED for the cardiovascular and hepatic endpoints evaluated in the EPA’s Human Health Toxicity Assessments to validate our approach. In that regard, our estimated human equivalent doses for the selected PODs were approximately 1.5 times greater than those estimated by the Verner model at steady state for a 70 kg individual (US EPA 2024a, 2024b). The differences arise from the higher volume of distribution estimated in our Wambaugh-adapted models compared with the one-compartment EPA-modified Verner model. If we consider the full spectrum of possible exposure doses, the EPAmodified Verner model would not be applicable for doses past the point of saturation, whereas the Wambaugh-adapted model incorporates saturable absorption and could be used. These comparisons suggest that the TK models developed with our approach are sufficiently similar to those applied for regulatory purposes, while being able to incorporate the more advanced saturable resorption mechanism, which increases the model’s utility for making inferences from animal datasets and extreme human exposure scenarios. The utility of the approach is further demonstrated by its application to PFHxS, which yielded a model with a clearance rate between those selected for males and females outside of reproductive ages and females of reproductive age in the EPA’s derivation of PFHxS candidate toxicity values (US EPA 2025). 
 
-This work demonstrates the feasibility of our approach to adapt TK models from nonhuman primates to humans with a level of accuracy. The application and continued development of this approach for PFAS compounds of interest will advance our ability to relate dietary PFAS to endpoints of concern. The inclusion of a development compartment to model gestational and lactational exposure to infants is a noted area for future improvement, as this is needed for baby and infant applications. Modifications were made to the Wambaugh animal model to account for gestation, lactation, and postweaning phases in other works (US EPA 2024a, 2024b), and the applicability of these modifications for our proposed approach to adapting nonhuman primate models for humans needs to be further explored. To our knowledge, there are limited additional nonhuman primate studies available in the literature for the wide range of PFAS compounds found in the diet (Olsen et al. 2009; Chang 2020c). Our 
+This work demonstrates the feasibility of our approach to adapt TK models from nonhuman primates to humans with a level of accuracy. The application and continued development of this approach for PFAS compounds of interest will advance our ability to relate dietary PFAS to endpoints of concern. The inclusion of a development compartment to model gestational and lactational exposure to infants is a noted area for future improvement, as this is needed for baby and infant applications. Modifications were made to the Wambaugh animal model to account for gestation, lactation, and postweaning phases in other works (US EPA 2024a, 2024b), and the applicability of these modifications for our proposed approach to adapting nonhuman primate models for humans needs to be further explored. To our knowledge, there are limited additional nonhuman primate studies available in the literature for the wide range of PFAS compounds found in the diet (Olsen et al. 2009; Chang 2020c). Our
 
+<!-- PAGE 7 -->
+### [Page 7]
 _Toxicological Sciences_ , 2025, Vol 207, Issue 1 | 145 
 
 **Table 2.** Comparing the PODHEDs calculated with the Verner model in (US EPA 2024a, 2024b) for PFOS and PFOA to estimates calculated with the human-adapted Wambaugh model. 
@@ -251,8 +265,10 @@ The authors would like to thank other subject matter experts in the Human Foods 
 
 - Andersen ME, Clewell HJ 3rd, Tan YM, Butenhoff JL, Olsen GW. 2006. Pharmacokinetic modeling of saturable, renal resorption of perfluoroalkylacids in monkeys—probing the determinants of long plasma half-lives. Toxicology. 227:156–164. 
 
-- ATSDR. 2021. Toxicological profile for perfluoroalkyls. Atlanta, GA: U.S. Department of Health and Human Services, Public Health Service. 
+- ATSDR. 2021. Toxicological profile for perfluoroalkyls. Atlanta, GA: U.S. Department of Health and Human Services, Public Health Service.
 
+<!-- PAGE 8 -->
+### [Page 8]
 146 | Dean et al. 
 
 - Baron KT. 2023. Mrgsolve: simulate from ode-based models. R package version 1.3.0. https://mrgsolve.org/docs/ 
@@ -315,8 +331,10 @@ The authors would like to thank other subject matter experts in the Human Foods 
 
 - Loccisano AE, Campbell JL, Andersen ME, Clewell HJ. 2011. Evaluation and prediction of pharmacokinetics of PFOA and PFOS in the monkey and human using a PBPK model. Regul Toxicol Pharmacol. 59:157–175. 
 
-- Loveless SE, Hoban D, Sykes G, Frame SR, Everds NE. 2008. Evaluation of the immune system in rats and mice administered linear ammonium perfluorooctanoate. Toxicol Sci. 105:86–96. 
+- Loveless SE, Hoban D, Sykes G, Frame SR, Everds NE. 2008. Evaluation of the immune system in rats and mice administered linear ammonium perfluorooctanoate. Toxicol Sci. 105:86–96.
 
+<!-- PAGE 9 -->
+### [Page 9]
 _Toxicological Sciences_ , 2025, Vol 207, Issue 1 | 147 
 
 - Lumley T. 2004. Analysis of complex survey samples. J Stat Soft. 9:1–19. 
@@ -377,5 +395,4 @@ _Toxicological Sciences_ , 2025, Vol 207, Issue 1 | 147
 
 > This is an Open Access article distributed under the terms of the Creative Commons Attribution License (https://creativecommons.org/licenses/by/4.0/ ), which permits unrestricted reuse, distribution, and reproduction in any medium, provided the original work is properly cited. Toxicological Sciences, 2025, 207, 139–147 
 
-https://doi.org/10.1093/toxsci/kfaf087 Research article 
-
+https://doi.org/10.1093/toxsci/kfaf087 Research article

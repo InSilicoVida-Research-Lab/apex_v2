@@ -48,7 +48,6 @@ class ColQwenRetriever:
         self.model_name = "vidore/colqwen2.5-v0.2"
         
         try:
-            # Load the model and processor in FP16 as per the architecture spec
             logger.info(f"Loading {self.model_name} in FP16 precision...")
             self.model = ColQwen2_5.from_pretrained(
                 self.model_name, 
@@ -82,7 +81,6 @@ class ColQwenRetriever:
             query_embeddings = self.model(**batch_queries)
 
         # 3. Calculate MaxSim for both queries
-        # query_embeddings[0] is positive query, query_embeddings[1] is negative query
         pos_query_emb = query_embeddings[0:1]
         neg_query_emb = query_embeddings[1:2]
         
@@ -94,28 +92,20 @@ class ColQwenRetriever:
             p_score = pos_scores[i].item()
             n_score = neg_scores[i].item()
             
-            # If the page is highly confident as a Reference section (n_score > p_score)
-            # BUT it also has a strong positive score for being a table (p_score > 10.0),
-            # do NOT penalize it. It's likely a table embedded inside the references.
             penalty = 0
             if n_score > p_score and p_score < 10.0:
-                penalty = 10.0  # massive penalty to push it out of the top-k
+                penalty = 10.0
                 
             final_score = p_score - penalty
             all_scores.append((i, final_score, p_score, n_score))
             
         max_score = max(s for _, s, _, _ in all_scores)
         
-        # Log every page score so we can see exactly what ColQwen thinks
         for i, s, p, n in sorted(all_scores, key=lambda x: x[1], reverse=True):
             logger.info(f"  Page {i+1:>2}: final={s:.4f} (pos={p:.4f}, neg={n:.4f})")
         
-        # 4. Dual threshold: must pass BOTH a relative AND absolute floor
-        #    - relative: must be within 85% of the top-scoring page
-        #    - absolute: absolute minimum to reject clearly irrelevant pages (logos, refs)
-        #      Set empirically — ColQwen MaxSim scores for PK tables are typically > 15.0
         relative_cutoff = max_score * threshold_ratio
-        absolute_floor = max_score * 0.60  # hard floor: never go below 60% of max
+        absolute_floor = max_score * 0.60
         cutoff = max(relative_cutoff, absolute_floor)
         
         top_indices = [
@@ -123,10 +113,8 @@ class ColQwenRetriever:
             if s >= cutoff
         ]
                 
-        # Sort by score descending and limit to top_k
         top_indices.sort(key=lambda i: all_scores[i][1], reverse=True)
         
-        # Fallback: guarantee at least 4 pages (or all pages if fewer than 4) are kept for tables
         min_pages = min(4, len(all_scores))
         if len(top_indices) < min_pages:
             sorted_all = sorted(range(len(all_scores)), key=lambda i: all_scores[i][1], reverse=True)
@@ -134,7 +122,6 @@ class ColQwenRetriever:
             
         top_indices = top_indices[:top_k]
         
-        # Fallback if somehow empty
         if not top_indices:
             best_idx = max(range(len(all_scores)), key=lambda i: all_scores[i][2])
             top_indices = [best_idx]
@@ -225,8 +212,6 @@ CRITICAL INSTRUCTIONS FOR THIS TABLE:
 Document Table ({source_location}):
 {markdown_table_string}"""
 
-
-from .schemas import ExtractedPage, ExtractedParameter, TableExtractionPage, DiagramExtractionPage
 
 TABLE_SYSTEM_PROMPT_TEMPLATE = """You are an evidence-grounded pharmacokinetic (PK) and PBPK table data extraction engine compatible with the Tan et al. reporting template.
 Your task is to faithfully extract model parameters, experimental values, and model outputs from scientific tables into the strict JSON schema provided below.
@@ -471,7 +456,7 @@ class SGLangExtractor:
                 logger.info(f"Using OpenAI-compatible API at {self.server_url} with model {self.model_name}.")
                 return
 
-        # 4. Priority 4: Fallback to Embedded Local SGLang Engine
+        # 5. Priority 5: Fallback to Embedded Local SGLang Engine
         if force in ("auto", "engine", "embedded"):
             try:
                 import sglang as sgl
@@ -523,7 +508,6 @@ class SGLangExtractor:
             pass
 
         try:
-            # Check if /generate endpoint is present and doesn't 404
             resp = requests.post(f"{url}/generate", json={}, timeout=timeout)
             if resp.status_code != 404:
                 logger.info(f"Detected running native SGLang {label} at {url} (/generate -> {resp.status_code}).")
@@ -621,10 +605,36 @@ class SGLangExtractor:
             return ""
         if "</think>" in text:
             text = text.split("</think>")[-1].strip()
-        m = re.search(r"```(?:json)?\s*(\{.*?\})\s*```", text, re.DOTALL)
+        m = re.search(r"```(?:json)?\s*(\{.*\})\s*```", text, re.DOTALL)
         if m:
             return m.group(1).strip()
         return text.strip()
+
+    @staticmethod
+    def _parse_chatml_to_messages(prompt_text: str, img_data_uri: Optional[str] = None) -> List[Dict[str, Any]]:
+        """Unwraps `<|im_start|>role...<|im_end|>` tags into clean OpenAI messages to prevent double-templating."""
+        pattern = re.compile(r"<\|im_start\|>(system|user|assistant)\s*\n(.*?)<\|im_end\|>", re.DOTALL)
+        matches = pattern.findall(prompt_text)
+        if not matches:
+            clean_user = re.sub(r"<\|vision_start\|>.*?<\|vision_end\|>", "", prompt_text).strip()
+            if img_data_uri:
+                return [{"role": "user", "content": [{"type": "image_url", "image_url": {"url": img_data_uri}}, {"type": "text", "text": clean_user}]}]
+            return [{"role": "user", "content": clean_user}]
+
+        messages: List[Dict[str, Any]] = []
+        for role, content in matches:
+            clean_content = re.sub(r"<\|vision_start\|>.*?<\|vision_end\|>", "", content).strip()
+            if role == "user" and img_data_uri:
+                messages.append({
+                    "role": "user",
+                    "content": [
+                        {"type": "image_url", "image_url": {"url": img_data_uri}},
+                        {"type": "text", "text": clean_content},
+                    ],
+                })
+            else:
+                messages.append({"role": role, "content": clean_content})
+        return messages
 
     async def _generate(
         self,
@@ -645,7 +655,6 @@ class SGLangExtractor:
         if not getattr(self, "is_loaded", False):
             raise RuntimeError("SGLangExtractor is not loaded. Check server connectivity or .env.")
 
-        # Prepare base64 image data if image is provided
         img_data_uri = None
         if image is not None:
             img_data_uri = self._image_to_base64_data_uri(image)
@@ -719,16 +728,12 @@ class SGLangExtractor:
                 )
                 self.openai_client = client
 
-            content_items = []
-            if img_data_uri:
-                content_items.append({"type": "image_url", "image_url": {"url": img_data_uri}})
-            content_items.append({"type": "text", "text": prompt_text})
-
             def _call_openai(include_image=True):
-                messages_content = content_items if (include_image and img_data_uri) else prompt_text
+                active_uri = img_data_uri if include_image else None
+                messages = self._parse_chatml_to_messages(prompt_text, img_data_uri=active_uri)
                 kwargs = {
                     "model": self.model_name,
-                    "messages": [{"role": "user", "content": messages_content}],
+                    "messages": messages,
                     "max_tokens": max_new_tokens,
                     "temperature": temperature,
                 }
@@ -745,9 +750,8 @@ class SGLangExtractor:
                 return content
             except Exception as e:
                 err_str = str(e)
-                # If server doesn't support multimodal without mmproj (e.g. llama-server without --mmproj)
                 if img_data_uri and ("image input is not supported" in err_str or "mmproj" in err_str or "500" in err_str):
-                    logger.warning(f"Server does not support image input (no mmproj loaded). Retrying with text prompt only.")
+                    logger.warning("Server does not support image input (no mmproj loaded). Retrying with text prompt only.")
                     completion = await asyncio.to_thread(_call_openai, False)
                     choice = completion.choices[0]
                     content = choice.message.content or ""
@@ -875,6 +879,15 @@ class SGLangExtractor:
         elif clean.startswith("```"):
             clean = clean[3:]
         clean = clean.rstrip("`").strip()
+
+        # Remove trailing commas before closing brackets/braces
+        clean = re.sub(r",\s*([\]\}])", r"\1", clean)
+
+        # Ensure candidate starts from the first '{' to discard conversational preamble
+        first_brace = clean.find("{")
+        if first_brace == -1:
+            return None
+        clean = clean[first_brace:]
 
         last_brace_idx = len(clean)
         while True:
@@ -1210,7 +1223,7 @@ class SGLangExtractor:
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
 
         start_t = time.time()
-        logger.info(f"SGLang: [START] Extracting dosing from Methods text...")
+        logger.info("SGLang: [START] Extracting dosing from Methods text...")
 
         schema_json = json.dumps(DosingExtraction.model_json_schema(), indent=2)
         system_prompt = (
@@ -1255,7 +1268,7 @@ class SGLangExtractor:
             raise RuntimeError("SGLangExtractor failed to load. Ensure the SGLang server is running and accessible.")
 
         start_t = time.time()
-        logger.info(f"SGLang: [START] Running Tier 2 Evaluation Pass...")
+        logger.info("SGLang: [START] Running Tier 2 Evaluation Pass...")
 
         schema_json = json.dumps(EvaluatorJudgments.model_json_schema(), indent=2)
         system_prompt = (
@@ -1294,12 +1307,7 @@ class SGLangExtractor:
             raise
 
     async def assess_tan_template(self, full_document_json: str, context_text: Optional[str] = None) -> "TanPBPKAssessment":
-        """Run the Tan et al. PBPK reporting questionnaire.
-
-        The parsed response is normalized after generation so that missing
-        evidence becomes ``i_cannot_answer`` and confidence is computed from
-        evidence completeness rather than accepted from the model.
-        """
+        """Run the Tan et al. PBPK reporting questionnaire."""
         from pk_pipeline.schemas import TanPBPKAssessment
         from pk_pipeline.tan_assessor import (
             build_tan_assessment_prompt,
@@ -1330,7 +1338,20 @@ class SGLangExtractor:
                 timeout_seconds=3600,
             )
             clean_json_str = self._strip_think_and_fences(extracted_text)
-            assessment = normalize_tan_assessment(json.loads(clean_json_str), document)
+            first_brace = clean_json_str.find("{")
+            if first_brace != -1:
+                last_brace = clean_json_str.rfind("}")
+                if last_brace != -1 and last_brace > first_brace:
+                    clean_json_str = clean_json_str[first_brace:last_brace + 1]
+                else:
+                    clean_json_str = clean_json_str[first_brace:]
+            clean_json_str = re.sub(r",\s*([\]\}])", r"\1", clean_json_str)
+            try:
+                parsed_dict = json.loads(clean_json_str)
+            except Exception:
+                repaired = self._repair_truncated_json(clean_json_str)
+                parsed_dict = repaired if isinstance(repaired, dict) else {}
+            assessment = normalize_tan_assessment(parsed_dict, document)
             logger.info(
                 "SGLang: [END] Tan questionnaire complete in %.2fs.",
                 time.time() - start_t,
@@ -1348,14 +1369,15 @@ class SGLangExtractor:
         self,
         markdown_text: str,
         paper_title: Optional[str] = None,
-        mode: str = "single",
+        mode: str = "sections",
         max_new_tokens: int = 12000,
     ) -> "TanPBPKAssessment":
         """Run the Tan et al. PBPK reporting questionnaire directly on a Markdown paper.
 
-        Accepts the complete Markdown text of the paper, prompts the LLM to
-        evaluate Tan questions with strict evidence citations, and
-        normalizes the response into a validated TanPBPKAssessment.
+        Uses section-aware Markdown routing so that every batch of questions
+        receives the relevant sections of the paper (Abstract, Methods, Tables,
+        Equations, Results, Evaluation, Sensitivity, Discussion) without losing
+        the second half of the paper to prefix truncation.
         """
         from pk_pipeline.schemas import TanPBPKAssessment
         from pk_pipeline.tan_assessor import (
@@ -1373,96 +1395,114 @@ class SGLangExtractor:
         start_t = time.time()
         logger.info(f"LLM: [START] Running Tan PBPK reporting questionnaire on Markdown paper (mode={mode})...")
         schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
+        include_no_think = "qwen" in self.model_name.lower()
 
-        # Prepend /no_think for Qwen reasoning models to suppress chain-of-thought
-        # and preserve the entire token budget for the JSON response.
-        no_think_prefix = ""
-        if "qwen" in self.model_name.lower():
-            no_think_prefix = "/no_think\n"
+        def _parse_batch_response(raw_text: str, batch_label: str) -> tuple[list[dict], dict]:
+            """Parse JSON output from a batch call with safe truncation repair."""
+            clean_str = self._strip_think_and_fences(raw_text)
+
+            # Slice from the first '{' and, if closing '}' exists, up to the last '}'
+            first_brace = clean_str.find("{")
+            if first_brace != -1:
+                last_brace = clean_str.rfind("}")
+                if last_brace != -1 and last_brace > first_brace:
+                    clean_str = clean_str[first_brace:last_brace + 1]
+                else:
+                    clean_str = clean_str[first_brace:]
+
+            # First try direct JSON load after removing trailing commas
+            cleaned_commas = re.sub(r",\s*([\]\}])", r"\1", clean_str)
+            try:
+                parsed = json.loads(cleaned_commas)
+                if isinstance(parsed, dict):
+                    items_list = parsed.get("items", [])
+                    meta_dict = parsed.get("model_identification") or {}
+                    logger.info(f"Tan batch {batch_label}: parsed {len(items_list)} items OK.")
+                    return items_list, meta_dict
+            except Exception:
+                pass
+
+            # Second: use stack-based truncated JSON repair
+            repaired_dict = self._repair_truncated_json(clean_str)
+            if isinstance(repaired_dict, dict) and "items" in repaired_dict:
+                items_list = repaired_dict.get("items", [])
+                meta_dict = repaired_dict.get("model_identification") or {}
+                logger.info(
+                    f"Tan batch {batch_label}: repaired truncated JSON, recovered {len(items_list)} items."
+                )
+                return items_list, meta_dict
+
+            logger.warning(f"Tan batch {batch_label}: could not parse JSON output.")
+            return [], {}
 
         try:
             if mode == "sections":
-                all_items = []
                 by_id = {item["item_id"]: item for item in TAN_QUESTIONNAIRE_ITEMS}
-
-                # Context budget for a 32 768-token model:
-                #   ~5 000 tokens: 20 000-char markdown clip
-                #   ~1 000 tokens: schema + prompt overhead
-                #   ~4 000 tokens: JSON output for ≤4 items (terse)
-                # → hard cap: 4 items per LLM call.
-                ITEMS_PER_CALL = 4
-                # Markdown is clipped to 20 000 chars (~5 000 tokens).
-                sec_md = markdown_text[:20000] if len(markdown_text) > 20000 else markdown_text
-
-                # Flatten all section item lists into ordered batches of ≤4.
-                all_item_ids: list[str] = []
-                for item_ids in TAN_SECTIONS.values():
-                    all_item_ids.extend(item_ids)
+                ITEMS_PER_CALL = 6
 
                 batches: list[tuple[str, list[dict]]] = []
-                for i in range(0, len(all_item_ids), ITEMS_PER_CALL):
-                    chunk_ids = all_item_ids[i: i + ITEMS_PER_CALL]
-                    chunk_items = [by_id[iid] for iid in chunk_ids if iid in by_id]
-                    batch_label = f"batch_{i // ITEMS_PER_CALL + 1}"
-                    batches.append((batch_label, chunk_items))
+                for sec_name, item_ids in TAN_SECTIONS.items():
+                    for i in range(0, len(item_ids), ITEMS_PER_CALL):
+                        chunk_ids = item_ids[i: i + ITEMS_PER_CALL]
+                        chunk_items = [by_id[iid] for iid in chunk_ids if iid in by_id]
+                        batch_label = f"{sec_name}_{i // ITEMS_PER_CALL + 1}"
+                        batches.append((batch_label, chunk_items))
 
-                for batch_label, batch_items in batches:
-                    batch_prompt = no_think_prefix + build_tan_markdown_assessment_prompt(
-                        sec_md,
-                        paper_title=paper_title,
-                        items=batch_items,
-                    )
-                    # 4 terse items × ~600 tokens each = 2 400; floor at 3 000 for safety.
-                    batch_max_tokens = max(3000, len(batch_items) * 700)
-                    extracted_text = await self._generate(
-                        prompt_text=batch_prompt,
-                        schema_json=schema_json,
-                        max_new_tokens=batch_max_tokens,
-                        temperature=0.0,
-                        timeout_seconds=600,
-                    )
-                    clean_str = self._strip_think_and_fences(extracted_text)
-                    try:
-                        if not clean_str.strip().startswith("{"):
-                            m = re.search(r"(\{.*\})", clean_str, re.DOTALL)
-                            if m:
-                                clean_str = m.group(1)
-                        # Repair common LLM JSON mistakes before parsing:
-                        #  1. trailing commas before ] or }
-                        #  2. single-quoted strings → double-quoted
-                        repaired = re.sub(r",\s*([\]\}])", r"\1", clean_str)
-                        repaired = re.sub(r"(?<![\\])'", '"', repaired)
-                        parsed = json.loads(repaired)
-                        batch_parsed = parsed.get("items", [])
-                        all_items.extend(batch_parsed)
-                        logger.info(
-                            f"Tan batch {batch_label}: parsed {len(batch_parsed)} items OK."
+                sem = asyncio.Semaphore(2)
+
+                async def _run_batch(batch_label: str, batch_items: list[dict]) -> tuple[list[dict], dict]:
+                    async with sem:
+                        batch_prompt = build_tan_markdown_assessment_prompt(
+                            markdown_text,
+                            paper_title=paper_title,
+                            max_markdown_chars=26000,
+                            items=batch_items,
+                            include_no_think=include_no_think,
                         )
-                    except Exception as parse_err:
-                        # Partial recovery: extract complete {"item_id":...} objects via regex.
-                        recovered = re.findall(
-                            r'\{\s*"item_id"\s*:\s*"[^"]+".+?\}(?=\s*[,\]]|\s*\})',
-                            clean_str,
-                            re.DOTALL,
+                        batch_max_tokens = max(4096, len(batch_items) * 750)
+                        extracted_text = await self._generate(
+                            prompt_text=batch_prompt,
+                            schema_json=schema_json,
+                            max_new_tokens=batch_max_tokens,
+                            temperature=0.0,
+                            timeout_seconds=900,
                         )
-                        if recovered:
-                            for item_str in recovered:
-                                try:
-                                    all_items.append(json.loads(item_str))
-                                except Exception:
-                                    pass
-                            logger.warning(
-                                f"Tan batch {batch_label}: partial recovery, "
-                                f"got {len(recovered)} items (JSON truncated)."
-                            )
-                        else:
-                            logger.warning(
-                                f"Tan batch {batch_label}: could not parse JSON — {parse_err}"
-                            )
-                raw_assessment = {"items": all_items}
+                        return _parse_batch_response(extracted_text, batch_label)
+
+                batch_results = await asyncio.gather(
+                    *[_run_batch(lbl, itms) for lbl, itms in batches],
+                    return_exceptions=True,
+                )
+
+                all_items: list[dict] = []
+                merged_model_id: dict = {}
+                for res in batch_results:
+                    if isinstance(res, Exception):
+                        logger.warning(f"Tan batch raised exception: {res}")
+                        continue
+                    b_items, b_meta = res
+                    all_items.extend(b_items)
+                    if isinstance(b_meta, dict):
+                        for k, v in b_meta.items():
+                            if v and not merged_model_id.get(k):
+                                merged_model_id[k] = v
+
+                if not all_items:
+                    logger.warning("All LLM Tan batches returned empty items; falling back to deterministic Markdown evaluation.")
+                    return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
+
+                raw_assessment = {
+                    "model_identification": merged_model_id,
+                    "items": all_items,
+                }
                 assessment = normalize_tan_assessment(raw_assessment)
             else:
-                prompt_text = no_think_prefix + build_tan_markdown_assessment_prompt(markdown_text, paper_title=paper_title)
+                prompt_text = build_tan_markdown_assessment_prompt(
+                    markdown_text,
+                    paper_title=paper_title,
+                    max_markdown_chars=32000,
+                    include_no_think=include_no_think,
+                )
                 extracted_text = await self._generate(
                     prompt_text=prompt_text,
                     schema_json=schema_json,
@@ -1470,12 +1510,13 @@ class SGLangExtractor:
                     temperature=0.0,
                     timeout_seconds=3600,
                 )
-                clean_json_str = self._strip_think_and_fences(extracted_text)
-                if not clean_json_str.strip().startswith("{"):
-                    m = re.search(r"(\{.*\})", clean_json_str, re.DOTALL)
-                    if m:
-                        clean_json_str = m.group(1)
-                assessment = normalize_tan_assessment(json.loads(clean_json_str))
+                items_list, meta_dict = _parse_batch_response(extracted_text, "single_pass")
+                if not items_list:
+                    return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
+                assessment = normalize_tan_assessment({
+                    "model_identification": meta_dict,
+                    "items": items_list,
+                })
 
             logger.info(
                 "LLM: [END] Tan Markdown questionnaire complete in %.2fs.",
@@ -1491,14 +1532,12 @@ class SGLangExtractor:
             return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
 
 
-
 class PBPKExtractorService:
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-7B-Instruct"):
         self.model_id = model_id
         self.use_sglang = False
         self.server_url = Config.SGLANG_LOCAL_URL
 
-        # Check local SGLang server first, then DGX SGLang server
         for probe_url in [Config.SGLANG_LOCAL_URL, Config.DGX_SGLANG_URL]:
             try:
                 import requests
@@ -1533,10 +1572,6 @@ class PBPKExtractorService:
                 logger.warning(f"PBPKExtractorService: vLLM initialization note: {e}")
 
     def find_top_pages(self, retriever, pdf_images: list, top_k_per_query: int = 3) -> dict:
-        """
-        Multi-query ensemble retrieval to ensure prose pages, split tables,
-        and compartmental diagrams are all retrieved.
-        """
         queries = {
             "tables": "Table of physiological parameters blood flow tissue volumes partition coefficients Vmax Km clearance",
             "narrative": "pharmacokinetic values estimated half-life clearance volume bioavailability body weight cardiac output",
@@ -1592,12 +1627,10 @@ class PBPKExtractorService:
             raise RuntimeError("Neither SGLang server nor vLLM is available for PBPKExtractorService.")
 
 
-
 class LayaFilter:
     """
     Fast System-1 decision model (convaiinnovations/laya) for triage,
     narrative chunk filtering, and document routing.
-    Runs non-autoregressively in ~20-30ms.
     """
     def __init__(self, device: str = None, threshold: float = 0.25):
         self.threshold = threshold
@@ -1613,11 +1646,6 @@ class LayaFilter:
             self.is_loaded = False
 
     def is_pk_relevant(self, text: str) -> tuple[bool, float, str]:
-        """
-        Evaluates whether a text excerpt contains numerical PK model parameters,
-        rate constants, partition coefficients, or physiological parameters.
-        Returns: (keep_boolean, confidence_score, model_type_choice)
-        """
         if not self.is_loaded or len(text.strip()) < 50:
             return True, 1.0, "unknown"
 
@@ -1642,13 +1670,11 @@ class LayaFilter:
             }
         }
         try:
-            # truncate to 3500 chars to avoid exceeding token limit
             truncated_text = text[:3500]
             res = self.router.predict(truncated_text, questions)
             score = float(res["answers"]["has_pk_parameters"]["noul"])
             choice = res["answers"]["model_type"]["choice"]
 
-            # Keep only if probability meets threshold
             keep = (score >= self.threshold)
             return keep, score, choice
         except Exception as e:
@@ -1656,9 +1682,6 @@ class LayaFilter:
             return True, 1.0, "unknown"
 
     def classify_model_type(self, text: str) -> str:
-        """
-        Quickly classifies paper or section into: 'pbpk', 'compartmental', 'nca', or 'not_applicable'.
-        """
         if not self.is_loaded:
             return "not_applicable"
 
@@ -1686,9 +1709,6 @@ class LayaFilter:
 class WeVisDocParser:
     """
     Tencent/WeVisDoc-4B Vision-to-Markdown Document Parser.
-    Fine-tuned from Qwen3-VL to convert PDF document/table images into structured Markdown
-    with LaTeX math formulas and standard HTML tables (preserving rowspan, colspan, hierarchical headers).
-    Reference: https://huggingface.co/tencent/WeVisDoc-4B
     """
     DEFAULT_SYSTEM_PROMPT = (
         "You are an AI assistant specialized in converting PDF images to Markdown format. "
@@ -1717,7 +1737,6 @@ class WeVisDocParser:
         self.is_loaded = False
 
     def load(self):
-        """Loads processor and model weights into VRAM lazily."""
         if self.is_loaded:
             return
 
@@ -1756,9 +1775,6 @@ class WeVisDocParser:
         user_prompt: str = None,
         system_prompt: str = None
     ) -> str:
-        """
-        Transcribes a PIL Image into structured Markdown with HTML tables and LaTeX math.
-        """
         self.load()
         sys_prompt = system_prompt or self.DEFAULT_SYSTEM_PROMPT
         u_prompt = user_prompt or self.DEFAULT_USER_PROMPT

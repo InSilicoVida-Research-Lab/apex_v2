@@ -6,8 +6,8 @@
     "year": null
   },
   "model_classification": {
-    "model_type": "not_applicable",
-    "evidence_quote": null
+    "model_type": "pbpk",
+    "evidence_quote": "..."
   },
   "model_context": null,
   "biological_basis": null,

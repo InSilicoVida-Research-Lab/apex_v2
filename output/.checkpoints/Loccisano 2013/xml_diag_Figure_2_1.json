@@ -14,132 +14,90 @@
   "table_evidence": [],
   "model_structure": {
     "reported_compartment_count": "not_reported",
-    "listed_compartment_count": 7,
+    "listed_compartment_count": 4,
     "count_consistency": null,
     "compartments": [
       {
-        "id": "intake",
-        "label_raw": "Intake",
-        "confidence": 1.0
+        "id": "maternal_plasma",
+        "label_raw": "Maternal plasma",
+        "confidence": 0.9
       },
       {
-        "id": "plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
+        "id": "maternal_milk",
+        "label_raw": "Maternal milk",
+        "confidence": 0.9
       },
       {
-        "id": "liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
-      },
-      {
-        "id": "kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
-      },
-      {
-        "id": "rest_of_body",
-        "label_raw": "Rest of body",
-        "confidence": 1.0
-      },
-      {
-        "id": "milk",
-        "label_raw": "Milk",
-        "confidence": 1.0
+        "id": "maternal_tissues",
+        "label_raw": "Maternal tissues",
+        "confidence": 0.7
       },
       {
         "id": "infant",
         "label_raw": "Infant",
-        "confidence": 1.0
+        "confidence": 0.9
       }
     ],
     "connections": [
       {
-        "source": "intake",
-        "target": "plasma",
-        "label_raw": null,
+        "source": "external",
+        "target": "maternal_plasma",
+        "label_raw": "direct intake",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "exposure",
         "evidence": "Maternal exposure is by direct intake.",
-        "confidence": 1.0
+        "confidence": 0.9
       },
       {
-        "source": "plasma",
-        "target": "liver",
-        "label_raw": null,
+        "source": "maternal_plasma",
+        "target": "maternal_milk",
+        "label_raw": "flow-limited transfer",
         "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "liver",
-        "target": "plasma",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "plasma",
-        "target": "kidney",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "kidney",
-        "target": "plasma",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "plasma",
-        "target": "rest_of_body",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "rest_of_body",
-        "target": "plasma",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "plasma",
-        "target": "milk",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
+        "edge_type": "transfer",
         "evidence": "Transfer from the plasma to the milk compartment was assumed to be flow-limited.",
-        "confidence": 1.0
+        "confidence": 0.9
       },
       {
-        "source": "milk",
+        "source": "maternal_milk",
         "target": "infant",
-        "label_raw": null,
+        "label_raw": "milk",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "exposure",
         "evidence": "the infant exposure is through milk.",
-        "confidence": 1.0
+        "confidence": 0.9
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_tissues",
+        "label_raw": "uptake into tissues",
+        "direction": "forward",
+        "edge_type": "distribution",
+        "evidence": "Only the free fraction of chemical in plasma was available for uptake into tissues or milk.",
+        "confidence": 0.7
       }
     ],
-    "absorption": null,
+    "absorption": {
+      "route": null,
+      "model_type": null,
+      "site": null,
+      "evidence_quote": "Maternal exposure is by direct intake; the infant exposure is through milk."
+    },
     "metabolism": null,
     "elimination": null,
-    "unresolved": null,
+    "unresolved": [
+      {
+        "description": "Maternal tissue compartments are not explicitly named in the provided text.",
+        "reason": "The text mentions uptake into tissues but does not list individual tissue compartments, so a generic maternal_tissues compartment is used."
+      },
+      {
+        "description": "Mammary tissue compartment is not included.",
+        "reason": "No data were available for PFOA or PFOS partitioning into mammary tissue; chemical in plasma was assumed to be in direct contact with the milk compartment."
+      },
+      {
+        "description": "Infant elimination route is not shown or described.",
+        "reason": "The provided text states the infant was treated as a single compartment but does not specify elimination pathways."
+      }
+    ],
     "source_location": "Figure 2",
     "equations_provided": "none",
     "allometric_scaling_rules": [],

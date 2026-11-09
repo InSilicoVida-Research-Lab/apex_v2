@@ -13,7 +13,7 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans"
+    "evidence_quote": "..."
   },
   "model_context": null,
   "biological_basis": null,
@@ -23,203 +23,133 @@
     "count_consistency": null,
     "compartments": [
       {
-        "id": "mat_plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
+        "id": "maternal_plasma",
+        "label_raw": "Maternal plasma",
+        "confidence": 0.9
       },
       {
-        "id": "mat_liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
+        "id": "fetal_plasma",
+        "label_raw": "Fetal plasma",
+        "confidence": 0.9
       },
       {
-        "id": "mat_kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
+        "id": "maternal_tissues",
+        "label_raw": "Maternal tissues",
+        "confidence": 0.6
       },
       {
-        "id": "mat_slow",
-        "label_raw": "Slowly perfused",
-        "confidence": 1.0
+        "id": "fetal_tissues",
+        "label_raw": "Fetal tissues",
+        "confidence": 0.6
       },
       {
-        "id": "mat_rapid",
-        "label_raw": "Rapidly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "mat_bone",
-        "label_raw": "Bone",
-        "confidence": 1.0
-      },
-      {
-        "id": "mat_blood",
-        "label_raw": "Blood",
-        "confidence": 1.0
-      },
-      {
-        "id": "fetus",
-        "label_raw": "Fetus",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_slow",
-        "label_raw": "Slowly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_rapid",
-        "label_raw": "Rapidly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_bone",
-        "label_raw": "Bone",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_blood",
-        "label_raw": "Blood",
-        "confidence": 1.0
-      },
-      {
-        "id": "intake",
-        "label_raw": "Intake",
-        "confidence": 1.0
-      },
-      {
-        "id": "plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
-      },
-      {
-        "id": "liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
-      },
-      {
-        "id": "kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
-      },
-      {
-        "id": "rest_of_body",
-        "label_raw": "Rest of body",
-        "confidence": 1.0
-      },
-      {
-        "id": "milk",
-        "label_raw": "Milk",
-        "confidence": 1.0
+        "id": "maternal_milk",
+        "label_raw": "Maternal milk",
+        "confidence": 0.9
       },
       {
         "id": "infant",
         "label_raw": "Infant",
-        "confidence": 1.0
+        "confidence": 0.9
       }
     ],
     "connections": [
       {
-        "source": "intake",
-        "target": "plasma",
-        "label_raw": null,
+        "source": "external",
+        "target": "maternal_plasma",
+        "label_raw": "IV dose",
         "direction": "forward",
-        "edge_type": null,
-        "evidence": "Maternal exposure is by direct intake.",
-        "confidence": 1.0
-      },
-      {
-        "source": "plasma",
-        "target": "liver",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
+        "edge_type": "input",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.9
       },
       {
-        "source": "liver",
-        "target": "plasma",
-        "label_raw": null,
+        "source": "maternal_plasma",
+        "target": "maternal_tissues",
+        "label_raw": "Q",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
       },
       {
-        "source": "plasma",
-        "target": "kidney",
-        "label_raw": null,
+        "source": "maternal_tissues",
+        "target": "maternal_plasma",
+        "label_raw": "Q",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
       },
       {
-        "source": "kidney",
-        "target": "plasma",
-        "label_raw": null,
+        "source": "fetal_plasma",
+        "target": "fetal_tissues",
+        "label_raw": "Q",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
       },
       {
-        "source": "plasma",
-        "target": "rest_of_body",
-        "label_raw": null,
+        "source": "fetal_tissues",
+        "target": "fetal_plasma",
+        "label_raw": "Q",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
       },
       {
-        "source": "rest_of_body",
-        "target": "plasma",
-        "label_raw": null,
+        "source": "maternal_plasma",
+        "target": "fetal_plasma",
+        "label_raw": "ktrans1",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "placental_transfer",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.8
       },
       {
-        "source": "plasma",
-        "target": "milk",
-        "label_raw": null,
+        "source": "fetal_plasma",
+        "target": "maternal_plasma",
+        "label_raw": "ktrans2",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "placental_transfer",
+        "evidence": null,
+        "confidence": 0.8
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_milk",
+        "label_raw": "flow-limited transfer",
+        "direction": "forward",
+        "edge_type": "transfer",
         "evidence": "Transfer from the plasma to the milk compartment was assumed to be flow-limited.",
-        "confidence": 1.0
+        "confidence": 0.9
       },
       {
-        "source": "milk",
+        "source": "maternal_milk",
         "target": "infant",
-        "label_raw": null,
+        "label_raw": "milk",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "exposure",
         "evidence": "the infant exposure is through milk.",
-        "confidence": 1.0
+        "confidence": 0.9
       }
     ],
-    "absorption": null,
+    "absorption": {
+      "route": "iv",
+      "model_type": "generic_input",
+      "site": "maternal_plasma",
+      "evidence_quote": "Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma"
+    },
     "metabolism": null,
     "elimination": null,
-    "unresolved": null,
+    "unresolved": [
+      {
+        "description": "Equation 2 defines a 1% increase in a growth equation: Growth equation with 1% increase = original growth equation + 0.01 * original growth equation.",
+        "reason": "The equation provides a scaling constant but does not identify the growth equation variables, compartments, species, compound, or biological context."
+      }
+    ],
     "source_location": "Equation 2",
     "equations_provided": "text",
     "allometric_scaling_rules": [],
@@ -7307,7 +7237,16 @@
   "simulated_data": [],
   "formulation_characterization": [],
   "qualitative_findings": [],
-  "parameter_mentions_without_values": [],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "sensitivity coefficient",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "model_evidence",
+      "requires_supplement": null,
+      "context_quote": "Equation 1:"
+    }
+  ],
   "sensitivity_analysis": [],
   "table_evidence": [
     {
@@ -19873,14 +19812,14 @@
   "oecd_assessment": null,
   "verification": {
     "tier": 1,
-    "elapsed_ms": 5.83,
+    "elapsed_ms": 6.57,
     "total_parameters": 87,
     "parameters_with_flags": 13,
     "total_flags": 13,
     "error_count": 7,
     "warning_count": 6,
     "clean": false,
-    "summary": "13/87 parameters flagged: 7 error(s), 6 warning(s). Elapsed: 5.8ms.",
+    "summary": "13/87 parameters flagged: 7 error(s), 6 warning(s). Elapsed: 6.6ms.",
     "flags": [
       {
         "param_index": 1,

@@ -7,7 +7,7 @@
   },
   "model_classification": {
     "model_type": "not_applicable",
-    "evidence_quote": "Growth equation with 1% increase = original growth equation + 0.01 * original growth equation"
+    "evidence_quote": null
   },
   "model_context": null,
   "biological_basis": null,
@@ -21,7 +21,12 @@
     "absorption": null,
     "metabolism": null,
     "elimination": null,
-    "unresolved": null,
+    "unresolved": [
+      {
+        "description": "Equation 2 defines a 1% increase in a growth equation: Growth equation with 1% increase = original growth equation + 0.01 * original growth equation.",
+        "reason": "The equation provides a scaling constant but does not identify the growth equation variables, compartments, species, compound, or biological context."
+      }
+    ],
     "source_location": "Equation 2",
     "equations_provided": "text",
     "allometric_scaling_rules": [],
