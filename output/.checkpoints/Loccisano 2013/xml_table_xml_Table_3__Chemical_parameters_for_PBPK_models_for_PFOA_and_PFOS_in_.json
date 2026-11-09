@@ -1,0 +1,1675 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "not_applicable",
+    "evidence_quote": null
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 3",
+      "title": "Table 3: Chemical parameters for PBPK models for PFOA and PFOS in pregnant and lactating women, fetus, and infant.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Parameter"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "PFOA",
+            "mother"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "PFOA",
+            "fetus"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "PFOA",
+            "infant"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "PFOS",
+            "mother"
+          ],
+          "index": 4
+        },
+        {
+          "column_id": "c6",
+          "path": [
+            "PFOS",
+            "fetus"
+          ],
+          "index": 5
+        },
+        {
+          "column_id": "c7",
+          "path": [
+            "PFOS",
+            "infant"
+          ],
+          "index": 6
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Free fraction of chemical in plasma (Free)",
+            "0.02"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Volume of distribution (Vdc; infant only, scaled to BWKid)",
+            "-",
+            "0.17"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Renal resorption Parameters"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "transporter maximum, Tmc (ug/h/kg 0.75 )",
+            "10",
+            "-"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "affinity constant, Kt (ug/L)",
+            "0.055",
+            "-"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "Partition Coefficients"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "Gut:plasma (Pgut)",
+            "0.05",
+            "-"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "Liver:plasma (Pliv)",
+            "2.2",
+            "-"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "Kidney: plasma (Pkid)",
+            "1.05",
+            "-"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "Fat: plasma (Pfat)",
+            "0.04",
+            "-"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "Mammary Tissue: plasma (Pmam; gestation only)",
+            "0.13",
+            "-"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "Rest of body tissues: plasma (Ptis)",
+            "0.12",
+            "-"
+          ],
+          "index": 11
+        },
+        {
+          "row_id": "r13",
+          "path": [
+            "Placenta:Plasma (Ppla)",
+            "0.28",
+            "-"
+          ],
+          "index": 12
+        },
+        {
+          "row_id": "r14",
+          "path": [
+            "Skin: plasma (PSk)",
+            "0.1",
+            "-"
+          ],
+          "index": 13
+        },
+        {
+          "row_id": "r15",
+          "path": [
+            "Mammary tissue:plasma (PMam; gestation only)",
+            "0.13",
+            "-"
+          ],
+          "index": 14
+        },
+        {
+          "row_id": "r16",
+          "path": [
+            "Milk: plasma (PMilk; lactation only)",
+            "0.038",
+            "-"
+          ],
+          "index": 15
+        },
+        {
+          "row_id": "r17",
+          "path": [
+            "Uptake/Elimination Rate Constants"
+          ],
+          "index": 16
+        },
+        {
+          "row_id": "r18",
+          "path": [
+            "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+            "0.1",
+            "-",
+            "0.005"
+          ],
+          "index": 17
+        },
+        {
+          "row_id": "r19",
+          "path": [
+            "Placental transfer (gestation only)"
+          ],
+          "index": 18
+        },
+        {
+          "row_id": "r20",
+          "path": [
+            "mother to fetus, ktrans1C (L/h/kg 0.75 )",
+            "0.46",
+            "-"
+          ],
+          "index": 19
+        },
+        {
+          "row_id": "r21",
+          "path": [
+            "fetus to mother, ktrans2C (L/h/kg 0.75 )",
+            "-",
+            "0.46"
+          ],
+          "index": 20
+        },
+        {
+          "row_id": "r22",
+          "path": [
+            "Amniotic fluid transfer (gestation only)"
+          ],
+          "index": 21
+        },
+        {
+          "row_id": "r23",
+          "path": [
+            "fetus to fluid, ktrans3C (L/h/kg 0.75 )",
+            "-",
+            "0.008"
+          ],
+          "index": 22
+        },
+        {
+          "row_id": "r24",
+          "path": [
+            "fluid to fetus, ktrans4C (L/h/kg 0.75 )",
+            "-",
+            "0.001"
+          ],
+          "index": 23
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c1",
+          "row_id": "r1",
+          "column_id": "c1",
+          "text": "Free fraction of chemical in plasma (Free)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "0.02",
+          "numeric_value": 0.02,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "0.02",
+          "numeric_value": 0.02,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "0.02",
+          "numeric_value": 0.02,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c5",
+          "row_id": "r1",
+          "column_id": "c5",
+          "text": "0.025",
+          "numeric_value": 0.025,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c6",
+          "row_id": "r1",
+          "column_id": "c6",
+          "text": "0.025",
+          "numeric_value": 0.025,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c7",
+          "row_id": "r1",
+          "column_id": "c7",
+          "text": "0.025",
+          "numeric_value": 0.025,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c1",
+          "row_id": "r2",
+          "column_id": "c1",
+          "text": "Volume of distribution (Vdc; infant only, scaled to BWKid)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c2",
+          "row_id": "r2",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c3",
+          "row_id": "r2",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c4",
+          "row_id": "r2",
+          "column_id": "c4",
+          "text": "0.17",
+          "numeric_value": 0.17,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c6",
+          "row_id": "r2",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c7",
+          "row_id": "r2",
+          "column_id": "c7",
+          "text": "0.22",
+          "numeric_value": 0.22,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c1",
+          "row_id": "r3",
+          "column_id": "c1",
+          "text": "Renal resorption Parameters",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c1",
+          "row_id": "r4",
+          "column_id": "c1",
+          "text": "transporter maximum, Tmc (ug/h/kg 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c2",
+          "row_id": "r4",
+          "column_id": "c2",
+          "text": "10",
+          "numeric_value": 10.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "3.5",
+          "numeric_value": 3.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c6",
+          "row_id": "r4",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c7",
+          "row_id": "r4",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c1",
+          "row_id": "r5",
+          "column_id": "c1",
+          "text": "affinity constant, Kt (ug/L)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "0.055",
+          "numeric_value": 0.055,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "0.023",
+          "numeric_value": 0.023,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c6",
+          "row_id": "r5",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c7",
+          "row_id": "r5",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c1",
+          "row_id": "r6",
+          "column_id": "c1",
+          "text": "Partition Coefficients",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c1",
+          "row_id": "r7",
+          "column_id": "c1",
+          "text": "Gut:plasma (Pgut)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c2",
+          "row_id": "r7",
+          "column_id": "c2",
+          "text": "0.05",
+          "numeric_value": 0.05,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "0.57",
+          "numeric_value": 0.57,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c6",
+          "row_id": "r7",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c7",
+          "row_id": "r7",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c1",
+          "row_id": "r8",
+          "column_id": "c1",
+          "text": "Liver:plasma (Pliv)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c2",
+          "row_id": "r8",
+          "column_id": "c2",
+          "text": "2.2",
+          "numeric_value": 2.2,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c3",
+          "row_id": "r8",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c4",
+          "row_id": "r8",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c5",
+          "row_id": "r8",
+          "column_id": "c5",
+          "text": "3.72",
+          "numeric_value": 3.72,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c6",
+          "row_id": "r8",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c7",
+          "row_id": "r8",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c1",
+          "row_id": "r9",
+          "column_id": "c1",
+          "text": "Kidney: plasma (Pkid)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c2",
+          "row_id": "r9",
+          "column_id": "c2",
+          "text": "1.05",
+          "numeric_value": 1.05,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c3",
+          "row_id": "r9",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c4",
+          "row_id": "r9",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c5",
+          "row_id": "r9",
+          "column_id": "c5",
+          "text": "0.8",
+          "numeric_value": 0.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c6",
+          "row_id": "r9",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c7",
+          "row_id": "r9",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c1",
+          "row_id": "r10",
+          "column_id": "c1",
+          "text": "Fat: plasma (Pfat)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c2",
+          "row_id": "r10",
+          "column_id": "c2",
+          "text": "0.04",
+          "numeric_value": 0.04,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c3",
+          "row_id": "r10",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c4",
+          "row_id": "r10",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c5",
+          "row_id": "r10",
+          "column_id": "c5",
+          "text": "0.13",
+          "numeric_value": 0.13,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c6",
+          "row_id": "r10",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c7",
+          "row_id": "r10",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c1",
+          "row_id": "r11",
+          "column_id": "c1",
+          "text": "Mammary Tissue: plasma (Pmam; gestation only)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c2",
+          "row_id": "r11",
+          "column_id": "c2",
+          "text": "0.13",
+          "numeric_value": 0.13,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c5",
+          "row_id": "r11",
+          "column_id": "c5",
+          "text": "0.16",
+          "numeric_value": 0.16,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c6",
+          "row_id": "r11",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c7",
+          "row_id": "r11",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c1",
+          "row_id": "r12",
+          "column_id": "c1",
+          "text": "Rest of body tissues: plasma (Ptis)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c2",
+          "row_id": "r12",
+          "column_id": "c2",
+          "text": "0.12",
+          "numeric_value": 0.12,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c3",
+          "row_id": "r12",
+          "column_id": "c3",
+          "text": "0.12",
+          "numeric_value": 0.12,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c4",
+          "row_id": "r12",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c5",
+          "row_id": "r12",
+          "column_id": "c5",
+          "text": "0.20",
+          "numeric_value": 0.2,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c6",
+          "row_id": "r12",
+          "column_id": "c6",
+          "text": "0.20",
+          "numeric_value": 0.2,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c7",
+          "row_id": "r12",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c1",
+          "row_id": "r13",
+          "column_id": "c1",
+          "text": "Placenta:Plasma (Ppla)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c2",
+          "row_id": "r13",
+          "column_id": "c2",
+          "text": "0.28",
+          "numeric_value": 0.28,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c3",
+          "row_id": "r13",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c4",
+          "row_id": "r13",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c5",
+          "row_id": "r13",
+          "column_id": "c5",
+          "text": "0.41",
+          "numeric_value": 0.41,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c6",
+          "row_id": "r13",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c7",
+          "row_id": "r13",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c1",
+          "row_id": "r14",
+          "column_id": "c1",
+          "text": "Skin: plasma (PSk)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c2",
+          "row_id": "r14",
+          "column_id": "c2",
+          "text": "0.1",
+          "numeric_value": 0.1,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c3",
+          "row_id": "r14",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c4",
+          "row_id": "r14",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c5",
+          "row_id": "r14",
+          "column_id": "c5",
+          "text": "0.29",
+          "numeric_value": 0.29,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c6",
+          "row_id": "r14",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c7",
+          "row_id": "r14",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c1",
+          "row_id": "r15",
+          "column_id": "c1",
+          "text": "Mammary tissue:plasma (PMam; gestation only)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c2",
+          "row_id": "r15",
+          "column_id": "c2",
+          "text": "0.13",
+          "numeric_value": 0.13,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c3",
+          "row_id": "r15",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c5",
+          "row_id": "r15",
+          "column_id": "c5",
+          "text": "0.16",
+          "numeric_value": 0.16,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c6",
+          "row_id": "r15",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c7",
+          "row_id": "r15",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c1",
+          "row_id": "r16",
+          "column_id": "c1",
+          "text": "Milk: plasma (PMilk; lactation only)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c2",
+          "row_id": "r16",
+          "column_id": "c2",
+          "text": "0.038",
+          "numeric_value": 0.038,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c3",
+          "row_id": "r16",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c4",
+          "row_id": "r16",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c5",
+          "row_id": "r16",
+          "column_id": "c5",
+          "text": "0.0122",
+          "numeric_value": 0.0122,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c6",
+          "row_id": "r16",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c7",
+          "row_id": "r16",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c1",
+          "row_id": "r17",
+          "column_id": "c1",
+          "text": "Uptake/Elimination Rate Constants",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c1",
+          "row_id": "r18",
+          "column_id": "c1",
+          "text": "urinary elimination rate constant, kurinec (/h/kg-0.25); keliml for infant (/h)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c2",
+          "row_id": "r18",
+          "column_id": "c2",
+          "text": "0.1",
+          "numeric_value": 0.1,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c3",
+          "row_id": "r18",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c4",
+          "row_id": "r18",
+          "column_id": "c4",
+          "text": "0.005",
+          "numeric_value": 0.005,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c5",
+          "row_id": "r18",
+          "column_id": "c5",
+          "text": "0.005",
+          "numeric_value": 0.005,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c6",
+          "row_id": "r18",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c7",
+          "row_id": "r18",
+          "column_id": "c7",
+          "text": "0.001",
+          "numeric_value": 0.001,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r19_c1",
+          "row_id": "r19",
+          "column_id": "c1",
+          "text": "Placental transfer (gestation only)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c1",
+          "row_id": "r20",
+          "column_id": "c1",
+          "text": "mother to fetus, ktrans1C (L/h/kg 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c2",
+          "row_id": "r20",
+          "column_id": "c2",
+          "text": "0.46",
+          "numeric_value": 0.46,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c3",
+          "row_id": "r20",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c4",
+          "row_id": "r20",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c5",
+          "row_id": "r20",
+          "column_id": "c5",
+          "text": "0.46",
+          "numeric_value": 0.46,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c6",
+          "row_id": "r20",
+          "column_id": "c6",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c7",
+          "row_id": "r20",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c1",
+          "row_id": "r21",
+          "column_id": "c1",
+          "text": "fetus to mother, ktrans2C (L/h/kg 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c2",
+          "row_id": "r21",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c3",
+          "row_id": "r21",
+          "column_id": "c3",
+          "text": "0.46",
+          "numeric_value": 0.46,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c4",
+          "row_id": "r21",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c5",
+          "row_id": "r21",
+          "column_id": "c5",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c6",
+          "row_id": "r21",
+          "column_id": "c6",
+          "text": "1.01",
+          "numeric_value": 1.01,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c7",
+          "row_id": "r21",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r22_c1",
+          "row_id": "r22",
+          "column_id": "c1",
+          "text": "Amniotic fluid transfer (gestation only)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c1",
+          "row_id": "r23",
+          "column_id": "c1",
+          "text": "fetus to fluid, ktrans3C (L/h/kg 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c2",
+          "row_id": "r23",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c3",
+          "row_id": "r23",
+          "column_id": "c3",
+          "text": "0.008",
+          "numeric_value": 0.008,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c4",
+          "row_id": "r23",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c5",
+          "row_id": "r23",
+          "column_id": "c5",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c6",
+          "row_id": "r23",
+          "column_id": "c6",
+          "text": "0.006",
+          "numeric_value": 0.006,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c7",
+          "row_id": "r23",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c1",
+          "row_id": "r24",
+          "column_id": "c1",
+          "text": "fluid to fetus, ktrans4C (L/h/kg 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c2",
+          "row_id": "r24",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c3",
+          "row_id": "r24",
+          "column_id": "c3",
+          "text": "0.001",
+          "numeric_value": 0.001,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c4",
+          "row_id": "r24",
+          "column_id": "c4",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c5",
+          "row_id": "r24",
+          "column_id": "c5",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c6",
+          "row_id": "r24",
+          "column_id": "c6",
+          "text": "0.001",
+          "numeric_value": 0.001,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c7",
+          "row_id": "r24",
+          "column_id": "c7",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [
+        "PFOS",
+        "PFOA"
+      ],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [],
+      "populations": [],
+      "footnotes": [],
+      "source_page": null,
+      "source_image_path": null
+    }
+  ],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

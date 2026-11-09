@@ -1,0 +1,156 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans"
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [],
+  "model_structure": {
+    "reported_compartment_count": null,
+    "listed_compartment_count": 15,
+    "count_consistency": null,
+    "compartments": [
+      {
+        "id": "mat_plasma",
+        "label_raw": "Plasma",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_liver",
+        "label_raw": "Liver",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_kidney",
+        "label_raw": "Kidney",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_slow",
+        "label_raw": "Slowly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_rapid",
+        "label_raw": "Rapidly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_bone",
+        "label_raw": "Bone",
+        "confidence": 1.0
+      },
+      {
+        "id": "mat_blood",
+        "label_raw": "Blood",
+        "confidence": 1.0
+      },
+      {
+        "id": "fetus",
+        "label_raw": "Fetus",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_plasma",
+        "label_raw": "Plasma",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_liver",
+        "label_raw": "Liver",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_kidney",
+        "label_raw": "Kidney",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_slow",
+        "label_raw": "Slowly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_rapid",
+        "label_raw": "Rapidly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_bone",
+        "label_raw": "Bone",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_blood",
+        "label_raw": "Blood",
+        "confidence": 1.0
+      }
+    ],
+    "connections": [
+      {
+        "source": "external",
+        "target": "mat_plasma",
+        "label_raw": "IV",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": 1.0
+      },
+      {
+        "source": "mat_plasma",
+        "target": "mat_liver",
+        "label_raw": "Q_liver",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": 1.0
+      },
+      {
+        "source": "mat_liver",
+        "target": "external",
+        "label_raw": "CL_int",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": 1.0
+      },
+      {
+        "source": "mat_plasma",
+        "target": "mat_kidney",
+        "label_raw": "Q_kidney",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": 1.0
+      }
+    ],
+    "absorption": null,
+    "metabolism": null,
+    "elimination": null,
+    "unresolved": null,
+    "source_location": null,
+    "equations_provided": "none",
+    "allometric_scaling_rules": [],
+    "scaling_equations": []
+  },
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

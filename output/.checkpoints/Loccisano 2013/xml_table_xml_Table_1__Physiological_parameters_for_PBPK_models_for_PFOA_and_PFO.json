@@ -1,0 +1,1491 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "not_applicable",
+    "evidence_quote": null
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 1",
+      "title": "Table 1: Physiological parameters for PBPK models for PFOA and PFOS in pregnant woman and fetus.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Parameter"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "Mother"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "Fetus"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "source"
+          ],
+          "index": 3
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Maternal body weight (BW; kg) and fetal weight (VFet; kg)",
+            "56.9 – 70 (initial); 65.3 – 79.6 (increasing)",
+            "0 – 3.8 [*]",
+            "Clewell, et al 1999 ; Gentry, et al 2003"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Tissue volumes (fraction of BW or VFet)"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Gut, VGutC",
+            "0.0171",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "Liver, VLivC",
+            "0.026",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "Kidney, VKidC",
+            "0.004",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "Filtrate, VFilC",
+            "0.0004",
+            "-",
+            "10% of kidney volume"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "Fat, VFatC (initial volume)",
+            "0.214",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "Mammary tissue, VMamC (initial volume)",
+            "0.0062",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "Fetal plasma, VPIasFC",
+            "-",
+            "0.0428",
+            "Davies & Morris, 1993"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "Tissue volume (L, age-dependent)"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "Fat, VFat",
+            "14.0 – 19.5 [*]",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "Mammary tissue, VMam",
+            "0.41 – 0.79 [*]",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 11
+        },
+        {
+          "row_id": "r13",
+          "path": [
+            "Placenta, VPIa",
+            "0 – 0.63 [*]",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 12
+        },
+        {
+          "row_id": "r14",
+          "path": [
+            "Plasma, VPIas",
+            "2.7 – 3.2 [*]",
+            "-",
+            "Salas, et al 2006"
+          ],
+          "index": 13
+        },
+        {
+          "row_id": "r15",
+          "path": [
+            "Remaining tissues, VR",
+            "34.5 – 31.9 [*]",
+            "difference between BW and sum of other tissues"
+          ],
+          "index": 14
+        },
+        {
+          "row_id": "r16",
+          "path": [
+            "Amniotic fluid (L, one fetus)",
+            "-",
+            "0 – 0.51 [*]",
+            "Beall, et al 2007"
+          ],
+          "index": 15
+        },
+        {
+          "row_id": "r17",
+          "path": [
+            "Blood flows (fraction of QC)"
+          ],
+          "index": 16
+        },
+        {
+          "row_id": "r18",
+          "path": [
+            "Cardiac output (QCC, L/h/kg 0.75 ; initial)",
+            "20.0",
+            "-",
+            "Clewell, et al 1999"
+          ],
+          "index": 17
+        },
+        {
+          "row_id": "r19",
+          "path": [
+            "fetal cardiac output (L/h/kg blood)",
+            "-",
+            "54.0",
+            "Clewell, et al 1999"
+          ],
+          "index": 18
+        },
+        {
+          "row_id": "r20",
+          "path": [
+            "Gut, QGutC",
+            "0.181",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 19
+        },
+        {
+          "row_id": "r21",
+          "path": [
+            "Liver, QLivC",
+            "0.25",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 20
+        },
+        {
+          "row_id": "r22",
+          "path": [
+            "Skin, QSkC",
+            "0.058",
+            "-",
+            "Brown, et al 1997"
+          ],
+          "index": 21
+        },
+        {
+          "row_id": "r23",
+          "path": [
+            "hematocrit, Htc",
+            "0.38 – 0.367 [*]",
+            "0.5",
+            "Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn)"
+          ],
+          "index": 22
+        },
+        {
+          "row_id": "r24",
+          "path": [
+            "Blood flows (L/h, age-dependent)"
+          ],
+          "index": 23
+        },
+        {
+          "row_id": "r25",
+          "path": [
+            "Cardiac output, increasing, QC",
+            "295 – 355 [*]",
+            "0 – 4.8 [*]",
+            "Gentry, et al 2003"
+          ],
+          "index": 24
+        },
+        {
+          "row_id": "r26",
+          "path": [
+            "Fat, QFat",
+            "14.8 – 21.2 [*]",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 25
+        },
+        {
+          "row_id": "r27",
+          "path": [
+            "Mammary tissue, QMam",
+            "7.7 – 15.4 [*]",
+            "-",
+            "Gentry, et al 2002"
+          ],
+          "index": 26
+        },
+        {
+          "row_id": "r28",
+          "path": [
+            "Placenta, QPIa",
+            "0 – 23.4 [*]",
+            "-",
+            "Clewell, et al, 2002"
+          ],
+          "index": 27
+        },
+        {
+          "row_id": "r29",
+          "path": [
+            "Kidney, QKid ; plasma flow",
+            "24.4 – 40.3 [*]",
+            "-",
+            "Sims & Krantz, 1958"
+          ],
+          "index": 28
+        },
+        {
+          "row_id": "r30",
+          "path": [
+            "Filtrate, QFilC—glomular filtration rate (L/h)",
+            "6.0 – 9.1 [*]",
+            "-",
+            "Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995"
+          ],
+          "index": 29
+        },
+        {
+          "row_id": "r31",
+          "path": [
+            "Remaining tissue, QR",
+            "108 – 115 [*]",
+            "0 – 4.0 [*]",
+            "difference between total CO and flows to other tissues"
+          ],
+          "index": 30
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c1",
+          "row_id": "r1",
+          "column_id": "c1",
+          "text": "Maternal body weight (BW; kg) and fetal weight (VFet; kg)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "56.9 – 70 (initial); 65.3 – 79.6 (increasing)",
+          "numeric_value": 56.9,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "56.9 – 70 (initial); 65.3 – 79.6 (increasing)"
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "0 – 3.8 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 3.8 [*]"
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "Clewell, et al 1999 ; Gentry, et al 2003",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c1",
+          "row_id": "r2",
+          "column_id": "c1",
+          "text": "Tissue volumes (fraction of BW or VFet)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c1",
+          "row_id": "r3",
+          "column_id": "c1",
+          "text": "Gut, VGutC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c2",
+          "row_id": "r3",
+          "column_id": "c2",
+          "text": "0.0171",
+          "numeric_value": 0.0171,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c1",
+          "row_id": "r4",
+          "column_id": "c1",
+          "text": "Liver, VLivC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c2",
+          "row_id": "r4",
+          "column_id": "c2",
+          "text": "0.026",
+          "numeric_value": 0.026,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c1",
+          "row_id": "r5",
+          "column_id": "c1",
+          "text": "Kidney, VKidC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "0.004",
+          "numeric_value": 0.004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c1",
+          "row_id": "r6",
+          "column_id": "c1",
+          "text": "Filtrate, VFilC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c2",
+          "row_id": "r6",
+          "column_id": "c2",
+          "text": "0.0004",
+          "numeric_value": 0.0004,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "10% of kidney volume",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c1",
+          "row_id": "r7",
+          "column_id": "c1",
+          "text": "Fat, VFatC (initial volume)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c2",
+          "row_id": "r7",
+          "column_id": "c2",
+          "text": "0.214",
+          "numeric_value": 0.214,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c1",
+          "row_id": "r8",
+          "column_id": "c1",
+          "text": "Mammary tissue, VMamC (initial volume)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c2",
+          "row_id": "r8",
+          "column_id": "c2",
+          "text": "0.0062",
+          "numeric_value": 0.0062,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c3",
+          "row_id": "r8",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c4",
+          "row_id": "r8",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c1",
+          "row_id": "r9",
+          "column_id": "c1",
+          "text": "Fetal plasma, VPIasFC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c2",
+          "row_id": "r9",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c3",
+          "row_id": "r9",
+          "column_id": "c3",
+          "text": "0.0428",
+          "numeric_value": 0.0428,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c4",
+          "row_id": "r9",
+          "column_id": "c4",
+          "text": "Davies & Morris, 1993",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c1",
+          "row_id": "r10",
+          "column_id": "c1",
+          "text": "Tissue volume (L, age-dependent)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c1",
+          "row_id": "r11",
+          "column_id": "c1",
+          "text": "Fat, VFat",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c2",
+          "row_id": "r11",
+          "column_id": "c2",
+          "text": "14.0 – 19.5 [*]",
+          "numeric_value": 14.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "14.0 – 19.5 [*]"
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c1",
+          "row_id": "r12",
+          "column_id": "c1",
+          "text": "Mammary tissue, VMam",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c2",
+          "row_id": "r12",
+          "column_id": "c2",
+          "text": "0.41 – 0.79 [*]",
+          "numeric_value": 0.41,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0.41 – 0.79 [*]"
+        },
+        {
+          "cell_id": "cell_r12_c3",
+          "row_id": "r12",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c4",
+          "row_id": "r12",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c1",
+          "row_id": "r13",
+          "column_id": "c1",
+          "text": "Placenta, VPIa",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c2",
+          "row_id": "r13",
+          "column_id": "c2",
+          "text": "0 – 0.63 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 0.63 [*]"
+        },
+        {
+          "cell_id": "cell_r13_c3",
+          "row_id": "r13",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r13_c4",
+          "row_id": "r13",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c1",
+          "row_id": "r14",
+          "column_id": "c1",
+          "text": "Plasma, VPIas",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c2",
+          "row_id": "r14",
+          "column_id": "c2",
+          "text": "2.7 – 3.2 [*]",
+          "numeric_value": 2.7,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "2.7 – 3.2 [*]"
+        },
+        {
+          "cell_id": "cell_r14_c3",
+          "row_id": "r14",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r14_c4",
+          "row_id": "r14",
+          "column_id": "c4",
+          "text": "Salas, et al 2006",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c1",
+          "row_id": "r15",
+          "column_id": "c1",
+          "text": "Remaining tissues, VR",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r15_c2",
+          "row_id": "r15",
+          "column_id": "c2",
+          "text": "34.5 – 31.9 [*]",
+          "numeric_value": 34.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "34.5 – 31.9 [*]"
+        },
+        {
+          "cell_id": "cell_r15_c4",
+          "row_id": "r15",
+          "column_id": "c4",
+          "text": "difference between BW and sum of other tissues",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c1",
+          "row_id": "r16",
+          "column_id": "c1",
+          "text": "Amniotic fluid (L, one fetus)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c2",
+          "row_id": "r16",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r16_c3",
+          "row_id": "r16",
+          "column_id": "c3",
+          "text": "0 – 0.51 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 0.51 [*]"
+        },
+        {
+          "cell_id": "cell_r16_c4",
+          "row_id": "r16",
+          "column_id": "c4",
+          "text": "Beall, et al 2007",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r17_c1",
+          "row_id": "r17",
+          "column_id": "c1",
+          "text": "Blood flows (fraction of QC)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c1",
+          "row_id": "r18",
+          "column_id": "c1",
+          "text": "Cardiac output (QCC, L/h/kg 0.75 ; initial)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c2",
+          "row_id": "r18",
+          "column_id": "c2",
+          "text": "20.0",
+          "numeric_value": 20.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c3",
+          "row_id": "r18",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r18_c4",
+          "row_id": "r18",
+          "column_id": "c4",
+          "text": "Clewell, et al 1999",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r19_c1",
+          "row_id": "r19",
+          "column_id": "c1",
+          "text": "fetal cardiac output (L/h/kg blood)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r19_c2",
+          "row_id": "r19",
+          "column_id": "c2",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r19_c3",
+          "row_id": "r19",
+          "column_id": "c3",
+          "text": "54.0",
+          "numeric_value": 54.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r19_c4",
+          "row_id": "r19",
+          "column_id": "c4",
+          "text": "Clewell, et al 1999",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c1",
+          "row_id": "r20",
+          "column_id": "c1",
+          "text": "Gut, QGutC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c2",
+          "row_id": "r20",
+          "column_id": "c2",
+          "text": "0.181",
+          "numeric_value": 0.181,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c3",
+          "row_id": "r20",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r20_c4",
+          "row_id": "r20",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c1",
+          "row_id": "r21",
+          "column_id": "c1",
+          "text": "Liver, QLivC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c2",
+          "row_id": "r21",
+          "column_id": "c2",
+          "text": "0.25",
+          "numeric_value": 0.25,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c3",
+          "row_id": "r21",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r21_c4",
+          "row_id": "r21",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r22_c1",
+          "row_id": "r22",
+          "column_id": "c1",
+          "text": "Skin, QSkC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r22_c2",
+          "row_id": "r22",
+          "column_id": "c2",
+          "text": "0.058",
+          "numeric_value": 0.058,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r22_c3",
+          "row_id": "r22",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r22_c4",
+          "row_id": "r22",
+          "column_id": "c4",
+          "text": "Brown, et al 1997",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c1",
+          "row_id": "r23",
+          "column_id": "c1",
+          "text": "hematocrit, Htc",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c2",
+          "row_id": "r23",
+          "column_id": "c2",
+          "text": "0.38 – 0.367 [*]",
+          "numeric_value": 0.38,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0.38 – 0.367 [*]"
+        },
+        {
+          "cell_id": "cell_r23_c3",
+          "row_id": "r23",
+          "column_id": "c3",
+          "text": "0.5",
+          "numeric_value": 0.5,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r23_c4",
+          "row_id": "r23",
+          "column_id": "c4",
+          "text": "Milman, et al 1999 (maternal); Sisson, et al 1959 (value for newborn)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r24_c1",
+          "row_id": "r24",
+          "column_id": "c1",
+          "text": "Blood flows (L/h, age-dependent)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r25_c1",
+          "row_id": "r25",
+          "column_id": "c1",
+          "text": "Cardiac output, increasing, QC",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r25_c2",
+          "row_id": "r25",
+          "column_id": "c2",
+          "text": "295 – 355 [*]",
+          "numeric_value": 295.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "295 – 355 [*]"
+        },
+        {
+          "cell_id": "cell_r25_c3",
+          "row_id": "r25",
+          "column_id": "c3",
+          "text": "0 – 4.8 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 4.8 [*]"
+        },
+        {
+          "cell_id": "cell_r25_c4",
+          "row_id": "r25",
+          "column_id": "c4",
+          "text": "Gentry, et al 2003",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r26_c1",
+          "row_id": "r26",
+          "column_id": "c1",
+          "text": "Fat, QFat",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r26_c2",
+          "row_id": "r26",
+          "column_id": "c2",
+          "text": "14.8 – 21.2 [*]",
+          "numeric_value": 14.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "14.8 – 21.2 [*]"
+        },
+        {
+          "cell_id": "cell_r26_c3",
+          "row_id": "r26",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r26_c4",
+          "row_id": "r26",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r27_c1",
+          "row_id": "r27",
+          "column_id": "c1",
+          "text": "Mammary tissue, QMam",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r27_c2",
+          "row_id": "r27",
+          "column_id": "c2",
+          "text": "7.7 – 15.4 [*]",
+          "numeric_value": 7.7,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "7.7 – 15.4 [*]"
+        },
+        {
+          "cell_id": "cell_r27_c3",
+          "row_id": "r27",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r27_c4",
+          "row_id": "r27",
+          "column_id": "c4",
+          "text": "Gentry, et al 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r28_c1",
+          "row_id": "r28",
+          "column_id": "c1",
+          "text": "Placenta, QPIa",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r28_c2",
+          "row_id": "r28",
+          "column_id": "c2",
+          "text": "0 – 23.4 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 23.4 [*]"
+        },
+        {
+          "cell_id": "cell_r28_c3",
+          "row_id": "r28",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r28_c4",
+          "row_id": "r28",
+          "column_id": "c4",
+          "text": "Clewell, et al, 2002",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r29_c1",
+          "row_id": "r29",
+          "column_id": "c1",
+          "text": "Kidney, QKid ; plasma flow",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r29_c2",
+          "row_id": "r29",
+          "column_id": "c2",
+          "text": "24.4 – 40.3 [*]",
+          "numeric_value": 24.4,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "24.4 – 40.3 [*]"
+        },
+        {
+          "cell_id": "cell_r29_c3",
+          "row_id": "r29",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r29_c4",
+          "row_id": "r29",
+          "column_id": "c4",
+          "text": "Sims & Krantz, 1958",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r30_c1",
+          "row_id": "r30",
+          "column_id": "c1",
+          "text": "Filtrate, QFilC—glomular filtration rate (L/h)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r30_c2",
+          "row_id": "r30",
+          "column_id": "c2",
+          "text": "6.0 – 9.1 [*]",
+          "numeric_value": 6.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "6.0 – 9.1 [*]"
+        },
+        {
+          "cell_id": "cell_r30_c3",
+          "row_id": "r30",
+          "column_id": "c3",
+          "text": "-",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r30_c4",
+          "row_id": "r30",
+          "column_id": "c4",
+          "text": "Sims & Krantz 1958 ; Dunlop 1981 ; Duvekot 1995",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r31_c1",
+          "row_id": "r31",
+          "column_id": "c1",
+          "text": "Remaining tissue, QR",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r31_c2",
+          "row_id": "r31",
+          "column_id": "c2",
+          "text": "108 – 115 [*]",
+          "numeric_value": 108.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "108 – 115 [*]"
+        },
+        {
+          "cell_id": "cell_r31_c3",
+          "row_id": "r31",
+          "column_id": "c3",
+          "text": "0 – 4.0 [*]",
+          "numeric_value": 0.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": "0 – 4.0 [*]"
+        },
+        {
+          "cell_id": "cell_r31_c4",
+          "row_id": "r31",
+          "column_id": "c4",
+          "text": "difference between total CO and flows to other tissues",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [
+        "PFOS",
+        "PFOA"
+      ],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [],
+      "populations": [],
+      "footnotes": [
+        "[*] range of values from beginning to end of gestation"
+      ],
+      "source_page": null,
+      "source_image_path": null
+    }
+  ],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}
