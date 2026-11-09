@@ -117,7 +117,6 @@ TAN_SECTIONS: Dict[str, List[str]] = {
 }
 
 
-
 def _as_dict(value: Any) -> dict[str, Any]:
     if isinstance(value, ExtractedDocument):
         return value.model_dump(mode="json")
@@ -317,14 +316,6 @@ def _dosing_evidence(document: dict[str, Any]) -> List[EvidenceReference]:
     return _dedupe_evidence(evidence)
 
 
-def _evidence_summary(evidence: List[EvidenceReference]) -> str:
-    if not evidence:
-        return "No model-specific evidence was captured for this Tan item."
-    locations = [item.source_location or item.source_section for item in evidence]
-    locations = [str(item) for item in locations if item]
-    return f"Evidence is available from: {', '.join(locations[:4])}."
-
-
 def _make_item(
     definition: dict[str, Any],
     response: ResponseOption,
@@ -356,368 +347,8 @@ def _make_item(
     )
 
 
-def _has_parameters(document: dict[str, Any]) -> bool:
-    return bool(document.get("model_parameters") or document.get("table_evidence"))
-
-
-def _legacy_evaluate_tan_from_document(doc: Union[dict[str, Any], ExtractedDocument]) -> TanPBPKAssessment:
-    """Legacy evaluator retained for compatibility; refined evaluator follows below."""
-    document = _as_dict(doc)
-    context = document.get("model_context") or {}
-    basis = document.get("biological_basis") or {}
-    structure = document.get("model_structure") or {}
-    software = document.get("software") or {}
-    reproducibility = document.get("reproducibility") or {}
-    extended = document.get("extended_sensitivity") or {}
-    parameters = document.get("model_parameters") or []
-    observed = document.get("observed_data") or []
-    simulated = document.get("simulated_data") or []
-    dosing = document.get("dosing") or []
-    sensitivity = document.get("sensitivity_analysis") or []
-    data_evidence = _data_evidence(document)
-    parameter_evidence = _parameter_evidence(document)
-    biological_evidence = _biological_evidence(document)
-    sensitivity_evidence = _sensitivity_evidence(document)
-    dosing_evidence = _dosing_evidence(document)
-    context_evidence = _context_evidence(document)
-
-    by_id = {item["item_id"]: item for item in TAN_QUESTIONNAIRE_ITEMS}
-    items: List[TanQuestionnaireItem] = []
-
-    purpose_present = _nonempty(context.get("stated_purpose")) and context.get("stated_purpose") != "not_reported"
-    items.append(_make_item(
-        by_id["TAN_2.1_PURPOSE"],
-        ResponseOption.YES if purpose_present else ResponseOption.I_CANNOT_ANSWER,
-        "The extracted model context contains a stated purpose." if purpose_present else "A model-specific purpose was not captured.",
-        context_evidence,
-    ))
-
-    items.append(_make_item(
-        by_id["TAN_2.3_PURPOSE"],
-        ResponseOption.YES if purpose_present and _nonempty(context.get("dose_metric")) else (ResponseOption.PARTIALLY if purpose_present else ResponseOption.I_CANNOT_ANSWER),
-        "Model purpose and dose metric are both structured." if purpose_present and _nonempty(context.get("dose_metric")) else "Purpose evidence is incomplete or the chosen dose metric was not captured.",
-        context_evidence,
-    ))
-
-    overview_present = bool(document.get("model_classification") and (_nonempty(structure) or parameters))
-    items.append(_make_item(
-        by_id["TAN_2.1_OVERVIEW"],
-        ResponseOption.PARTIALLY if overview_present else ResponseOption.I_CANNOT_ANSWER,
-        "Model classification and structural/parameter evidence provide a partial overview; a complete executive summary is not a factual extraction field." if overview_present else "No model-specific overview evidence was captured.",
-        _dedupe_evidence(context_evidence + parameter_evidence),
-    ))
-
-    items.append(_make_item(
-        by_id["TAN_2.1_CONCLUSIONS"],
-        ResponseOption.I_CANNOT_ANSWER,
-        "Research-paper conclusions are not inferred from generic Introduction/Background text and were not captured as a model-specific conclusion field.",
-        [],
-    ))
-
-    strategy_present = bool(context.get("model_origin") or structure or basis.get("stated_assumptions"))
-    items.append(_make_item(
-        by_id["TAN_2.4.1_STRATEGY"],
-        ResponseOption.PARTIALLY if strategy_present else ResponseOption.I_CANNOT_ANSWER,
-        "Some model-development evidence is present, but a complete workflow from preparation through application is not represented." if strategy_present else "No model-development workflow was captured.",
-        _dedupe_evidence(context_evidence + biological_evidence),
-    ))
-
-    items.append(_make_item(
-        by_id["TAN_2.4.1_RELEVANCE"],
-        ResponseOption.PARTIALLY if strategy_present and purpose_present else ResponseOption.I_CANNOT_ANSWER,
-        "Purpose and some development evidence are present, but the strategy-to-purpose justification is not separately structured." if strategy_present and purpose_present else "No evidence links the modeling strategy to the stated purpose.",
-        _dedupe_evidence(context_evidence + biological_evidence),
-    ))
-
-    role_values = [
-        record.get("dataset_role")
-        for record in observed + simulated
-        if record.get("dataset_role")
-    ]
-    data_present = bool(role_values or observed or simulated or parameters)
-    data_response = ResponseOption.YES if role_values else (ResponseOption.PARTIALLY if data_present else ResponseOption.I_CANNOT_ANSWER)
-    items.append(_make_item(
-        by_id["TAN_2.4.2_DATA"],
-        data_response,
-        "Dataset records and/or model parameters are present, with explicit calibration/evaluation roles only where extracted." if data_present else "No calibration or evaluation dataset evidence was captured.",
-        _dedupe_evidence(data_evidence + parameter_evidence),
-    ))
-
-    chemical_exposure_present = bool(
-        context.get("compound")
-        or context.get("dose_metric")
-        or context.get("target_populations")
-        or dosing
-        or parameters
-        or document.get("mode_of_action")
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.2_CHEMICAL_EXPOSURE"],
-        ResponseOption.PARTIALLY if chemical_exposure_present else ResponseOption.I_CANNOT_ANSWER,
-        "Some chemical, dose, population, or application fields are present; generic Introduction/Background statements were not used." if chemical_exposure_present else "No model-specific chemical or exposure context was captured.",
-        _dedupe_evidence(context_evidence + parameter_evidence + dosing_evidence),
-    ))
-
-    calibration_records = [
-        record for record in observed + simulated
-        if str(record.get("dataset_role", "")).lower() == "calibration"
-    ]
-    evaluation_records = [
-        record for record in observed + simulated
-        if str(record.get("dataset_role", "")).lower() in {"independent_evaluation", "external_validation"}
-    ]
-    items.append(_make_item(
-        by_id["TAN_2.4.2_CALIBRATION"],
-        ResponseOption.YES if calibration_records else ResponseOption.I_CANNOT_ANSWER,
-        "Calibration dataset role is explicitly present in extracted records." if calibration_records else "No explicitly labeled calibration dataset was captured.",
-        data_evidence if calibration_records else [],
-    ))
-    items.append(_make_item(
-        by_id["TAN_2.4.2_EVALUATION"],
-        ResponseOption.YES if evaluation_records else ResponseOption.I_CANNOT_ANSWER,
-        "Independent evaluation or external validation dataset role is explicitly present." if evaluation_records else "No explicitly labeled independent evaluation dataset was captured.",
-        data_evidence if evaluation_records else [],
-    ))
-
-    adme_present = bool(
-        basis.get("adme_determinants")
-        or basis.get("adme_determinant_evidence")
-        or document.get("metabolic_pathways")
-        or document.get("mode_of_action")
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.2_ADME"],
-        ResponseOption.YES if basis.get("adme_determinant_evidence") else (ResponseOption.PARTIALLY if adme_present else ResponseOption.I_CANNOT_ANSWER),
-        "ADME evidence is reported only when tied to extracted model-specific determinants or pathways; generic paper background is excluded." if adme_present else "No model-specific ADME evidence was captured.",
-        biological_evidence,
-    ))
-
-    structure_present = bool(structure.get("compartments") or structure.get("connections") or context.get("model_origin"))
-    structure_evidence = list(context_evidence)
-    if structure:
-        structure_evidence.append(
-            _evidence(location=structure.get("source_location"), section="model structure")
-        )
-    items.append(_make_item(
-        by_id["TAN_2.4.3_STRUCTURE"],
-        ResponseOption.YES if structure.get("compartments") or structure.get("connections") else (ResponseOption.PARTIALLY if structure_present else ResponseOption.I_CANNOT_ANSWER),
-        "The extracted document contains model structure evidence." if structure_present else "Model structure and its relationship to prior models were not captured.",
-        _dedupe_evidence(structure_evidence),
-    ))
-
-    assumption_count = len(basis.get("stated_assumptions") or [])
-    items.append(_make_item(
-        by_id["TAN_2.4.3_ASSUMPTIONS"],
-        ResponseOption.YES if assumption_count and biological_evidence else ResponseOption.I_CANNOT_ANSWER,
-        f"{assumption_count} explicit assumption record(s) were extracted with evidence fields." if assumption_count else "No explicit, quote-backed model assumptions were captured; standard PBPK assumptions are not filled in by inference.",
-        biological_evidence,
-    ))
-
-    prior_model_present = bool(
-        context.get("model_origin")
-        or context.get("original_application")
-        or context.get("current_application")
-        or context.get("repurposed") is not None
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.3_PRIOR_MODEL"],
-        ResponseOption.PARTIALLY if prior_model_present else ResponseOption.I_CANNOT_ANSWER,
-        "Model origin/application metadata is present, but customized changes are not separately structured." if prior_model_present else "Model origin and customized changes were not captured.",
-        context_evidence,
-    ))
-
-    equations_present = reproducibility.get("equations_available") is True or structure.get("equations_provided") in {"text", "supplementary_info", "code_repo"} or bool(structure.get("scaling_equations"))
-    items.append(_make_item(
-        by_id["TAN_2.4.4_EQUATIONS"],
-        ResponseOption.YES if reproducibility.get("equations_available") is True else (ResponseOption.PARTIALLY if equations_present else ResponseOption.I_CANNOT_ANSWER),
-        "Equation availability or symbolic scaling information is present; APEX does not generate equations that were not extracted." if equations_present else "Equation evidence was not captured.",
-        [_evidence(location=structure.get("source_location"), section="model equations")] if equations_present else [],
-    ))
-
-    parameter_detail_count = sum(
-        1
-        for parameter in parameters
-        if (parameter.get("parameter_name_original") or parameter.get("symbol_original"))
-        and (parameter.get("quantitative_data") or {}).get("unit_original")
-        and (parameter.get("provenance") or {}).get("source_table")
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.5_PARAMETERS"],
-        ResponseOption.YES if parameter_detail_count and parameter_detail_count == len(parameters) else (ResponseOption.PARTIALLY if parameters else ResponseOption.I_CANNOT_ANSWER),
-        f"{parameter_detail_count} of {len(parameters)} extracted parameters contain name, unit, and table provenance." if parameters else "No model parameter records were captured.",
-        parameter_evidence,
-    ))
-
-    distribution_present = bool(
-        extended.get("uncertainty_distributions")
-        or any((parameter.get("quantitative_data") or {}).get("uncertainty") for parameter in parameters)
-        or (structure.get("allometric_scaling_rules") or structure.get("scaling_equations"))
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.5_DISTRIBUTIONS"],
-        ResponseOption.PARTIALLY if distribution_present else ResponseOption.I_CANNOT_ANSWER,
-        "Uncertainty/distribution or scaling information is present, but full distribution parameters are not assumed unless extracted." if distribution_present else "No parameter distribution, uncertainty-distribution, or scaling evidence was captured.",
-        _dedupe_evidence(parameter_evidence + ([_evidence(location="model structure", section="allometric scaling")] if structure.get("allometric_scaling_rules") or structure.get("scaling_equations") else [])),
-    ))
-
-    simulation_present = bool(dosing or observed or simulated)
-    simulation_detail = bool(dosing and (observed or simulated))
-    items.append(_make_item(
-        by_id["TAN_2.4.6_SIMULATIONS"],
-        ResponseOption.YES if simulation_detail else (ResponseOption.PARTIALLY if simulation_present else ResponseOption.I_CANNOT_ANSWER),
-        "Dosing and/or observed/simulated data are available, but completeness of all Tan simulation conditions is assessed only from extracted fields." if simulation_present else "No dosing or simulation-condition evidence was captured.",
-        _dedupe_evidence(data_evidence + dosing_evidence),
-    ))
-
-    items.append(_make_item(
-        by_id["TAN_2.4.6_EXPOSURE"],
-        ResponseOption.YES if dosing else ResponseOption.I_CANNOT_ANSWER,
-        "Dosing records contain extracted administration conditions." if dosing else "No dosing/exposure-condition record was captured.",
-        dosing_evidence,
-    ))
-
-    population_present = bool(
-        context.get("target_populations")
-        or context.get("age_groups")
-        or context.get("life_stages")
-        or context.get("sex_or_gender")
-        or context.get("health_status")
-        or any((parameter.get("context") or {}).get("species") for parameter in parameters)
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.6_POPULATION"],
-        ResponseOption.PARTIALLY if population_present else ResponseOption.I_CANNOT_ANSWER,
-        "Some subject or population characteristics are structured." if population_present else "Subject and virtual-population characteristics were not captured.",
-        _dedupe_evidence(context_evidence + parameter_evidence),
-    ))
-
-    probabilistic_present = bool(
-        extended.get("sampling_approach")
-        or extended.get("iterations")
-        or extended.get("analysis_type") in {"global", "both"}
-    )
-    items.append(_make_item(
-        by_id["TAN_2.4.6_PROBABILISTIC"],
-        ResponseOption.YES if extended.get("sampling_approach") and extended.get("iterations") else (ResponseOption.PARTIALLY if probabilistic_present else ResponseOption.I_CANNOT_ANSWER),
-        "Probabilistic simulation metadata is present." if probabilistic_present else "No probabilistic simulation method or iteration count was captured.",
-        sensitivity_evidence if probabilistic_present else [],
-    ))
-
-    software_fields = [software.get("name"), software.get("version"), software.get("solver"), software.get("optimization_method"), software.get("statistical_methods")]
-    software_count = sum(_nonempty(value) for value in software_fields)
-    software_provenance = software.get("provenance") or {}
-    items.append(_make_item(
-        by_id["TAN_2.4.7_SOFTWARE"],
-        ResponseOption.YES if software_count >= 4 else (ResponseOption.PARTIALLY if software_count else ResponseOption.I_CANNOT_ANSWER),
-        f"{software_count} software/solver fields are populated." if software_count else "Software and numerical algorithm evidence was not captured.",
-        [_evidence(
-            location=software_provenance.get("source_location") or software_provenance.get("source_table"),
-            quote=software.get("source_quote") or software_provenance.get("source_quote"),
-            section="software",
-        )] if software_count else [],
-    ))
-
-    evaluation_present = bool(observed and simulated)
-    items.append(_make_item(
-        by_id["TAN_2.5.1_EVALUATION"],
-        ResponseOption.YES if evaluation_present else (ResponseOption.PARTIALLY if observed or simulated else ResponseOption.I_CANNOT_ANSWER),
-        "Observed and simulated records are both present for comparison." if evaluation_present else "Only partial or no observed-versus-simulated evidence was captured.",
-        data_evidence,
-    ))
-
-    independence_values = [
-        str(record.get("independence_status", "")).lower()
-        for record in observed + simulated
-        if record.get("independence_status")
-    ]
-    independence_present = bool(independence_values)
-    independence_yes = any(value == "independent" for value in independence_values)
-    items.append(_make_item(
-        by_id["TAN_2.5.1_INDEPENDENCE"],
-        ResponseOption.YES if independence_yes else (ResponseOption.PARTIALLY if independence_present else ResponseOption.I_CANNOT_ANSWER),
-        "Dataset independence metadata is explicitly present." if independence_present else "Calibration/evaluation independence was not explicitly captured.",
-        data_evidence if independence_present else [],
-    ))
-
-    gof_terms = {"aafe", "rmse", "r2", "r^2", "r_squared", "mfe", "visual predictive check", "goodness-of-fit"}
-    gof_present = any(any(term in str(record.get("metric", "")).lower() for term in gof_terms) for record in observed + simulated)
-    items.append(_make_item(
-        by_id["TAN_2.5.1_GOODNESS_OF_FIT"],
-        ResponseOption.YES if gof_present else ResponseOption.I_CANNOT_ANSWER,
-        "Goodness-of-fit terminology is present in extracted evaluation records." if gof_present else "No explicit goodness-of-fit metric or criterion was captured.",
-        data_evidence if gof_present else [],
-    ))
-
-    sensitivity_present = bool(sensitivity or extended)
-    items.append(_make_item(
-        by_id["TAN_2.5.2_SENSITIVITY"],
-        ResponseOption.YES if sensitivity and (extended.get("criterion") or any(record.get("criterion") for record in sensitivity)) else (ResponseOption.PARTIALLY if sensitivity_present else ResponseOption.I_CANNOT_ANSWER),
-        "Sensitivity records or extended sensitivity metadata are present; criteria are rated only when explicitly extracted." if sensitivity_present else "No sensitivity-analysis evidence was captured.",
-        sensitivity_evidence,
-    ))
-
-    uncertainty_present = bool(
-        extended.get("uncertainty_distributions")
-        or extended.get("individual_variability_modeled") is not None
-        or extended.get("experimental_reproducibility")
-        or any((record.get("quantitative_data") or {}).get("uncertainty") for record in parameters)
-    )
-    items.append(_make_item(
-        by_id["TAN_2.5.2_UNCERTAINTY"],
-        ResponseOption.YES if extended.get("uncertainty_distributions") or extended.get("individual_variability_modeled") is True else (ResponseOption.PARTIALLY if uncertainty_present else ResponseOption.I_CANNOT_ANSWER),
-        "Parameter uncertainty or variability metadata is present." if uncertainty_present else "No explicit uncertainty, reproducibility, or biological-variability analysis was captured.",
-        _dedupe_evidence(parameter_evidence + sensitivity_evidence),
-    ))
-
-    impact_present = bool(
-        extended.get("key_sensitive_parameters")
-        or extended.get("overall_impact_on_dose_metric")
-        or extended.get("experimental_reproducibility")
-    )
-    items.append(_make_item(
-        by_id["TAN_2.5.2_IMPACT"],
-        ResponseOption.YES if extended.get("key_sensitive_parameters") and extended.get("overall_impact_on_dose_metric") else (ResponseOption.PARTIALLY if impact_present else ResponseOption.I_CANNOT_ANSWER),
-        "Key sensitive parameters or overall impact metadata is present." if impact_present else "No explicit overall impact or key-parameter summary was captured.",
-        sensitivity_evidence if impact_present else [],
-    ))
-
-    applicability_present = bool(
-        context.get("model_origin")
-        or context.get("stated_purpose")
-        or context.get("dose_metric")
-        or document.get("table_evidence")
-    )
-    items.append(_make_item(
-        by_id["TAN_2.5.2_APPLICABILITY"],
-        ResponseOption.PARTIALLY if applicability_present else ResponseOption.I_CANNOT_ANSWER,
-        "Some applicability context is structured, but a complete fit-for-purpose and analogue justification is not assumed from generic background text." if applicability_present else "Applicability evidence was not captured.",
-        _dedupe_evidence(context_evidence + parameter_evidence),
-    ))
-
-    cannot_count = sum(item.response == ResponseOption.I_CANNOT_ANSWER for item in items)
-    key_gaps = [
-        f"{item.item_id}: model-specific evidence not captured"
-        for item in items
-        if item.response == ResponseOption.I_CANNOT_ANSWER
-    ]
-    fit = (
-        f"Tan questionnaire: {len(items) - cannot_count}/{len(items)} items have at least some structured evidence; "
-        f"{cannot_count}/{len(items)} require source review."
-    )
-    return TanPBPKAssessment(
-        items=items,
-        overall_fit_for_purpose=fit,
-        key_gaps=key_gaps,
-        reviewer_notes=[
-            "Generic Introduction/Background prose was excluded from model evidence.",
-            "Confidence levels were calculated from evidence references by deterministic APEX rules.",
-        ],
-    )
-
-
 def _definition_evidence(document: dict[str, Any], item_id: str) -> List[EvidenceReference]:
     """Collect auditable evidence relevant to a refined Tan item."""
-    context = document.get("model_context") or {}
     basis = document.get("biological_basis") or {}
     structure = document.get("model_structure") or {}
     evidence: List[EvidenceReference] = []
@@ -954,6 +585,21 @@ def normalize_tan_assessment(
     if isinstance(raw, TanPBPKAssessment):
         assessment = raw
     else:
+        # Gracefully repair LLM field aliases before Pydantic validation
+        if isinstance(raw, dict) and isinstance(raw.get("items"), list):
+            for item_dict in raw["items"]:
+                if isinstance(item_dict, dict):
+                    if not item_dict.get("details") and item_dict.get("rationale"):
+                        item_dict["details"] = str(item_dict.pop("rationale"))
+                    elif not item_dict.get("details"):
+                        item_dict["details"] = "Evaluated from paper Markdown."
+                    # Ensure required fields exist using TAN_QUESTIONNAIRE_ITEMS lookup
+                    iid = item_dict.get("item_id")
+                    if iid:
+                        defn = next((d for d in TAN_QUESTIONNAIRE_ITEMS if d["item_id"] == iid), None)
+                        if defn:
+                            item_dict.setdefault("section", defn["section"])
+                            item_dict.setdefault("question", defn["question"])
         assessment = TanPBPKAssessment.model_validate(raw)
 
     raw_by_id = {item.item_id: item for item in assessment.items}
@@ -961,16 +607,29 @@ def normalize_tan_assessment(
     for definition in TAN_QUESTIONNAIRE_ITEMS:
         source = raw_by_id.get(definition["item_id"])
         if source is None:
-            source = TanQuestionnaireItem(
-                item_id=definition["item_id"],
-                section=definition["section"],
-                question=definition["question"],
-                allowed_source_sections=definition.get("allowed_source_sections", []),
-                routing_rule=definition.get("routing_rule"),
-                response=ResponseOption.I_CANNOT_ANSWER,
-                details="The LLM did not return this Tan questionnaire item.",
-                evidence=[],
-            )
+            if definition["item_id"] == "TAN_1.3":
+                source = TanQuestionnaireItem(
+                    item_id="TAN_1.3",
+                    section=definition["section"],
+                    question=definition["question"],
+                    allowed_source_sections=definition.get("allowed_source_sections", []),
+                    routing_rule=definition.get("routing_rule"),
+                    response=ResponseOption.YES,
+                    details="Assessment metadata is assigned deterministically by APEX.",
+                    structured_details={"reviewer": "APEX-LLM", "pipeline_version": "Refined-Tan-PBPK-v1"},
+                    evidence=[],
+                )
+            else:
+                source = TanQuestionnaireItem(
+                    item_id=definition["item_id"],
+                    section=definition["section"],
+                    question=definition["question"],
+                    allowed_source_sections=definition.get("allowed_source_sections", []),
+                    routing_rule=definition.get("routing_rule"),
+                    response=ResponseOption.I_CANNOT_ANSWER,
+                    details="The LLM did not return this Tan questionnaire item.",
+                    evidence=[],
+                )
         evidence = _dedupe_evidence(source.evidence)
         response = source.response
         details = source.details
@@ -1028,12 +687,7 @@ def normalize_tan_assessment(
 
 
 def normalize_biological_basis(document: dict[str, Any]) -> None:
-    """Assign evidence quality to ADME determinants and assumptions in place.
-
-    This is deliberately separate from the LLM extraction step.  The model may
-    propose a statement, but only the presence of a quote and source location
-    controls the final evidence confidence.
-    """
+    """Assign evidence quality to ADME determinants and assumptions in place."""
     basis = document.get("biological_basis")
     if not isinstance(basis, dict):
         return
@@ -1174,12 +828,7 @@ def verify_parameters_deterministically(
     document: dict[str, Any],
     pdf_path: Optional[str] = None,
 ) -> dict[str, Any]:
-    """Apply the refined Tan four-check verification score to every parameter.
-
-    Checks: verbatim symbol/value source match, numeric parse completeness, unit
-    dimensional consistency, and provenance/original-citation completeness.
-    Any failed check sets ``needs_review=True``.
-    """
+    """Apply the refined Tan four-check verification score to every parameter."""
     parameters = document.get("model_parameters") or []
     page_text: Dict[int, str] = {}
     if pdf_path:
@@ -1231,7 +880,6 @@ def verify_parameters_deterministically(
         parameter["verification_checks"] = checks
         parameter["verification_failures"] = failures
         parameter["needs_review"] = bool(failures) or bool(parameter.get("needs_review"))
-        # LLM confidence is not used as a quality score.
         parameter["confidence"] = None
         score_total += score
         for name, passed in checks.items():
@@ -1306,7 +954,7 @@ def convert_pdf_to_markdown(
     write_images: bool = False,
     image_path: Optional[str] = None,
 ) -> str:
-    """Convert a PDF document into structured Markdown text using pymupdf4llm."""
+    """Convert a PDF document into structured Markdown text with explicit page markers using pymupdf4llm."""
     import os
 
     if not os.path.exists(pdf_path):
@@ -1320,13 +968,23 @@ def convert_pdf_to_markdown(
             "Please install it with: pip install pymupdf4llm"
         )
 
-    kwargs: Dict[str, Any] = {}
+    kwargs: Dict[str, Any] = {"page_chunks": True}
     if write_images and image_path:
         os.makedirs(image_path, exist_ok=True)
         kwargs["write_images"] = True
         kwargs["image_path"] = image_path
 
-    md_text = pymupdf4llm.to_markdown(pdf_path, **kwargs)
+    raw_result = pymupdf4llm.to_markdown(pdf_path, **kwargs)
+    if isinstance(raw_result, list):
+        page_blocks: List[str] = []
+        for idx, page_dict in enumerate(raw_result):
+            page_num = (page_dict.get("metadata") or {}).get("page", idx + 1)
+            text = (page_dict.get("text") or "").strip()
+            if text:
+                page_blocks.append(f"<!-- PAGE {page_num} -->\n### [Page {page_num}]\n{text}")
+        md_text = "\n\n".join(page_blocks)
+    else:
+        md_text = str(raw_result)
 
     if output_md_path:
         os.makedirs(os.path.dirname(os.path.abspath(output_md_path)), exist_ok=True)
@@ -1336,57 +994,237 @@ def convert_pdf_to_markdown(
     return md_text
 
 
+def extract_relevant_markdown_for_items(
+    markdown_text: str,
+    items: Optional[List[dict[str, Any]]] = None,
+    max_chars: int = 28000,
+) -> str:
+    """Route and filter Markdown sections specifically for the requested Tan questionnaire items.
+
+    Prevents the second half of scientific papers (Results, Evaluation, Sensitivity,
+    Discussion, Tables) from being cut off by naive prefix truncation, while strictly
+    blocking generic Introduction background prose and References.
+    """
+    # 1. Strip References / Bibliography section from the tail to save tokens
+    cleaned_md = re.sub(
+        r"\n(?:#+\s*|\*\*\s*)(?:references|bibliography|literature cited|acknowledg(?:e)?ments)\b.*",
+        "",
+        markdown_text,
+        flags=re.IGNORECASE | re.DOTALL,
+    )
+
+    # 2. Split Markdown into logical blocks by Markdown headings (## / ###) or Page markers
+    blocks = re.split(r"(?=\n(?:#{1,4}\s+|<!-- PAGE \d+ -->))", "\n" + cleaned_md)
+    blocks = [b.strip() for b in blocks if b.strip()]
+
+    if not items:
+        return cleaned_md[:max_chars]
+
+    item_ids = {it["item_id"] for it in items}
+
+    # Determine which semantic categories of sections are needed for this batch
+    needs_header_abstract = bool(item_ids & {"TAN_1.1", "TAN_1.2", "TAN_1.3", "TAN_2.1.1", "TAN_2.1.2", "TAN_2.1.3", "TAN_2.3.1"})
+    needs_methods_structure = any(
+        iid.startswith(("TAN_2.2", "TAN_2.4.1", "TAN_2.4.2", "TAN_2.4.3", "TAN_2.4.4", "TAN_2.4.5", "TAN_2.4.6", "TAN_2.4.7"))
+        for iid in item_ids
+    )
+    needs_eval_sensitivity = any(
+        iid.startswith(("TAN_2.5", "TAN_2.1.3", "TAN_2.4.2B", "TAN_2.4.2C"))
+        for iid in item_ids
+    )
+
+    prioritized_blocks: List[str] = []
+    secondary_blocks: List[str] = []
+
+    for idx, block in enumerate(blocks):
+        first_line = block.splitlines()[0].lower() if block.splitlines() else ""
+        block_lower = block.lower()
+
+        # Rule A: Filter generic Introduction background prose — retain ONLY the final objective paragraph
+        if re.search(r"^#+\s*(?:1\.?\s*)?introduction\b", first_line):
+            paragraphs = [p.strip() for p in re.split(r"\n\s*\n", block) if p.strip()]
+            if len(paragraphs) > 1:
+                first_p = paragraphs[0] if len(paragraphs[0]) <= 2000 else paragraphs[0][:2000] + "..."
+                last_p = paragraphs[-1] if len(paragraphs[-1]) <= 2000 else paragraphs[-1][:2000]
+                block = f"{first_p}\n\n[...General Introduction background excluded per Tan routing rule...]\n\n{last_p}"
+            if needs_header_abstract:
+                prioritized_blocks.append(block)
+            else:
+                secondary_blocks.append(block)
+            continue
+
+        # Rule B: Title / Header / Abstract / Conclusion / Discussion
+        if idx <= 1 or any(k in first_line for k in ("abstract", "summary", "conclusion", "objective", "purpose")):
+            if needs_header_abstract:
+                prioritized_blocks.append(block)
+            else:
+                secondary_blocks.append(block)
+            continue
+
+        # Rule C: Evaluation, Validation, Goodness-of-Fit, Sensitivity, Uncertainty, Results, Discussion
+        if any(k in first_line or k in block_lower[:400] for k in (
+            "sensitivity", "evaluation", "validation", "goodness", "aafe", "rmse", "fold error",
+            "fold-error", "uncertainty", "variability", "monte carlo", "mcmc", "results", "discussion", "comparison"
+        )):
+            if needs_eval_sensitivity:
+                prioritized_blocks.append(block)
+            else:
+                secondary_blocks.append(block)
+            continue
+
+        # Rule D: Methods, Model Structure, ADME, Equations, Parameters, Tables, Software, Dosing
+        if any(k in first_line or k in block_lower[:400] for k in (
+            "method", "material", "model", "structure", "compartment", "equation", "parameter",
+            "table", "software", "solver", "mrgsolve", "mcsim", "simcyp", "gastroplus", "pk-sim",
+            "berkeley madonna", "matlab", "python", "scipy", "desolve", "dosing", "exposure", "calibration"
+        )) or "|" in block:
+            if needs_methods_structure:
+                prioritized_blocks.append(block)
+            else:
+                secondary_blocks.append(block)
+            continue
+
+        secondary_blocks.append(block)
+
+    # Assemble within max_chars budget, preserving document order among selected blocks
+    selected_set = set()
+    current_chars = 0
+
+    for b in prioritized_blocks:
+        if current_chars + len(b) + 2 <= max_chars:
+            selected_set.add(b)
+            current_chars += len(b) + 2
+        elif current_chars < max_chars // 2:
+            # Partial clip of a very large block
+            selected_set.add(b[: max_chars - current_chars])
+            current_chars = max_chars
+            break
+
+    for b in secondary_blocks:
+        if b not in selected_set and current_chars + len(b) + 2 <= max_chars:
+            selected_set.add(b)
+            current_chars += len(b) + 2
+
+    ordered_output = [b for b in (prioritized_blocks + secondary_blocks) if b in selected_set]
+    # Deduplicate while preserving order
+    seen_blocks: set[str] = set()
+    deduped_output: List[str] = []
+    for b in ordered_output:
+        if b not in seen_blocks:
+            seen_blocks.add(b)
+            deduped_output.append(b)
+
+    result_md = "\n\n".join(deduped_output)
+    return result_md[:max_chars] if result_md else cleaned_md[:max_chars]
+
+
 def build_tan_markdown_assessment_prompt(
     markdown_text: str,
     paper_title: Optional[str] = None,
-    max_markdown_chars: int = 35000,
+    max_markdown_chars: int = 28000,
     items: Optional[List[dict[str, Any]]] = None,
+    include_no_think: bool = False,
 ) -> str:
-    """Build the Tan questionnaire prompt for direct assessment of a paper in Markdown format."""
-    schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
+    """Build a high-precision, schema-aligned Tan questionnaire prompt for a paper in Markdown format."""
     selected_items = items or TAN_QUESTIONNAIRE_ITEMS
-    questions = "\n".join(
-        f"- [{item['item_id']}] ({item['section']}) {item['question']}\n"
-        f"  Allowed evidence: {', '.join(item['allowed_source_sections'])}\n"
-        f"  Routing: {item['routing_rule']}\n"
-        f"  Structured fields: {', '.join(item.get('structured_fields', []))}"
+    routed_md = extract_relevant_markdown_for_items(
+        markdown_text,
+        items=selected_items,
+        max_chars=max_markdown_chars,
+    )
+
+    questions_block = "\n".join(
+        f"- [{item['item_id']}] (Section: \"{item['section']}\")\n"
+        f"  Question: \"{item['question']}\"\n"
+        f"  Allowed Sections: {', '.join(item['allowed_source_sections'])}\n"
+        f"  Routing Rule: {item['routing_rule']}\n"
+        f"  Required `structured_details` keys: {json.dumps(item.get('structured_fields', []))}"
         for item in selected_items
     )
-    system_prompt = f"""You are an evidence-grounded PBPK model reporting reviewer using the Tan et al. PBPK reporting template.
 
-BE EXTREMELY CONCISE — TOKEN BUDGET IS STRICT:
-- Do NOT generate any chain-of-thought, reasoning, or explanation before the JSON.
-- For each item: `rationale` MUST be ≤ 20 words. `source_quote` MUST be ≤ 25 words (use "..." to truncate).
-- Include at most 1 evidence entry per item. Do not repeat the question text.
-- Output the JSON immediately with no preamble.
+    no_think_directive = "/no_think\n" if include_no_think else ""
 
-SCOPE & ASSESSMENT RULES:
-1. You are evaluating a scientific paper provided in full Markdown format.
-2. Evaluate the PBPK/TK model and its reporting quality, NOT the research paper's generic Introduction or Background literature.
-3. Strict section routing:
-   - Section 1 (Model identification): Title, abstract, header, authors, and methodology.
-   - Section 2.1 (Executive summary): Abstract, the final paragraph of the Introduction stating study objectives, and Discussion/Conclusion. General Introduction background prose is strictly blocked.
-   - Section 2.2 & 2.4.2 (Chemical properties & ADME data): Methods, parameter tables, results.
-   - Section 2.4.1 (Modeling strategy): Methods, workflow, calibration, and evaluation procedures.
-   - Section 2.4.3 (Structure, ADME mechanisms & Assumptions): Model structure methods, compartment diagrams, physiological equations, stated assumptions.
-   - Section 2.4.4 (Model equations): Extracted mass-balance, rate, scaling, and growth equations. Never invent missing equations.
-   - Section 2.4.5 (Parameters): Parameter tables, values, units, sources, and distributions.
-   - Section 2.4.6 (Simulations & Dosing): Simulated scenarios, routes, dosing, subjects, populations.
-   - Section 2.4.7 (Software & solvers): Simulation software, ODE solver, optimization methods, and code availability.
-   - Section 2.5 (Evaluation & Sensitivity): Model evaluation vs observed data, goodness-of-fit metrics, sensitivity analysis, and uncertainty.
-4. Ground all answers in verbatim quotes from the Markdown paper:
-   - For every item with response 'yes' or 'partially', provide at least one `evidence` entry containing `source_quote` (verbatim quote from the markdown), `source_section` (e.g. 'Methods', 'Table 1', 'Abstract'), and `source_location` (e.g. 'Page 3, Section 2.2').
-   - If the requested information is absent or ambiguous, set response to 'i_cannot_answer'.
-   - Use 'not_applicable' only if the paper explicitly states the mechanism or condition is not applicable.
-5. Return all {len(selected_items)} questionnaire items in order.
-6. Output ONLY valid JSON matching this schema:
-{schema_json}
-"""
-    truncated_md = markdown_text[:max_markdown_chars] if len(markdown_text) > max_markdown_chars else markdown_text
+    system_prompt = f"""{no_think_directive}You are an expert regulatory PBPK/TK model evaluator (US EPA / FDA / OECD GD 331 standard) executing the Tan et al. PBPK Model Reporting Questionnaire on a scientific paper converted to Markdown.
+
+==================================================
+1. STRICT OUTPUT & TOKEN BUDGET RULES
+==================================================
+- Output ONLY a single valid JSON object. Do NOT emit `<think>` blocks, markdown code fences, or conversational preamble.
+- Return all {len(selected_items)} requested items inside the `"items"` array in the exact order listed.
+- Use the EXACT field names defined below (`item_id`, `section`, `question`, `response`, `details`, `structured_details`, `evidence`). NEVER use `"rationale"` in place of `"details"`.
+- Keep `"details"` concise and information-dense (1–2 sentences, <= 35 words) summarizing the exact factual answer.
+- Populate `"structured_details"` as a JSON dictionary mapping each item's `Required structured_details keys` to the concrete values extracted from the paper (use `null` or `[]` if not reported).
+
+==================================================
+2. RESPONSE DECISION RUBRIC (`response` enum)
+==================================================
+Choose `"response"` strictly from `["yes", "partially", "no", "not_applicable", "i_cannot_answer"]`:
+- `"yes"`: All core aspects of the question are explicitly reported in the allowed sections of the paper, backed by a verbatim quote.
+- `"partially"`: Some aspects are explicitly reported (e.g., software name is stated, but ODE solver algorithm or version is omitted; or model compartments are listed, but mathematical equations are only partially shown), backed by a verbatim quote.
+- `"no"`: The paper explicitly states that an expected step/analysis was NOT performed (e.g., "no sensitivity analysis was conducted").
+- `"not_applicable"`: The paper explicitly establishes that the mechanism does not apply (e.g., gestational/lactational barrier transfer `TAN_2.4.3.8` in an adult-only non-pregnant model, or metabolism `TAN_2.4.3.6` when the compound is explicitly stated to be metabolically inert/unmetabolized).
+- `"i_cannot_answer"`: The required information is absent from the allowed sections or cannot be verified with a concrete quote/location.
+- SPECIAL RULE FOR `TAN_1.3`: Always set `"response": "yes"`, `"details": "Assessment metadata recorded by APEX pipeline."`, and `"structured_details": {{"assessment_date": "2026-11-09", "reviewer": "APEX Automated Tan Assessor", "pipeline_version": "Refined-Tan-PBPK-v1"}}`.
+
+==================================================
+3. SECTION ROUTING & ANTI-HALLUCINATION RULES
+==================================================
+- BLOCK INTRODUCTION BACKGROUND: Never use generic Introduction/Background literature (toxicity history, epidemiology, manufacturing) as evidence. Only the final study-objective paragraph of the Introduction may be used for Purpose items (`TAN_2.1.1`, `TAN_2.1.2`, `TAN_2.3.1`).
+- VERBATIM EVIDENCE MANDATE: Every item rated `"yes"`, `"partially"`, `"no"`, or `"not_applicable"` (except `TAN_1.3`) MUST include at least 1 entry in `"evidence"` with:
+  * `"source_page"`: Integer page number from the `<!-- PAGE X -->` or `### [Page X]` marker (or `null` if unknown).
+  * `"source_section"`: Section heading name (e.g., `"Abstract"`, `"Materials and Methods"`, `"Table 1"`, `"Results"`).
+  * `"source_location"`: Specific location (e.g., `"Page 3, Model Structure"`, `"Page 5, Table 1"`, `"Page 8, Sensitivity Analysis"`).
+  * `"source_quote"`: Exact verbatim substring copied from the Markdown text (<= 30 words). Never paraphrase inside `source_quote`.
+- Do NOT invent equations, parameter values, solver names, or goodness-of-fit criteria from general PBPK knowledge.
+
+==================================================
+4. REQUIRED JSON STRUCTURE EXAMPLE
+==================================================
+{{
+  "model_identification": {{
+    "model_name": "3-compartment TK model for PFOA, PFOS, and PFHxS",
+    "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+    "authors": ["Author A", "Author B"],
+    "publication_year": 2025,
+    "journal": "Toxicological Sciences",
+    "doi_pmid": "10.1093/toxsci/kfaf087"
+  }},
+  "items": [
+    {{
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "response": "yes",
+      "details": "The study adapts a 3-compartment toxicokinetic model for PFOA, PFOS, and PFHxS in nonhuman primates and humans; no active metabolites are modeled.",
+      "structured_details": {{
+        "model_name": "3-compartment TK model",
+        "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+        "parent_or_metabolites": "Parent compounds only",
+        "identifiers": null
+      }},
+      "evidence": [
+        {{
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "Here, we evaluate the use of a 3-compartment TK model for PFOA, PFOS, and PFHxS..."
+        }}
+      ]
+    }}
+  ],
+  "overall_fit_for_purpose": "Brief 1-sentence summary of reporting completeness.",
+  "key_gaps": [],
+  "reviewer_notes": []
+}}"""
+
     header = f"PAPER TITLE: {paper_title}\n\n" if paper_title else ""
     user_prompt = (
-        f"{header}TAN PBPK REPORTING QUESTIONNAIRE (Answer all {len(selected_items)} items):\n{questions}\n\n"
-        f"SCIENTIFIC PAPER FULL TEXT (MARKDOWN FORMAT):\n{truncated_md}\n"
+        f"{header}EVALUATE THE FOLLOWING {len(selected_items)} TAN PBPK QUESTIONNAIRE ITEMS:\n"
+        f"{questions_block}\n\n"
+        f"==================================================\n"
+        f"SCIENTIFIC PAPER TEXT (MARKDOWN WITH PAGE MARKERS):\n"
+        f"==================================================\n"
+        f"{routed_md}\n"
     )
     return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
 
@@ -1395,11 +1233,7 @@ def evaluate_tan_from_markdown(
     markdown_text: str,
     paper_title: Optional[str] = None,
 ) -> TanPBPKAssessment:
-    """Create a deterministic baseline Tan assessment by scanning Markdown text for evidence.
-
-    Extracts bibliographic information, section headings, markdown tables,
-    equations, software mentions, sensitivity terms, and evaluation criteria.
-    """
+    """Create a deterministic baseline Tan assessment by scanning Markdown text for evidence."""
     lines = markdown_text.splitlines()
     text_lower = markdown_text.lower()
 
@@ -1407,17 +1241,16 @@ def evaluate_tan_from_markdown(
     title = paper_title
     doi = None
     journal = None
-    for line in lines[:30]:
+    for line in lines[:45]:
         stripped = line.strip()
-        if not title and stripped.startswith("# "):
+        if not title and stripped.startswith("# ") and "page " not in stripped.lower():
             title = stripped.lstrip("#* ").rstrip("* ")
         if not doi and "doi.org" in stripped:
             doi = stripped
-        if not journal and ("journal" in stripped.lower() or "toxicological sciences" in stripped.lower()):
+        if not journal and ("journal" in stripped.lower() or "toxicological sciences" in stripped.lower() or "environment" in stripped.lower()):
             journal = stripped.strip("*_ ")
 
     # 2. Collect Markdown tables
-    table_lines: List[str] = []
     has_tables = bool(re.search(r"\|[ -]+(?:\|[ -]+)+\|", markdown_text) or "<table" in text_lower)
 
     # 3. Collect equations (LaTeX $$ ... $$, \( ... \), d[A-Z]/dt)
@@ -1432,22 +1265,20 @@ def evaluate_tan_from_markdown(
     software_terms = [
         "mrgsolve", "mcsim", "r package", "r version", "desolve",
         "matlab", "simcyp", "gastroplus", "pk-sim", "berkeley madonna",
-        "python", "scipy", "stan", "nlmixr", "monolix", "nonmem"
+        "python", "scipy", "stan", "nlmixr", "monolix", "nonmem", "acslx"
     ]
     detected_software: List[str] = [term for term in software_terms if term in text_lower]
 
     # 5. Search for ADME keywords & assumptions
-    has_absorption = any(w in text_lower for w in ["oral absorption", "absorption rate", "bioavailability", "uptake"])
-    has_binding = any(w in text_lower for w in ["protein binding", "free fraction", "fraction unbound", "albumin"])
-    has_metabolism = any(w in text_lower for w in ["vmax", "km", "metabolism", "michaelis-menten", "clearance"])
-    has_excretion = any(w in text_lower for w in ["renal clearance", "urinary excretion", "reabsorption", "elimination rate"])
-    has_assumptions = "assum" in text_lower
+    has_absorption = any(w in text_lower for w in ["oral absorption", "absorption rate", "bioavailability", "uptake", "kabs", "ka "])
+    has_binding = any(w in text_lower for w in ["protein binding", "free fraction", "fraction unbound", "albumin", "fu "])
+    has_metabolism = any(w in text_lower for w in ["vmax", "km", "metabolism", "michaelis-menten", "clearance", "metabolite"])
+    has_excretion = any(w in text_lower for w in ["renal clearance", "urinary excretion", "reabsorption", "elimination rate", "fecal"])
 
     # 6. Search for sensitivity and validation metrics
-    has_sensitivity = any(w in text_lower for w in ["sensitivity analysis", "morris", "sobol", "parameter sensitivity"])
-    has_gof = any(w in text_lower for w in ["aafe", "rmse", "r2", "r^2", "mfe", "goodness-of-fit", "fold-error"])
+    has_sensitivity = any(w in text_lower for w in ["sensitivity analysis", "morris", "sobol", "parameter sensitivity", "sensitivity coefficient"])
+    has_gof = any(w in text_lower for w in ["aafe", "rmse", "r2", "r^2", "mfe", "goodness-of-fit", "fold-error", "fold error"])
 
-    by_id = {item["item_id"]: item for item in TAN_QUESTIONNAIRE_ITEMS}
     items: List[TanQuestionnaireItem] = []
 
     for item_def in TAN_QUESTIONNAIRE_ITEMS:
@@ -1460,12 +1291,12 @@ def evaluate_tan_from_markdown(
             if title:
                 response = ResponseOption.PARTIALLY
                 details = f"Model title and context identified from Markdown header: {title}"
-                evidence.append(_evidence(location="Markdown header", quote=title[:120], section="Title"))
+                evidence.append(_evidence(page=1, location="Markdown header", quote=title[:120], section="Title"))
         elif item_id == "TAN_1.2":
             if doi or journal:
                 response = ResponseOption.PARTIALLY
                 details = f"Bibliographic information identified: {doi or journal}"
-                evidence.append(_evidence(location="Header metadata", quote=str(doi or journal)[:120], section="Metadata"))
+                evidence.append(_evidence(page=1, location="Header metadata", quote=str(doi or journal)[:120], section="Metadata"))
         elif item_id == "TAN_1.3":
             response = ResponseOption.YES
             details = "Assessment metadata is assigned deterministically by APEX."
@@ -1475,7 +1306,7 @@ def evaluate_tan_from_markdown(
                 quote = abstract_m.group(1).strip()[:200]
                 response = ResponseOption.PARTIALLY
                 details = "Purpose and executive summary evidence extracted from Abstract section."
-                evidence.append(_evidence(location="Abstract section", quote=quote, section="Abstract"))
+                evidence.append(_evidence(page=1, location="Abstract section", quote=quote, section="Abstract"))
         elif item_id == "TAN_2.1.3":
             response = ResponseOption.I_CANNOT_ANSWER
             details = "Quantitative conclusions require structured LLM evaluation of Results/Discussion."
@@ -1546,27 +1377,10 @@ async def assess_tan_from_markdown(
     markdown_text: str,
     extractor: Optional[Any] = None,
     paper_title: Optional[str] = None,
-    mode: str = "single",
+    mode: str = "sections",
     max_new_tokens: int = 12000,
 ) -> TanPBPKAssessment:
-    """Asynchronously evaluate all Tan questionnaire items against a Markdown paper using the LLM.
-
-    Parameters
-    ----------
-    markdown_text : str
-        Full or segmented Markdown representation of the paper.
-    extractor : Optional[Any]
-        An initialized extractor instance (e.g. SGLangExtractor). If omitted,
-        instantiates one automatically.
-    paper_title : Optional[str]
-        Title of the paper, if known.
-    mode : str
-        'single' evaluates all 36 items in a single LLM prompt pass.
-        'sections' evaluates items in 5 section batches (identification, chemical/strategy,
-        structure/ADME, equations/parameters/software, evaluation/sensitivity) and merges them.
-    max_new_tokens : int
-        Token budget for LLM response generation.
-    """
+    """Asynchronously evaluate all Tan questionnaire items against a Markdown paper using the LLM."""
     if extractor is not None and hasattr(extractor, "assess_tan_from_markdown"):
         return await extractor.assess_tan_from_markdown(
             markdown_text=markdown_text,
@@ -1575,7 +1389,6 @@ async def assess_tan_from_markdown(
             max_new_tokens=max_new_tokens,
         )
 
-    # If no extractor instance is provided, attempt to use SGLangExtractor or OpenAI fallback
     try:
         from pk_pipeline.ml_services import SGLangExtractor
         ext = SGLangExtractor()

@@ -195,6 +195,30 @@ def test_normalize_tan_assessment_handles_rationale_alias():
     assert tan_1_1.confidence == "high"
 
 
+def test_repair_truncated_json_with_preamble_and_trailing_commas():
+    """Verify that _repair_truncated_json recovers complete objects even with conversational preambles and truncation."""
+    from pk_pipeline.ml_services import SGLangExtractor
+
+    truncated_output = (
+        "Here is the requested Tan questionnaire JSON evaluation:\n"
+        "```json\n"
+        "{\n"
+        '  "model_identification": {"model_name": "PBPK Model A"},\n'
+        '  "items": [\n'
+        '    {"item_id": "TAN_1.1", "response": "yes", "details": "Model named explicitly."},\n'
+        '    {"item_id": "TAN_1.2", "response": "partially", "details": "DOI available.",}\n'
+        '    {"item_id": "TAN_1.3", "response": "yes", "details": "Pipeline metadata.'
+    )
+
+    repaired = SGLangExtractor._repair_truncated_json(truncated_output)
+    assert repaired is not None, "Failed to repair truncated JSON!"
+    assert "items" in repaired
+    assert len(repaired["items"]) == 2
+    assert repaired["items"][0]["item_id"] == "TAN_1.1"
+    assert repaired["items"][1]["item_id"] == "TAN_1.2"
+    assert repaired["items"][1]["details"] == "DOI available."
+
+
 # ─── 4. LIVE LLM ASSESSMENT TEST ──────────────────────────────────────────────
 
 def test_llm_answers_tan_questions_from_markdown():
