@@ -1,0 +1,1233 @@
+{
+  "template_name": "Tan et al. PBPK Reporting Template",
+  "template_version": "Refined-Tan-PBPK-Research-v1",
+  "assessment_date": null,
+  "reviewer": null,
+  "pipeline_version": null,
+  "model_identification": {},
+  "assessment_scope": "Model-specific evidence only; generic Introduction/Background statements are excluded unless explicitly tied to the model.",
+  "items": [
+    {
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Methods"
+      ],
+      "routing_rule": "Do not infer identifiers or compounds from general Introduction background.",
+      "response": "yes",
+      "details": "Wambaugh model adapted for PFOS, PFOA, PFHxS; no metabolites or CAS stated.",
+      "structured_details": {
+        "model_name": "Wambaugh model (adapted from Andersen et al. 2006)",
+        "target_compounds": [
+          "PFOS",
+          "PFOA",
+          "PFHxS"
+        ],
+        "parent_or_metabolites": "Parent compounds only",
+        "identifiers": "None stated"
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Selected model section",
+          "source_quote": "we selected the animal model in Wambaugh et al. (2013) for further adaptation herein."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.2",
+      "section": "1. Model identification",
+      "question": "Extract authors, publication year, journal, and DOI/PMID.",
+      "allowed_source_sections": [
+        "Title page",
+        "Header",
+        "Bibliographic metadata"
+      ],
+      "routing_rule": "Use bibliographic metadata only.",
+      "response": "yes",
+      "details": "Dean et al., 2025, Toxicological Sciences, DOI 10.1093/toxsci/kfaf087.",
+      "structured_details": {
+        "authors": [
+          "Kara J. Dean",
+          "R\u00e9gis Pouillot",
+          "Jane M. Van Doren",
+          "Sofia M. Santillana Farakos"
+        ],
+        "publication_year": 2025,
+        "journal": "Toxicological Sciences",
+        "doi_pmid": "10.1093/toxsci/kfaf087"
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Header",
+          "source_location": "Top of page 1",
+          "source_quote": "Toxicological Sciences, 2025, 207(1), 139\u2013147 https://doi.org/10.1093/toxsci/kfaf087"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.3",
+      "section": "1. Reviewer context",
+      "question": "Record assessment date, reviewer, and pipeline version.",
+      "allowed_source_sections": [
+        "Reviewer metadata"
+      ],
+      "routing_rule": "This is pipeline metadata, not paper evidence.",
+      "response": "not_applicable",
+      "details": "Pipeline metadata not derivable from paper text.",
+      "structured_details": {
+        "assessment_date": null,
+        "reviewer": null,
+        "pipeline_version": null
+      },
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The response has no auditable model-specific evidence reference."
+    },
+    {
+      "item_id": "TAN_2.1.1",
+      "section": "2.1 Executive summary",
+      "question": "What is the specific scientific or regulatory rationale for conducting this PBPK analysis?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use Abstract, the final Introduction objective paragraph, and Discussion/Conclusion summary only; block general Introduction background.",
+      "response": "yes",
+      "details": "Adapt animal TK models to predict human serum for data-sparse PFAS to support reverse dosimetry and risk assessment.",
+      "structured_details": {
+        "rationale": "Few TK models exist for many food-relevant PFAS; existing models show inconsistencies with empirical data.",
+        "purpose": "Adapt nonhuman primate TK models to predict human serum levels for reverse dosimetry and risk assessment."
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Abstract",
+          "source_location": "Abstract",
+          "source_quote": "To facilitate reverse dosimetry and risk assessment for the less studied PFAS compounds in food, we developed and evaluated an approach to adapt existing toxicokinetic models"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.1.2",
+      "section": "2.1 Executive summary",
+      "question": "Provide a high-level overview of modeled chemicals, species, life stages/populations, exposure routes, and primary applications.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only purpose-summary sections; do not reconstruct scope from generic background.",
+      "response": "yes",
+      "details": "Adapted Wambaugh model for PFOA/PFOS/PFHxS; cynomolgus monkey scaled to adult humans; oral/IV routes; reverse dosimetry and risk assessment.",
+      "structured_details": {
+        "model_overview": "Adapted three-compartment TK model from nonhuman primates to humans for PFAS",
+        "chemicals": [
+          "PFOA",
+          "PFOS",
+          "PFHxS"
+        ],
+        "species": [
+          "cynomolgus monkey",
+          "human"
+        ],
+        "life_stages": [
+          "adults 21-79 years"
+        ],
+        "routes": [
+          "oral",
+          "intravenous"
+        ],
+        "applications": [
+          "reverse dosimetry",
+          "risk assessment",
+          "PODHED calculation"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Abstract",
+          "source_location": "Abstract",
+          "source_quote": "adapt existing toxicokinetic models for nonhuman primates to predict human serum levels...reverse dosimetry and risk assessment"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.1.3",
+      "section": "2.1 Executive summary",
+      "question": "What primary quantitative and scientific conclusions are supported by the PBPK simulations?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only Abstract and Discussion/Conclusion model results; do not infer conclusions from model inputs.",
+      "response": "yes",
+      "details": "MSLE 0.07/0.03 for human PFOS/PFOA; 98%/71% within factor 2; Tmc 1.07/0.54 mg/h/kg; approach yields similar dosimetry to regulatory models.",
+      "structured_details": {
+        "key_conclusions": [
+          "Approach yields similar dosimetry estimates to regulatory models",
+          "Can inform decision-making in data-sparse spaces"
+        ],
+        "quantitative_results": {
+          "MSLE_human_PFOS": 0.07,
+          "MSLE_human_PFOA": 0.03,
+          "factor2_PFOS": "98%",
+          "factor2_PFOA": "71%",
+          "Tmc_PFOS_mg_h_kg": 1.07,
+          "Tmc_PFOA_mg_h_kg": 0.54
+        }
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Abstract",
+          "source_location": "Abstract",
+          "source_quote": "yields similar dosimetry estimates to those of other models, particularly those used for regulatory purposes"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.3.1",
+      "section": "2.3 Model purpose",
+      "question": "What exact scientific, dosimetry, or regulatory questions does the model address, and what internal dose metrics are predicted?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion",
+        "Methods: model purpose"
+      ],
+      "routing_rule": "Prefer explicit problem formulation/purpose statements; exclude generic exposure/toxicity history.",
+      "response": "yes",
+      "details": "Facilitate reverse dosimetry for data-sparse PFAS; predict serum concentrations and PODHED for cardiovascular/hepatic endpoints.",
+      "structured_details": {
+        "problem_formulation": "Adapt animal TK models to predict human serum levels for less-studied PFAS in food",
+        "fit_for_purpose": "Reverse dosimetry and risk assessment in data-sparse spaces",
+        "dose_metrics": [
+          "serum concentration",
+          "PODHED"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Introduction: final paragraph",
+          "source_location": "Introduction final paragraph",
+          "source_quote": "develop an approach that makes use of existing animal data and models and scales it to humans"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.2.1",
+      "section": "2.2 & 2.4.2 Chemical properties and active moiety",
+      "question": "Which physicochemical and PK/TK properties are explicitly used in Methods to build or parameterize the model? Identify the modeled moiety and exposure routes.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Strictly exclude general toxicity/epidemiology background not used to parameterize, calibrate, or evaluate the model.",
+      "response": "yes",
+      "details": "Parameters: bioAv, VCC, Tmc, Kt, Free, k12, k21, ka; saturable Michaelis-Menten resorption; oral/IV routes; PFAS anions as active moiety.",
+      "structured_details": {
+        "properties": [
+          "bioAv",
+          "VCC",
+          "Tmc",
+          "Kt",
+          "Free",
+          "k12",
+          "k21",
+          "ka",
+          "QCC",
+          "BW"
+        ],
+        "active_moiety": "PFAS compounds (PFOS, PFOA, PFHxS)",
+        "exposure_routes": [
+          "oral",
+          "intravenous"
+        ],
+        "parameter_use": "Saturable resorption via Michaelis-Menten; allometric scaling of cardiac output and volumes"
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods: Selected model",
+          "source_location": "Methods, Selected model",
+          "source_quote": "saturable process with a Michaelis\u2013Menten kinetics dictates reabsorption from the filtrate compartment"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.1",
+      "section": "2.4.1 Modeling strategy",
+      "question": "What is the end-to-end workflow from data preparation to model development, calibration/fitting, verification/evaluation, and application, and how does it support the purpose?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use Materials/Methods/Tables/Figures; exclude generic Introduction.",
+      "response": "i_cannot_answer",
+      "details": "The LLM did not return this Tan questionnaire item.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2A",
+      "section": "2.4.2 Data summary: parameterization studies",
+      "question": "Summarize specific in vitro, in silico, mass-balance, tissue-distribution, metabolism, transporter, and protein-binding studies used to inform structure or derive parameters.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Require study conditions and citations when reported; do not treat background citations as model data.",
+      "response": "i_cannot_answer",
+      "details": "The LLM did not return this Tan questionnaire item.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2B",
+      "section": "2.4.2 Calibration datasets",
+      "question": "List all datasets used to calibrate, optimize, or fit unknown parameters, including citation, species/population, matrix, sample size, dosing/exposure, and time points.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Only label a dataset calibration when the paper explicitly assigns that role.",
+      "response": "i_cannot_answer",
+      "details": "The LLM did not return this Tan questionnaire item.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2C",
+      "section": "2.4.2 Evaluation datasets",
+      "question": "List independent datasets held out from calibration and used to evaluate predictive capability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code",
+        "Results"
+      ],
+      "routing_rule": "Only label a dataset independent when the paper explicitly distinguishes it from calibration.",
+      "response": "i_cannot_answer",
+      "details": "The LLM did not return this Tan questionnaire item.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.1",
+      "section": "2.4.3A Structure and lineage",
+      "question": "Does the model replicate, refine/modify a published model, or introduce a new structure? Describe and justify customized modifications and predecessor citations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Exclude Introduction; use Methods, schematic, Discussion limitations, and supplementary code.",
+      "response": "yes",
+      "details": "The model adapts the Wambaugh (2013) animal model, which itself adapts Andersen (2006), adding a bioavailability parameter.",
+      "structured_details": {
+        "lineage": "Adapted from Wambaugh et al. (2013), which is an adaptation of Andersen et al. (2006).",
+        "predecessor_citations": [
+          "Wambaugh et al. (2013)",
+          "Andersen et al. (2006)"
+        ],
+        "modifications": "Added a bioavailability parameter to align with the Verner et al. (2016) model.",
+        "justification": "To align with the US EPA model used for reference dose level setting."
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Materials and methods",
+          "source_location": "Selected model",
+          "source_quote": "we selected the animal model in Wambaugh et al. (2013) for further adaptation herein."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.2",
+      "section": "2.4.3A Structure and platform",
+      "question": "For each species/life-stage submodel, list anatomical compartments, total count, platform, and inter-organ/inter-life-stage connectivity.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use diagrams and model-structure Methods; do not infer disconnected links.",
+      "response": "partially",
+      "details": "The model uses three compartments (central, deep, filtrate) for both animal and human submodels.",
+      "structured_details": {
+        "platform": "R using mrgsolve and FME packages",
+        "submodels": [
+          "Nonhuman primate",
+          "Human"
+        ],
+        "compartments": [
+          "Central",
+          "Deep",
+          "Filtrate"
+        ],
+        "count": 3,
+        "connections": "Central to deep, central to filtrate, filtrate to central via saturable resorption.",
+        "flows": "Cardiac output, filtrate flow, deep compartment flow."
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Materials and methods",
+          "source_location": "Selected model",
+          "source_quote": "includes three compartments: A central compartment, a second (\u201cdeep\u201d) compartment, and a filtrate compartment"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.3",
+      "section": "2.4.3B ADME: absorption",
+      "question": "How does the model represent uptake across oral/GI, drinking water, breast milk, inhalation, dermal, IV, and presystemic routes?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, mathematical implementation, governing parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "Oral absorption is modeled via bioavailability and gut absorption rate (ka); IV is simulated. Other routes are not modeled.",
+      "structured_details": {
+        "biological_mechanism": "Oral ingestion and intravenous administration.",
+        "mathematical_implementation": "Bioavailability parameter and first-order absorption rate (ka).",
+        "governing_parameters": [
+          "bioAv",
+          "ka"
+        ],
+        "compartments": [
+          "Central"
+        ],
+        "source_location": "Inferences"
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Materials and methods",
+          "source_location": "Inferences",
+          "source_quote": "a parameter for bioavailability was added to the model... rate of absorption from the gut (ka)"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.4",
+      "section": "2.4.3B ADME: binding and blood partitioning",
+      "question": "How are protein binding, free fraction, hematocrit, and blood-to-plasma partitioning represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "The free fraction of unbound compound in human plasma is modeled; hematocrit and blood-to-plasma partitioning are not explicitly detailed.",
+      "structured_details": {
+        "biological_mechanism": "Protein binding in plasma.",
+        "mathematical_implementation": "Proportion of free compound in the central compartment (Free).",
+        "governing_parameters": [
+          "Free"
+        ],
+        "compartments": [
+          "Central"
+        ],
+        "source_location": "Inferences"
+      },
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Materials and methods",
+          "source_location": "Inferences",
+          "source_quote": "the proportion of free compound in the central compartment (Free)... fraction of unbound compound in human plasma"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.5",
+      "section": "2.4.3B ADME: tissue partitioning",
+      "question": "Which tissues are perfusion- versus diffusion-limited, how are partition coefficients determined, and how are dynamic physiological changes represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "Three compartments (central, deep, filtrate) with rate constants k12/k21; no tissue-specific partition coefficients or dynamic physiology.",
+      "structured_details": {
+        "biological_mechanism": "Central, deep, and filtrate compartments; no tissue-specific partitioning",
+        "mathematical_implementation": "First-order rate constants k12, k21 between central and deep compartments",
+        "governing_parameters": [
+          "k12",
+          "k21",
+          "VCC",
+          "Qd",
+          "Qfil"
+        ],
+        "compartments": [
+          "central",
+          "deep",
+          "filtrate"
+        ],
+        "source_location": "Methods, Fig. 1, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods / Fig. 1",
+          "source_location": "Page 141, Fig. 1 schematic",
+          "source_quote": "three compartments: A central compartment, a second ('deep') compartment, and a filtrate compartment"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.6",
+      "section": "2.4.3B ADME: metabolism",
+      "question": "Is the compound metabolized or inert? If metabolized, identify organs, enzymes, rate laws, parent transformation, and metabolite formation.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "No metabolism compartment or enzymes described; model assumes parent compound only, but inertness not explicitly stated.",
+      "structured_details": {
+        "biological_mechanism": "No metabolism represented; model tracks parent compound only",
+        "mathematical_implementation": "No metabolic rate equations present",
+        "governing_parameters": [],
+        "compartments": [],
+        "source_location": "Methods, Fig. 1, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods / Fig. 1",
+          "source_location": "Page 141, Fig. 1",
+          "source_quote": "CPrim, CDeep, and Cfil are the chemical concentrations in the primary/central, deep/second, and filtrate compartments"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.7",
+      "section": "2.4.3B ADME: excretion and recirculation",
+      "question": "How are urinary, biliary/fecal, exhaled, long-half-life, renal-reabsorption, and enterohepatic mechanisms represented, including life-stage differences?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "Renal reabsorption via Michaelis-Menten (Tm, Kt) in filtrate compartment; no biliary, exhaled, or enterohepatic mechanisms.",
+      "structured_details": {
+        "biological_mechanism": "Saturable renal reabsorption from filtrate to central compartment",
+        "mathematical_implementation": "Michaelis-Menten kinetics with Tm and Kt parameters",
+        "governing_parameters": [
+          "Tm",
+          "Kt",
+          "Qfil",
+          "Vfil"
+        ],
+        "compartments": [
+          "filtrate",
+          "central"
+        ],
+        "source_location": "Methods, Fig. 1, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods",
+          "source_location": "Page 141, Methods - Selected model",
+          "source_quote": "saturable process with a Michaelis\u2013Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.8",
+      "section": "2.4.3B ADME: barrier and life-stage transfer",
+      "question": "For gestational/lactational/barrier models, extract placental, amniotic, milk, and suckling-transfer mechanisms and equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use model structure, schematic, and Methods only; mark not_applicable only when explicitly established.",
+      "response": "not_applicable",
+      "details": "Paper explicitly states model excludes pregnancy, breastfeeding, and developmental compartments.",
+      "structured_details": {
+        "biological_mechanism": "Not applicable; model excludes gestation and lactation",
+        "mathematical_implementation": "No placental, amniotic, milk, or suckling equations",
+        "governing_parameters": [],
+        "compartments": [],
+        "source_location": "Methods, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods",
+          "source_location": "Page 141, Methods - Model checking",
+          "source_quote": "the TK model does not include a development compartment and thus underestimates serum levels in children"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.9",
+      "section": "2.4.3C Assumptions: perfusion/diffusion/lumping",
+      "question": "What assumptions concern well-stirred behavior, organ lumping, or omitted compartments, and what are the justification and structural/equation impacts?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only; do not supply textbook assumptions.",
+      "response": "partially",
+      "details": "Three-compartment lumped model; development compartment explicitly omitted.",
+      "structured_details": {
+        "stated_assumption": "TK model does not include a development compartment; model does not account for pregnancy or breastfeeding.",
+        "authors_justification": "Underestimates serum levels in children/young adults by excluding gestation/breastfeeding exposures.",
+        "structural_impact": "Individuals <20 years excluded from NHANES fitting; developmental/immunological endpoints excluded from PODHED.",
+        "source_location": "Methods, Model checking and validation, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods: Model checking and validation",
+          "source_location": "p.141, paragraph on NHANES exclusion",
+          "source_quote": "the TK model does not include a development compartment and thus underestimates serum levels in children..."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.10",
+      "section": "2.4.3C Assumptions: binding/free fraction",
+      "question": "What assumptions concern protein/RBC binding and constancy of fu/Free across concentration, species, or life stage?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "partially",
+      "details": "Free is a constant parameter; updated to human plasma values; correlated with resorption parameters.",
+      "structured_details": {
+        "stated_assumption": "Free (proportion of free compound in central compartment) is a fixed constant parameter.",
+        "authors_justification": "Updated to reflect most current assessment of fraction unbound in human plasma (Smeltz et al. 2023).",
+        "structural_impact": "Free highly correlated to resorption parameters; changing Free changes Tmc and Kt.",
+        "source_location": "Methods: Inferences, p.140; Results, p.142"
+      },
+      "evidence": [
+        {
+          "source_page": 140,
+          "source_section": "Methods: Inferences",
+          "source_location": "p.140, Inferences paragraph",
+          "source_quote": "values for Free, the proportion of free compound in the central compartment, were updated..."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.11",
+      "section": "2.4.3C Assumptions: borrowing",
+      "question": "Which parameters are borrowed across surrogate species or analogue chemicals, and why?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Do not infer borrowing from similar values; require explicit evidence.",
+      "response": "yes",
+      "details": "Parameters held constant animal-to-human; PFHxS starting values borrowed from PFOS.",
+      "structured_details": {
+        "stated_assumption": "Remaining parameters held constant between animal and human models; PFHxS starting values same as PFOS.",
+        "authors_justification": "Lower bioavailability in NHP assumed experiment-specific; PFHxS lacks independent starting data.",
+        "structural_impact": "Only Tmc refit for human half-life; bioAv and Kt refit for PFOA.",
+        "source_location": "Results: Model parameters, p.142; Methods: Application to other compounds, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 142,
+          "source_section": "Results: Model parameters estimated for humans",
+          "source_location": "p.142, paragraph on scaling",
+          "source_quote": "The remaining parameters were held constant between the animal and human models..."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.12",
+      "section": "2.4.3C Assumptions: clearance/resorption/ontogeny",
+      "question": "What assumptions concern zero metabolism, active renal reabsorption, or immature/omitted transporter activity in fetuses/infants?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "partially",
+      "details": "Active saturable renal reabsorption modeled; no metabolism compartment; ontogeny omitted.",
+      "structured_details": {
+        "stated_assumption": "Saturable Michaelis-Menten reabsorption from filtrate to central compartment; no metabolism; no development compartment.",
+        "authors_justification": "Nonlinear elimination accommodated; development compartment excluded due to lack of data.",
+        "structural_impact": "Underestimates serum in children; developmental endpoints excluded from PODHED.",
+        "source_location": "Methods: Selected model, p.140; Methods: Model checking, p.141"
+      },
+      "evidence": [
+        {
+          "source_page": 140,
+          "source_section": "Methods: Selected model",
+          "source_location": "p.140, Selected model paragraph",
+          "source_quote": "a saturable process with a Michaelis\u2013Menten kinetics dictates reabsorption from the filtrate compartment..."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.13",
+      "section": "2.4.3C Assumptions: dosing/steady state",
+      "question": "What assumptions concern pre-pregnancy run-in, route surrogates, intake adjustments, or milk production/suckling initialization?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "partially",
+      "details": "Paper explicitly excludes pregnancy/lactation; no run-in, route surrogate, or suckling assumptions stated.",
+      "structured_details": {
+        "stated_assumption": "Model does not account for pregnancy or breastfeeding; excludes gestation and breastfeeding exposures.",
+        "authors_justification": "Development compartment absent; children/young adults excluded from NHANES fitting.",
+        "structural_impact": "Underestimates serum levels in children/young adults; developmental/immunological endpoints not evaluated.",
+        "source_location": "Methods, Model checking and validation; Results, Comparisons to EPA-modified Verner model"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods: Model checking and validation",
+          "source_location": "Page 141, Model checking and validation",
+          "source_quote": "the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.4",
+      "section": "2.4.4 Model equations",
+      "question": "Provide all extracted differential mass-balance, saturable transport/metabolism, dynamic growth, and allometric scaling equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input equation extraction; never generate missing equations.",
+      "response": "partially",
+      "details": "Schematic (Fig 1) gives parameter relationships; no explicit ODEs written in text.",
+      "structured_details": {
+        "mass_balance_equations": "Not explicitly written; 3-compartment structure (Vc, Vt, Vfil) implied by Fig 1.",
+        "rate_equations": "Saturable resorption via Michaelis-Menten (Tm, Kt) from filtrate to central; ka absorption; k12/k21 intercompartmental.",
+        "growth_equations": "None stated.",
+        "scaling_equations": "Vc=Vcc\u00d7BW; Tm=Tmc\u00d7BW; Qfil=QfilC\u00d7QCC\u00d7BW^0.74; Vt=k12/k21\u00d7Vc; Qd=k12\u00d7Vc; Vfil=VfilC\u00d7BW.",
+        "source_location": "Fig. 1 schematic; Methods: Selected model"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Fig. 1",
+          "source_location": "Page 141, Fig. 1",
+          "source_quote": "Vc=Vcc\u00d7BW ... Tm = Tmc \u00d7BW ... Qfil = QfilC \u00d7 QCC \u00d7 BW0.74 ... Vt=k12/k21 \u00d7 Vc"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5A",
+      "section": "2.4.5A Parameter tabulation and scaling",
+      "question": "Extract all physiological and chemical-specific input parameters from tables, footnotes, and Methods, including dynamic ranges, units, scaling, compound, species, and life stage.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input parameters.",
+      "response": "partially",
+      "details": "8 chemical-specific parameters named; Table 1 truncated; scaling to 70 kg human, BW^0.74 cardiac output.",
+      "structured_details": {
+        "parameters": [
+          "bioAv",
+          "VCC",
+          "Tmc",
+          "Kt",
+          "Free",
+          "k12",
+          "k21",
+          "ka",
+          "QCC"
+        ],
+        "dynamic_start_value": "Table S1 starting values referenced but not shown.",
+        "dynamic_end_value": "Table 1 mean (95% CI) referenced but truncated.",
+        "units": "Tmc mg/h/kg; QCC L/h/kg^0.74; bioAv fraction.",
+        "scaling": "BW linear for Vc, Vt, Vfil, Tm; BW^0.74 for Qfil.",
+        "context": "Cynomolgus monkey scaled to 70 kg human adult; PFOS/PFOA/PFHxS."
+      },
+      "evidence": [
+        {
+          "source_page": 140,
+          "source_section": "Methods: TK modeling approach",
+          "source_location": "Page 140, step ii",
+          "source_quote": "scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg0.74)"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5B",
+      "section": "2.4.5B Parameter sources and competing values",
+      "question": "For each parameter, identify source category, original primary citation/location, competing values, chosen value, and rationale.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Prefer original primary citations over secondary citations; do not invent citations.",
+      "response": "partially",
+      "details": "Sources cited for Free, bioAv, Tmc, QCC; Table 1 Source column truncated; no competing values tabulated.",
+      "structured_details": {
+        "source_category": "Literature-derived, MCMC-estimated, and assumed values.",
+        "original_citation": "Smeltz et al. 2023 (Free); Li et al. 2018/Pizzurro et al. 2019 (Tmc half-life); Loccisano et al. 2011 (scaling); Verner et al. 2016 (bioAv 90%).",
+        "competing_values": "Wambaugh et al. 2013 optimized values vs. updated Free; lower NHP bioAv vs. 90% assumed.",
+        "chosen_value": "Free updated to Smeltz; bioAv 90%; Tmc fit to human half-life.",
+        "rationale": "Most current unbound fraction; align with EPA RfD; lower NHP bioAv attributed to experiment-specific conditions."
+      },
+      "evidence": [
+        {
+          "source_page": 140,
+          "source_section": "Methods: Inferences",
+          "source_location": "Page 140, Inferences",
+          "source_quote": "values for Free ... were updated to reflect the most current assessment of the fraction of unbound compound in human plasma (Smeltz et al. 2023)"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5C",
+      "section": "2.4.5C Parameter distributions and uncertainty",
+      "question": "Extract probability distributions and bounds, or explain deterministic time-varying range/alternative-bound parameterization.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not confuse confidence intervals with dynamic physiological ranges.",
+      "response": "partially",
+      "details": "MCMC 95% credible intervals reported in Table 1; no explicit distribution types or bounds stated.",
+      "structured_details": {
+        "distribution_type": "MCMC posterior (implied)",
+        "distribution_parameters": "Mean and 95% CI reported",
+        "bounds": "Not explicitly stated",
+        "range_parameterization": "Not described"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods - Inferences",
+          "source_location": "Page 141, Inferences paragraph",
+          "source_quote": "The 95% credible intervals for the estimated parameter values were determined from the output of the MCMC."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.6A",
+      "section": "2.4.6A Exposure and dosing",
+      "question": "Extract all simulated exposure/dosing scenarios, routes, timing, duration, formulation, feeding/fasting, doses/concentrations, and intake rates.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use model simulation conditions only; do not infer doses from general exposure history.",
+      "response": "partially",
+      "details": "Oral and IV routes in animal data; NHANES simulation uses log-linear exposure model with specific intake rates.",
+      "structured_details": {
+        "scenarios": [
+          "Animal PK fitting (oral, IV)",
+          "NHANES biomonitoring simulation"
+        ],
+        "routes": [
+          "Oral",
+          "Intravenous"
+        ],
+        "timing": "1950\u20132017 (NHANES); breaks at 1990, 1998",
+        "duration": "Lifetime (NHANES simulation)",
+        "formulation": "Not specified",
+        "dose": "Not specified for animal fitting",
+        "intake_rates": "14.9 ng/kg BW/day (1990 PFOS); 0.24 ng/kg BW/day (2017 PFOS); 0.45\u20131.1 ng/kg BW/day (PFOA)"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods - Model checking and validation",
+          "source_location": "Page 141, NHANES paragraph",
+          "source_quote": "PFAS exposure varying log-linearly with calendar time, starting in 1950 and with discontinuous breaks in 1990 and 1998."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.6B",
+      "section": "2.4.6B Samples, subjects, trials, and probabilistic setup",
+      "question": "Extract sample matrices/times, subject and virtual-population characteristics, number of trials/subjects, and Monte Carlo/MCMC iterations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use explicit simulation/evaluation conditions only.",
+      "response": "partially",
+      "details": "Serum matrix; NHANES ages 21\u201379; MCMC used but iteration count not stated.",
+      "structured_details": {
+        "matrices": [
+          "Serum"
+        ],
+        "collection_times": [
+          "1999\u20132000",
+          "2003\u20132004",
+          "2017\u20132018"
+        ],
+        "subjects": "NHANES individuals aged 21\u201379",
+        "virtual_population": "Not described",
+        "trials": "Not stated",
+        "iterations": "Not stated"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods - Model checking and validation",
+          "source_location": "Page 141, NHANES paragraph",
+          "source_quote": "Data for individuals < 20 years of age were excluded... individuals \u226580 years of age were excluded."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.7",
+      "section": "2.4.7 Software and numerical solvers",
+      "question": "Extract software/version/product reference, ODE solver, interpolation, optimization/statistical algorithms, and code availability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not infer solver or code availability from software name alone.",
+      "response": "partially",
+      "details": "R with mrgsolve and FME packages; modMCMC and modFit used; code in Section S1. No explicit ODE solver named.",
+      "structured_details": {
+        "software": "R",
+        "version": "Not stated",
+        "website_manual": "Not stated",
+        "solver": "Not explicitly named (mrgsolve implied)",
+        "interpolation": "Not stated",
+        "optimization": "modFit (FME)",
+        "statistics": "modMCMC (FME)",
+        "code_available": "Yes (Section S1)"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods - Inferences",
+          "source_location": "Page 141, Inferences paragraph",
+          "source_quote": "coded and studied in R using the mrgsolve package framework and the FME package."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1A",
+      "section": "2.5.1A Evaluation: training versus validation",
+      "question": "Compare predictions with observed time-concentration data and distinguish calibration fit from independent predictive performance.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use evaluation Methods, Results, Discussion, and evaluation figures/tables; preserve training/validation roles exactly.",
+      "response": "yes",
+      "details": "Training on nonhuman primate data; validation against NHANES biomonitoring and PODHED comparison to EPA Verner model.",
+      "structured_details": {
+        "training_comparison": "Wambaugh model fitted to cynomolgus monkey PFOS/PFOA data (Seacat, Chang, Butenhoff)",
+        "validation_comparison": "NHANES biomonitoring simulation and PODHED comparison to EPA-modified Verner model",
+        "observations": "NHANES serum levels 1999-2018; nonhuman primate serum time-concentration data",
+        "predictions": "Simulated serum levels and PODHED for cardiovascular/hepatic endpoints",
+        "limitations": "No pregnancy/lactation; children <20 and adults \u226580 excluded from NHANES fitting"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Results: Model validation",
+          "source_location": "Page 141, Results",
+          "source_quote": "The PFOS model predicted serum levels with an MSLE of 0.07...PFOA model...MSLE of 0.03"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1B",
+      "section": "2.5.1B Goodness-of-fit and applicability",
+      "question": "Extract statistical tests, fold-error criteria, visual criteria, interpretation, applicability, and limitations.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Do not infer GOF from a graph unless the paper states the criterion.",
+      "response": "yes",
+      "details": "MSLE and factor-of-2 criteria stated; visual comparison performed; EPA acceptability range cited.",
+      "structured_details": {
+        "metrics": [
+          "MSLE 0.07 PFOS animal",
+          "MSLE 0.58 PFOA animal",
+          "MSLE 0.07 PFOS human",
+          "MSLE 0.03 PFOA human"
+        ],
+        "criteria": "Within factor of 2 considered adequate (WHO 2010); MSLE within EPA acceptable range",
+        "visual_assessment": "Visual comparison of observed vs predicted (Figs 2-4, S1-S4)",
+        "applicability": "General population adults 21-79; cardiovascular/hepatic PODHED",
+        "limitations": "No developmental/immunological endpoints; no pregnancy/lactation compartment"
+      },
+      "evidence": [
+        {
+          "source_page": 141,
+          "source_section": "Methods: Model checking and validation",
+          "source_location": "Page 141, Methods",
+          "source_quote": "Predictions that were on average within a factor of 2 of the experimental data were considered adequate"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2A",
+      "section": "2.5.2A Sensitivity protocol",
+      "question": "Extract local/global type, sampling approach, perturbation/time points/dose levels, mathematical method, and threshold criterion.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use sensitivity Methods/Results and sensitivity figures/tables only.",
+      "response": "partially",
+      "details": "Local perturbation of ka/k12/k21 by 2 orders of magnitude; MCMC for identifiability; no formal global SA described.",
+      "structured_details": {
+        "analysis_type": "Local parameter perturbation and MCMC identifiability",
+        "sampling": "MCMC (modMCMC function, FME package)",
+        "perturbation": "ka, k12, k21 varied up to 2 orders of magnitude; k12/k21 ratio \u2265100 tested",
+        "time_points": "Not specified",
+        "method": "collin function for a priori identifiability; iterative MCMC convergence checks",
+        "criterion": "Change in estimated parameters <10% considered robust"
+      },
+      "evidence": [
+        {
+          "source_page": 142,
+          "source_section": "Results: Model parameters",
+          "source_location": "Page 142, Results",
+          "source_quote": "Changing the value of ka, k12, or k12 by up to 2 orders of magnitude resulted in an average change...of less than 10%"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2B",
+      "section": "2.5.2B Sensitive parameters and uncertainty impact",
+      "question": "Summarize influential parameters and the overall impact of sensitivity, variability, and uncertainty on outputs and reliability.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use explicit reported results; do not infer reliability from parameter magnitude.",
+      "response": "yes",
+      "details": "Free, ka, k12, k21 fixed due to collinearity; VCC, Tmc, Kt, bioAv estimated; parameter uncertainty via MCMC 95% CI.",
+      "structured_details": {
+        "key_parameters": [
+          "Free (highly correlated to Tmc/Kt)",
+          "ka",
+          "k12",
+          "k21",
+          "VCC",
+          "Tmc",
+          "Kt",
+          "bioAv"
+        ],
+        "output_matrices": [
+          "Serum concentration time profiles",
+          "NHANES biomonitoring trends",
+          "PODHED"
+        ],
+        "overall_impact": "ka/k12/k21 perturbations <10% effect on estimated parameters; Free strongly affects Tmc/Kt",
+        "reliability": "Inference robust given data; including variability/uncertainty would capture more observed data"
+      },
+      "evidence": [
+        {
+          "source_page": 142,
+          "source_section": "Results: Model parameters",
+          "source_location": "Page 142, Results",
+          "source_quote": "The Free parameter was found to be highly correlated to the resorption parameters; changing Free will then result in a change in Tmc and Kt"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    }
+  ],
+  "verification_summary": {},
+  "overall_fit_for_purpose": "32/36 Tan items have an evidence-backed rating; 4/36 remain i_cannot_answer.",
+  "key_gaps": [
+    "TAN_2.4.1: model-specific evidence not sufficient for a supported rating",
+    "TAN_2.4.2A: model-specific evidence not sufficient for a supported rating",
+    "TAN_2.4.2B: model-specific evidence not sufficient for a supported rating",
+    "TAN_2.4.2C: model-specific evidence not sufficient for a supported rating"
+  ],
+  "reviewer_notes": [
+    "Confidence was recalculated by APEX from evidence completeness; the LLM confidence value was not trusted."
+  ]
+}

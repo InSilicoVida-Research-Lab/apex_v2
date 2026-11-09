@@ -7,275 +7,135 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right). Fetal plasma circulation is separate from the maternal circulation. Only the mother is exposed directly; chemical is transferred to the fetus through the placenta. Placental transfer is described by a simple diffusion process (ktrans1 and ktrans2). Q's represent blood flows to and from the tissues; only the free fraction of chemical in plasma is available for uptake into tissues. Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma; maternal exposure can also be through drinking water."
+    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans"
   },
   "model_context": null,
   "biological_basis": null,
   "table_evidence": [],
   "model_structure": {
-    "reported_compartment_count": "not_reported",
-    "listed_compartment_count": 13,
-    "count_consistency": "consistent",
+    "reported_compartment_count": null,
+    "listed_compartment_count": 15,
+    "count_consistency": null,
     "compartments": [
       {
-        "id": "plasma",
-        "label_raw": "Plasma (free fraction available for uptake into tissues)",
-        "confidence": null
+        "id": "mat_plasma",
+        "label_raw": "Plasma",
+        "confidence": 1.0
       },
       {
-        "id": "gut",
-        "label_raw": "Gut",
-        "confidence": null
-      },
-      {
-        "id": "liver",
+        "id": "mat_liver",
         "label_raw": "Liver",
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "id": "fat",
-        "label_raw": "Fat",
-        "confidence": null
-      },
-      {
-        "id": "placenta",
-        "label_raw": "Placenta",
-        "confidence": null
-      },
-      {
-        "id": "skin",
-        "label_raw": "Skin",
-        "confidence": null
-      },
-      {
-        "id": "mammary",
-        "label_raw": "Mammary",
-        "confidence": null
-      },
-      {
-        "id": "rest_of_body",
-        "label_raw": "Rest of body",
-        "confidence": null
-      },
-      {
-        "id": "kidney",
+        "id": "mat_kidney",
         "label_raw": "Kidney",
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "id": "filtrate",
-        "label_raw": "Filtrate",
-        "confidence": null
+        "id": "mat_slow",
+        "label_raw": "Slowly perfused",
+        "confidence": 1.0
       },
       {
-        "id": "storage",
-        "label_raw": "storage",
-        "confidence": null
+        "id": "mat_rapid",
+        "label_raw": "Rapidly perfused",
+        "confidence": 1.0
       },
       {
-        "id": "fetal_plasma",
-        "label_raw": "Fetal plasma (free fraction)",
-        "confidence": null
+        "id": "mat_bone",
+        "label_raw": "Bone",
+        "confidence": 1.0
       },
       {
-        "id": "amniotic_fluid",
-        "label_raw": "Amniotic fluid",
-        "confidence": null
+        "id": "mat_blood",
+        "label_raw": "Blood",
+        "confidence": 1.0
       },
       {
-        "id": "rest_of_fetal_body",
-        "label_raw": "Rest of fetal body",
-        "confidence": null
+        "id": "fetus",
+        "label_raw": "Fetus",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_plasma",
+        "label_raw": "Plasma",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_liver",
+        "label_raw": "Liver",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_kidney",
+        "label_raw": "Kidney",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_slow",
+        "label_raw": "Slowly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_rapid",
+        "label_raw": "Rapidly perfused",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_bone",
+        "label_raw": "Bone",
+        "confidence": 1.0
+      },
+      {
+        "id": "fet_blood",
+        "label_raw": "Blood",
+        "confidence": 1.0
       }
     ],
     "connections": [
       {
         "source": "external",
-        "target": "gut",
-        "label_raw": "Oral dose, Drinking H2O",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "gut",
-        "label_raw": "QGut",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "liver",
-        "label_raw": "QLiv",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "fat",
-        "label_raw": "QFat",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "placenta",
-        "label_raw": "QPla",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "skin",
-        "label_raw": "QSk",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "mammary",
-        "label_raw": "QMam",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "rest_of_body",
-        "label_raw": "QR",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "kidney",
-        "label_raw": "QKid",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "filtrate",
-        "label_raw": "QFil",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "filtrate",
-        "target": "kidney",
-        "label_raw": "Tm,Kt",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "filtrate",
-        "target": "storage",
-        "label_raw": null,
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "storage",
-        "target": "external",
-        "label_raw": "urine",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "external",
-        "target": "plasma",
+        "target": "mat_plasma",
         "label_raw": "IV",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "placenta",
-        "target": "fetal_plasma",
-        "label_raw": "ktrans1",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "fetal_plasma",
-        "target": "placenta",
-        "label_raw": "ktrans2",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "fetal_plasma",
-        "target": "rest_of_fetal_body",
-        "label_raw": "QRFet",
+        "source": "mat_plasma",
+        "target": "mat_liver",
+        "label_raw": "Q_liver",
         "direction": "bidirectional",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "rest_of_fetal_body",
-        "target": "amniotic_fluid",
-        "label_raw": "ktrans3",
+        "source": "mat_liver",
+        "target": "external",
+        "label_raw": "CL_int",
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "amniotic_fluid",
-        "target": "rest_of_fetal_body",
-        "label_raw": "ktrans4",
-        "direction": "forward",
+        "source": "mat_plasma",
+        "target": "mat_kidney",
+        "label_raw": "Q_kidney",
+        "direction": "bidirectional",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       }
     ],
-    "absorption": {
-      "route": "oral",
-      "model_type": null,
-      "site": "gut",
-      "evidence_quote": "Oral dose, Drinking H2O"
-    },
+    "absorption": null,
     "metabolism": null,
-    "elimination": {
-      "routes": [
-        "urine"
-      ],
-      "evidence_quote": "urine"
-    },
+    "elimination": null,
     "unresolved": null,
-    "source_location": "Figure 1",
+    "source_location": null,
     "equations_provided": "none",
     "allometric_scaling_rules": [],
     "scaling_equations": []

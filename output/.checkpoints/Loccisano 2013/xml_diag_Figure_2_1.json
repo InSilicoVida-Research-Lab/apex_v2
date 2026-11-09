@@ -7,231 +7,138 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans (maternal, left; infant, right)."
+    "evidence_quote": "Figure 2: PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans (maternal, left; infant, right)."
   },
   "model_context": null,
   "biological_basis": null,
   "table_evidence": [],
   "model_structure": {
     "reported_compartment_count": "not_reported",
-    "listed_compartment_count": 10,
-    "count_consistency": "consistent",
+    "listed_compartment_count": 7,
+    "count_consistency": null,
     "compartments": [
       {
-        "id": "plasma",
-        "label_raw": "Plasma (free fraction available for uptake into tissues)",
-        "confidence": null
+        "id": "intake",
+        "label_raw": "Intake",
+        "confidence": 1.0
       },
       {
-        "id": "gut",
-        "label_raw": "Gut",
-        "confidence": null
+        "id": "plasma",
+        "label_raw": "Plasma",
+        "confidence": 1.0
       },
       {
         "id": "liver",
         "label_raw": "Liver",
-        "confidence": null
-      },
-      {
-        "id": "fat",
-        "label_raw": "Fat",
-        "confidence": null
-      },
-      {
-        "id": "skin",
-        "label_raw": "Skin",
-        "confidence": null
-      },
-      {
-        "id": "milk",
-        "label_raw": "Milk",
-        "confidence": null
-      },
-      {
-        "id": "rest_of_body_infant",
-        "label_raw": "Rest of body (infant)",
-        "confidence": null
-      },
-      {
-        "id": "rest_of_body",
-        "label_raw": "Rest of body",
-        "confidence": null
+        "confidence": 1.0
       },
       {
         "id": "kidney",
         "label_raw": "Kidney",
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "id": "filtrate",
-        "label_raw": "Filtrate",
-        "confidence": null
+        "id": "rest_of_body",
+        "label_raw": "Rest of body",
+        "confidence": 1.0
       },
       {
-        "id": "storage",
-        "label_raw": "storage",
-        "confidence": null
+        "id": "milk",
+        "label_raw": "Milk",
+        "confidence": 1.0
+      },
+      {
+        "id": "infant",
+        "label_raw": "Infant",
+        "confidence": 1.0
       }
     ],
     "connections": [
       {
-        "source": "external",
-        "target": "gut",
-        "label_raw": "Oral, Drinking H2O",
+        "source": "intake",
+        "target": "plasma",
+        "label_raw": null,
         "direction": "forward",
         "edge_type": null,
-        "evidence": null,
-        "confidence": null
+        "evidence": "Maternal exposure is by direct intake.",
+        "confidence": 1.0
       },
       {
         "source": "plasma",
-        "target": "gut",
-        "label_raw": "QGut",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "gut",
         "target": "liver",
         "label_raw": null,
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "plasma",
-        "target": "liver",
-        "label_raw": "QLiv",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "fat",
-        "label_raw": "QFat",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "skin",
-        "label_raw": "QSk",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "milk",
-        "label_raw": "QMam",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "milk",
-        "target": "rest_of_body_infant",
-        "label_raw": "kmilk",
+        "source": "liver",
+        "target": "plasma",
+        "label_raw": null,
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "rest_of_body_infant",
-        "target": "external",
-        "label_raw": "keliml",
+        "source": "plasma",
+        "target": "kidney",
+        "label_raw": null,
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
+      },
+      {
+        "source": "kidney",
+        "target": "plasma",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": 1.0
       },
       {
         "source": "plasma",
         "target": "rest_of_body",
-        "label_raw": "QR",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "kidney",
-        "label_raw": "QKid",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "plasma",
-        "target": "filtrate",
-        "label_raw": "QFil",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "filtrate",
-        "target": "kidney",
-        "label_raw": "Tm,Kt",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "filtrate",
-        "target": "storage",
         "label_raw": null,
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
       },
       {
-        "source": "storage",
-        "target": "external",
-        "label_raw": "urine",
-        "direction": "forward",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": null
-      },
-      {
-        "source": "external",
+        "source": "rest_of_body",
         "target": "plasma",
-        "label_raw": "IV",
+        "label_raw": null,
         "direction": "forward",
         "edge_type": null,
         "evidence": null,
-        "confidence": null
+        "confidence": 1.0
+      },
+      {
+        "source": "plasma",
+        "target": "milk",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": "Transfer from the plasma to the milk compartment was assumed to be flow-limited.",
+        "confidence": 1.0
+      },
+      {
+        "source": "milk",
+        "target": "infant",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": "the infant exposure is through milk.",
+        "confidence": 1.0
       }
     ],
-    "absorption": {
-      "route": "oral",
-      "model_type": null,
-      "site": "gut",
-      "evidence_quote": "Maternal exposure is by direct intake; the infant exposure is through milk."
-    },
+    "absorption": null,
     "metabolism": null,
-    "elimination": {
-      "routes": [
-        "urine"
-      ],
-      "evidence_quote": "urine"
-    },
+    "elimination": null,
     "unresolved": null,
     "source_location": "Figure 2",
     "equations_provided": "none",

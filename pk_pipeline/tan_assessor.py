@@ -1,7 +1,6 @@
 """Tan et al. PBPK reporting-template questionnaire.
 
-This module is intentionally separate from :mod:`oecd_assessor`.  Tan's
-template is used here as a model-reporting questionnaire covering purpose,
+Tan's template is used here as a model-reporting questionnaire covering purpose,
 strategy, data, structure, equations, parameters, simulations, software,
 evaluation, and sensitivity/uncertainty.
 
@@ -94,6 +93,29 @@ TAN_QUESTIONNAIRE_ITEMS: List[dict[str, Any]] = [
     _question("TAN_2.5.2A", "2.5.2A Sensitivity protocol", "Extract local/global type, sampling approach, perturbation/time points/dose levels, mathematical method, and threshold criterion.", _EVAL_SECTIONS, "Use sensitivity Methods/Results and sensitivity figures/tables only.", ["analysis_type", "sampling", "perturbation", "time_points", "method", "criterion"]),
     _question("TAN_2.5.2B", "2.5.2B Sensitive parameters and uncertainty impact", "Summarize influential parameters and the overall impact of sensitivity, variability, and uncertainty on outputs and reliability.", _EVAL_SECTIONS, "Use explicit reported results; do not infer reliability from parameter magnitude.", ["key_parameters", "output_matrices", "overall_impact", "reliability"]),
 ]
+
+TAN_SECTIONS: Dict[str, List[str]] = {
+    "identification_and_purpose": [
+        "TAN_1.1", "TAN_1.2", "TAN_1.3",
+        "TAN_2.1.1", "TAN_2.1.2", "TAN_2.1.3", "TAN_2.3.1",
+    ],
+    "chemical_strategy_data": [
+        "TAN_2.2.1", "TAN_2.4.1", "TAN_2.4.2A", "TAN_2.4.2B", "TAN_2.4.2C",
+    ],
+    "structure_adme_assumptions": [
+        "TAN_2.4.3.1", "TAN_2.4.3.2", "TAN_2.4.3.3", "TAN_2.4.3.4", "TAN_2.4.3.5",
+        "TAN_2.4.3.6", "TAN_2.4.3.7", "TAN_2.4.3.8", "TAN_2.4.3.9", "TAN_2.4.3.10",
+        "TAN_2.4.3.11", "TAN_2.4.3.12", "TAN_2.4.3.13",
+    ],
+    "equations_parameters_software": [
+        "TAN_2.4.4", "TAN_2.4.5A", "TAN_2.4.5B", "TAN_2.4.5C",
+        "TAN_2.4.6A", "TAN_2.4.6B", "TAN_2.4.7",
+    ],
+    "evaluation_and_sensitivity": [
+        "TAN_2.5.1A", "TAN_2.5.1B", "TAN_2.5.2A", "TAN_2.5.2B",
+    ],
+}
+
 
 
 def _as_dict(value: Any) -> dict[str, Any]:
@@ -1276,3 +1298,295 @@ def build_tan_pbpk_assessment_prompt(
 ) -> str:
     """Backward-friendly descriptive alias for prompt callers."""
     return build_tan_assessment_prompt(extracted_doc_json, context_text=context_text)
+
+
+def convert_pdf_to_markdown(
+    pdf_path: str,
+    output_md_path: Optional[str] = None,
+    write_images: bool = False,
+    image_path: Optional[str] = None,
+) -> str:
+    """Convert a PDF document into structured Markdown text using pymupdf4llm."""
+    import os
+
+    if not os.path.exists(pdf_path):
+        raise FileNotFoundError(f"PDF file not found: {pdf_path}")
+
+    try:
+        import pymupdf4llm
+    except ImportError:
+        raise ImportError(
+            "pymupdf4llm is required to convert PDF to Markdown. "
+            "Please install it with: pip install pymupdf4llm"
+        )
+
+    kwargs: Dict[str, Any] = {}
+    if write_images and image_path:
+        os.makedirs(image_path, exist_ok=True)
+        kwargs["write_images"] = True
+        kwargs["image_path"] = image_path
+
+    md_text = pymupdf4llm.to_markdown(pdf_path, **kwargs)
+
+    if output_md_path:
+        os.makedirs(os.path.dirname(os.path.abspath(output_md_path)), exist_ok=True)
+        with open(output_md_path, "w", encoding="utf-8") as f:
+            f.write(md_text)
+
+    return md_text
+
+
+def build_tan_markdown_assessment_prompt(
+    markdown_text: str,
+    paper_title: Optional[str] = None,
+    max_markdown_chars: int = 35000,
+    items: Optional[List[dict[str, Any]]] = None,
+) -> str:
+    """Build the Tan questionnaire prompt for direct assessment of a paper in Markdown format."""
+    schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
+    selected_items = items or TAN_QUESTIONNAIRE_ITEMS
+    questions = "\n".join(
+        f"- [{item['item_id']}] ({item['section']}) {item['question']}\n"
+        f"  Allowed evidence: {', '.join(item['allowed_source_sections'])}\n"
+        f"  Routing: {item['routing_rule']}\n"
+        f"  Structured fields: {', '.join(item.get('structured_fields', []))}"
+        for item in selected_items
+    )
+    system_prompt = f"""You are an evidence-grounded PBPK model reporting reviewer using the Tan et al. PBPK reporting template.
+
+BE EXTREMELY CONCISE — TOKEN BUDGET IS STRICT:
+- Do NOT generate any chain-of-thought, reasoning, or explanation before the JSON.
+- For each item: `rationale` MUST be ≤ 20 words. `source_quote` MUST be ≤ 25 words (use "..." to truncate).
+- Include at most 1 evidence entry per item. Do not repeat the question text.
+- Output the JSON immediately with no preamble.
+
+SCOPE & ASSESSMENT RULES:
+1. You are evaluating a scientific paper provided in full Markdown format.
+2. Evaluate the PBPK/TK model and its reporting quality, NOT the research paper's generic Introduction or Background literature.
+3. Strict section routing:
+   - Section 1 (Model identification): Title, abstract, header, authors, and methodology.
+   - Section 2.1 (Executive summary): Abstract, the final paragraph of the Introduction stating study objectives, and Discussion/Conclusion. General Introduction background prose is strictly blocked.
+   - Section 2.2 & 2.4.2 (Chemical properties & ADME data): Methods, parameter tables, results.
+   - Section 2.4.1 (Modeling strategy): Methods, workflow, calibration, and evaluation procedures.
+   - Section 2.4.3 (Structure, ADME mechanisms & Assumptions): Model structure methods, compartment diagrams, physiological equations, stated assumptions.
+   - Section 2.4.4 (Model equations): Extracted mass-balance, rate, scaling, and growth equations. Never invent missing equations.
+   - Section 2.4.5 (Parameters): Parameter tables, values, units, sources, and distributions.
+   - Section 2.4.6 (Simulations & Dosing): Simulated scenarios, routes, dosing, subjects, populations.
+   - Section 2.4.7 (Software & solvers): Simulation software, ODE solver, optimization methods, and code availability.
+   - Section 2.5 (Evaluation & Sensitivity): Model evaluation vs observed data, goodness-of-fit metrics, sensitivity analysis, and uncertainty.
+4. Ground all answers in verbatim quotes from the Markdown paper:
+   - For every item with response 'yes' or 'partially', provide at least one `evidence` entry containing `source_quote` (verbatim quote from the markdown), `source_section` (e.g. 'Methods', 'Table 1', 'Abstract'), and `source_location` (e.g. 'Page 3, Section 2.2').
+   - If the requested information is absent or ambiguous, set response to 'i_cannot_answer'.
+   - Use 'not_applicable' only if the paper explicitly states the mechanism or condition is not applicable.
+5. Return all {len(selected_items)} questionnaire items in order.
+6. Output ONLY valid JSON matching this schema:
+{schema_json}
+"""
+    truncated_md = markdown_text[:max_markdown_chars] if len(markdown_text) > max_markdown_chars else markdown_text
+    header = f"PAPER TITLE: {paper_title}\n\n" if paper_title else ""
+    user_prompt = (
+        f"{header}TAN PBPK REPORTING QUESTIONNAIRE (Answer all {len(selected_items)} items):\n{questions}\n\n"
+        f"SCIENTIFIC PAPER FULL TEXT (MARKDOWN FORMAT):\n{truncated_md}\n"
+    )
+    return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
+
+
+def evaluate_tan_from_markdown(
+    markdown_text: str,
+    paper_title: Optional[str] = None,
+) -> TanPBPKAssessment:
+    """Create a deterministic baseline Tan assessment by scanning Markdown text for evidence.
+
+    Extracts bibliographic information, section headings, markdown tables,
+    equations, software mentions, sensitivity terms, and evaluation criteria.
+    """
+    lines = markdown_text.splitlines()
+    text_lower = markdown_text.lower()
+
+    # 1. Identify Title and Authors from headers
+    title = paper_title
+    doi = None
+    journal = None
+    for line in lines[:30]:
+        stripped = line.strip()
+        if not title and stripped.startswith("# "):
+            title = stripped.lstrip("#* ").rstrip("* ")
+        if not doi and "doi.org" in stripped:
+            doi = stripped
+        if not journal and ("journal" in stripped.lower() or "toxicological sciences" in stripped.lower()):
+            journal = stripped.strip("*_ ")
+
+    # 2. Collect Markdown tables
+    table_lines: List[str] = []
+    has_tables = bool(re.search(r"\|[ -]+(?:\|[ -]+)+\|", markdown_text) or "<table" in text_lower)
+
+    # 3. Collect equations (LaTeX $$ ... $$, \( ... \), d[A-Z]/dt)
+    has_equations = bool(
+        "$$" in markdown_text
+        or "\\[" in markdown_text
+        or re.search(r"d[A-Za-z_]+/dt\s*=", markdown_text)
+        or re.search(r"\\frac\{d", markdown_text)
+    )
+
+    # 4. Search for software tools
+    software_terms = [
+        "mrgsolve", "mcsim", "r package", "r version", "desolve",
+        "matlab", "simcyp", "gastroplus", "pk-sim", "berkeley madonna",
+        "python", "scipy", "stan", "nlmixr", "monolix", "nonmem"
+    ]
+    detected_software: List[str] = [term for term in software_terms if term in text_lower]
+
+    # 5. Search for ADME keywords & assumptions
+    has_absorption = any(w in text_lower for w in ["oral absorption", "absorption rate", "bioavailability", "uptake"])
+    has_binding = any(w in text_lower for w in ["protein binding", "free fraction", "fraction unbound", "albumin"])
+    has_metabolism = any(w in text_lower for w in ["vmax", "km", "metabolism", "michaelis-menten", "clearance"])
+    has_excretion = any(w in text_lower for w in ["renal clearance", "urinary excretion", "reabsorption", "elimination rate"])
+    has_assumptions = "assum" in text_lower
+
+    # 6. Search for sensitivity and validation metrics
+    has_sensitivity = any(w in text_lower for w in ["sensitivity analysis", "morris", "sobol", "parameter sensitivity"])
+    has_gof = any(w in text_lower for w in ["aafe", "rmse", "r2", "r^2", "mfe", "goodness-of-fit", "fold-error"])
+
+    by_id = {item["item_id"]: item for item in TAN_QUESTIONNAIRE_ITEMS}
+    items: List[TanQuestionnaireItem] = []
+
+    for item_def in TAN_QUESTIONNAIRE_ITEMS:
+        item_id = item_def["item_id"]
+        evidence: List[EvidenceReference] = []
+        details = "No model-specific evidence was captured from the Markdown text."
+        response = ResponseOption.I_CANNOT_ANSWER
+
+        if item_id == "TAN_1.1":
+            if title:
+                response = ResponseOption.PARTIALLY
+                details = f"Model title and context identified from Markdown header: {title}"
+                evidence.append(_evidence(location="Markdown header", quote=title[:120], section="Title"))
+        elif item_id == "TAN_1.2":
+            if doi or journal:
+                response = ResponseOption.PARTIALLY
+                details = f"Bibliographic information identified: {doi or journal}"
+                evidence.append(_evidence(location="Header metadata", quote=str(doi or journal)[:120], section="Metadata"))
+        elif item_id == "TAN_1.3":
+            response = ResponseOption.YES
+            details = "Assessment metadata is assigned deterministically by APEX."
+        elif item_id in {"TAN_2.1.1", "TAN_2.1.2", "TAN_2.3.1"}:
+            abstract_m = re.search(r"(?i)#+\s*abstract\s*\n(.*?)(?=\n#+|$)", markdown_text, re.DOTALL)
+            if abstract_m:
+                quote = abstract_m.group(1).strip()[:200]
+                response = ResponseOption.PARTIALLY
+                details = "Purpose and executive summary evidence extracted from Abstract section."
+                evidence.append(_evidence(location="Abstract section", quote=quote, section="Abstract"))
+        elif item_id == "TAN_2.1.3":
+            response = ResponseOption.I_CANNOT_ANSWER
+            details = "Quantitative conclusions require structured LLM evaluation of Results/Discussion."
+        elif item_id in {"TAN_2.4.3.3", "TAN_2.4.3.4", "TAN_2.4.3.5", "TAN_2.4.3.6", "TAN_2.4.3.7"}:
+            phase_checks = {
+                "TAN_2.4.3.3": ("absorption", has_absorption),
+                "TAN_2.4.3.4": ("binding/distribution", has_binding),
+                "TAN_2.4.3.5": ("tissue partitioning", "partition" in text_lower),
+                "TAN_2.4.3.6": ("metabolism", has_metabolism),
+                "TAN_2.4.3.7": ("excretion", has_excretion),
+            }
+            phase_name, present = phase_checks[item_id]
+            if present:
+                response = ResponseOption.PARTIALLY
+                details = f"ADME {phase_name} mechanisms identified in Markdown methods/results."
+                evidence.append(_evidence(location="Methods text", quote=f"Mentions of {phase_name} in model text", section="Methods"))
+        elif item_id == "TAN_2.4.4":
+            if has_equations:
+                response = ResponseOption.PARTIALLY
+                details = "Mathematical equations or rate equations detected in Markdown."
+                evidence.append(_evidence(location="Equations section", quote="Mathematical equations present in text", section="Methods"))
+        elif item_id in {"TAN_2.4.5A", "TAN_2.4.5B"}:
+            if has_tables:
+                response = ResponseOption.PARTIALLY
+                details = "Parameter table(s) detected in Markdown text."
+                evidence.append(_evidence(location="Table block", quote="Markdown parameter table present", section="Tables"))
+        elif item_id == "TAN_2.4.7":
+            if detected_software:
+                response = ResponseOption.PARTIALLY
+                details = f"Software / solver references detected: {', '.join(detected_software)}"
+                evidence.append(_evidence(location="Methods text", quote=f"Software: {detected_software[0]}", section="Methods"))
+        elif item_id in {"TAN_2.5.1A", "TAN_2.5.1B"}:
+            if has_gof:
+                response = ResponseOption.PARTIALLY
+                details = "Goodness-of-fit metrics or validation terminology detected in Results/Discussion."
+                evidence.append(_evidence(location="Results text", quote="Evaluation / goodness-of-fit metrics present", section="Results"))
+        elif item_id in {"TAN_2.5.2A", "TAN_2.5.2B"}:
+            if has_sensitivity:
+                response = ResponseOption.PARTIALLY
+                details = "Sensitivity analysis terms detected in Markdown text."
+                evidence.append(_evidence(location="Methods / Results text", quote="Sensitivity analysis mentioned", section="Methods"))
+
+        items.append(_make_item(item_def, response, details, evidence, require_evidence=(item_id != "TAN_1.3")))
+
+    model_metadata = {
+        "model_name": title,
+        "authors": lines[0] if lines else None,
+        "doi_pmid": doi,
+        "journal": journal,
+    }
+    cannot_count = sum(it.response == ResponseOption.I_CANNOT_ANSWER for it in items)
+    return TanPBPKAssessment(
+        template_name="Tan et al. PBPK Reporting Template (Markdown Baseline)",
+        template_version="Refined-Tan-PBPK-Research-v1",
+        assessment_scope="Deterministic scan of Markdown text; generic Introduction/Background excluded.",
+        model_identification=model_metadata,
+        items=items,
+        overall_fit_for_purpose=f"{len(items) - cannot_count}/{len(items)} Tan items supported by Markdown evidence; {cannot_count}/{len(items)} require deeper extraction.",
+        key_gaps=[f"{it.item_id}: evidence incomplete in Markdown text" for it in items if it.response == ResponseOption.I_CANNOT_ANSWER],
+        reviewer_notes=[
+            "Deterministic baseline generated from paper Markdown text.",
+            "Confidence levels computed from auditable evidence references.",
+        ],
+    )
+
+
+async def assess_tan_from_markdown(
+    markdown_text: str,
+    extractor: Optional[Any] = None,
+    paper_title: Optional[str] = None,
+    mode: str = "single",
+    max_new_tokens: int = 12000,
+) -> TanPBPKAssessment:
+    """Asynchronously evaluate all Tan questionnaire items against a Markdown paper using the LLM.
+
+    Parameters
+    ----------
+    markdown_text : str
+        Full or segmented Markdown representation of the paper.
+    extractor : Optional[Any]
+        An initialized extractor instance (e.g. SGLangExtractor). If omitted,
+        instantiates one automatically.
+    paper_title : Optional[str]
+        Title of the paper, if known.
+    mode : str
+        'single' evaluates all 36 items in a single LLM prompt pass.
+        'sections' evaluates items in 5 section batches (identification, chemical/strategy,
+        structure/ADME, equations/parameters/software, evaluation/sensitivity) and merges them.
+    max_new_tokens : int
+        Token budget for LLM response generation.
+    """
+    if extractor is not None and hasattr(extractor, "assess_tan_from_markdown"):
+        return await extractor.assess_tan_from_markdown(
+            markdown_text=markdown_text,
+            paper_title=paper_title,
+            mode=mode,
+            max_new_tokens=max_new_tokens,
+        )
+
+    # If no extractor instance is provided, attempt to use SGLangExtractor or OpenAI fallback
+    try:
+        from pk_pipeline.ml_services import SGLangExtractor
+        ext = SGLangExtractor()
+        if ext.is_loaded:
+            return await ext.assess_tan_from_markdown(
+                markdown_text=markdown_text,
+                paper_title=paper_title,
+                mode=mode,
+                max_new_tokens=max_new_tokens,
+            )
+    except Exception:
+        pass
+
+    return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
