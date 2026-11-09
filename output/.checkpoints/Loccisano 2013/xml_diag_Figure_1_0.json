@@ -7,135 +7,125 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans"
+    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right)."
   },
   "model_context": null,
   "biological_basis": null,
   "table_evidence": [],
   "model_structure": {
-    "reported_compartment_count": null,
-    "listed_compartment_count": 15,
+    "reported_compartment_count": "not_reported",
+    "listed_compartment_count": 4,
     "count_consistency": null,
     "compartments": [
       {
-        "id": "mat_plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
+        "id": "maternal_plasma",
+        "label_raw": "Maternal plasma",
+        "confidence": 0.9
       },
       {
-        "id": "mat_liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
+        "id": "fetal_plasma",
+        "label_raw": "Fetal plasma",
+        "confidence": 0.9
       },
       {
-        "id": "mat_kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
+        "id": "maternal_tissues",
+        "label_raw": "Maternal tissues",
+        "confidence": 0.6
       },
       {
-        "id": "mat_slow",
-        "label_raw": "Slowly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "mat_rapid",
-        "label_raw": "Rapidly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "mat_bone",
-        "label_raw": "Bone",
-        "confidence": 1.0
-      },
-      {
-        "id": "mat_blood",
-        "label_raw": "Blood",
-        "confidence": 1.0
-      },
-      {
-        "id": "fetus",
-        "label_raw": "Fetus",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_plasma",
-        "label_raw": "Plasma",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_liver",
-        "label_raw": "Liver",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_kidney",
-        "label_raw": "Kidney",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_slow",
-        "label_raw": "Slowly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_rapid",
-        "label_raw": "Rapidly perfused",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_bone",
-        "label_raw": "Bone",
-        "confidence": 1.0
-      },
-      {
-        "id": "fet_blood",
-        "label_raw": "Blood",
-        "confidence": 1.0
+        "id": "fetal_tissues",
+        "label_raw": "Fetal tissues",
+        "confidence": 0.6
       }
     ],
     "connections": [
       {
         "source": "external",
-        "target": "mat_plasma",
-        "label_raw": "IV",
+        "target": "maternal_plasma",
+        "label_raw": "IV dose",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "input",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.9
       },
       {
-        "source": "mat_plasma",
-        "target": "mat_liver",
-        "label_raw": "Q_liver",
-        "direction": "bidirectional",
-        "edge_type": null,
-        "evidence": null,
-        "confidence": 1.0
-      },
-      {
-        "source": "mat_liver",
-        "target": "external",
-        "label_raw": "CL_int",
+        "source": "maternal_plasma",
+        "target": "maternal_tissues",
+        "label_raw": "Q",
         "direction": "forward",
-        "edge_type": null,
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
       },
       {
-        "source": "mat_plasma",
-        "target": "mat_kidney",
-        "label_raw": "Q_kidney",
-        "direction": "bidirectional",
-        "edge_type": null,
+        "source": "maternal_tissues",
+        "target": "maternal_plasma",
+        "label_raw": "Q",
+        "direction": "forward",
+        "edge_type": "blood_flow",
         "evidence": null,
-        "confidence": 1.0
+        "confidence": 0.7
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "fetal_tissues",
+        "label_raw": "Q",
+        "direction": "forward",
+        "edge_type": "blood_flow",
+        "evidence": null,
+        "confidence": 0.7
+      },
+      {
+        "source": "fetal_tissues",
+        "target": "fetal_plasma",
+        "label_raw": "Q",
+        "direction": "forward",
+        "edge_type": "blood_flow",
+        "evidence": null,
+        "confidence": 0.7
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "fetal_plasma",
+        "label_raw": "ktrans1",
+        "direction": "forward",
+        "edge_type": "placental_transfer",
+        "evidence": null,
+        "confidence": 0.8
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "maternal_plasma",
+        "label_raw": "ktrans2",
+        "direction": "forward",
+        "edge_type": "placental_transfer",
+        "evidence": null,
+        "confidence": 0.8
       }
     ],
-    "absorption": null,
+    "absorption": {
+      "route": "iv",
+      "model_type": "generic_input",
+      "site": "maternal_plasma",
+      "evidence_quote": "Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma"
+    },
     "metabolism": null,
     "elimination": null,
-    "unresolved": null,
-    "source_location": null,
+    "unresolved": [
+      {
+        "description": "Specific maternal and fetal tissue compartments are not identifiable from the provided text.",
+        "reason": "The text refers generically to tissues and Q blood flows but does not list individual tissue boxes."
+      },
+      {
+        "description": "Elimination routes or excretion arrows are not specified.",
+        "reason": "The provided text describes exposure, blood flows, and placental transfer but not elimination."
+      },
+      {
+        "description": "Whether the placenta is represented as a separate compartment or only as direct maternal-fetal plasma transfer is not fully specified.",
+        "reason": "The text states transfer through the placenta with ktrans1 and ktrans2 but does not explicitly describe a placenta box."
+      }
+    ],
+    "source_location": "Figure 1",
     "equations_provided": "none",
     "allometric_scaling_rules": [],
     "scaling_equations": []

@@ -19,7 +19,16 @@
   "simulated_data": [],
   "formulation_characterization": [],
   "qualitative_findings": [],
-  "parameter_mentions_without_values": [],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "sensitivity coefficient",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "model_evidence",
+      "requires_supplement": null,
+      "context_quote": "Equation 1:"
+    }
+  ],
   "sensitivity_analysis": [],
   "extended_sensitivity": null,
   "dosing": null,

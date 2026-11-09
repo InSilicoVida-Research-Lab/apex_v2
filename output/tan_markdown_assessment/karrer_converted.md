@@ -1,3 +1,5 @@
+<!-- PAGE 1 -->
+### [Page 1]
 Research 
 
 A Section 508–conformant HTML version of this article is available at https://doi.org/10.1289/EHP2739. 
@@ -30,8 +32,10 @@ Several studies showed that BPS, BPF, and BPAF exert estrogenic effects and part
 
 Environmental Health Perspectives 
 
-077002-1 
+077002-1
 
+<!-- PAGE 2 -->
+### [Page 2]
 2000). Yet, the BPA glucuronide (BPA-g) cannot be regarded as completely inactive, as it possibly induces adipocyte differentiation (Boucher et al. 2015). Also, deconjugation is possible and may even be more relevant in sensitive age groups, e.g., the fetus (in fetal compartments and placenta, b–glucuronidase-mediated deconjugation of BPA-g is substantial, according to Ginsberg and Rice 2009; Lucier et al. 1977; Paigen 1989). As deconjugation may also occur with BPA sulfate (BPA-s), the concentrations of unconjugated BPs could be considerably higher in fetal than in adult serum (Reed et al. 2005; Tobacman et al. 2002). 
 
 The velocity and extent of the metabolism processes depend on the exposure route (Mielke et al. 2011). Therefore, it is important to consider the pharmacokinetic behavior specific to routes of exposure when assessing the exposure and risk of BPs. For this purpose, physiologically based pharmacokinetic (PBPK) modeling is valuable. Several publications already addressed PBPK modeling of BPA (Mielke and Gundert-Remy 2009; Teeguarden et al. 2005; Yang et al. 2015), and they considered exposure via the peroral and the dermal route (Mielke et al. 2011). However, to the best of our knowledge, no PBPK models are currently available for BPS, BPF, and BPAF, although exposure to these compounds is on the rise and their estrogenic potencies have been proven to be similar or even higher than the potency of BPA. 
@@ -69,10 +73,10 @@ The chemical-specific parameters indispensable for adapting the model to the BP 
 
 Environmental Health Perspectives 
 
-077002-2 
+077002-2
 
-
-
+<!-- PAGE 3 -->
+### [Page 3]
 <!-- Start of picture text -->
 Urinary excretion<br>Glucuronides in Sulfates in<br>Oral exposure serum serum<br>Glucuronidation Sulfation<br>Stomach Gut Liver<br>Gastric<br>emptying<br>Fat<br>Skin surface<br>Dermal exposure Skin<br>depot<br>Dermal uptake<br>Gonads<br>Brain<br>Rich<br>Slow<br>Serum<br>Urinary excretion<br><!-- End of picture text -->
 
@@ -116,8 +120,10 @@ Note: BPAF, bisphenol AF; BPF, bisphenol F; BPS, bisphenol S; HIM, human intesti
 
 Environmental Health Perspectives 
 
-077002-3 
+077002-3
 
+<!-- PAGE 4 -->
+### [Page 4]
 Table 2. HPLC-UV analytical conditions. 
 
 |Substrate|Gradient (B = Acetonitril)<br>Detection wavelength<br>(nm)|Retention time<br>(min)|
@@ -166,8 +172,10 @@ aRough average of peroral and dermal high exposure estimates for adults by the E
 
 Environmental Health Perspectives 
 
-077002-4 
+077002-4
 
+<!-- PAGE 5 -->
+### [Page 5]
 specific physiological parameters (Tables 4 and S1) to investigate age-dependent differences of internal exposures with equal external exposures per kg BW (Table 3, scenario 3). Last, we used environmentally relevant external exposure estimates for BPA (instead of the standard 500 ng=kg BW before) via both the dermal and peroral exposure route as model inputs for all BPs [route- and agespecific high-exposure estimates for BPA (EFSA CEF 2015; von Goetz et al. 2017), see Table 4]. We simulated peroral exposure by mimicking a diet with three meals per day within 12 h (Nicklas et al. 2001) and dermal exposure by touching thermal paper and using personal care products (PCPs) twice a day, in the morning and in the evening (Garcia-Hidalgo et al. 2017; Liao and Kannan 2011). The simulation was run for 4 d, until we reached a steady state (see Table 3, scenario 4). 
 
 To account for the multiple dosings, we divided the estimated daily peroral and dermal exposure estimates into three and two daily doses, respectively. As absorption fractions we used 100% (EU 2008), 20% (Toner et al. 2016), and 60% (Biedermann et al. 2010) for peroral exposure and dermal exposure from thermal paper and PCPs, respectively. As PCPs can also contain ingredients enhancing skin penetration, the value of 60% for BPA dissolved in ethanol was chosen. As dermal absorption half-lives we used 6 h for thermal paper (Demierre et al. 2012) and 10 min for PCPs (Biedermann et al. 2010). As uptake periods, we used 15 min for peroral exposure (Tsukioka et al. 2004; Völkel et al. 2002) and 24 h for dermal exposure, representing exposures after which BPs are not washed off for a long time, so that they can penetrate the stratum corneum, where they are protected from removal (Demierre et al. 2012). All these uptake parameters were used in all exposure assessments, and they are summarized in Table 5. To interpret the results, we focused on comparing the Cmax and the area under the curve (AUC). 
@@ -218,8 +226,10 @@ aParameter values were used for females and males, respectively. Note: PCPs, per
 
 Environmental Health Perspectives 
 
-077002-5 
+077002-5
 
+<!-- PAGE 6 -->
+### [Page 6]
 Table 6. PTS for BPA (Doerge et al. 2011; Zhang and Zhang 2006) and BPS, BPF, and BPAF (Zhang and Zhang 2006). 
 
 |Tissue|BPA|BPS<sup>a</sup>|BPF<sup>b</sup>|BPAF|
@@ -270,8 +280,10 @@ Hormann et al. (2014) let volunteers wet their hands with hand sanitizer before 
 
 Environmental Health Perspectives 
 
-077002-6 
+077002-6
 
+<!-- PAGE 7 -->
+### [Page 7]
 model predictions. For this, we estimated the external peroral and dermal exposure, the extent of dermal absorption, and the dermal absorption half-life according to the study design as described in the following paragraph: 
 
 In one experiment, Hormann et al. (2014) measured the BPA amount transferred to a hand wetted with sanitizer due to holding thermal paper for different lengths of time. After each trial, they thoroughly swiped the hand and measured all BPA transferred to the wipes. In our calculations, we assumed that the highest BPA amount measured can be transferred to the hands and is available for dermal absorption (mdermal1). In the main experiment, three volunteers handled receipts for 4 min with both hands, which were wetted with sanitizer (one receipt per hand). Afterwards, both hands touched 10 French fries each during a total contact time of 4 min. The French fries from one hand were analyzed for their BPA content (moral). The volunteers ate the French fries from the other hand. Afterwards, one hand of each volunteer was thoroughly swiped, and the transferred BPA was analyzed (mdermal2). The other hand stayed contaminated for the rest of the experiment (90 min in total). We based our exposure simulations on one peroral and two dermal doses. The first dermal dose was 2 � mdermal1 from 0–8 min (two hands). The worst-case extent of absorption for the first dermal dose was ðmdermal1 − moral − mdermal2Þ=mdermal1. This share could have been taken up within 8 min, and we calculated the absorption half-life accordingly. 
@@ -306,8 +318,10 @@ When comparing the uncalibrated BPS model with the biomonitoring data (Oh et al.
 
 Environmental Health Perspectives 
 
-077002-7 
+077002-7
 
+<!-- PAGE 8 -->
+### [Page 8]
 Table 7. Chemical specific metabolic model parameters for BPA, BPS, BPF, and BPAF. 
 
 |Metabolic parameters|BPA|BPS|BPF|BPAF|All BPs|
@@ -377,10 +391,10 @@ Note: BW, body weight; BP, bisphenol; BPA, bisphenol A; BPAF, bisphenol AF; BPF,
 
 Environmental Health Perspectives 
 
-077002-8 
+077002-8
 
-
-
+<!-- PAGE 9 -->
+### [Page 9]
 <!-- Start of picture text -->
 A<br>Small intestine Liver<br>●<br>● ● ●<br>●<br>●<br>● ● ●<br>●<br>●<br>●<br>●<br>●<br>● ●<br>0 200 600 1000 1400 0 200 400 600 800 1000<br>B<br>0 1 2 3 0 0.004 0.008 0.012<br>cx (μmol/L) cx (μmol/L)<br>x = { __ BPA       BPS   - - - ● __   BPF       BPAF   - - - }<br>25<br>20 30000<br>15<br>10<br> (μmol/h)vx<br>5 1000020000<br>0 0<br>5 30<br>4<br>20<br>3<br>(μmol/h)vx  2<br>10<br>1<br>0 0<br><!-- End of picture text -->
 
@@ -404,10 +418,10 @@ In the qualitative evaluation of parameter uncertainty, we found that parameters
 
 Environmental Health Perspectives 
 
-077002-9 
+077002-9
 
-
-
+<!-- PAGE 10 -->
+### [Page 10]
 <!-- Start of picture text -->
 A Serum B Gonads<br>BPA<br>oral dermal oral dermal<br>BPS<br>BPF<br>BPAF<br>0 24 48 0 24 48 0 24 48 0 24 48<br>time (h) time (h) time (h) time (h)<br>Females solid lines  |  Males dotted lines<br>0<br>−2<br>x<br>−4<br>  c-BP (10    nM)<br>−6<br><!-- End of picture text -->
 
@@ -437,10 +451,10 @@ Regarding the parametrization of BPS, BPF, and BPAF, we expanded the knowledge o
 
 Environmental Health Perspectives 
 
-077002-10 
+077002-10
 
-
-
+<!-- PAGE 11 -->
+### [Page 11]
 <!-- Start of picture text -->
 Serum Gonads<br>0 12 24 36 48 60 72 84 96 0 12 24 36 48 60 72 84 96<br>0 12 24 36 48 60 72 84 96 0 12 24 36 48 60 72 84 96<br>0 12 24 36 48 60 72 84 96 0 12 24 36 48 60 72 84 96<br>0 12 24 36 48 60 72 84 96 0 12 24 36 48 60 72 84 96<br>time (h)                        time (h)<br>- - Infants      Toddlers      Children      fem. Ado.    __ . . . __ - -  male Ado.      fem. Adults    __ - -  male Adults<br>15<br>-2 4<br>. 10<br>2<br>5<br>c-BPA (nM  10   )<br>0 0<br>50 40<br>-2 40<br>30<br>. 30<br>20<br>20<br>c-BPS (nM  10   )<br>10<br>10<br>0 0<br>6<br>6<br>-2<br>. 4<br>4<br>c-BPF (nM  10   ) 2<br>2<br>0 0<br>1.5 3<br>-2<br>. 1 2<br>c-BPAF (nM  10   ) 0.5 1<br>0 0<br><!-- End of picture text -->
 
@@ -454,8 +468,10 @@ concentrations. This discrepancy was seen during the calibration of the BPS PBPK
 
 Environmental Health Perspectives 
 
-077002-11 
+077002-11
 
+<!-- PAGE 12 -->
+### [Page 12]
 Table 9. Highest values for Cmax and daily AUC of unconjugated BPA, BPS, BPF, and BPAF in serum and gonads and associated exposed age groups and sex obtained with the basic PBPK models after peroral and dermal exposures as estimated by the EFSA CEF (2015) for BPA in the high exposure scenario. 
 
 |Cmax or AUC|BPA|BPS|BPF|BPAF|
@@ -490,8 +506,10 @@ Figure 6. Cumulative density functions for the AUC (in steady state) and Cmax of
 
 Environmental Health Perspectives 
 
-077002-12 
+077002-12
 
+<!-- PAGE 13 -->
+### [Page 13]
 Table 10. Values for AUC and Cmax predicted for the unconjugated bisphenols in serum of females of childbearing age in the two-dimensional Monte Carlo analysis (n = 1,000 � 1,000) after peroral and dermal exposures as estimated by the EFSA CEF (2015) for BPA in the high-exposure scenario. 
 
 ||AUC|(nM*h|per day i|n steady|state)||Cm|ax (pM|)||
@@ -554,8 +572,10 @@ Note: Mean stands for the arithmetic mean. AUC, area under the curve; BPA, bisph
 
 Environmental Health Perspectives 
 
-077002-13 
+077002-13
 
+<!-- PAGE 14 -->
+### [Page 14]
 1.7–2.1; Choi and Lee 2017) and was glucuronized with the lowest rate of all BPs in the concentration ranges present in the intestine and the liver. The low glucuronidation rates might be an important reason for the high internal concentrations of unconjugated BPS, which have also been observed in the biomonitoring study by Oh et al. (2018). In this respect, the results of our kinetic experiments are in good agreement with the pharmacokinetics observed in humans. Measured concentrations of unconjugated BPS were higher and measured concentrations of BPS-g were lower than modeled, which implies that in vivo BPS glucuronidation rates might be even lower than found in vitro. 
 
 Exposure differences between age groups in our model simulations were mostly caused by the exposure patterns and anatomical differences of the different age groups and genders (Tables 4 and S1). However, one should keep in mind that the glucuronidation kinetics were assessed with adult hepatocytes, and the PBPK models for BPA and BPS were calibrated with measurements in adult body fluids. Therefore, the exposure differences might increase if age-group-specific metabolism parameters and biomonitoring data were available. 
@@ -590,8 +610,10 @@ Boucher JG, Boudreau A, Ahmed S, Atlas E. 2015. In vitro effects of bisphenol A 
 
 Environmental Health Perspectives 
 
-077002-14 
+077002-14
 
+<!-- PAGE 15 -->
+### [Page 15]
 - Brown RP, Delp MD, Lindstedt SL, Rhomberg LR, Beliles RP. 1997. Physiological parameter values for physiologically based pharmacokinetic models. Toxicol Ind Health 13(4):407–484, PMID: 9249929, https://doi.org/10.1177/074823379701300401. 
 
 - Calafat AM, Ye X, Wong L-Y, Reidy JA, Needham LL. 2008. Exposure of the U.S. population to bisphenol A and 4-tertiary-Octylphenol: 2003-2004 test. Environ Health Perspect 116(1):39–44, PMID: 18197297, https://doi.org/10.1289/ehp.10753. 
@@ -680,8 +702,10 @@ Environmental Health Perspectives
 
 Environmental Health Perspectives 
 
-077002-15 
+077002-15
 
+<!-- PAGE 16 -->
+### [Page 16]
 Li M, Yang Y, Yang Y, Yin J, Zhang J, Feng Y, et al. 2013. Biotransformation of bisphenol AF to its major glucuronide metabolite reduces estrogenic activity. PLOS ONE 8(12):e83170, PMID: 24349450, https://doi.org/10.1371/journal.pone.0083170. 
 
 - Liao C, Kannan K. 2013. Concentrations and profiles of bisphenol A and other bisphenol analogues in foodstuffs from the United States and their implications for human exposure. J Agric Food Chem 61(19):4655–4662, PMID: 23614805, https://doi.org/10.1021/jf400445n. 
@@ -776,8 +800,10 @@ Li M, Yang Y, Yang Y, Yin J, Zhang J, Feng Y, et al. 2013. Biotransformation of 
 
 Environmental Health Perspectives 
 
-077002-16 
+077002-16
 
+<!-- PAGE 17 -->
+### [Page 17]
 model. Clin Pharmacokinet 53(1):51–72, PMID: 23839530, https://doi.org/10.1007/ s40262-013-0096-z. 
 
 - Völkel W, Colnot T, Csanády GA, Filser JG, Dekant W. 2002. Metabolism and kinetics of Bisphenol A in humans at low doses following oral administration. Chem Res Toxicol 15(10):1281–1287, PMID: 12387626, https://doi.org/10.1021/tx025548t. 
@@ -802,5 +828,4 @@ model. Clin Pharmacokinet 53(1):51–72, PMID: 23839530, https://doi.org/10.1007
 
 Environmental Health Perspectives 
 
-077002-17 
-
+077002-17
