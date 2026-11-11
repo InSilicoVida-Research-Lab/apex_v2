@@ -522,6 +522,7 @@ class SGLangExtractor:
             return False
         import requests
         base_v1 = f"{url.rstrip('/')}/v1" if not url.endswith("/v1") else url
+        base_root = url.split("/v1")[0].rstrip("/")
         try:
             resp = requests.get(f"{base_v1}/models", timeout=timeout)
             if resp.status_code == 200:
@@ -533,9 +534,23 @@ class SGLangExtractor:
                     if configured_model and configured_model != "Qwen/Qwen3.8-27B-FP8"
                     else (discovered_model or "default")
                 )
+                self.model_name = chosen_model
+
+                # Probe for native llama-server /completion endpoint
+                try:
+                    c_resp = requests.post(f"{base_root}/completion", json={"prompt": "test", "n_predict": 1}, timeout=1.5)
+                    if c_resp.status_code == 200:
+                        self.backend_mode = "llama_server"
+                        self.server_url = base_root
+                        self.use_server = True
+                        self.is_loaded = True
+                        logger.info(f"Detected running llama-server with native /completion and KV-cache at {self.server_url} (model: {self.model_name}).")
+                        return True
+                except Exception:
+                    pass
+
                 self.backend_mode = "openai_api"
                 self.server_url = base_v1
-                self.model_name = chosen_model
                 if OpenAI is not None:
                     self.openai_client = OpenAI(
                         base_url=self.server_url,
@@ -661,6 +676,46 @@ class SGLangExtractor:
         elif image_path and os.path.exists(image_path):
             img_data_uri = self._image_path_to_base64_data_uri(image_path)
 
+        # Mode A1: llama-server native (/completion) — Fast with KV-cache reuse & pre-closed think
+        if self.backend_mode == "llama_server":
+            import aiohttp
+            timeout = aiohttp.ClientTimeout(total=timeout_seconds)
+            base_root = self.server_url.split("/v1")[0].rstrip("/")
+            llama_payload = {
+                "prompt": prompt_text,
+                "n_predict": max_new_tokens,
+                "temperature": temperature,
+                "cache_prompt": True,
+                "stop": ["<|im_end|>", "<|endoftext|>"],
+            }
+            if schema_json:
+                if isinstance(schema_json, str):
+                    try:
+                        llama_payload["json_schema"] = json.loads(schema_json)
+                    except Exception:
+                        pass
+                elif isinstance(schema_json, dict):
+                    llama_payload["json_schema"] = schema_json
+            try:
+                async with aiohttp.ClientSession(timeout=timeout) as session:
+                    async with session.post(f"{base_root}/completion", json=llama_payload) as resp:
+                        if resp.status == 200:
+                            comp_result = await resp.json()
+                            return comp_result.get("content", "")
+                        elif resp.status == 400 and "json_schema" in llama_payload:
+                            # Retry without json_schema if grammar conversion failed
+                            llama_payload.pop("json_schema", None)
+                            async with session.post(f"{base_root}/completion", json=llama_payload) as retry_resp:
+                                if retry_resp.status == 200:
+                                    comp_result = await retry_resp.json()
+                                    return comp_result.get("content", "")
+                        err_body = await resp.text()
+                        logger.warning(f"llama-server /completion error {resp.status}: {err_body}; falling back to openai_api.")
+                        self.backend_mode = "openai_api"
+            except Exception as e:
+                logger.warning(f"llama-server /completion error: {e}; falling back to openai_api.")
+                self.backend_mode = "openai_api"
+
         # Mode A: SGLang Server (/generate) — Local or DGX
         if self.backend_mode in ("local_server", "dgx_server", "sglang_server") or (self.use_server and self.backend_mode != "openai_api"):
             import aiohttp
@@ -685,12 +740,55 @@ class SGLangExtractor:
                     async with aiohttp.ClientSession(timeout=timeout) as session:
                         async with session.post(f"{self.server_url}/generate", json=payload) as resp:
                             if resp.status == 404:
+                                base_root = self.server_url.split("/v1")[0].rstrip("/")
+                                # Check if server is llama-server (/completion)
+                                try:
+                                    llama_payload = {
+                                        "prompt": prompt_text,
+                                        "n_predict": max_new_tokens,
+                                        "temperature": temperature,
+                                        "cache_prompt": True,
+                                        "stop": ["<|im_end|>", "<|endoftext|>"],
+                                    }
+                                    if schema_json:
+                                        if isinstance(schema_json, str):
+                                            try:
+                                                llama_payload["json_schema"] = json.loads(schema_json)
+                                            except Exception:
+                                                pass
+                                        elif isinstance(schema_json, dict):
+                                            llama_payload["json_schema"] = schema_json
+                                    async with session.post(f"{base_root}/completion", json=llama_payload) as comp_resp:
+                                        if comp_resp.status == 200:
+                                            logger.info(
+                                                f"Endpoint {base_root}/completion succeeded (llama-server detected). "
+                                                f"Using native llama-server backend with KV-cache reuse."
+                                            )
+                                            self.backend_mode = "llama_server"
+                                            self.server_url = base_root
+                                            comp_result = await comp_resp.json()
+                                            return comp_result.get("content", "")
+                                        elif comp_resp.status == 400 and "json_schema" in llama_payload:
+                                            llama_payload.pop("json_schema", None)
+                                            async with session.post(f"{base_root}/completion", json=llama_payload) as comp_retry:
+                                                if comp_retry.status == 200:
+                                                    logger.info(
+                                                        f"Endpoint {base_root}/completion succeeded (llama-server detected without schema constraint). "
+                                                        f"Using native llama-server backend with KV-cache reuse."
+                                                    )
+                                                    self.backend_mode = "llama_server"
+                                                    self.server_url = base_root
+                                                    comp_result = await comp_retry.json()
+                                                    return comp_result.get("content", "")
+                                except Exception:
+                                    pass
+
                                 logger.info(
                                     f"Endpoint {self.server_url}/generate returned 404 (server is OpenAI-compatible / llama-server). "
                                     f"Auto-switching backend to openai_api mode..."
                                 )
                                 self.backend_mode = "openai_api"
-                                base_v1 = f"{self.server_url.rstrip('/')}/v1" if not self.server_url.endswith("/v1") else self.server_url
+                                base_v1 = f"{base_root}/v1"
                                 self.server_url = base_v1
                                 if OpenAI is not None:
                                     self.openai_client = OpenAI(
@@ -736,6 +834,7 @@ class SGLangExtractor:
                     "messages": messages,
                     "max_tokens": max_new_tokens,
                     "temperature": temperature,
+                    "extra_body": {"cache_prompt": True},
                 }
                 if schema_json:
                     kwargs["response_format"] = {"type": "json_object"}
@@ -929,6 +1028,54 @@ class SGLangExtractor:
                     return parsed
             except json.JSONDecodeError:
                 continue
+
+        # Second pass: Truncation occurred inside an open string or open object.
+        # Step A: Close unclosed double quote if an odd number of unescaped quotes exists.
+        in_string = False
+        escape = False
+        for ch in clean:
+            if escape:
+                escape = False
+                continue
+            if ch == '\\':
+                escape = True
+                continue
+            if ch == '"':
+                in_string = not in_string
+
+        candidate = clean + ('"' if in_string else "")
+
+        # Step B: Balance open braces and brackets on the stack.
+        in_string = False
+        escape = False
+        stack = []
+        for ch in candidate:
+            if escape:
+                escape = False
+                continue
+            if ch == '\\':
+                escape = True
+                continue
+            if ch == '"':
+                in_string = not in_string
+                continue
+            if not in_string:
+                if ch in ('{', '['):
+                    stack.append(ch)
+                elif ch in ('}', ']'):
+                    if stack:
+                        top = stack[-1]
+                        if (top == '{' and ch == '}') or (top == '[' and ch == ']'):
+                            stack.pop()
+
+        closing = "".join("}" if op == "{" else "]" for op in reversed(stack))
+        repaired_candidate = re.sub(r",\s*([\]\}])", r"\1", candidate + closing)
+        try:
+            parsed = json.loads(repaired_candidate)
+            if isinstance(parsed, dict):
+                return parsed
+        except json.JSONDecodeError:
+            pass
 
         return None
 
@@ -1306,6 +1453,59 @@ class SGLangExtractor:
             logger.error(f"Failed to parse SGLang Tier 2 evaluation output: {e}\nRaw Output: {extracted_text}")
             raise
 
+    @staticmethod
+    def _compact_document_for_tan(document: dict) -> dict:
+        """Create a compact, token-efficient representation of the extracted document.
+
+        Strips verbose internals (raw OCR cell grids, transcription chunks,
+        internal validation logs) while preserving all critical PBPK facts needed
+        to evaluate the Tan questionnaire (metadata, structure, parameters,
+        dosing, assumptions, and table summaries).
+        """
+        if not isinstance(document, dict):
+            return {}
+
+        tables_summary = []
+        for t in document.get("table_evidence", []):
+            if isinstance(t, dict):
+                tables_summary.append({
+                    "table_id": t.get("table_id"),
+                    "title": t.get("title"),
+                    "compounds": t.get("subject_compounds", []),
+                    "species": t.get("species", []),
+                    "footnotes": t.get("footnotes", []),
+                })
+
+        parameters_summary = []
+        for p in (document.get("model_parameters") or []):
+            if isinstance(p, dict):
+                q = p.get("quantitative_data", {}) or {}
+                ctx = p.get("context", {}) or {}
+                prov = p.get("provenance", {}) or {}
+                parameters_summary.append({
+                    "name": p.get("parameter_name_original") or p.get("parameter_name") or p.get("symbol_original"),
+                    "symbol": p.get("symbol_original") or p.get("symbol") or "",
+                    "value": q.get("value"),
+                    "unit": q.get("unit_standardized") or q.get("unit") or q.get("unit_original") or "",
+                    "compound": ctx.get("compound"),
+                    "species": ctx.get("species"),
+                    "table": prov.get("source_table"),
+                    "quote": (prov.get("source_quote") or "")[:200],
+                })
+
+        return {
+            "page_metadata": document.get("page_metadata"),
+            "model_classification": document.get("model_classification"),
+            "model_structure": document.get("model_structure"),
+            "biological_basis": document.get("biological_basis"),
+            "model_context": document.get("model_context"),
+            "dosing": document.get("dosing"),
+            "software": document.get("software"),
+            "reproducibility": document.get("reproducibility"),
+            "tables": tables_summary,
+            "parameters": parameters_summary,
+        }
+
     async def assess_tan_template(self, full_document_json: str, context_text: Optional[str] = None) -> "TanPBPKAssessment":
         """Run the Tan et al. PBPK reporting questionnaire."""
         from pk_pipeline.schemas import TanPBPKAssessment
@@ -1326,14 +1526,33 @@ class SGLangExtractor:
 
         start_t = time.time()
         logger.info("SGLang: [START] Running Tan PBPK reporting questionnaire...")
+
+        # Compact document evidence to prevent overflowing context limits (140k+ tokens -> ~5-8k tokens)
+        compact_doc = self._compact_document_for_tan(document)
+        compact_doc_json = json.dumps(compact_doc, indent=1)
         schema_json = json.dumps(TanPBPKAssessment.model_json_schema(), indent=2)
-        prompt_text = build_tan_assessment_prompt(full_document_json, context_text=context_text)
+        prompt_text = build_tan_assessment_prompt(compact_doc_json, context_text=context_text)
+
+        # Context-window guard: estimate prompt tokens (~3.5 chars/token)
+        est_prompt_tokens = int(len(prompt_text) / 3.5)
+        max_ctx = getattr(self, "max_context_length", 32768) or 32768
+
+        if est_prompt_tokens >= (max_ctx - 4000):
+            logger.warning(
+                "Document evidence (~%d tokens) exceeds safe model context window (%d tokens). "
+                "Using deterministic evidence evaluation to prevent context truncation.",
+                est_prompt_tokens,
+                max_ctx,
+            )
+            return evaluate_tan_from_document(document)
+
+        max_tokens_budget = min(12000, max(2000, int(max_ctx - est_prompt_tokens - 1000)))
 
         try:
             extracted_text = await self._generate(
                 prompt_text=prompt_text,
                 schema_json=schema_json,
-                max_new_tokens=12000,
+                max_new_tokens=max_tokens_budget,
                 temperature=0.0,
                 timeout_seconds=3600,
             )
@@ -1383,9 +1602,11 @@ class SGLangExtractor:
         from pk_pipeline.tan_assessor import (
             TAN_QUESTIONNAIRE_ITEMS,
             TAN_SECTIONS,
+            build_tan_kv_cache_prompt,
             build_tan_markdown_assessment_prompt,
             evaluate_tan_from_markdown,
             normalize_tan_assessment,
+            strip_tan_bibliography,
         )
 
         if not getattr(self, "is_loaded", False):
@@ -1489,6 +1710,53 @@ class SGLangExtractor:
 
                 if not all_items:
                     logger.warning("All LLM Tan batches returned empty items; falling back to deterministic Markdown evaluation.")
+                    return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
+
+                raw_assessment = {
+                    "model_identification": merged_model_id,
+                    "items": all_items,
+                }
+                assessment = normalize_tan_assessment(raw_assessment)
+            elif mode == "kv_cache":
+                # ── Mode: KV-Cache Prefix Reuse (Static clean paper prefix + questions suffix) ──
+                clean_paper = strip_tan_bibliography(markdown_text)
+
+                ITEMS_PER_CALL = 2
+                all_items_pool = TAN_QUESTIONNAIRE_ITEMS
+                batches = []
+                for i in range(0, len(all_items_pool), ITEMS_PER_CALL):
+                    chunk = all_items_pool[i : i + ITEMS_PER_CALL]
+                    batches.append((f"kv_batch_{i // ITEMS_PER_CALL + 1}", chunk))
+
+                all_items: list[dict] = []
+                merged_model_id: dict = {}
+
+                # Sequential batch execution preserves slot KV cache in llama-server and SGLang
+                for batch_label, batch_items in batches:
+                    batch_prompt = build_tan_kv_cache_prompt(
+                        clean_paper_md=clean_paper,
+                        items=batch_items,
+                        paper_title=paper_title,
+                        include_no_think=include_no_think,
+                        pre_close_think=True,
+                    )
+                    batch_max_tokens = max(1600, len(batch_items) * 600)
+                    extracted_text = await self._generate(
+                        prompt_text=batch_prompt,
+                        schema_json=schema_json,
+                        max_new_tokens=batch_max_tokens,
+                        temperature=0.0,
+                        timeout_seconds=900,
+                    )
+                    b_items, b_meta = _parse_batch_response(extracted_text, batch_label)
+                    all_items.extend(b_items)
+                    if isinstance(b_meta, dict):
+                        for k, v in b_meta.items():
+                            if v and not merged_model_id.get(k):
+                                merged_model_id[k] = v
+
+                if not all_items:
+                    logger.warning("All LLM KV-cache Tan batches returned empty items; falling back to deterministic Markdown evaluation.")
                     return evaluate_tan_from_markdown(markdown_text, paper_title=paper_title)
 
                 raw_assessment = {

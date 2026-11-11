@@ -1,0 +1,1208 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "simple_empirical_compartmental",
+    "evidence_quote": "The Wambaugh model is an adaptation of the model and includes three compartments: A central compartment, a second (“deep”) compartment, and a filtrate compartment, where a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment"
+  },
+  "model_context": {
+    "model_origin": "adapted from Wambaugh model",
+    "stated_purpose": "To facilitate reverse dosimetry and risk assessment for the less studied PFAS compounds in food, we developed and evaluated an approach to adapt existing toxicokinetic models for nonhuman primates to predict human serum levels.",
+    "dose_metric": "human serum levels",
+    "target_populations": [
+      "adults over the age of 20"
+    ],
+    "age_groups": [
+      "adults"
+    ],
+    "life_stages": [],
+    "sex_or_gender": "unspecified",
+    "health_status": "healthy",
+    "geographic_population": "US",
+    "original_application": "nonhuman primate toxicokinetic modeling",
+    "current_application": "human reverse dosimetry and risk assessment for PFAS compounds",
+    "repurposed": true,
+    "source_quote": "To facilitate reverse dosimetry and risk assessment for the less studied PFAS compounds in food, we developed and evaluated an approach to adapt existing toxicokinetic models for nonhuman primates to predict human serum levels.",
+    "source_location": "Abstract",
+    "source_page": null,
+    "evidence_directness": "direct"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "saturable renal reabsorption",
+      "serum protein binding (free fraction)",
+      "oral bioavailability",
+      "body weight",
+      "cardiac output",
+      "elimination half-life"
+    ],
+    "adme_determinant_evidence": [
+      {
+        "description": "Saturable reabsorption from filtrate to central compartment via Michaelis-Menten kinetics",
+        "evidence_quote": "where a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment",
+        "source_location": "Selected model",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Free fraction in serum (Free) is highly correlated to resorption parameters Tmc and Kt",
+        "evidence_quote": "The Free parameter was found to be highly correlated to the resorption parameters; changing Free will then result in a change in Tmc and K t .",
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Bioavailability directly impacts the amount of compounds entering serum",
+        "evidence_quote": "The bioavailability parameter directly impacts the amount of the compounds that enter the serum",
+        "source_location": "Discussion",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "adme_phase_evidence": [
+      {
+        "phase": "absorption",
+        "biological_mechanism": "Oral ingestion with first-order absorption rate from gut",
+        "mathematical_implementation": "First-order absorption rate constant (ka) from gut compartment",
+        "governing_parameters": [
+          "ka",
+          "bioAv"
+        ],
+        "compartments": [
+          "Gut",
+          "Central compartment"
+        ],
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS; Discussion",
+        "source_page": null,
+        "evidence_quote": "the rate of absorption from the gut ( k a )",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "distribution_binding",
+        "biological_mechanism": "Serum protein binding determining free fraction available for filtration and reabsorption",
+        "mathematical_implementation": "Free fraction (Free) parameter scaling available compound for saturable reabsorption",
+        "governing_parameters": [
+          "Free"
+        ],
+        "compartments": [
+          "Central compartment"
+        ],
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS; Discussion",
+        "source_page": null,
+        "evidence_quote": "The Free parameter was found to be highly correlated to the resorption parameters; changing Free will then result in a change in Tmc and K t .",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "distribution_tissue",
+        "biological_mechanism": "Distribution between central and deep tissue compartments",
+        "mathematical_implementation": "First-order inter-compartmental transfer rate constants (k12, k21)",
+        "governing_parameters": [
+          "k12",
+          "k21"
+        ],
+        "compartments": [
+          "Central compartment",
+          "Second (deep) compartment"
+        ],
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_quote": "the rate to and from the second compartment ( k 12 , k 21 )",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "excretion_recirculation",
+        "biological_mechanism": "Saturable renal reabsorption from filtrate compartment back to central compartment",
+        "mathematical_implementation": "Michaelis-Menten kinetics with maximum rate (Tmc) and affinity constant (Kt)",
+        "governing_parameters": [
+          "Tmc",
+          "Kt"
+        ],
+        "compartments": [
+          "Filtrate compartment",
+          "Central compartment"
+        ],
+        "source_location": "Selected model",
+        "source_page": null,
+        "evidence_quote": "where a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Saturable reabsorption from filtrate to central compartment follows Michaelis-Menten kinetics",
+        "evidence_quote": "where a saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment",
+        "source_location": "Selected model",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Oral bioavailability initially set at 90% for both PFOS and PFOA to reflect high fraction of administered dose reaching systemic circulation after oral ingestion",
+        "evidence_quote": "The bioavailability was initially set at 90% for both compounds to reflect a high fraction of an administered dose reaching systemic circulation after oral ingestion",
+        "source_location": "Inferences",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures",
+        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "source_location": "Model checking and validation",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Lower bioavailability observed in nonhuman primate model for PFOA assumed to be result of experiment-specific conditions",
+        "evidence_quote": "the lower bioavailability observed in the nonhuman primate model was assumed to be the result of experiment-specific conditions",
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Remaining parameters held constant between animal and human models except PFOA bioAv and Kt",
+        "evidence_quote": "The remaining parameters were held constant between the animal and human models, as shown in Table 1 , with the exception of the PFOA bioAv and K t parameters, which were refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model",
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Free parameters selected based on protein binding assay findings",
+        "evidence_quote": "The Free parameters in these models were selected based on protein binding assay findings",
+        "source_location": "Discussion",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Binding efficacy may be higher in vitro than in vivo",
+        "evidence_quote": "However, the binding efficacy may be higher in vitro than in vivo.",
+        "source_location": "Discussion",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Default bioavailability values chosen to reflect high absorption observed in animals after ingestion exposures",
+        "evidence_quote": "the default values were chosen to reflect the high absorption observed in animals after ingestion exposures",
+        "source_location": "Discussion",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "assumption_evidence": [
+      {
+        "category": "clearance_resorption_ontogeny",
+        "stated_assumption": "TK model does not include a development compartment",
+        "authors_justification": "Model underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures",
+        "structural_impact": "Individuals <20 years of age excluded from fitting process; model applicable only to adults over 20",
+        "source_location": "Model checking and validation",
+        "source_page": null,
+        "evidence_quote": "Data for individuals <20 years of age were excluded from the fitting process because the TK model does not include a development compartment and thus underestimates serum levels in children and young adults by excluding gestation and breastfeeding exposures.",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "category": "protein_binding_free_fraction",
+        "stated_assumption": "Free fraction in serum selected from protein binding assay findings",
+        "authors_justification": "Availability of compound-specific Free values for multiple PFAS compounds of interest",
+        "structural_impact": "Free parameter highly correlated to resorption parameters Tmc and Kt; changing Free changes Tmc and Kt",
+        "source_location": "Discussion; Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_quote": "The Free parameters in these models were selected based on protein binding assay findings . An advantage of this approach is the availability of compound-specific Free values for multiple PFAS compounds of interest. However, the binding efficacy may be higher in vitro than in vivo.",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "category": "cross_species_cross_chemical_borrowing",
+        "stated_assumption": "Lower bioavailability observed in nonhuman primate model for PFOA assumed to be result of experiment-specific conditions",
+        "authors_justification": "Assumption that experimental conditions in nonhuman primate study do not reflect true human bioavailability",
+        "structural_impact": "PFOA bioAv refit to nonhuman primate data assuming 90% bioavailability for human model application",
+        "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+        "source_page": null,
+        "evidence_quote": "the lower bioavailability observed in the nonhuman primate model was assumed to be the result of experiment-specific conditions",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "category": "dosing_exposure_steady_state",
+        "stated_assumption": "Saturable resorption process likely minimal relevance for PFBS due to short half-life",
+        "authors_justification": "Short half-life of PFBS (<7 days)",
+        "structural_impact": "PFBS study not pursued further",
+        "source_location": "Application to other compounds",
+        "source_page": null,
+        "evidence_quote": "Given the short half-life of PFBS (<7 days) and the likely minimal relevance of the saturable resorption process, we decided not to pursue the study of this compound further.",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "specialized_mechanisms": [
+      "saturable_reabsorption",
+      "michaelis_menten_reabsorption"
+    ],
+    "evidence_confidence": "low",
+    "confidence_basis": null
+  },
+  "table_evidence": [],
+  "model_structure": {
+    "reported_compartment_count": 3,
+    "listed_compartment_count": 3,
+    "count_consistency": "consistent",
+    "compartments": [
+      {
+        "id": "central",
+        "label_raw": "central compartment",
+        "confidence": null
+      },
+      {
+        "id": "deep",
+        "label_raw": "second (deep) compartment",
+        "confidence": null
+      },
+      {
+        "id": "filtrate",
+        "label_raw": "filtrate compartment",
+        "confidence": null
+      }
+    ],
+    "connections": [
+      {
+        "source": "central",
+        "target": "deep",
+        "rate_or_flow_symbol": "k12",
+        "equation": null
+      },
+      {
+        "source": "deep",
+        "target": "central",
+        "rate_or_flow_symbol": "k21",
+        "equation": null
+      },
+      {
+        "source": "central",
+        "target": "filtrate",
+        "rate_or_flow_symbol": null,
+        "equation": null
+      },
+      {
+        "source": "filtrate",
+        "target": "central",
+        "rate_or_flow_symbol": "Tmc, Kt",
+        "equation": "Michaelis-Menten saturable reabsorption"
+      }
+    ],
+    "absorption": {
+      "route": "oral",
+      "model_type": "first_order",
+      "site": "gut",
+      "evidence_quote": "the rate of absorption from the gut ( k a )"
+    },
+    "metabolism": null,
+    "elimination": {
+      "routes": [
+        "renal"
+      ],
+      "evidence_quote": "saturable process with a Michaelis–Menten kinetics dictates reabsorption from the filtrate compartment to the central compartment"
+    },
+    "unresolved": null,
+    "source_location": "Selected model",
+    "equations_provided": "none",
+    "allometric_scaling_rules": [
+      "Cardiac output scaled to 12.5 L/h/kg^0.74 for humans"
+    ],
+    "scaling_equations": [
+      "QCC = 12.5 L/h/kg^0.74"
+    ]
+  },
+  "metabolic_pathways": [],
+  "parameter_blocks": [
+    {
+      "block_name": "Human scaling parameters",
+      "implied_species": "Human",
+      "implied_unit_original": null,
+      "parameter_class": "physiological",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "body_weight",
+          "parameter_name": "Body weight",
+          "parameter_name_original": "bodyweight",
+          "parameter_name_standardized": "body_weight",
+          "symbol": "BW",
+          "symbol_original": "BW",
+          "symbol_standardized": "BW",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "70 kg",
+            "value": 70.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "kg",
+            "unit_original": "kg",
+            "unit_standardized": "kg",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "TK modeling approach: a case study with PFOS and PFOA",
+            "source_location": "TK modeling approach: a case study with PFOS and PFOA",
+            "source_quote": "We scaled the reparametrized Wambaugh model from Part I to humans using human values for the bodyweight (70 kg)",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "cardiac_output",
+          "parameter_name": "Cardiac output",
+          "parameter_name_original": "cardiac output",
+          "parameter_name_standardized": "cardiac_output",
+          "symbol": "QCC",
+          "symbol_original": "QCC",
+          "symbol_standardized": "QCC",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "12.5 L/h/kg 0.74",
+            "value": 12.5,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "L/h/kg^0.74",
+            "unit_original": "L/h/kg 0.74",
+            "unit_standardized": "L/h/kg^0.74",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "TK modeling approach: a case study with PFOS and PFOA",
+            "source_location": "TK modeling approach: a case study with PFOS and PFOA",
+            "source_quote": "human values for the bodyweight (70 kg) and cardiac output (12.5 L/h/kg 0.74 )",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    },
+    {
+      "block_name": "PFOS human parameters",
+      "implied_species": "Human",
+      "implied_unit_original": null,
+      "parameter_class": "biochemical",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "bioavailability",
+          "parameter_name": "Oral bioavailability",
+          "parameter_name_original": "bioavailability",
+          "parameter_name_standardized": "oral_bioavailability",
+          "symbol": "bioAv",
+          "symbol_original": "bioAv",
+          "symbol_standardized": "F",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFOS",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": "oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "90%",
+            "value": 0.9,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": "initially set",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Inferences",
+            "source_location": "Inferences",
+            "source_quote": "The bioavailability was initially set at 90% for both compounds",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "elimination_half_life",
+          "parameter_name": "Elimination half-life",
+          "parameter_name_original": "half-life",
+          "parameter_name_standardized": "elimination_half_life",
+          "symbol": "T1/2",
+          "symbol_original": "T1/2",
+          "symbol_standardized": "t1/2",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFOS",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "3.4 years",
+            "value": 3.4,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "years",
+            "unit_original": "years",
+            "unit_standardized": "years",
+            "unit_inherited": false,
+            "value_qualifier": "target for fitting Tmc",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_quote": "fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively",
+            "reference": null,
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    },
+    {
+      "block_name": "PFOA human parameters",
+      "implied_species": "Human",
+      "implied_unit_original": null,
+      "parameter_class": "biochemical",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "bioavailability",
+          "parameter_name": "Oral bioavailability",
+          "parameter_name_original": "bioAv",
+          "parameter_name_standardized": "oral_bioavailability",
+          "symbol": "bioAv",
+          "symbol_original": "bioAv",
+          "symbol_standardized": "F",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFOA",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": "oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "90%",
+            "value": 0.9,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": "assumed for human model application",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_quote": "refit to the nonhuman primate data assuming a bioavailability of 90% for application in the human model",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "elimination_half_life",
+          "parameter_name": "Elimination half-life",
+          "parameter_name_original": "half-life",
+          "parameter_name_standardized": "elimination_half_life",
+          "symbol": "T1/2",
+          "symbol_original": "T1/2",
+          "symbol_standardized": "t1/2",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFOA",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.7 years",
+            "value": 2.7,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "years",
+            "unit_original": "years",
+            "unit_standardized": "years",
+            "unit_inherited": false,
+            "value_qualifier": "target for fitting Tmc",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_location": "Model parameters estimated for humans for both PFOA and PFOS",
+            "source_quote": "fitting a saturable resorption rate ( Tmc ) for a half-life of 3.4 years and 2.7 years for PFOS and PFOA, respectively",
+            "reference": null,
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    },
+    {
+      "block_name": "PFHxS human parameters",
+      "implied_species": "Human",
+      "implied_unit_original": null,
+      "parameter_class": "biochemical",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "elimination_half_life",
+          "parameter_name": "Elimination half-life",
+          "parameter_name_original": "half-life",
+          "parameter_name_standardized": "elimination_half_life",
+          "symbol": "T1/2",
+          "symbol_original": "T1/2",
+          "symbol_standardized": "t1/2",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFHxS",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "5.3 years",
+            "value": 5.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "years",
+            "unit_original": "years",
+            "unit_standardized": "years",
+            "unit_inherited": false,
+            "value_qualifier": "target for scaling",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Application to PFHxS",
+            "source_location": "Application to PFHxS",
+            "source_quote": "The animal model was scaled to human using a half-life of 5.3 years",
+            "reference": null,
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "maximal_velocity",
+          "parameter_name": "Maximum rate of saturable resorption",
+          "parameter_name_original": "Tmc",
+          "parameter_name_standardized": "maximal_resorption_rate",
+          "symbol": "Tmc",
+          "symbol_original": "Tmc",
+          "symbol_standardized": "Tmc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFHxS",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": "Filtrate",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.47 mg/h/kg",
+            "value": 0.47,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "mg/h/kg",
+            "unit_original": "mg/h/kg",
+            "unit_standardized": "mg/h/kg",
+            "unit_inherited": false,
+            "value_qualifier": "resulting from scaling",
+            "footnote_marker": null,
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Application to PFHxS",
+            "source_location": "Application to PFHxS",
+            "source_quote": "resulting in a Tmc of 0.47 mg/h/kg",
+            "reference": null,
+            "status": "derived",
+            "parameter_status": "Derived",
+            "status_raw": null,
+            "derivation": {
+              "method": "allometric_scaling",
+              "source_species": "Nonhuman primate",
+              "optimization_target": "half-life of 5.3 years"
+            },
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Renal clearance",
+          "parameter_name_original": "clearance",
+          "parameter_name_standardized": "renal_clearance",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": null,
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFHxS",
+            "species": "Human",
+            "subject_species": "Human",
+            "life_stage": "Adult",
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": "70 kg adult"
+          },
+          "quantitative_data": {
+            "value_text": "approximately 0.06 mL/kg-day",
+            "value": 0.06,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "mL/kg-day",
+            "unit_original": "mL/kg-day",
+            "unit_standardized": "mL/kg/day",
+            "unit_inherited": false,
+            "value_qualifier": "approximately; for doses well below saturation (<1000 mg/kg BW/day)",
+            "footnote_marker": null,
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Application to PFHxS",
+            "source_location": "Application to PFHxS",
+            "source_quote": "the human model is associated with a clearance of approximately 0.06 mL/kg-day for a 70 kg adult",
+            "reference": null,
+            "status": "derived",
+            "parameter_status": "Derived",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    },
+    {
+      "block_name": "PFBS parameters",
+      "implied_species": null,
+      "implied_unit_original": null,
+      "parameter_class": "biochemical",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "elimination_half_life",
+          "parameter_name": "Elimination half-life",
+          "parameter_name_original": "half-life",
+          "parameter_name_standardized": "elimination_half_life",
+          "symbol": "T1/2",
+          "symbol_original": "T1/2",
+          "symbol_standardized": "t1/2",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "PFBS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "<7 days",
+            "value": null,
+            "start_value": null,
+            "end_value": 7.0,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "days",
+            "unit_original": "days",
+            "unit_standardized": "days",
+            "unit_inherited": false,
+            "value_qualifier": "short half-life; less than",
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Application to other compounds",
+            "source_location": "Application to other compounds",
+            "source_quote": "Given the short half-life of PFBS (<7 days)",
+            "reference": null,
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "direct"
+          },
+          "confidence": null,
+          "needs_review": true,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [
+    {
+      "metric": "serum levels within factor of 2",
+      "formulation": null,
+      "species": "Nonhuman primate",
+      "value": 0.86,
+      "unit": "fraction of data points",
+      "source_type": "simulated",
+      "dataset_role": "calibration",
+      "dataset_type": "animal",
+      "independence_status": "not_independent",
+      "dataset_description": "PFHxS nonhuman primate serum levels",
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Application to PFHxS",
+        "source_location": "Application to PFHxS",
+        "source_quote": "the final model predictions for the nonhuman primate model were within a factor of 2 of the observed serum levels for 86% of the data points",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    }
+  ],
+  "formulation_characterization": [],
+  "qualitative_findings": [
+    {
+      "finding_type": "relative_model_output_comparison",
+      "metric": "human equivalent dose",
+      "formulation": null,
+      "comparator": "Verner model",
+      "species": "Human",
+      "relative_change": "approximately 1.5 times greater",
+      "qualifier": "approximately",
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Discussion",
+        "source_location": "Discussion",
+        "source_quote": "our estimated human equivalent doses for the selected PODs were approximately 1.5 times greater than those estimated by the Verner model at steady state for a 70 kg individual",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    },
+    {
+      "finding_type": "relative_model_output_comparison",
+      "metric": "clearance",
+      "formulation": null,
+      "comparator": "EPA PFHxS candidate toxicity values",
+      "species": "Human",
+      "relative_change": "between 0.041 and 0.072 mL/kg-day",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Application to PFHxS",
+        "source_location": "Application to PFHxS",
+        "source_quote": "which falls between the clearance values applied for males and females outside of reproductive ages (0.041 mL/kg-day) and females of reproductive ages (0.072 mL/kg-day) in the EPA's derivation of PFHxS candidate toxicity values",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "direct"
+      }
+    }
+  ],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "Free (proportion of free compound in serum)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Model parameters estimated for humans for both PFOA and PFOS",
+      "requires_supplement": true,
+      "context_quote": "the proportion of free compound in the serum ( Free )... were assigned set values from the iterative evaluation of the starting parameters ( Table S1 )"
+    },
+    {
+      "parameter_name": "ka (rate of absorption from the gut)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Model parameters estimated for humans for both PFOA and PFOS",
+      "requires_supplement": true,
+      "context_quote": "the rate of absorption from the gut ( k a )... were assigned set values from the iterative evaluation of the starting parameters ( Table S1 )"
+    },
+    {
+      "parameter_name": "k12 (rate to second compartment)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Model parameters estimated for humans for both PFOA and PFOS",
+      "requires_supplement": true,
+      "context_quote": "the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 )"
+    },
+    {
+      "parameter_name": "k21 (rate from second compartment)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Model parameters estimated for humans for both PFOA and PFOS",
+      "requires_supplement": true,
+      "context_quote": "the rate to and from the second compartment ( k 12 , k 21 ) were assigned set values from the iterative evaluation of the starting parameters ( Table S1 )"
+    },
+    {
+      "parameter_name": "Kt (Michaelis-Menten affinity constant)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Model parameters estimated for humans for both PFOA and PFOS",
+      "requires_supplement": true,
+      "context_quote": "changing Free will then result in a change in Tmc and K t"
+    },
+    {
+      "parameter_name": "Tmc (maximum rate of saturable resorption)",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "TK modeling approach: a case study with PFOS and PFOA",
+      "requires_supplement": true,
+      "context_quote": "adjusted the maximum rate of the saturable resorption parameter ( T m , mg/h) to match the half-life estimated in humans"
+    }
+  ],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": {
+    "analysis_type": "local",
+    "method": null,
+    "design": "one_at_a_time",
+    "criterion": "minimal impact on model outputs for tested values",
+    "sampling_approach": null,
+    "iterations": null,
+    "dose_metric_evaluated": "model outputs",
+    "uncertainty_distributions": null,
+    "individual_variability_modeled": null,
+    "experimental_reproducibility": null,
+    "key_sensitive_parameters": [
+      "Free",
+      "bioavailability"
+    ],
+    "overall_impact_on_dose_metric": "Free and bioavailability found to have strong influence on results; k12, k21, ka found to have minimal impact"
+  },
+  "dosing": null,
+  "software": null,
+  "reproducibility": {
+    "equations_available": null,
+    "equations_location": null,
+    "code_available": null,
+    "code_location": null,
+    "supplementary_information_available": true,
+    "public_repository": null,
+    "reproducibility_notes": "Table S1 referenced for starting parameters; Tables S2 and S3 referenced for sensitivity analyses; Figs S7-S10 referenced for validation plots"
+  },
+  "mode_of_action": null
+}

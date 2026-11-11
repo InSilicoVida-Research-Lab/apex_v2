@@ -1229,6 +1229,143 @@ Choose `"response"` strictly from `["yes", "partially", "no", "not_applicable", 
     return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
 
 
+def strip_tan_bibliography(markdown_text: str) -> str:
+    """Remove References / Bibliography section while keeping all prior paper content
+    and any subsequent Tables, Figures, or Appendices intact.
+    """
+    ref_pattern = r"\n(?:#+\s*)?(?:\*\*\s*)?(?:references|literature cited|bibliography)(?:\s*\*\*)?\s*\n"
+    m_ref = re.search(ref_pattern, markdown_text, flags=re.IGNORECASE)
+    if not m_ref:
+        return markdown_text.strip()
+
+    pre_ref = markdown_text[:m_ref.start()].rstrip()
+    after_ref_text = markdown_text[m_ref.end():]
+
+    # Look for subsequent content that is NOT part of the bibliography
+    # (e.g. Tables, Figures, Appendices, Supporting Info often placed at the end of author manuscripts)
+    post_pattern = r"\n(?:#+\s*)?(?:\*\*\s*)?(?:table\s+\d+|tables?\b|appendix|supplementary|supporting information|figures?\s+and\s+tables?)\b"
+    m_post = re.search(post_pattern, after_ref_text, flags=re.IGNORECASE)
+
+    if m_post:
+        post_content = after_ref_text[m_post.start():].strip()
+        return f"{pre_ref}\n\n[... References Section Omitted For Length ...]\n\n{post_content}"
+    else:
+        return pre_ref
+
+
+def build_tan_kv_cache_prompt(
+    clean_paper_md: str,
+    items: Optional[List[dict[str, Any]]] = None,
+    paper_title: Optional[str] = None,
+    include_no_think: bool = False,
+    pre_close_think: bool = True,
+) -> str:
+    """Build an immutable-prefix, KV-cache-optimized prompt for the Tan questionnaire.
+
+    The system prompt, paper title, and entire cleaned paper text are placed FIRST
+    as a byte-for-byte identical prefix across all batches. The batch questionnaire
+    items and required structured keys are appended at the very end as a dynamic suffix.
+    """
+    selected_items = items or TAN_QUESTIONNAIRE_ITEMS
+    questions_block = "\n".join(
+        f"- [{item['item_id']}] (Section: \"{item['section']}\")\n"
+        f"  Question: \"{item['question']}\"\n"
+        f"  Allowed Sections: {', '.join(item['allowed_source_sections'])}\n"
+        f"  Routing Rule: {item['routing_rule']}\n"
+        f"  Required `structured_details` keys: {json.dumps(item.get('structured_fields', []))}"
+        for item in selected_items
+    )
+
+    no_think_directive = "/no_think\n" if include_no_think else ""
+
+    system_prompt = f"""{no_think_directive}You are an expert regulatory PBPK/TK model evaluator (US EPA / FDA / OECD GD 331 standard) executing the Tan et al. PBPK Model Reporting Questionnaire on a scientific paper converted to Markdown.
+
+==================================================
+1. STRICT OUTPUT & TOKEN BUDGET RULES
+==================================================
+- Output ONLY a single valid JSON object. Do NOT emit `<think>` blocks, markdown code fences, or conversational preamble.
+- Return all {len(selected_items)} requested items inside the `"items"` array in the exact order listed.
+- Use the EXACT field names defined below (`item_id`, `section`, `question`, `response`, `details`, `structured_details`, `evidence`). NEVER use `"rationale"` in place of `"details"`.
+- Keep `"details"` concise and information-dense (1–2 sentences, <= 35 words) summarizing the exact factual answer.
+- Populate `"structured_details"` as a JSON dictionary mapping each item's `Required structured_details keys` to the concrete values extracted from the paper (use `null` or `[]` if not reported).
+
+==================================================
+2. RESPONSE DECISION RUBRIC (`response` enum)
+==================================================
+Choose `"response"` strictly from `["yes", "partially", "no", "not_applicable", "i_cannot_answer"]`:
+- `"yes"`: All core aspects of the question are explicitly reported in the allowed sections of the paper, backed by a verbatim quote.
+- `"partially"`: Some aspects are explicitly reported (e.g., software name is stated, but ODE solver algorithm or version is omitted; or model compartments are listed, but mathematical equations are only partially shown), backed by a verbatim quote.
+- `"no"`: The paper explicitly states that an expected step/analysis was NOT performed (e.g., "no sensitivity analysis was conducted").
+- `"not_applicable"`: The paper explicitly establishes that the mechanism does not apply (e.g., gestational/lactational barrier transfer `TAN_2.4.3.8` in an adult-only non-pregnant model, or metabolism `TAN_2.4.3.6` when the compound is explicitly stated to be metabolically inert/unmetabolized).
+- `"i_cannot_answer"`: The required information is absent from the allowed sections or cannot be verified with a concrete quote/location.
+- SPECIAL RULE FOR `TAN_1.3`: Always set `"response": "yes"`, `"details": "Assessment metadata recorded by APEX pipeline."`, and `"structured_details": {{"assessment_date": "2026-11-09", "reviewer": "APEX Automated Tan Assessor", "pipeline_version": "Refined-Tan-PBPK-v1"}}`.
+
+==================================================
+3. SECTION ROUTING & ANTI-HALLUCINATION RULES
+==================================================
+- BLOCK INTRODUCTION BACKGROUND: Never use generic Introduction/Background literature (toxicity history, epidemiology, manufacturing) as evidence. Only the final study-objective paragraph of the Introduction may be used for Purpose items (`TAN_2.1.1`, `TAN_2.1.2`, `TAN_2.3.1`).
+- VERBATIM EVIDENCE MANDATE: Every item rated `"yes"`, `"partially"`, `"no"`, or `"not_applicable"` (except `TAN_1.3`) MUST include at least 1 entry in `"evidence"` with:
+  * `"source_page"`: Integer page number from the `<!-- PAGE X -->` or `### [Page X]` marker (or `null` if unknown).
+  * `"source_section"`: Section heading name (e.g., `"Abstract"`, `"Materials and Methods"`, `"Table 1"`, `"Results"`).
+  * `"source_location"`: Specific location (e.g., `"Page 3, Model Structure"`, `"Page 5, Table 1"`, `"Page 8, Sensitivity Analysis"`).
+  * `"source_quote"`: Exact verbatim substring copied from the Markdown text (<= 30 words). Never paraphrase inside `source_quote`.
+- Do NOT invent equations, parameter values, solver names, or goodness-of-fit criteria from general PBPK knowledge.
+
+==================================================
+4. REQUIRED JSON STRUCTURE EXAMPLE
+==================================================
+{{
+  "model_identification": {{
+    "model_name": "3-compartment TK model for PFOA, PFOS, and PFHxS",
+    "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+    "authors": ["Author A", "Author B"],
+    "publication_year": 2025,
+    "journal": "Toxicological Sciences",
+    "doi_pmid": "10.1093/toxsci/kfaf087"
+  }},
+  "items": [
+    {{
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "response": "yes",
+      "details": "The study adapts a 3-compartment toxicokinetic model for PFOA, PFOS, and PFHxS in nonhuman primates and humans; no active metabolites are modeled.",
+      "structured_details": {{
+        "model_name": "3-compartment TK model",
+        "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+        "parent_or_metabolites": "Parent compounds only",
+        "identifiers": null
+      }},
+      "evidence": [
+        {{
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "Here, we evaluate the use of a 3-compartment TK model for PFOA, PFOS, and PFHxS..."
+        }}
+      ]
+    }}
+  ],
+  "overall_fit_for_purpose": "Brief 1-sentence summary of reporting completeness.",
+  "key_gaps": [],
+  "reviewer_notes": []
+}}"""
+
+    header = f"PAPER TITLE: {paper_title}\n\n" if paper_title else ""
+    user_prompt = (
+        f"{header}==================================================\n"
+        f"SCIENTIFIC PAPER TEXT (MARKDOWN WITH PAGE MARKERS):\n"
+        f"==================================================\n"
+        f"{clean_paper_md}\n\n"
+        f"==================================================\n"
+        f"EVALUATE THE FOLLOWING {len(selected_items)} TAN PBPK QUESTIONNAIRE ITEMS FOR THE PAPER ABOVE:\n"
+        f"==================================================\n"
+        f"{questions_block}\n"
+    )
+    think_closer = "<think>\n</think>\n" if pre_close_think else ""
+    return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n{think_closer}"
+
+
 def evaluate_tan_from_markdown(
     markdown_text: str,
     paper_title: Optional[str] = None,

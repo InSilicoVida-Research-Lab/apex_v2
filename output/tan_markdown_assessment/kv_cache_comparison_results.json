@@ -1,0 +1,186 @@
+{
+  "summary": {
+    "prefill_reduction_pct": 85.02,
+    "wall_time_saved_s": 31.83,
+    "wall_speedup": 1.25,
+    "tokens_saved": 22799,
+    "baseline": {
+      "strategy_name": "baseline",
+      "total_wall_time_s": 158.3731710910797,
+      "total_prefill_time_ms": 10910.431,
+      "total_decode_time_ms": 143614.095,
+      "total_prompt_tokens": 24329,
+      "total_cached_tokens": 15601,
+      "total_completion_tokens": 4891,
+      "overall_cache_hit_pct": 64.12511817172921,
+      "subsequent_prefill_time_ms": 5413.459500000001,
+      "subsequent_cache_hit_pct": 49.974515800203875,
+      "prefill_speedup_vs_batch1": 0.015426734050564151,
+      "total_items": 12,
+      "total_positive": 10,
+      "total_cannot_answer": 0,
+      "total_evidence": 10,
+      "total_eval_sens_answered": 0,
+      "batch_metrics": [
+        {
+          "batch_idx": 1,
+          "batch_label": "Batch_1 (4 items)",
+          "item_ids": [
+            "TAN_1.1",
+            "TAN_1.2",
+            "TAN_1.3",
+            "TAN_2.1.1"
+          ],
+          "wall_time_s": 37.904865026474,
+          "prompt_tokens": 7761,
+          "cached_tokens": 7757,
+          "cache_hit_pct": 99.94846024996778,
+          "prefill_time_ms": 83.512,
+          "decode_time_ms": 37534.548,
+          "completion_tokens": 1291,
+          "prefill_tok_per_sec": 47.89730817128078,
+          "decode_tok_per_sec": 34.36833713836117,
+          "positive_count": 3,
+          "cannot_answer_count": 0,
+          "evidence_count": 3,
+          "eval_sens_answered": 0
+        },
+        {
+          "batch_idx": 2,
+          "batch_label": "Batch_2 (4 items)",
+          "item_ids": [
+            "TAN_2.1.2",
+            "TAN_2.1.3",
+            "TAN_2.3.1",
+            "TAN_2.2.1"
+          ],
+          "wall_time_s": 53.07915997505188,
+          "prompt_tokens": 7848,
+          "cached_tokens": 7844,
+          "cache_hit_pct": 99.94903160040775,
+          "prefill_time_ms": 85.906,
+          "decode_time_ms": 52752.186,
+          "completion_tokens": 1800,
+          "prefill_tok_per_sec": 46.562521826182106,
+          "decode_tok_per_sec": 34.10285215479032,
+          "positive_count": 4,
+          "cannot_answer_count": 0,
+          "evidence_count": 4,
+          "eval_sens_answered": 0
+        },
+        {
+          "batch_idx": 3,
+          "batch_label": "Batch_3 (4 items)",
+          "item_ids": [
+            "TAN_2.4.1",
+            "TAN_2.4.2A",
+            "TAN_2.4.2B",
+            "TAN_2.4.2C"
+          ],
+          "wall_time_s": 64.33009505271912,
+          "prompt_tokens": 8720,
+          "cached_tokens": 0,
+          "cache_hit_pct": 0.0,
+          "prefill_time_ms": 10741.013,
+          "decode_time_ms": 53327.361,
+          "completion_tokens": 1800,
+          "prefill_tok_per_sec": 811.8414901834677,
+          "decode_tok_per_sec": 33.735027690569574,
+          "positive_count": 3,
+          "cannot_answer_count": 0,
+          "evidence_count": 3,
+          "eval_sens_answered": 0
+        }
+      ]
+    },
+    "kv_cache": {
+      "strategy_name": "kv_cache",
+      "total_wall_time_s": 126.54747700691223,
+      "total_prefill_time_ms": 2273.134,
+      "total_decode_time_ms": 123960.77300000002,
+      "total_prompt_tokens": 33996,
+      "total_cached_tokens": 32466,
+      "total_completion_tokens": 4222,
+      "overall_cache_hit_pct": 95.49947052594423,
+      "subsequent_prefill_time_ms": 810.6914999999999,
+      "subsequent_cache_hit_pct": 95.16025144046087,
+      "prefill_speedup_vs_batch1": 0.8039445337714779,
+      "total_items": 12,
+      "total_positive": 11,
+      "total_cannot_answer": 0,
+      "total_evidence": 11,
+      "total_eval_sens_answered": 0,
+      "batch_metrics": [
+        {
+          "batch_idx": 1,
+          "batch_label": "Batch_1 (4 items)",
+          "item_ids": [
+            "TAN_1.1",
+            "TAN_1.2",
+            "TAN_1.3",
+            "TAN_2.1.1"
+          ],
+          "wall_time_s": 35.225011110305786,
+          "prompt_tokens": 11251,
+          "cached_tokens": 10822,
+          "cache_hit_pct": 96.18700559950226,
+          "prefill_time_ms": 651.751,
+          "decode_time_ms": 34305.425,
+          "completion_tokens": 1174,
+          "prefill_tok_per_sec": 658.2268381636546,
+          "decode_tok_per_sec": 34.19284267721505,
+          "positive_count": 3,
+          "cannot_answer_count": 0,
+          "evidence_count": 3,
+          "eval_sens_answered": 0
+        },
+        {
+          "batch_idx": 2,
+          "batch_label": "Batch_2 (4 items)",
+          "item_ids": [
+            "TAN_2.1.2",
+            "TAN_2.1.3",
+            "TAN_2.3.1",
+            "TAN_2.2.1"
+          ],
+          "wall_time_s": 38.86125087738037,
+          "prompt_tokens": 11338,
+          "cached_tokens": 10822,
+          "cache_hit_pct": 95.44893279237961,
+          "prefill_time_ms": 742.636,
+          "decode_time_ms": 38096.444,
+          "completion_tokens": 1295,
+          "prefill_tok_per_sec": 694.8222278478286,
+          "decode_tok_per_sec": 33.96642479282318,
+          "positive_count": 4,
+          "cannot_answer_count": 0,
+          "evidence_count": 4,
+          "eval_sens_answered": 0
+        },
+        {
+          "batch_idx": 3,
+          "batch_label": "Batch_3 (4 items)",
+          "item_ids": [
+            "TAN_2.4.1",
+            "TAN_2.4.2A",
+            "TAN_2.4.2B",
+            "TAN_2.4.2C"
+          ],
+          "wall_time_s": 52.460718870162964,
+          "prompt_tokens": 11407,
+          "cached_tokens": 10822,
+          "cache_hit_pct": 94.87157008854213,
+          "prefill_time_ms": 878.747,
+          "decode_time_ms": 51558.904,
+          "completion_tokens": 1753,
+          "prefill_tok_per_sec": 665.7206226593092,
+          "decode_tok_per_sec": 33.98055164244763,
+          "positive_count": 4,
+          "cannot_answer_count": 0,
+          "evidence_count": 4,
+          "eval_sens_answered": 0
+        }
+      ]
+    }
+  }
+}

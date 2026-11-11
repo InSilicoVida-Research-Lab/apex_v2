@@ -1,0 +1,1715 @@
+{
+  "template_name": "Tan et al. PBPK Reporting Template",
+  "template_version": "Refined-Tan-PBPK-Research-v1",
+  "assessment_date": null,
+  "reviewer": null,
+  "pipeline_version": null,
+  "model_identification": {
+    "model_name": "8-compartment PBPK model for BPA, BPS, BPF, and BPAF",
+    "target_compounds": [
+      "BPA",
+      "BPS",
+      "BPF",
+      "BPAF"
+    ],
+    "authors": [
+      "Cecile Karrer",
+      "Thomas Roiss",
+      "Natalie von Goetz",
+      "Darja Gramec Skledar",
+      "Lucija Peterlin Ma\u0161i\u010d",
+      "Konrad Hungerb\u00fchler"
+    ],
+    "publication_year": 2018,
+    "journal": "Environmental Health Perspectives",
+    "doi_pmid": "10.1289/EHP2739"
+  },
+  "assessment_scope": "Model-specific evidence only; generic Introduction/Background statements are excluded unless explicitly tied to the model.",
+  "items": [
+    {
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Methods"
+      ],
+      "routing_rule": "Do not infer identifiers or compounds from general Introduction background.",
+      "response": "yes",
+      "details": "The study develops an 8-compartment PBPK model for BPA, BPS, BPF, and BPAF, modeling parent compounds and their glucuronide/sulfate metabolites.",
+      "structured_details": {
+        "model_name": "8-compartment PBPK model",
+        "target_compounds": [
+          "BPA",
+          "BPS",
+          "BPF",
+          "BPAF"
+        ],
+        "parent_or_metabolites": "Parent compounds and glucuronide/sulfate metabolites",
+        "identifiers": null
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "we refined an eightcompartment PBPK model... It consists of the compartments titled serum, liver, fat, skin, gonads, brain..."
+        },
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "compare the pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.2",
+      "section": "1. Model identification",
+      "question": "Extract authors, publication year, journal, and DOI/PMID.",
+      "allowed_source_sections": [
+        "Title page",
+        "Header",
+        "Bibliographic metadata"
+      ],
+      "routing_rule": "Use bibliographic metadata only.",
+      "response": "yes",
+      "details": "Authors, year (2018), journal (Environmental Health Perspectives), and DOI (10.1289/EHP2739) are explicitly stated in the header and footer.",
+      "structured_details": {
+        "authors": [
+          "Cecile Karrer",
+          "Thomas Roiss",
+          "Natalie von Goetz",
+          "Darja Gramec Skledar",
+          "Lucija Peterlin Ma\u0161i\u010d",
+          "Konrad Hungerb\u00fchler"
+        ],
+        "publication_year": 2018,
+        "journal": "Environmental Health Perspectives",
+        "doi_pmid": "10.1289/EHP2739"
+      },
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Header",
+          "source_location": "Page 1, Header",
+          "source_quote": "Cecile Karrer, Thomas Roiss, Natalie von Goetz, Darja Gramec Skledar, Lucija Peterlin Ma\u0161i\u010d, and Konrad Hungerb\u00fchler"
+        },
+        {
+          "source_page": 1,
+          "source_section": "Header",
+          "source_location": "Page 1, Header",
+          "source_quote": "https://doi.org/10.1289/EHP2739"
+        },
+        {
+          "source_page": 1,
+          "source_section": "Footer",
+          "source_location": "Page 1, Footer",
+          "source_quote": "126(7) July 2018 Environmental Health Perspectives"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.3",
+      "section": "1. Reviewer context",
+      "question": "Record assessment date, reviewer, and pipeline version.",
+      "allowed_source_sections": [
+        "Reviewer metadata"
+      ],
+      "routing_rule": "This is pipeline metadata, not paper evidence.",
+      "response": "yes",
+      "details": "Assessment metadata recorded by APEX pipeline.",
+      "structured_details": {
+        "assessment_date": "2026-11-09",
+        "reviewer": "APEX Automated Tan Assessor",
+        "pipeline_version": "Refined-Tan-PBPK-v1"
+      },
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The response has no auditable model-specific evidence reference."
+    },
+    {
+      "item_id": "TAN_2.1.1",
+      "section": "2.1 Executive summary",
+      "question": "What is the specific scientific or regulatory rationale for conducting this PBPK analysis?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use Abstract, the final Introduction objective paragraph, and Discussion/Conclusion summary only; block general Introduction background.",
+      "response": "yes",
+      "details": "The study aims to compare pharmacokinetic behaviors of BPA and its substitutes (BPS, BPF, BPAF) to assess if replacing BPA lowers endocrine disruption risk.",
+      "structured_details": {
+        "rationale": "BPA is facing stricter regulations and is being replaced by analogs (BPS, BPF, BPAF) with similar or higher estrogenic potencies, but no PBPK models exist for these analogs.",
+        "purpose": "To compare internal exposures of BPA and its substitutes after environmentally relevant exposures and investigate consequences of BPA replacement."
+      },
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract, OBJECTIVES",
+          "source_quote": "Our goal was to compare the pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF... investigate the consequences of replacing BPA with other BPs."
+        },
+        {
+          "source_page": 2,
+          "source_section": "Introduction",
+          "source_location": "Page 2, Introduction, final paragraph",
+          "source_quote": "This comparison allowed us to investigate possible consequences of a BPA replacement with its structural analogs."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.1.2",
+      "section": "2.1 Executive summary",
+      "question": "Provide a high-level overview of modeled chemicals, species, life stages/populations, exposure routes, and primary applications.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only purpose-summary sections; do not reconstruct scope from generic background.",
+      "response": "yes",
+      "details": "The study models BPA, BPS, BPF, and BPAF in humans across infants to adults via peroral and dermal routes to compare internal exposures and assess replacement risks.",
+      "structured_details": {
+        "model_overview": "PBPK model comparing pharmacokinetic behavior of BPA and its structural analogs (BPS, BPF, BPAF) in humans.",
+        "chemicals": [
+          "BPA",
+          "BPS",
+          "BPF",
+          "BPAF"
+        ],
+        "species": [
+          "Human"
+        ],
+        "life_stages": [
+          "Infants",
+          "Toddlers",
+          "Children",
+          "Adolescents",
+          "Adults"
+        ],
+        "routes": [
+          "Peroral",
+          "Dermal"
+        ],
+        "applications": [
+          "Comparison of internal exposures",
+          "Risk assessment of BPA replacement"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "compare the pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF for different age groups after environmentally relevant external exposures"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Introduction",
+          "source_location": "Page 2, Introduction final paragraph",
+          "source_quote": "We used the PBPK models to compare internal exposures after peroral and dermal exposures for different age groups."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.1.3",
+      "section": "2.1 Executive summary",
+      "question": "What primary quantitative and scientific conclusions are supported by the PBPK simulations?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only Abstract and Discussion/Conclusion model results; do not infer conclusions from model inputs.",
+      "response": "yes",
+      "details": "Simulations show BPS yields highest internal concentrations, while BPAF has highest estrogenic potency, suggesting replacement may not lower endocrine disruption risk.",
+      "structured_details": {
+        "key_conclusions": [
+          "Replacement of BPA with structural analogs may not lower endocrine disruption risk.",
+          "BPS exposure leads to highest internal concentrations of unconjugated BPs.",
+          "BPAF and BPS exposure might be more critical than BPA exposure considering estrogenic potencies."
+        ],
+        "quantitative_results": [
+          "BPS exposure led to the highest internal concentrations of unconjugated BPs.",
+          "BPAF has 7 to 13 times higher estrogenic potency than BPA.",
+          "MOE for BPS in serum was 2,440 and for BPAF in gonads was 1,810."
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "Assuming equal external exposures, BPS exposure led to the highest internal concentrations of unconjugated BPs."
+        },
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "Our data suggest that the replacement of BPA with structural analogs may not lower the risk for endocrine disruption."
+        },
+        {
+          "source_page": 14,
+          "source_section": "Discussion",
+          "source_location": "Page 14, Discussion",
+          "source_quote": "The calculated MOE was the lowest for BPS in serum and for BPAF in gonads with 2,440 and 1,810, respectively"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.3.1",
+      "section": "2.3 Model purpose",
+      "question": "What exact scientific, dosimetry, or regulatory questions does the model address, and what internal dose metrics are predicted?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion",
+        "Methods: model purpose"
+      ],
+      "routing_rule": "Prefer explicit problem formulation/purpose statements; exclude generic exposure/toxicity history.",
+      "response": "yes",
+      "details": "The model compares pharmacokinetic behaviors of BPA and its analogs after environmental exposure to assess replacement risks, predicting serum and gonad concentrations, Cmax, and AUC.",
+      "structured_details": {
+        "problem_formulation": "Compare pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF for different age groups after environmentally relevant external exposures to investigate consequences of replacing BPA.",
+        "fit_for_purpose": "Yes, the model is explicitly designed to compare internal exposures of BPA analogs to assess endocrine disruption risk.",
+        "dose_metrics": [
+          "Serum concentration",
+          "Gonad concentration",
+          "Cmax",
+          "AUC"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract, OBJECTIVES",
+          "source_quote": "Our goal was to compare the pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF for different age groups after environmentally relevant external exposures"
+        },
+        {
+          "source_page": 4,
+          "source_section": "Methods",
+          "source_location": "Page 4, Comparison of Model Predictions with Internal Exposure Assessments",
+          "source_quote": "To interpret the results, we focused on comparing the Cmax and the area under the curve (AUC)."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.2.1",
+      "section": "2.2 & 2.4.2 Chemical properties and active moiety",
+      "question": "Which physicochemical and PK/TK properties are explicitly used in Methods to build or parameterize the model? Identify the modeled moiety and exposure routes.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Strictly exclude general toxicity/epidemiology background not used to parameterize, calibrate, or evaluate the model.",
+      "response": "yes",
+      "details": "The model uses tissue-to-serum partition coefficients (PTS) via QSAR, glucuronidation/sulfation kinetics (Km, Vmax, Ksi), and molecular weight. The active moiety is unconjugated BPs; routes are peroral and dermal.",
+      "structured_details": {
+        "properties": [
+          "Tissue-to-serum partition coefficients (PTS)",
+          "Glucuronidation kinetics (Km, Vmax, Ksi)",
+          "Sulfation kinetics (Km, Vmax)",
+          "Molecular weight",
+          "pKa",
+          "logPow"
+        ],
+        "active_moiety": "Unconjugated bisphenols (BPA, BPS, BPF, BPAF)",
+        "exposure_routes": [
+          "Peroral",
+          "Dermal"
+        ],
+        "parameter_use": "PTS estimated via QSAR; metabolism kinetics from in vitro microsomes; molecular weight used to estimate EHR."
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, Parametrization for BPS, BPF, and BPAF",
+          "source_quote": "The chemical-specific parameters indispensable for adapting the model to the BP analogs were the PTS and the metabolism parameters"
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Figure 2 Caption",
+          "source_quote": "The perorally ingested bisphenols are presystemically metabolized... Dermally absorbed bisphenols enter the skin compartment"
+        },
+        {
+          "source_page": 10,
+          "source_section": "Discussion",
+          "source_location": "Page 10, Model Calibration and Parametrization",
+          "source_quote": "The likelihood of chemicals to undergo EHR was found to correlate with the molecular weight of the metabolite"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.1",
+      "section": "2.4.1 Modeling strategy",
+      "question": "What is the end-to-end workflow from data preparation to model development, calibration/fitting, verification/evaluation, and application, and how does it support the purpose?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use Materials/Methods/Tables/Figures; exclude generic Introduction.",
+      "response": "yes",
+      "details": "The workflow involves refining an existing BPA model, deriving parameters via QSAR and in vitro assays, calibrating BPS with biomonitoring data, evaluating against independent studies, and applying 2D-MC for exposure comparison.",
+      "structured_details": {
+        "workflow": "Refine BPA model -> Derive parameters (QSAR/in vitro) -> Calibrate BPS -> Evaluate BPA -> Apply 2D-MC for analog comparison",
+        "data_preparation": "Literature review of metabolism parameters and QSAR selection for partition coefficients",
+        "development": "Translation of AsclX model to R; extension to include dermal exposure",
+        "calibration": "Visual fitting of BPS parameters to Oh et al. (2018) biomonitoring data; recalibration of BPA to Thayer et al. (2015)",
+        "evaluation": "Comparison of BPA model predictions with independent biomonitoring data (Teeguarden et al. 2015; Hormann et al. 2014)",
+        "application": "2D Monte Carlo uncertainty analysis and internal exposure assessment for different age groups"
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Introduction",
+          "source_location": "Page 2, Final paragraph",
+          "source_quote": "In this paper, we have modified a PBPK model for peroral exposure to BPA... and includes dermal exposure."
+        },
+        {
+          "source_page": 4,
+          "source_section": "Methods",
+          "source_location": "Page 4, Calibration of the BPS Model",
+          "source_quote": "We used the volunteers\u2019 individual physiological parameters... compared the concentration\u2013time profiles observed in the experiment with our model predictions."
+        },
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "To evaluate the model, we sought to compare it with biomonitoring data from literature that were independent of the data the basic models were calibrated with."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.2A",
+      "section": "2.4.2 Data summary: parameterization studies",
+      "question": "Summarize specific in vitro, in silico, mass-balance, tissue-distribution, metabolism, transporter, and protein-binding studies used to inform structure or derive parameters.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Require study conditions and citations when reported; do not treat background citations as model data.",
+      "response": "yes",
+      "details": "In vitro glucuronidation kinetics were measured in human liver/intestinal microsomes. Tissue partition coefficients were derived via QSARs. Metabolism parameters for BPA were sourced from literature.",
+      "structured_details": {
+        "studies": [
+          "In vitro glucuronidation kinetics (liver/intestine)",
+          "QSAR estimation of tissue-to-serum partition coefficients",
+          "Literature review of BPA metabolism parameters"
+        ],
+        "conditions": "37\u00b0C incubation, phosphate buffer pH 7.4, alamethicin permeabilization, HPLC-UV analysis",
+        "species": "Human",
+        "cell_fraction": "Pooled human liver microsomes (HLM) and pooled human intestinal microsomes (HIM)",
+        "substrate": "BPS, BPF, BPAF (and BPA for comparison)",
+        "software": "GraphPad Prism (kinetic fitting), R (modeling)",
+        "parameters_derived": [
+          "Km and vmax for glucuronidation",
+          "Ksi for substrate inhibition",
+          "Tissue-to-serum partition coefficients (PTS)"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "We determined the glucuronidation kinetics of BPS, BPF, and BPAF experimentally in both human liver and intestinal microsomes."
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Parametrization for BPS, BPF, and BPAF",
+          "source_quote": "Therefore, these parameters were estimated with QSARs... we selected the relationship that corresponded best to the respective experimental measurements for BPA"
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "We further analyzed the results with the GraphPad Prism software... and selected the most suitable kinetic model"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.2B",
+      "section": "2.4.2 Calibration datasets",
+      "question": "List all datasets used to calibrate, optimize, or fit unknown parameters, including citation, species/population, matrix, sample size, dosing/exposure, and time points.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Only label a dataset calibration when the paper explicitly assigns that role.",
+      "response": "yes",
+      "details": "The paper explicitly lists Thayer et al. (2015) for BPA calibration and Oh et al. (2018) for BPS calibration, detailing dosing, matrix, and sample sizes.",
+      "structured_details": {
+        "datasets": [
+          {
+            "role": "calibration",
+            "citation": "Thayer et al. (2015)",
+            "species_population": "Human adults",
+            "matrix": "Serum (BPA, BPA-g, BPA-s)",
+            "sample_size": "Not explicitly stated in text (referenced study)",
+            "dose": "Peroral exposure (implied from context of calibration)",
+            "time_points": "28 observation points for BPA; 15 for BPA-g and BPA-s"
+          },
+          {
+            "role": "calibration",
+            "citation": "Oh et al. (2018)",
+            "species_population": "7 healthy adults",
+            "matrix": "Serum and urine",
+            "sample_size": "7",
+            "dose": "8.75 \u00b5g/kg BW deuterated BPS in chocolate cookie",
+            "time_points": "Within a 48-h period"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Introduction",
+          "source_location": "Page 2, Introduction",
+          "source_quote": "We have then parametrized this optimized BPA model for BPS, BPF, and BPAF... A recent biomonitoring study on BPS was used to calibrate the kinetic profiles of BPS and BPS-g"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "examined which parameter set reflected the biomonitoring data by Thayer et al. (2015) for unconjugated BPA in serum best... n stands for the number of observation points (28 for BPA and 15 for BPA-g and BPA-s)."
+        },
+        {
+          "source_page": 4,
+          "source_section": "Methods",
+          "source_location": "Page 4, Calibration of the BPS Model",
+          "source_quote": "Oh et al. (2018) conducted a study... which we used to calibrate the BPS PBPK model... perorally exposed seven healthy adults to 8.75 \u00b5g/kg BW deuterated BPS... Serum and urine samples were collected within a 48-h period"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.2C",
+      "section": "2.4.2 Evaluation datasets",
+      "question": "List independent datasets held out from calibration and used to evaluate predictive capability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code",
+        "Results"
+      ],
+      "routing_rule": "Only label a dataset independent when the paper explicitly distinguishes it from calibration.",
+      "response": "yes",
+      "details": "Teeguarden et al. (2015) and Hormann et al. (2014) are explicitly identified as independent biomonitoring data used to evaluate the BPA model.",
+      "structured_details": {
+        "datasets": [
+          {
+            "role": "evaluation",
+            "citation": "Teeguarden et al. (2015)",
+            "species_population": "10 healthy male adults",
+            "matrix": "Venous blood and urine",
+            "sample_size": "10",
+            "time_points": "Within the 24-h study period"
+          },
+          {
+            "role": "evaluation",
+            "citation": "Hormann et al. (2014)",
+            "species_population": "3 volunteers (2 women, 1 man)",
+            "matrix": "Serum",
+            "sample_size": "3",
+            "time_points": "Not explicitly stated in text (referenced study)"
+          }
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "To evaluate the model, we sought to compare it with biomonitoring data from literature that were independent of the data the basic models were calibrated with."
+        },
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "Teeguarden et al. (2015) recruited ten healthy male adults... Within the 24-h study period, venous blood samples were drawn"
+        },
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "Hormann et al. (2014) let volunteers wet their hands... We compared the individual systemic serum profiles of BPA, BPA-g, and BPA-s measured in three volunteers"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.1",
+      "section": "2.4.3A Structure and lineage",
+      "question": "Does the model replicate, refine/modify a published model, or introduce a new structure? Describe and justify customized modifications and predecessor citations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Exclude Introduction; use Methods, schematic, Discussion limitations, and supplementary code.",
+      "response": "yes",
+      "details": "The study refines an 8-compartment PBPK model by Yang et al. (2015), correcting a scaling error, adding dermal exposure, and parametrizing for BPS, BPF, and BPAF.",
+      "structured_details": {
+        "lineage": "Refined/modified published model",
+        "predecessor_citations": [
+          "Yang et al. (2015)",
+          "Mielke et al. (2011)"
+        ],
+        "modifications": [
+          "Corrected BW scaling error in gut glucuronidation constant",
+          "Added dermal exposure route (skin surface depot)",
+          "Extended to BPS, BPF, BPAF with new glucuronidation kinetics",
+          "Calibrated BPS with biomonitoring data (Oh et al. 2018)"
+        ],
+        "justification": "To compare pharmacokinetic behaviors of BPA analogs after environmentally relevant exposures and assess replacement risks."
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "we refined an eightcompartment PBPK model, which had been calibrated for BPA in human adults"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "we extended it to also include dermal exposure by using the dosing procedure and parameters developed by Mielke et al. (2011)"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.2",
+      "section": "2.4.3A Structure and platform",
+      "question": "For each species/life-stage submodel, list anatomical compartments, total count, platform, and inter-organ/inter-life-stage connectivity.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use diagrams and model-structure Methods; do not infer disconnected links.",
+      "response": "yes",
+      "details": "The model uses R (v3.3.2) and includes 8 anatomical compartments (serum, liver, fat, skin, gonads, brain, richly/slowly perfused) plus submodules for metabolites, connected via blood flow.",
+      "structured_details": {
+        "platform": "R version 3.3.2",
+        "submodels": [
+          "Adults",
+          "Infants",
+          "Toddlers",
+          "Children",
+          "Adolescents"
+        ],
+        "compartments": [
+          "Serum",
+          "Liver",
+          "Fat",
+          "Skin",
+          "Gonads",
+          "Brain",
+          "Richly perfused tissue",
+          "Slowly perfused tissue",
+          "Stomach",
+          "Gut",
+          "Skin surface depot",
+          "BPA-g submodule",
+          "BPA-s submodule"
+        ],
+        "count": 8,
+        "connections": [
+          "Blood flow from serum to tissues",
+          "Gastric emptying to gut",
+          "Dermal uptake from skin surface depot to skin to serum",
+          "Enterohepatic recirculation"
+        ],
+        "flows": [
+          "Peroral absorption",
+          "Dermal absorption",
+          "Hepatic metabolism",
+          "Renal excretion",
+          "Biliary excretion/EHR"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "It consists of the compartments titled serum, liver, fat, skin, gonads, brain, \u201crichly perfused tissue,\u201d \u201cslowly perfused tissue\u201d"
+        },
+        {
+          "source_page": 7,
+          "source_section": "Methods",
+          "source_location": "Page 7, Computing Software",
+          "source_quote": "We performed coding and simulations using the programming language R, version 3.3.2"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.3",
+      "section": "2.4.3B ADME: absorption",
+      "question": "How does the model represent uptake across oral/GI, drinking water, breast milk, inhalation, dermal, IV, and presystemic routes?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, mathematical implementation, governing parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "The model explicitly represents peroral (GI) and dermal absorption with specific parameters and presystemic metabolism in gut/liver. Inhalation, breast milk, and IV routes are not modeled.",
+      "structured_details": {
+        "biological_mechanism": "Peroral exposure involves gastric emptying and absorption from small intestine to liver with presystemic metabolism. Dermal exposure involves a skin surface depot, skin compartment, and blood compartment without presystemic metabolism.",
+        "mathematical_implementation": "Peroral uptake uses first-order rate constants for gastric emptying and intestinal absorption. Dermal uptake uses a depot model with absorption half-lives.",
+        "governing_parameters": "Gastric emptying rate, volume of distribution in small intestine, oral uptake rate constant, dermal absorption fraction, dermal absorption half-life, uptake period.",
+        "compartments": "Stomach, Gut (small intestine), Liver, Skin surface depot, Skin, Serum.",
+        "source_location": "Page 2-3, Methods: PBPK Model for BPA; Page 5, Methods: Comparison of Model Predictions; Table 5."
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "extended it to also include dermal exposure by using the dosing procedure and parameters developed by Mielke et al. (2011)."
+        },
+        {
+          "source_page": 3,
+          "source_section": "Figure 2 Caption",
+          "source_location": "Page 3, Figure 2",
+          "source_quote": "The perorally ingested bisphenols are presystemically metabolized in the gut and in the liver to the respective metabolites."
+        },
+        {
+          "source_page": 5,
+          "source_section": "Methods",
+          "source_location": "Page 5, Comparison of Model Predictions",
+          "source_quote": "As absorption fractions we used 100% (EU 2008), 20% (Toner et al. 2016), and 60% (Biedermann et al. 2010) for peroral exposure and dermal exposure"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.4",
+      "section": "2.4.3B ADME: binding and blood partitioning",
+      "question": "How are protein binding, free fraction, hematocrit, and blood-to-plasma partitioning represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "The model uses tissue-to-serum partition coefficients (PTS) to represent distribution. Specific hematocrit values and explicit blood-to-plasma partitioning equations are not detailed in the main text, though serum compartments are used.",
+      "structured_details": {
+        "biological_mechanism": "Distribution is driven by tissue-to-serum partition coefficients (PTS) derived from QSARs or experimental data. Metabolites are assumed to distribute with systemic circulation.",
+        "mathematical_implementation": "Standard perfusion-limited PBPK equations using PTS. Metabolite volume of distribution set to plasma volume fraction.",
+        "governing_parameters": "Tissue-to-serum partition coefficients (PTS), plasma volume fraction (0.0435 L/kg).",
+        "compartments": "Serum, Liver, Fat, Skin, Gonads, Brain, Richly perfused tissue, Slowly perfused tissue.",
+        "source_location": "Page 2-3, Methods: PBPK Model for BPA; Page 6, Table 6; Page 8, Table 8."
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "For the PTS of BPA, just like Yang et al. (2015), we used parameters from the experimental study of Doerge et al. (2011)"
+        },
+        {
+          "source_page": 8,
+          "source_section": "Table 8",
+          "source_location": "Page 8, Table 8 Footnote j",
+          "source_quote": "Set equal to the plasma volume of 0:0435 L=kg for adult humans because the metabolites were assumed to be distributed with the systemic circulation."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.5",
+      "section": "2.4.3B ADME: tissue partitioning",
+      "question": "Which tissues are perfusion- versus diffusion-limited, how are partition coefficients determined, and how are dynamic physiological changes represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "Tissues are lumped by perfusion rates; partition coefficients are derived from QSARs or experimental data. Dynamic physiological changes are represented via age-specific parameters and Monte Carlo variability distributions.",
+      "structured_details": {
+        "biological_mechanism": "Perfusion-limited distribution with lumped tissue groups based on blood flow rates.",
+        "mathematical_implementation": "Tissue-to-serum partition coefficients (PTS) applied to perfusion-based differential equations.",
+        "governing_parameters": [
+          "Tissue-to-serum partition coefficients (PTS)",
+          "Organ blood flows",
+          "Tissue volumes"
+        ],
+        "compartments": [
+          "Serum",
+          "Liver",
+          "Fat",
+          "Skin",
+          "Gonads",
+          "Brain",
+          "Richly perfused tissue",
+          "Slowly perfused tissue"
+        ],
+        "source_location": "Page 2, PBPK Model for BPA; Page 6, Table 6"
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods: PBPK Model for BPA",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "compartments were lumped with a perfusion greater than 0:1 mL=min=g tissue... and in the compartment titled \u201cslowly perfused tissue,\u201d compartments were lumped with a perfusion smaller than 0:1 mL=min=g tissue"
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods: Parametrization for BPS, BPF, and BPAF",
+          "source_location": "Page 3, Parametrization for BPS, BPF, and BPAF",
+          "source_quote": "these parameters were estimated with QSARs. Among the QSARs described by DeJongh et al. (1997), Zhang and Zhang (2006), and Schmitt (2008), we selected the relationship"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.6",
+      "section": "2.4.3B ADME: metabolism",
+      "question": "Is the compound metabolized or inert? If metabolized, identify organs, enzymes, rate laws, parent transformation, and metabolite formation.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "yes",
+      "details": "Bisphenols are extensively metabolized in the liver and intestine via glucuronidation and sulfation. Michaelis-Menten and substrate inhibition kinetics are used to model these transformations.",
+      "structured_details": {
+        "biological_mechanism": "Phase II metabolism (glucuronidation and sulfation) in liver and intestine.",
+        "mathematical_implementation": "Michaelis-Menten and substrate inhibition enzyme kinetics equations.",
+        "governing_parameters": [
+          "Km",
+          "vmax",
+          "Ksi",
+          "Microsomal protein content"
+        ],
+        "compartments": [
+          "Liver",
+          "Gut (Small intestine)",
+          "Serum (for metabolites)"
+        ],
+        "source_location": "Page 3, Measurement of Glucuronidation Kinetics; Page 8, Table 7"
+      },
+      "evidence": [
+        {
+          "source_page": 3,
+          "source_section": "Methods: Measurement of Glucuronidation Kinetics of BPS, BPF, and BPAF",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "We determined the glucuronidation kinetics of BPS, BPF, and BPAF experimentally in both human liver and intestinal microsomes."
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods: Measurement of Glucuronidation Kinetics of BPS, BPF, and BPAF",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "selected the most suitable kinetic model (Michaelis-Menten or substrate inhibition, Equations 3 and 4)"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.7",
+      "section": "2.4.3B ADME: excretion and recirculation",
+      "question": "How are urinary, biliary/fecal, exhaled, long-half-life, renal-reabsorption, and enterohepatic mechanisms represented, including life-stage differences?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "Urinary excretion and enterohepatic recirculation (EHR) are explicitly modeled with rate constants; biliary, exhaled, and renal reabsorption are not modeled.",
+      "structured_details": {
+        "biological_mechanism": "Urinary excretion and enterohepatic recirculation (EHR)",
+        "mathematical_implementation": "First-order rate constants for urinary excretion and EHR conversion rates",
+        "governing_parameters": [
+          "Urinary excretion rate (1/h/kg BW^0.75)",
+          "EHR unconjugated rate",
+          "EHR glucuronide rate"
+        ],
+        "compartments": [
+          "Serum",
+          "Liver",
+          "Gut",
+          "Urinary excretion"
+        ],
+        "source_location": "Page 8, Table 8; Page 7, Results"
+      },
+      "evidence": [
+        {
+          "source_page": 8,
+          "source_section": "Table 8",
+          "source_location": "Page 8, Table 8",
+          "source_quote": "Urinary excretion (1=h=kg BW0.75)... EHR unconjugated (1=h=kg BW\u22120.25)... EHR as glucuronide"
+        },
+        {
+          "source_page": 7,
+          "source_section": "Results",
+          "source_location": "Page 7, BPS Model Parametrization",
+          "source_quote": "introduction of EHR into the PBPK model (with a share of 67%) improved the correlation"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.8",
+      "section": "2.4.3B ADME: barrier and life-stage transfer",
+      "question": "For gestational/lactational/barrier models, extract placental, amniotic, milk, and suckling-transfer mechanisms and equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use model structure, schematic, and Methods only; mark not_applicable only when explicitly established.",
+      "response": "not_applicable",
+      "details": "The model is for adults and children (non-pregnant/lactating); placental transfer is discussed qualitatively in the Discussion but not modeled.",
+      "structured_details": {
+        "biological_mechanism": "Placental transfer (discussed qualitatively, not modeled)",
+        "mathematical_implementation": null,
+        "governing_parameters": null,
+        "compartments": null,
+        "source_location": "Page 14, Discussion"
+      },
+      "evidence": [
+        {
+          "source_page": 14,
+          "source_section": "Discussion",
+          "source_location": "Page 14, Internal Exposure Assessments",
+          "source_quote": "it was shown that BPA can cross the placental barrier... One third of fetal plasma levels... were higher"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.9",
+      "section": "2.4.3C Assumptions: perfusion/diffusion/lumping",
+      "question": "What assumptions concern well-stirred behavior, organ lumping, or omitted compartments, and what are the justification and structural/equation impacts?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only; do not supply textbook assumptions.",
+      "response": "yes",
+      "details": "The model uses lumped compartments based on perfusion thresholds (>0.1 or <0.1 mL/min/g) following ICRP/Edginton standards, with specific organs aggregated into richly and slowly perfused groups.",
+      "structured_details": {
+        "stated_assumption": "Organs are lumped into 'richly perfused' and 'slowly perfused' compartments based on perfusion rates.",
+        "authors_justification": "Standard physiological grouping (ICRP 2002; Edginton et al. 2006) where perfusion >0.1 mL/min/g is richly perfused and <0.1 mL/min/g is slowly perfused.",
+        "structural_impact": "Reduces model complexity by aggregating heart, kidneys, gut, pancreas, spleen, stomach into one compartment and muscle/skeleton into another.",
+        "source_location": "Page 2, Methods: PBPK Model for BPA"
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods: PBPK Model for BPA",
+          "source_location": "Page 2, Paragraph 2",
+          "source_quote": "In the compartment titled \u201crichly perfused tissue,\u201d compartments were lumped with a perfusion greater than 0:1 mL=min=g tissue... and in the compartment titled \u201cslowly perfused tissue,\u201d compartments were lumped with a perfusion smaller than 0:1 mL=min=g tissue"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.10",
+      "section": "2.4.3C Assumptions: binding/free fraction",
+      "question": "What assumptions concern protein/RBC binding and constancy of fu/Free across concentration, species, or life stage?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "partially",
+      "details": "The model uses tissue-to-serum partition coefficients (PTS) which implicitly account for binding, but explicit assumptions about the constancy of free fraction (fu) or protein binding saturation are not detailed.",
+      "structured_details": {
+        "stated_assumption": "Tissue distribution is modeled via tissue-to-serum partition coefficients (PTS).",
+        "authors_justification": "PTS were derived from experimental data (BPA) or QSARs (analogs), implicitly capturing binding equilibrium.",
+        "structural_impact": "Binding is handled via the PTS ratio rather than explicit unbound fraction (fu) equations in the ODEs.",
+        "source_location": "Page 2, Methods: PBPK Model for BPA; Page 6, Table 6"
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods: PBPK Model for BPA",
+          "source_location": "Page 2, Paragraph 4",
+          "source_quote": "For the PTS of BPA, just like Yang et al. (2015), we used parameters from the experimental study of Doerge et al. (2011)"
+        },
+        {
+          "source_page": 6,
+          "source_section": "Table 6",
+          "source_location": "Page 6, Table 6 Caption",
+          "source_quote": "PTS for BPA (Doerge et al. 2011; Zhang and Zhang 2006) and BPS, BPF, and BPAF (Zhang and Zhang 2006)."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.11",
+      "section": "2.4.3C Assumptions: borrowing",
+      "question": "Which parameters are borrowed across surrogate species or analogue chemicals, and why?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Do not infer borrowing from similar values; require explicit evidence.",
+      "response": "yes",
+      "details": "Parameters for BPF and BPAF were borrowed from BPA and BPS models due to lack of in vivo data, justified by structural and molecular weight similarities.",
+      "structured_details": {
+        "stated_assumption": "BPF uses BPA calibration; BPAF uses BPS calibration for uptake and excretion; sulfation uses BPA kinetics.",
+        "authors_justification": "Similarities in molecular weight and chemical structure; lack of experimental data for analogs.",
+        "structural_impact": "Basic models for BPF and BPAF rely on surrogate kinetics rather than independent calibration.",
+        "source_location": "Page 7, BPS, BPF, and BPAF Model Parametrization and Calibration; Page 12, Discussion"
+      },
+      "evidence": [
+        {
+          "source_page": 7,
+          "source_section": "Results",
+          "source_location": "Page 7, BPS, BPF, and BPAF Model Parametrization and Calibration",
+          "source_quote": "we used the BPA model calibration for BPF, and the BPS model calibration for BPAF in the basic models"
+        },
+        {
+          "source_page": 12,
+          "source_section": "Discussion",
+          "source_location": "Page 12, Model Calibration and Parametrization",
+          "source_quote": "We used the sulfation kinetics of BPA as a surrogate in the basic models for the analogs"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.12",
+      "section": "2.4.3C Assumptions: clearance/resorption/ontogeny",
+      "question": "What assumptions concern zero metabolism, active renal reabsorption, or immature/omitted transporter activity in fetuses/infants?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "partially",
+      "details": "The model assumes adult glucuronidation kinetics for infants due to lack of age-specific data, and notes fetal deconjugation potential but does not model it.",
+      "structured_details": {
+        "stated_assumption": "Adult metabolism parameters applied to infants; fetal deconjugation acknowledged but not modeled.",
+        "authors_justification": "Glucuronidation kinetics assessed with adult hepatocytes; lack of age-group-specific metabolism parameters.",
+        "structural_impact": "Potential underestimation of internal exposure in infants and fetuses due to omitted ontogeny.",
+        "source_location": "Page 14, Internal Exposure Assessments; Page 2, Introduction"
+      },
+      "evidence": [
+        {
+          "source_page": 14,
+          "source_section": "Discussion",
+          "source_location": "Page 14, Internal Exposure Assessments",
+          "source_quote": "glucuronidation kinetics were assessed with adult hepatocytes... exposure differences might increase if age-group-specific metabolism parameters... were available"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Introduction",
+          "source_location": "Page 2, Introduction",
+          "source_quote": "in fetal compartments and placenta, b\u2013glucuronidase-mediated deconjugation of BPA-g is substantial"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.13",
+      "section": "2.4.3C Assumptions: dosing/steady state",
+      "question": "What assumptions concern pre-pregnancy run-in, route surrogates, intake adjustments, or milk production/suckling initialization?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "not_applicable",
+      "details": "The study models non-pregnant adults and children; no pregnancy, lactation, or suckling mechanisms are included.",
+      "structured_details": {
+        "stated_assumption": null,
+        "authors_justification": null,
+        "structural_impact": null,
+        "source_location": "Page 5, Table 3"
+      },
+      "evidence": [
+        {
+          "source_page": 5,
+          "source_section": "Table 3",
+          "source_location": "Page 5, Table 3",
+          "source_quote": "Age group regarded: Infants, toddlers, children, adolescents, adults"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.4",
+      "section": "2.4.4 Model equations",
+      "question": "Provide all extracted differential mass-balance, saturable transport/metabolism, dynamic growth, and allometric scaling equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input equation extraction; never generate missing equations.",
+      "response": "partially",
+      "details": "Michaelis-Menten and substrate inhibition equations are provided; mass-balance and allometric scaling equations are not explicitly shown.",
+      "structured_details": {
+        "mass_balance_equations": null,
+        "rate_equations": [
+          "Michaelis-Menten equation: v = (vmax * S) / (Km + S)",
+          "Substrate inhibition equation: v = (vmax * S) / (Km + S + S^2/Ksi)"
+        ],
+        "growth_equations": null,
+        "scaling_equations": null,
+        "source_location": "Page 3, Methods"
+      },
+      "evidence": [
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "Michaelis-Menten equation: ... Substrate inhibition equation:"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5A",
+      "section": "2.4.5A Parameter tabulation and scaling",
+      "question": "Extract all physiological and chemical-specific input parameters from tables, footnotes, and Methods, including dynamic ranges, units, scaling, compound, species, and life stage.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input parameters.",
+      "response": "yes",
+      "details": "Tables 6-8 and footnotes provide comprehensive chemical-specific metabolic parameters, partition coefficients, and physiological parameters with units, scaling exponents, and age-specific values.",
+      "structured_details": {
+        "parameters": [
+          "Hepatic glucuronidation Km/vmax",
+          "Intestinal glucuronidation Km/vmax",
+          "Hepatic sulfation Km/vmax",
+          "Tissue-to-serum partition coefficients (PTS)",
+          "Gastric emptying",
+          "Oral uptake rate",
+          "Urinary excretion rate",
+          "Enterohepatic recirculation (EHR) rates",
+          "Microsomal protein content",
+          "Body weight/Height/Organ volumes"
+        ],
+        "dynamic_start_value": null,
+        "dynamic_end_value": null,
+        "units": "nM, nmol/h/g liver, nmol/h/kg BW^0.75, 1/h/kg BW^0.25, mg protein/g liver, dimensionless",
+        "scaling": "Allometric scaling to BW^0.75 for excretion/metabolism and BW^0.25 for uptake/gastric emptying",
+        "context": "Human adults, infants, toddlers, children, adolescents; peroral and dermal exposure"
+      },
+      "evidence": [
+        {
+          "source_page": 8,
+          "source_section": "Table 7",
+          "source_location": "Page 8, Table 7",
+          "source_quote": "This parameter was scaled to nmol=h=kg bw0:75 within the model using the individual body weights of the test persons."
+        },
+        {
+          "source_page": 8,
+          "source_section": "Table 8",
+          "source_location": "Page 8, Table 8",
+          "source_quote": "Gastric emptying (1=h=kg BW\u22120:25)"
+        },
+        {
+          "source_page": 6,
+          "source_section": "Table 6",
+          "source_location": "Page 6, Table 6",
+          "source_quote": "PTS for BPA (Doerge et al. 2011; Zhang and Zhang 2006) and BPS, BPF, and BPAF (Zhang and Zhang 2006)."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5B",
+      "section": "2.4.5B Parameter sources and competing values",
+      "question": "For each parameter, identify source category, original primary citation/location, competing values, chosen value, and rationale.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Prefer original primary citations over secondary citations; do not invent citations.",
+      "response": "yes",
+      "details": "Footnotes in Tables 7-8 and Methods detail primary citations (e.g., Coughlin 2012, Trdan Lu\u0161in 2012), QSAR sources, and rationale for visual fitting or educated guesses when data were lacking.",
+      "structured_details": {
+        "source_category": [
+          "Experimental in vitro (HLM/HIM)",
+          "QSAR prediction",
+          "Literature review (multiple studies)",
+          "Visual fitting to biomonitoring data",
+          "Educated guess/Assumption"
+        ],
+        "original_citation": [
+          "Coughlin et al. (2012)",
+          "Trdan Lu\u0161in et al. (2012)",
+          "Zhang and Zhang (2006)",
+          "Doerge et al. (2011)",
+          "Oh et al. (2018)",
+          "Yang et al. (2015)"
+        ],
+        "competing_values": [
+          "Multiple Km/vmax ranges for BPA glucuronidation (Table S2)",
+          "Different QSARs for PTS (DeJongh, Schmitt, Zhang)"
+        ],
+        "chosen_value": "Specific values selected based on best fit to Thayer et al. (2015) biomonitoring data or Zhang and Zhang (2006) QSAR for PTS.",
+        "rationale": "Selected to minimize MRD/AFE against calibration data; QSAR chosen for best agreement with experimental BPA PTS; educated guesses used for EHR based on molecular weight trends."
+      },
+      "evidence": [
+        {
+          "source_page": 8,
+          "source_section": "Table 7 Footnotes",
+          "source_location": "Page 8, Table 7 Footnotes a, b, i",
+          "source_quote": "aReference supporting this value: Coughlin et al. (2012). bVisually fitted for BPS... iReference supporting this value: Trdan Lu\u0161in et al. (2012)."
+        },
+        {
+          "source_page": 7,
+          "source_section": "Results",
+          "source_location": "Page 7, BPS, BPF, and BPAF Model Parametrization",
+          "source_quote": "We selected the QSAR (2) by Zhang and Zhang (2006) to calculate the PTS in the basic model, because the use of this QSAR resulted in modeled results close to the experimental values"
+        },
+        {
+          "source_page": 8,
+          "source_section": "Table 8 Footnotes",
+          "source_location": "Page 8, Table 8 Footnotes g, h",
+          "source_quote": "gWe used an EHR rate of 0% for BPF as result of an educated guess due to BPF having a lower molecular weight than BPA."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5C",
+      "section": "2.4.5C Parameter distributions and uncertainty",
+      "question": "Extract probability distributions and bounds, or explain deterministic time-varying range/alternative-bound parameterization.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not confuse confidence intervals with dynamic physiological ranges.",
+      "response": "yes",
+      "details": "The study uses 2D-MC with trapezoidal distributions for uncertainty and truncated normal distributions for variability, including dynamic alternative bounds for vmax based on sampled Km.",
+      "structured_details": {
+        "distribution_type": [
+          "trapezoidal",
+          "truncated normal",
+          "normal",
+          "log-normal",
+          "uniform"
+        ],
+        "distribution_parameters": {
+          "uncertainty": "Trapezoidal distributions using lowest/highest reported values as modes and truncated normal boundaries as min/max",
+          "variability": "Truncated normal distributions (95% within \u00b11.96 SD), CVs specified per parameter (e.g., 30% default)"
+        },
+        "bounds": "Outer boundaries of truncated normal distributions used as min/max for trapezoidal uncertainty distributions",
+        "range_parameterization": "Dynamic alternative boundaries for vmax sampling introduced to prevent unrealistic reaction rates when Km is drawn from uncertainty distributions"
+      },
+      "evidence": [
+        {
+          "source_page": 5,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 5, Uncertainty Analysis",
+          "source_quote": "In the outer uncertainty loop, we used trapezoidal distributions on the basis of parameter values that had been found in different experiments"
+        },
+        {
+          "source_page": 5,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 5, Uncertainty Analysis",
+          "source_quote": "To avoid unrealistic reaction rates, we introduced a function calculating alternative boundaries for the sampling of vmax after a certain Km has been drawn."
+        },
+        {
+          "source_page": 6,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 6, Variability",
+          "source_quote": "In the inner variability loop, we randomly varied the model parameters using truncated normal distributions to account for interindividual variability"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.6A",
+      "section": "2.4.6A Exposure and dosing",
+      "question": "Extract all simulated exposure/dosing scenarios, routes, timing, duration, formulation, feeding/fasting, doses/concentrations, and intake rates.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use model simulation conditions only; do not infer doses from general exposure history.",
+      "response": "yes",
+      "details": "Five scenarios defined: single 500 ng/kg BW peroral/dermal doses; age-specific parallel peroral/dermal dosing over 4 days; and 2D-MC scenario for females. Uptake parameters and daily dose splits are detailed.",
+      "structured_details": {
+        "scenarios": [
+          "Scenario 1: Single peroral/dermal dose, adults, serum",
+          "Scenario 2: Single peroral/dermal dose, adults, gonads",
+          "Scenario 3: Single peroral/dermal dose, infants to adults, serum/gonads",
+          "Scenario 4: Parallel peroral/dermal dosing, infants to adults, serum/gonads",
+          "Scenario 5: Parallel peroral/dermal dosing, female adults, serum (2D-MC)"
+        ],
+        "routes": [
+          "peroral",
+          "dermal (thermal paper)",
+          "dermal (personal care products)"
+        ],
+        "timing": {
+          "single_dose": "t=0 h",
+          "parallel_peroral": "0, 6, 12, 24, 30, 36, 48, 54, 60, 72, 78, 84 h",
+          "parallel_dermal": "0, 12, 24, 36, 48, 60, 72, 84 h"
+        },
+        "duration": "4 days (96 h) for parallel dosing scenarios; 48 h for calibration",
+        "formulation": "Peroral: diet with 3 meals/day; Dermal: thermal paper and personal care products (PCPs)",
+        "dose": "500 ng/kg BW (single dose scenarios); Age/route-specific high exposure estimates from EFSA CEF (2015) for parallel scenarios",
+        "intake_rates": {
+          "peroral_absorption_fraction": "100%",
+          "dermal_TP_absorption_fraction": "20%",
+          "dermal_PCPs_absorption_fraction": "60%",
+          "peroral_uptake_period": "0.25 h",
+          "dermal_uptake_period": "24 h"
+        }
+      },
+      "evidence": [
+        {
+          "source_page": 4,
+          "source_section": "Table 3",
+          "source_location": "Page 4, Table 3",
+          "source_quote": "Single peroral or dermal dosing of 500 ng=kg BW, respectively"
+        },
+        {
+          "source_page": 4,
+          "source_section": "Table 3",
+          "source_location": "Page 4, Table 3",
+          "source_quote": "Peroral: 0, 6, 12, 24, 30, 36, 48, 54, 60, 72, 78, 84; dermal: 0, 12, 24, 36, 48, 60, 72, 84"
+        },
+        {
+          "source_page": 5,
+          "source_section": "Comparison of Model Predictions with Internal Exposure Assessments",
+          "source_location": "Page 5, Comparison of Model Predictions",
+          "source_quote": "We simulated peroral exposure by mimicking a diet with three meals per day within 12 h"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.6B",
+      "section": "2.4.6B Samples, subjects, trials, and probabilistic setup",
+      "question": "Extract sample matrices/times, subject and virtual-population characteristics, number of trials/subjects, and Monte Carlo/MCMC iterations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use explicit simulation/evaluation conditions only.",
+      "response": "yes",
+      "details": "Serum/urine matrices with 48h collection times; adult subjects (7 for BPS, 10/3 for BPA); 2D-MC with 1,000x1,000 iterations.",
+      "structured_details": {
+        "matrices": [
+          "serum",
+          "urine"
+        ],
+        "collection_times": [
+          "48-h period",
+          "24-h study period"
+        ],
+        "subjects": [
+          "7 healthy adults (BPS)",
+          "10 healthy male adults (BPA)",
+          "3 volunteers (BPA dermal/peroral)"
+        ],
+        "virtual_population": [
+          "women of childbearing age (18-45 y)",
+          "infants, toddlers, children, adolescents, adults"
+        ],
+        "trials": null,
+        "iterations": [
+          "1,000 inner loop iterations",
+          "1,000 outer loop iterations",
+          "1,000 x 1,000 total"
+        ]
+      },
+      "evidence": [
+        {
+          "source_page": 4,
+          "source_section": "Methods",
+          "source_location": "Page 4, Calibration of the BPS Model",
+          "source_quote": "They perorally exposed seven healthy adults to 8:75 lg=kg BW deuterated BPS administered in a chocolate cookie. Serum and urine samples were collected within a 48-h period"
+        },
+        {
+          "source_page": 5,
+          "source_section": "Methods",
+          "source_location": "Page 5, Uncertainty Analysis",
+          "source_quote": "The variability of all parameters was assessed in an inner loop of 1,000 iterations, and the uncertainty of the selected parameters was assessed in an outer loop of 1,000 iterations"
+        },
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "Teeguarden et al. (2015) recruited ten healthy male adults... Within the 24-h study period, venous blood samples were drawn, and all voided urine was collected."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.7",
+      "section": "2.4.7 Software and numerical solvers",
+      "question": "Extract software/version/product reference, ODE solver, interpolation, optimization/statistical algorithms, and code availability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not infer solver or code availability from software name alone.",
+      "response": "partially",
+      "details": "R v3.3.2 used for coding/simulations; code available in Supplemental Material. Specific ODE solver, interpolation, and optimization algorithms are not explicitly named.",
+      "structured_details": {
+        "software": [
+          "R",
+          "GraphPad Prism"
+        ],
+        "version": [
+          "3.3.2",
+          "5.04"
+        ],
+        "website_manual": null,
+        "solver": null,
+        "interpolation": null,
+        "optimization": null,
+        "statistics": [
+          "mean relative deviation (MRD)",
+          "average fold error (AFE)",
+          "residual sum of squares"
+        ],
+        "code_available": true
+      },
+      "evidence": [
+        {
+          "source_page": 7,
+          "source_section": "Methods",
+          "source_location": "Page 7, Computing Software",
+          "source_quote": "We performed coding and simulations using the programming language R, version 3.3.2 (see Supplemental Material for the model code and related input Tables C1\u2013C4)."
+        },
+        {
+          "source_page": 3,
+          "source_section": "Methods",
+          "source_location": "Page 3, Measurement of Glucuronidation Kinetics",
+          "source_quote": "We further analyzed the results with the GraphPad Prism software (version 5.04; GraphPad Software Inc.,)"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "we calculated the mean relative deviation (MRD) and average fold error (AFE) to assess precision and bias of the model predictions"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1A",
+      "section": "2.5.1A Evaluation: training versus validation",
+      "question": "Compare predictions with observed time-concentration data and distinguish calibration fit from independent predictive performance.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use evaluation Methods, Results, Discussion, and evaluation figures/tables; preserve training/validation roles exactly.",
+      "response": "yes",
+      "details": "The BPA model was calibrated with Thayer et al. (2015) and validated against independent Teeguarden et al. (2015) and Hormann et al. (2014) data; BPS was calibrated with Oh et al. (2018) with no independent validation.",
+      "structured_details": {
+        "training_comparison": "BPA calibrated with Thayer et al. (2015); BPS calibrated with Oh et al. (2018)",
+        "validation_comparison": "BPA validated against Teeguarden et al. (2015) and Hormann et al. (2014); BPS, BPF, BPAF lacked independent validation",
+        "observations": "Serum and urine concentrations of BPA, BPA-g, BPA-s, BPS, BPS-g",
+        "predictions": "Concentration-time profiles of unconjugated BPs and metabolites",
+        "limitations": "No independent validation data for BPS, BPF, BPAF; BPA validation showed overestimation"
+      },
+      "evidence": [
+        {
+          "source_page": 6,
+          "source_section": "Methods",
+          "source_location": "Page 6, Model Evaluation",
+          "source_quote": "To evaluate the model, we sought to compare it with biomonitoring data from literature that were independent of the data the basic models were calibrated with."
+        },
+        {
+          "source_page": 7,
+          "source_section": "Results",
+          "source_location": "Page 7, BPS Model Parametrization",
+          "source_quote": "When comparing the uncalibrated BPS model with the biomonitoring data (Oh et al. 2018), the concentrations modeled for unconjugated BPS in serum were lower"
+        },
+        {
+          "source_page": 10,
+          "source_section": "Results",
+          "source_location": "Page 10, Model Evaluation",
+          "source_quote": "the predicted average values for Cmax were 1.3 to 3 times and for AUC 1.4 to 1.6 times higher than the measured values."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1B",
+      "section": "2.5.1B Goodness-of-fit and applicability",
+      "question": "Extract statistical tests, fold-error criteria, visual criteria, interpretation, applicability, and limitations.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Do not infer GOF from a graph unless the paper states the criterion.",
+      "response": "yes",
+      "details": "MRD and AFE were used with a criterion of not exceeding 2; visual comparison of concentration-time profiles was performed; limitations include lack of validation for analogs and overestimation in BPA validation.",
+      "structured_details": {
+        "metrics": [
+          "Mean Relative Deviation (MRD)",
+          "Average Fold Error (AFE)"
+        ],
+        "criteria": "MRD and AFE should be low and not exceed a value of 2",
+        "visual_assessment": "Comparison of concentration-time profiles with biomonitoring data",
+        "applicability": "Adults and age groups for peroral and dermal exposure; BPA and BPS calibrated, BPF and BPAF approximated",
+        "limitations": "No independent validation for BPS, BPF, BPAF; BPA validation overestimated concentrations; sulfation kinetics approximated"
+      },
+      "evidence": [
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "we calculated the mean relative deviation (MRD) and average fold error (AFE) to assess precision and bias of the model predictions"
+        },
+        {
+          "source_page": 2,
+          "source_section": "Methods",
+          "source_location": "Page 2, PBPK Model for BPA",
+          "source_quote": "their MRD and AFE should also be low and not exceed a value of 2 (Edginton et al. 2006)"
+        },
+        {
+          "source_page": 12,
+          "source_section": "Discussion",
+          "source_location": "Page 12, Model Evaluation",
+          "source_quote": "the basic model could predict BPA serum concentrations of the two female subjects, but neither the BPA serum concentrations of the male subject"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2A",
+      "section": "2.5.2A Sensitivity protocol",
+      "question": "Extract local/global type, sampling approach, perturbation/time points/dose levels, mathematical method, and threshold criterion.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use sensitivity Methods/Results and sensitivity figures/tables only.",
+      "response": "partially",
+      "details": "The study reports a global 2D-MC uncertainty analysis with 1,000x1,000 iterations using trapezoidal and truncated normal distributions, but lacks a formal local sensitivity analysis or explicit perturbation thresholds.",
+      "structured_details": {
+        "analysis_type": "Global uncertainty and variability analysis (2D-MC)",
+        "sampling": "1,000 iterations for variability (inner loop) and 1,000 iterations for uncertainty (outer loop)",
+        "perturbation": "Parameters sampled from trapezoidal (uncertainty) and truncated normal (variability) distributions",
+        "time_points": "Steady state (4-day simulation)",
+        "method": "Two-dimensional Monte Carlo (2D-MC) simulation",
+        "criterion": "Qualitative tiered approach (medium-high/high uncertainty) followed by quantification; no explicit numerical perturbation threshold reported"
+      },
+      "evidence": [
+        {
+          "source_page": 5,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 5, Uncertainty Analysis",
+          "source_quote": "The variability of all parameters was assessed in an inner loop of 1,000 iterations, and the uncertainty of the selected parameters was assessed in an outer loop of 1,000 iterations"
+        },
+        {
+          "source_page": 5,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 5, Uncertainty Analysis",
+          "source_quote": "In the outer uncertainty loop, we used trapezoidal distributions... In the inner variability loop, we randomly varied the model parameters using truncated normal distributions"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2B",
+      "section": "2.5.2B Sensitive parameters and uncertainty impact",
+      "question": "Summarize influential parameters and the overall impact of sensitivity, variability, and uncertainty on outputs and reliability.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use explicit reported results; do not infer reliability from parameter magnitude.",
+      "response": "yes",
+      "details": "Metabolism kinetics, enzyme concentrations, partitioning, EHR, and dermal exposure were identified as highly uncertain. 90% of predicted variability fell within less than one order of magnitude.",
+      "structured_details": {
+        "key_parameters": [
+          "Metabolism kinetics (glucuronidation/sulfation)",
+          "Enzyme concentrations (microsomal protein content)",
+          "Tissue-to-serum partition coefficients (PTS)",
+          "Enterohepatic recirculation (EHR)",
+          "Dermal exposure parameters (absorption fraction/half-life)"
+        ],
+        "output_matrices": [
+          "Serum Cmax",
+          "Serum AUC",
+          "Gonad Cmax",
+          "Gonad AUC"
+        ],
+        "overall_impact": "90% of predicted variability fell within less than one order of magnitude; basic model predicted comparatively high concentrations.",
+        "reliability": "Moderate; high uncertainty in metabolism and partitioning parameters, but variability is constrained within one order of magnitude."
+      },
+      "evidence": [
+        {
+          "source_page": 9,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 9, Uncertainty Analysis",
+          "source_quote": "parameters related to metabolism kinetics, enzyme concentrations, partitioning, EHR, and dermal exposure were subject to relatively high uncertainty"
+        },
+        {
+          "source_page": 10,
+          "source_section": "Uncertainty Analysis",
+          "source_location": "Page 10, Uncertainty Analysis",
+          "source_quote": "In general, 90% of the predicted variability fell within less than one order of magnitude."
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    }
+  ],
+  "verification_summary": {},
+  "overall_fit_for_purpose": "36/36 Tan items have an evidence-backed rating; 0/36 remain i_cannot_answer.",
+  "key_gaps": [],
+  "reviewer_notes": [
+    "Confidence was recalculated by APEX from evidence completeness; the LLM confidence value was not trusted."
+  ]
+}

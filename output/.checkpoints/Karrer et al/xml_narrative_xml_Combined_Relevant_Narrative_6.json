@@ -1,0 +1,751 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "We readjusted a physiologically based pharmacokinetic (PBPK) model for peroral exposure to BPA and extended it to include dermal exposure."
+  },
+  "model_context": {
+    "model_origin": "adapted from Yang et al.",
+    "stated_purpose": "compare the pharmacokinetic behaviors of BPA, BPS, BPF, and BPAF for different age groups after environmentally relevant external exposures by taking into account substance-specific metabolism kinetics and partitioning behavior",
+    "dose_metric": "internal concentrations of unconjugated BPs in serum and gonads",
+    "target_populations": [
+      "females of childbearing age",
+      "different age groups"
+    ],
+    "age_groups": [
+      "women (18–45 y)",
+      "male adolescents"
+    ],
+    "life_stages": [],
+    "sex_or_gender": "both",
+    "health_status": null,
+    "geographic_population": null,
+    "original_application": "peroral exposure to BPA",
+    "current_application": "comparison of BPA, BPS, BPF, and BPAF pharmacokinetics after peroral and dermal exposure",
+    "repurposed": true,
+    "source_quote": "In this paper, we have modified a PBPK model for peroral exposure to BPA developed by Yang et al. ( ) so that it corresponds well with a human kinetic data set ( ) and includes dermal exposure.",
+    "source_location": "Introduction",
+    "source_page": null,
+    "evidence_directness": "direct"
+  },
+  "biological_basis": {
+    "adme_determinants": [
+      "hepatic and intestinal glucuronidation kinetics",
+      "tissue-to-serum partition coefficients",
+      "dermal and peroral absorption",
+      "enterohepatic recirculation",
+      "enzyme concentrations"
+    ],
+    "adme_determinant_evidence": [
+      {
+        "description": "Hepatic and intestinal glucuronidation kinetics determine metabolism rates of BPA analogs.",
+        "evidence_quote": "We experimentally assessed hepatic and intestinal glucuronidation kinetics of BPS, BPF, and BPAF to parametrize the model for these BPs",
+        "source_location": "Abstract",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Tissue-to-serum partition coefficients determine distribution behavior.",
+        "evidence_quote": "For estimating tissue-to-serum partition coefficients ( P TS ), we identified the most suitable and relevant quantitative structure–activity relationships (QSARs) from established models.",
+        "source_location": "Introduction",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Dermal and peroral absorption routes contribute to internal exposure.",
+        "evidence_quote": "The predominant routes of BPS and BPAF exposure were peroral and dermal exposure, respectively.",
+        "source_location": "Abstract",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Enterohepatic recirculation may be important for BPS kinetics.",
+        "evidence_quote": "The calibration of the BPS model with measured concentrations showed that enterohepatic recirculation may be important.",
+        "source_location": "Abstract",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "adme_phase_evidence": [
+      {
+        "phase": "absorption",
+        "biological_mechanism": "Peroral and dermal absorption with different absorption half-lives.",
+        "mathematical_implementation": null,
+        "governing_parameters": [
+          "absorption half-life",
+          "extent of absorption"
+        ],
+        "compartments": [
+          "skin",
+          "gut"
+        ],
+        "source_location": "Model Evaluation – Comparison with Biomonitoring Data",
+        "source_page": null,
+        "evidence_quote": "This share could have been taken up within 8 min, and we calculated the absorption half-life accordingly.",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "distribution_binding",
+        "biological_mechanism": "Tissue-to-serum partitioning estimated via QSARs.",
+        "mathematical_implementation": null,
+        "governing_parameters": [
+          "P_TS"
+        ],
+        "compartments": [
+          "serum",
+          "liver",
+          "fat",
+          "skin",
+          "gonads",
+          "brain",
+          "richly perfused tissue",
+          "slowly perfused tissue"
+        ],
+        "source_location": "Introduction",
+        "source_page": null,
+        "evidence_quote": "For estimating tissue-to-serum partition coefficients ( P TS ), we identified the most suitable and relevant quantitative structure–activity relationships (QSARs) from established models.",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "metabolism",
+        "biological_mechanism": "Hepatic and intestinal glucuronidation.",
+        "mathematical_implementation": null,
+        "governing_parameters": [
+          "glucuronidation kinetics",
+          "enzyme concentrations"
+        ],
+        "compartments": [
+          "liver",
+          "gut"
+        ],
+        "source_location": "Abstract",
+        "source_page": null,
+        "evidence_quote": "We experimentally assessed hepatic and intestinal glucuronidation kinetics of BPS, BPF, and BPAF to parametrize the model for these BPs",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "phase": "excretion_recirculation",
+        "biological_mechanism": "Enterohepatic recirculation (EHR) for BPS.",
+        "mathematical_implementation": null,
+        "governing_parameters": [
+          "EHR"
+        ],
+        "compartments": [
+          "liver",
+          "gut"
+        ],
+        "source_location": "Model Calibration and Parametrization",
+        "source_page": null,
+        "evidence_quote": "The calibration of the BPS PBPK model with the biomonitoring data by Oh et al. revealed that BPS is likely to undergo EHR",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "stated_assumptions": [
+      {
+        "description": "Tissue compartments are lumped based on perfusion thresholds (>0.1 mL/min/g for richly perfused, <0.1 mL/min/g for slowly perfused).",
+        "evidence_quote": "In the compartment titled “richly perfused tissue,” compartments were lumped with a perfusion greater than 0.1 mL / min / g tissue (heart, kidneys, small and large intestine, pancreas, spleen, and stomach), and in the compartment titled “slowly perfused tissue,” compartments were lumped with a perfusion smaller than 0.1 mL / min / g tissue (muscle and skeleton)",
+        "source_location": "PBPK Model for BPA",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Volume of distribution in the small intestine is an educated guess.",
+        "evidence_quote": "We used a CV of 25% for the tissue volumes , which we also used for the volume of distribution in the small intestine (educated guess).",
+        "source_location": "Uncertainty Analysis",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "description": "Equal external exposures are assumed for comparing BPA analogs.",
+        "evidence_quote": "Assuming equal external exposures, BPS exposure led to the highest internal concentrations of unconjugated BPs.",
+        "source_location": "Abstract",
+        "source_page": null,
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "assumption_evidence": [
+      {
+        "category": "tissue_perfusion_diffusion_lumping",
+        "stated_assumption": "Compartments are lumped into 'richly perfused tissue' and 'slowly perfused tissue' based on a perfusion threshold of 0.1 mL/min/g.",
+        "authors_justification": null,
+        "structural_impact": "Reduces the number of individual tissue compartments to two lumped compartments.",
+        "source_location": "PBPK Model for BPA",
+        "source_page": null,
+        "evidence_quote": "In the compartment titled “richly perfused tissue,” compartments were lumped with a perfusion greater than 0.1 mL / min / g tissue (heart, kidneys, small and large intestine, pancreas, spleen, and stomach), and in the compartment titled “slowly perfused tissue,” compartments were lumped with a perfusion smaller than 0.1 mL / min / g tissue (muscle and skeleton)",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      },
+      {
+        "category": "other",
+        "stated_assumption": "The volume of distribution in the small intestine is an educated guess.",
+        "authors_justification": "Lack of specific data necessitated an educated guess.",
+        "structural_impact": "Introduces uncertainty in the absorption and distribution phase for the gut compartment.",
+        "source_location": "Uncertainty Analysis",
+        "source_page": null,
+        "evidence_quote": "We used a CV of 25% for the tissue volumes , which we also used for the volume of distribution in the small intestine (educated guess).",
+        "evidence_directness": "explicit",
+        "evidence_confidence": "low"
+      }
+    ],
+    "specialized_mechanisms": [
+      "enterohepatic_recirculation",
+      "glucuronidation"
+    ],
+    "evidence_confidence": "low",
+    "confidence_basis": null
+  },
+  "table_evidence": [],
+  "model_structure": {
+    "reported_compartment_count": 8,
+    "listed_compartment_count": 8,
+    "count_consistency": "consistent",
+    "compartments": [
+      "serum",
+      "liver",
+      "fat",
+      "skin",
+      "gonads",
+      "brain",
+      "richly perfused tissue",
+      "slowly perfused tissue"
+    ],
+    "connections": [],
+    "absorption": {
+      "route": "peroral, dermal",
+      "model_type": null,
+      "site": "gut, skin",
+      "evidence_quote": "We readjusted a physiologically based pharmacokinetic (PBPK) model for peroral exposure to BPA and extended it to include dermal exposure."
+    },
+    "metabolism": {
+      "organ": "liver, gut",
+      "enzyme": "glucuronidation enzymes",
+      "metabolite": "BPA-g, BPS-g, BPF-g, BPAF-g",
+      "kinetics": null,
+      "parameters": [],
+      "evidence_quote": "We experimentally assessed hepatic and intestinal glucuronidation kinetics of BPS, BPF, and BPAF to parametrize the model for these BPs"
+    },
+    "elimination": {
+      "routes": null,
+      "evidence_quote": null
+    },
+    "unresolved": null,
+    "source_location": "PBPK Model for BPA",
+    "equations_provided": "none",
+    "allometric_scaling_rules": [],
+    "scaling_equations": []
+  },
+  "metabolic_pathways": [
+    {
+      "parent_compound": "BPA",
+      "metabolite_produced": "BPA-g",
+      "enzyme": "glucuronidation",
+      "location": "liver, gut",
+      "kinetics_type": "not_reported",
+      "ivive_used": false
+    },
+    {
+      "parent_compound": "BPS",
+      "metabolite_produced": "BPS-g",
+      "enzyme": "glucuronidation",
+      "location": "liver, gut",
+      "kinetics_type": "not_reported",
+      "ivive_used": true
+    },
+    {
+      "parent_compound": "BPF",
+      "metabolite_produced": "BPF-g",
+      "enzyme": "glucuronidation",
+      "location": "liver, gut",
+      "kinetics_type": "not_reported",
+      "ivive_used": true
+    },
+    {
+      "parent_compound": "BPAF",
+      "metabolite_produced": "BPAF-g",
+      "enzyme": "glucuronidation",
+      "location": "liver, gut",
+      "kinetics_type": "not_reported",
+      "ivive_used": true
+    }
+  ],
+  "parameter_blocks": [
+    {
+      "block_name": "Uncertainty Analysis",
+      "implied_species": "human",
+      "implied_unit_original": null,
+      "parameter_class": "physiological",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "cardiac_output",
+          "parameter_name": "Cardiac output CV",
+          "parameter_name_original": "cardiac output",
+          "parameter_name_standardized": "cardiac_output_cv",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": null,
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "human",
+            "subject_species": "human",
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "23%",
+            "value": 0.23,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": "CV",
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Uncertainty Analysis",
+            "source_location": "Uncertainty Analysis",
+            "source_quote": "Furthermore, we used a CV of 23% for the cardiac output",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "explicit"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue-to-serum partition coefficient CV",
+          "parameter_name_original": "P TS",
+          "parameter_name_standardized": "partition_coefficient_cv",
+          "symbol": "P_TS",
+          "symbol_original": "P TS",
+          "symbol_standardized": "P_TS",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "human",
+            "subject_species": "human",
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "32%",
+            "value": 0.32,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": "CV",
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Uncertainty Analysis",
+            "source_location": "Uncertainty Analysis",
+            "source_quote": "32% for the P TS",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "explicit"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "organ_blood_flow",
+          "parameter_name": "Organ blood flow CV",
+          "parameter_name_original": "organ blood flows",
+          "parameter_name_standardized": "organ_blood_flow_cv",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": null,
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "human",
+            "subject_species": "human",
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "27%",
+            "value": 0.27,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": "CV",
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Uncertainty Analysis",
+            "source_location": "Uncertainty Analysis",
+            "source_quote": "27% for the organ blood flows",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "explicit"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "organ_volume",
+          "parameter_name": "Tissue volume CV",
+          "parameter_name_original": "tissue volumes",
+          "parameter_name_standardized": "tissue_volume_cv",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": null,
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": "human",
+            "subject_species": "human",
+            "life_stage": null,
+            "formulation": null,
+            "compartment": null,
+            "organ": null,
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "25%",
+            "value": 0.25,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": "CV",
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "%",
+            "unit_standardized": "fraction",
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": null,
+            "row_id": null,
+            "column_id": null,
+            "cell_id": null,
+            "row_path": null,
+            "column_path": null,
+            "source_page": null,
+            "source_section": "Uncertainty Analysis",
+            "source_location": "Uncertainty Analysis",
+            "source_quote": "We used a CV of 25% for the tissue volumes",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": "explicit"
+          },
+          "confidence": null,
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [
+    {
+      "metric": "Cmax",
+      "formulation": null,
+      "species": "human",
+      "value": null,
+      "unit": null,
+      "source_type": "simulated",
+      "dataset_role": "independent_evaluation",
+      "dataset_type": "biomonitoring",
+      "independence_status": "unclear",
+      "dataset_description": "Teeguarden et al.",
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_location": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_quote": "the predicted average values for C max were 1.3 to 3 times... higher than the measured values",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "explicit"
+      }
+    },
+    {
+      "metric": "AUC",
+      "formulation": null,
+      "species": "human",
+      "value": null,
+      "unit": null,
+      "source_type": "simulated",
+      "dataset_role": "independent_evaluation",
+      "dataset_type": "biomonitoring",
+      "independence_status": "unclear",
+      "dataset_description": "Teeguarden et al.",
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_location": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_quote": "for AUC 1.4 to 1.6 times higher than the measured values",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "explicit"
+      }
+    }
+  ],
+  "formulation_characterization": [],
+  "qualitative_findings": [
+    {
+      "finding_type": "relative_model_output_comparison",
+      "metric": "Cmax",
+      "formulation": null,
+      "comparator": "measured values",
+      "species": "human",
+      "relative_change": "1.3 to 3 times higher",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_location": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_quote": "the predicted average values for C max were 1.3 to 3 times... higher than the measured values",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "explicit"
+      }
+    },
+    {
+      "finding_type": "relative_model_output_comparison",
+      "metric": "AUC",
+      "formulation": null,
+      "comparator": "measured values",
+      "species": "human",
+      "relative_change": "1.4 to 1.6 times higher",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_location": "Model Evaluation – Comparison to Biomonitoring Data",
+        "source_quote": "for AUC 1.4 to 1.6 times higher than the measured values",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "explicit"
+      }
+    },
+    {
+      "finding_type": "relative_model_output_comparison",
+      "metric": "half-life",
+      "formulation": null,
+      "comparator": "BPA",
+      "species": "human",
+      "relative_change": "2.7 times longer",
+      "qualifier": null,
+      "provenance": {
+        "source_table": null,
+        "row_id": null,
+        "column_id": null,
+        "cell_id": null,
+        "row_path": null,
+        "column_path": null,
+        "source_page": null,
+        "source_section": "Model Calibration and Parametrization",
+        "source_location": "Model Calibration and Parametrization",
+        "source_quote": "half-life 2.7 times longer than the half-life of BPA",
+        "reference": null,
+        "status": null,
+        "parameter_status": null,
+        "status_raw": null,
+        "derivation": null,
+        "evidence_directness": "explicit"
+      }
+    }
+  ],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "P_TS",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Introduction",
+      "requires_supplement": null,
+      "context_quote": "For estimating tissue-to-serum partition coefficients ( P TS ), we identified the most suitable and relevant quantitative structure–activity relationships (QSARs) from established models."
+    },
+    {
+      "parameter_name": "EHR",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Uncertainty Analysis",
+      "requires_supplement": null,
+      "context_quote": "parameters related to metabolism kinetics, enzyme concentrations, partitioning, EHR, and dermal exposure were subject to relatively high uncertainty"
+    }
+  ],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": {
+    "analysis_type": "global",
+    "method": "two-dimensional Monte Carlo",
+    "design": "sampled",
+    "criterion": null,
+    "sampling_approach": null,
+    "iterations": null,
+    "dose_metric_evaluated": "AUC and Cmax of unconjugated BPs in serum",
+    "uncertainty_distributions": null,
+    "individual_variability_modeled": true,
+    "experimental_reproducibility": null,
+    "key_sensitive_parameters": [
+      "metabolism kinetics",
+      "enzyme concentrations",
+      "partitioning",
+      "EHR",
+      "dermal exposure"
+    ],
+    "overall_impact_on_dose_metric": null
+  },
+  "dosing": [],
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}
