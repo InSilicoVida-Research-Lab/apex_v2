@@ -1,0 +1,15 @@
+{
+  "page_metadata": {
+    "title": "Test Paper Upload"
+  },
+  "model_parameters": [
+    {
+      "parameter_id": "test_p1",
+      "parameter_name_original": "Body Weight",
+      "quantitative_data": {
+        "value": 70.0,
+        "unit": "kg"
+      }
+    }
+  ]
+}

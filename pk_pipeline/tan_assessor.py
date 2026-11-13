@@ -194,13 +194,15 @@ def _deterministic_confidence(
 
 
 def _has_auditable_evidence(evidence: List[EvidenceReference]) -> bool:
-    """Require a quote, concrete source location, or page—not a semantic tag."""
-    return any(
-        item.source_quote
-        or item.source_location
-        or item.source_page is not None
-        for item in evidence
-    )
+    """Require a concrete non-empty quote, location, or positive page number."""
+    for item in evidence:
+        if item.source_quote and str(item.source_quote).strip() and str(item.source_quote).strip().lower() not in {"n/a", "none"}:
+            return True
+        if item.source_location and str(item.source_location).strip() and str(item.source_location).strip().lower() not in {"n/a", "none"}:
+            return True
+        if item.source_page is not None and item.source_page > 0:
+            return True
+    return False
 
 
 def _context_evidence(document: dict[str, Any]) -> List[EvidenceReference]:
@@ -581,28 +583,93 @@ def normalize_tan_assessment(
     raw: Union[dict[str, Any], TanPBPKAssessment],
     document: Optional[Union[dict[str, Any], ExtractedDocument]] = None,
 ) -> TanPBPKAssessment:
-    """Validate an LLM response and enforce complete, evidence-grounded items."""
-    if isinstance(raw, TanPBPKAssessment):
-        assessment = raw
-    else:
-        # Gracefully repair LLM field aliases before Pydantic validation
-        if isinstance(raw, dict) and isinstance(raw.get("items"), list):
-            for item_dict in raw["items"]:
-                if isinstance(item_dict, dict):
-                    if not item_dict.get("details") and item_dict.get("rationale"):
-                        item_dict["details"] = str(item_dict.pop("rationale"))
-                    elif not item_dict.get("details"):
-                        item_dict["details"] = "Evaluated from paper Markdown."
-                    # Ensure required fields exist using TAN_QUESTIONNAIRE_ITEMS lookup
-                    iid = item_dict.get("item_id")
-                    if iid:
-                        defn = next((d for d in TAN_QUESTIONNAIRE_ITEMS if d["item_id"] == iid), None)
-                        if defn:
-                            item_dict.setdefault("section", defn["section"])
-                            item_dict.setdefault("question", defn["question"])
-        assessment = TanPBPKAssessment.model_validate(raw)
+    """Validate an LLM response and enforce complete, evidence-grounded items.
 
-    raw_by_id = {item.item_id: item for item in assessment.items}
+    Validates item-by-item so that malformed edge cases in a single item do not
+    discard the remaining valid answers.
+    """
+    raw_by_id: dict[str, TanQuestionnaireItem] = {}
+
+    if isinstance(raw, TanPBPKAssessment):
+        raw_by_id = {item.item_id: item for item in raw.items}
+    elif isinstance(raw, dict):
+        raw_items = raw.get("items")
+        if isinstance(raw_items, list):
+            for item_dict in raw_items:
+                if not isinstance(item_dict, dict):
+                    continue
+
+                iid = item_dict.get("item_id")
+                if not iid or not isinstance(iid, str):
+                    continue
+
+                defn = next((d for d in TAN_QUESTIONNAIRE_ITEMS if d["item_id"] == iid), None)
+                if not defn:
+                    continue  # Ignore unknown item IDs gracefully
+
+                # Repair field aliases
+                if not item_dict.get("details") and item_dict.get("rationale"):
+                    item_dict["details"] = str(item_dict.pop("rationale"))
+                elif not item_dict.get("details"):
+                    item_dict["details"] = "Evaluated from paper Markdown."
+
+                item_dict.setdefault("section", defn["section"])
+                item_dict.setdefault("question", defn["question"])
+                item_dict.setdefault("allowed_source_sections", defn.get("allowed_source_sections", []))
+                item_dict.setdefault("routing_rule", defn.get("routing_rule"))
+
+                # Normalize response enum gracefully
+                resp_raw = str(item_dict.get("response") or "").lower().strip()
+                resp_map = {
+                    "yes": ResponseOption.YES,
+                    "partially": ResponseOption.PARTIALLY,
+                    "no": ResponseOption.NO,
+                    "not_applicable": ResponseOption.NOT_APPLICABLE,
+                    "not applicable": ResponseOption.NOT_APPLICABLE,
+                    "n/a": ResponseOption.NOT_APPLICABLE,
+                    "i_cannot_answer": ResponseOption.I_CANNOT_ANSWER,
+                    "cannot_answer": ResponseOption.I_CANNOT_ANSWER,
+                    "i cannot answer": ResponseOption.I_CANNOT_ANSWER,
+                }
+                item_dict["response"] = resp_map.get(resp_raw, ResponseOption.I_CANNOT_ANSWER)
+
+                # Sanitize evidence list
+                raw_ev = item_dict.get("evidence")
+                clean_ev = []
+                if isinstance(raw_ev, list):
+                    for ev in raw_ev:
+                        if isinstance(ev, EvidenceReference):
+                            clean_ev.append(ev)
+                        elif isinstance(ev, dict):
+                            # Coerce page numbers: string digits ("3", "3.0") -> int, reject <= 0
+                            sp = ev.get("source_page")
+                            if sp is not None:
+                                try:
+                                    sp_int = int(float(str(sp).strip()))
+                                    ev["source_page"] = sp_int if sp_int > 0 else None
+                                except (ValueError, TypeError):
+                                    ev["source_page"] = None
+                            # Sanitize quotes: strip and ignore "N/A"
+                            if ev.get("source_quote") is not None:
+                                sq = str(ev["source_quote"]).strip()
+                                ev["source_quote"] = sq if sq and sq.lower() not in {"n/a", "none"} else None
+                            # Sanitize locations: strip and ignore "N/A"
+                            if ev.get("source_location") is not None:
+                                sl = str(ev["source_location"]).strip()
+                                ev["source_location"] = sl if sl and sl.lower() not in {"n/a", "none"} else None
+                            try:
+                                clean_ev.append(EvidenceReference.model_validate(ev))
+                            except Exception:
+                                pass
+                        elif isinstance(ev, str) and ev.strip():
+                            clean_ev.append(EvidenceReference(source_quote=ev.strip(), source_location="text"))
+                item_dict["evidence"] = clean_ev
+
+                try:
+                    valid_item = TanQuestionnaireItem.model_validate(item_dict)
+                    raw_by_id[iid] = valid_item
+                except Exception as exc:
+                    logger.warning("Item %s failed individual validation (%s); defaulting.", iid, exc)
     normalized: List[TanQuestionnaireItem] = []
     for definition in TAN_QUESTIONNAIRE_ITEMS:
         source = raw_by_id.get(definition["item_id"])
@@ -658,29 +725,61 @@ def normalize_tan_assessment(
         )
 
     cannot_count = sum(item.response == ResponseOption.I_CANNOT_ANSWER for item in normalized)
-    gaps = list(dict.fromkeys(list(assessment.key_gaps) + [
+
+    if isinstance(raw, TanPBPKAssessment):
+        template_name = raw.template_name
+        template_version = raw.template_version
+        assessment_date = raw.assessment_date
+        reviewer = raw.reviewer
+        pipeline_version = raw.pipeline_version
+        model_identification = raw.model_identification
+        verification_summary = raw.verification_summary
+        raw_key_gaps = list(raw.key_gaps)
+        raw_reviewer_notes = list(raw.reviewer_notes)
+    elif isinstance(raw, dict):
+        template_name = raw.get("template_name") or "Refined TAN et al. PBPK Model Evaluation & Extraction Questionnaire"
+        template_version = raw.get("template_version") or "Refined-Tan-PBPK-Research-v1"
+        assessment_date = raw.get("assessment_date")
+        reviewer = raw.get("reviewer") or "APEX-LLM"
+        pipeline_version = raw.get("pipeline_version") or "Refined-Tan-PBPK-v1"
+        model_identification = raw.get("model_identification") or {}
+        verification_summary = raw.get("verification_summary") or {}
+        raw_key_gaps = list(raw.get("key_gaps") or [])
+        raw_reviewer_notes = list(raw.get("reviewer_notes") or [])
+    else:
+        template_name = "Refined TAN et al. PBPK Model Evaluation & Extraction Questionnaire"
+        template_version = "Refined-Tan-PBPK-Research-v1"
+        assessment_date = None
+        reviewer = "APEX-LLM"
+        pipeline_version = "Refined-Tan-PBPK-v1"
+        model_identification = {}
+        verification_summary = {}
+        raw_key_gaps = []
+        raw_reviewer_notes = []
+
+    gaps = list(dict.fromkeys(raw_key_gaps + [
         f"{item.item_id}: model-specific evidence not sufficient for a supported rating"
         for item in normalized
         if item.response == ResponseOption.I_CANNOT_ANSWER
     ]))
     return TanPBPKAssessment(
-        template_name=assessment.template_name,
-        template_version=assessment.template_version,
-        assessment_date=assessment.assessment_date,
-        reviewer=assessment.reviewer,
-        pipeline_version=assessment.pipeline_version,
-        model_identification=assessment.model_identification,
+        template_name=template_name,
+        template_version=template_version,
+        assessment_date=assessment_date,
+        reviewer=reviewer,
+        pipeline_version=pipeline_version,
+        model_identification=model_identification,
         assessment_scope=(
             "Model-specific evidence only; generic Introduction/Background statements are excluded unless explicitly tied to the model."
         ),
         items=normalized,
-        verification_summary=assessment.verification_summary,
+        verification_summary=verification_summary,
         overall_fit_for_purpose=(
             f"{len(normalized) - cannot_count}/{len(normalized)} Tan items have an evidence-backed rating; "
             f"{cannot_count}/{len(normalized)} remain i_cannot_answer."
         ),
         key_gaps=gaps,
-        reviewer_notes=list(dict.fromkeys(assessment.reviewer_notes + [
+        reviewer_notes=list(dict.fromkeys(raw_reviewer_notes + [
             "Confidence was recalculated by APEX from evidence completeness; the LLM confidence value was not trusted.",
         ])),
     )

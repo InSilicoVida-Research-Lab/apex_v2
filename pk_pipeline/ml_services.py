@@ -446,7 +446,7 @@ class SGLangExtractor:
                 return
 
         # 4. Priority 4: OpenAI-Compatible API / Cloud API from Config.OPENAI_BASE_URL
-        if force in ("auto", "api", "openai") or (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY != "EMPTY"):
+        if force in ("auto", "api", "openai", "cloud") and (Config.OPENAI_API_KEY and Config.OPENAI_API_KEY != "EMPTY"):
             if self._check_openai_api(Config.OPENAI_BASE_URL, Config.OPENAI_API_KEY):
                 self.backend_mode = "openai_api"
                 self.server_url = Config.OPENAI_BASE_URL

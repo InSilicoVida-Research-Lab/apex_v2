@@ -429,11 +429,12 @@ def normalize_parameter_units_and_ranges(param: dict) -> dict:
     # 5. Parse time-varying ranges (e.g., '56.9 - 70 (initial)' or '0 - 3.8' in Loccisano)
     val_text = (q.get("value_text") or "").strip()
     m_range = RANGE_CELL_RE.match(val_text)
-    if m_range and q.get("value") is None:
+    if m_range:
         start_v = float(m_range.group(1))
         end_v = float(m_range.group(2))
         q["start_value"] = start_v
         q["end_value"] = end_v
+        q["value"] = None
         q["value_qualifier"] = m_range.group(3) or "time_varying_range"
         q["uncertainty"] = {
             "type": "time_varying_range",
