@@ -1,0 +1,239 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Schematic overview of the PBPK model for BPA, BPS, BPF, and BPAF and their glucuronides and sulfates"
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [],
+  "model_structure": {
+    "reported_compartment_count": null,
+    "listed_compartment_count": 10,
+    "count_consistency": null,
+    "compartments": [
+      {
+        "id": "skin_surface_depot",
+        "label_raw": "Skin surface depot",
+        "confidence": 0.95
+      },
+      {
+        "id": "skin",
+        "label_raw": "Skin",
+        "confidence": 0.95
+      },
+      {
+        "id": "gut",
+        "label_raw": "Gut",
+        "confidence": 0.95
+      },
+      {
+        "id": "liver",
+        "label_raw": "Liver",
+        "confidence": 0.95
+      },
+      {
+        "id": "blood",
+        "label_raw": "Blood",
+        "confidence": 0.95
+      },
+      {
+        "id": "rich",
+        "label_raw": "Rich",
+        "confidence": 0.95
+      },
+      {
+        "id": "slow",
+        "label_raw": "Slow",
+        "confidence": 0.95
+      },
+      {
+        "id": "subserum",
+        "label_raw": "Subserum",
+        "confidence": 0.95
+      },
+      {
+        "id": "urine",
+        "label_raw": "Urine",
+        "confidence": 0.95
+      },
+      {
+        "id": "feces",
+        "label_raw": "Feces",
+        "confidence": 0.95
+      }
+    ],
+    "connections": [
+      {
+        "source": "external",
+        "target": "gut",
+        "label_raw": "Oral dose",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "external",
+        "target": "skin_surface_depot",
+        "label_raw": "Dermal dose",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "skin_surface_depot",
+        "target": "skin",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "skin",
+        "target": "blood",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "gut",
+        "target": "liver",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "gut",
+        "target": "feces",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "liver",
+        "target": "blood",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "liver",
+        "target": "subserum",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "blood",
+        "target": "rich",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "blood",
+        "target": "slow",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "rich",
+        "target": "blood",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "slow",
+        "target": "blood",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "blood",
+        "target": "subserum",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "subserum",
+        "target": "urine",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      }
+    ],
+    "absorption": {
+      "route": "oral",
+      "model_type": "mechanistic",
+      "site": "gut",
+      "evidence_quote": "The perorally ingested bisphenols are presystemically metabolized in the gut and in the liver"
+    },
+    "metabolism": {
+      "organ": "liver",
+      "enzyme": null,
+      "metabolite": "glucuronides and sulfates",
+      "kinetics": null,
+      "parameters": null,
+      "evidence_quote": "presystemically metabolized in the gut and in the liver to the respective metabolites"
+    },
+    "elimination": {
+      "routes": [
+        "renal",
+        "fecal"
+      ],
+      "evidence_quote": "The metabolites enter a subserum compartment without being distributed to the other tissues before excretion."
+    },
+    "unresolved": null,
+    "source_location": "Figure 2",
+    "equations_provided": "none",
+    "allometric_scaling_rules": [],
+    "scaling_equations": []
+  },
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

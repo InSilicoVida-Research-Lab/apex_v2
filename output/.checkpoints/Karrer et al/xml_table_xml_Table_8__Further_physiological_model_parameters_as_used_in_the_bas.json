@@ -1,0 +1,2888 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Further physiological model parameters as used in the basic PBPK models for BPA, BPS, BPF, and BPAF."
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 8",
+      "title": "Table 8: Further physiological model parameters as used in the basic PBPK models for BPA, BPS, BPF, and BPAF.",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Further physiological parameters"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "BPA"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "BPS"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "BPF"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "BPAF"
+          ],
+          "index": 4
+        },
+        {
+          "column_id": "c6",
+          "path": [
+            "All BPs"
+          ],
+          "index": 5
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Gastric emptying ( 1 / h / kg BW − 0.25 )"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Volume of distribution in small intestine (mL)"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )",
+            "2.10 [a]",
+            "5.00 [c]",
+            "2.10 [d]"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "Urinary excretion ( 1 / h / kg BW 0.75 )",
+            "0.060 [f]",
+            "0.30 [c]",
+            "0.060 [d]"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+            "0.9 [f]",
+            "0.33 [c]",
+            "1.0 [g]"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "EHR unconjugated ( 1 / h / kg BW − 0.25 )",
+            "0.20 [f]",
+            "0.35 [c]",
+            "0.20 [d]"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "EHR as glucuronide ( 1 / h / kg BW − 0.25 )",
+            "0.20 [f]",
+            "2.0 [c]",
+            "0.20 [d]"
+          ],
+          "index": 6
+        },
+        {
+          "row_id": "r8",
+          "path": [
+            "Glucuronides & Sulfates"
+          ],
+          "index": 7
+        },
+        {
+          "row_id": "r9",
+          "path": [
+            "Uptake from enterocytes into the liver ( 1 / h / kg BW − 0.25 )"
+          ],
+          "index": 8
+        },
+        {
+          "row_id": "r10",
+          "path": [
+            "Volume of distribution (fraction of body weight)"
+          ],
+          "index": 9
+        },
+        {
+          "row_id": "r11",
+          "path": [
+            "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )",
+            "0.35 [f]",
+            "1.2 [c]",
+            "0.35 [d]"
+          ],
+          "index": 10
+        },
+        {
+          "row_id": "r12",
+          "path": [
+            "Urinary excretion sulfate ( 1 / h / kg BW 0.75 )"
+          ],
+          "index": 11
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c1",
+          "row_id": "r1",
+          "column_id": "c1",
+          "text": "Gastric emptying ( 1 / h / kg BW − 0.25 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c6",
+          "row_id": "r1",
+          "column_id": "c6",
+          "text": "3.50 [a]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c1",
+          "row_id": "r2",
+          "column_id": "c1",
+          "text": "Volume of distribution in small intestine (mL)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c6",
+          "row_id": "r2",
+          "column_id": "c6",
+          "text": "122 [b]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c1",
+          "row_id": "r3",
+          "column_id": "c1",
+          "text": "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c2",
+          "row_id": "r3",
+          "column_id": "c2",
+          "text": "2.10 [a]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "5.00 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "2.10 [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c5",
+          "row_id": "r3",
+          "column_id": "c5",
+          "text": "5.00 [e]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c1",
+          "row_id": "r4",
+          "column_id": "c1",
+          "text": "Urinary excretion ( 1 / h / kg BW 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c2",
+          "row_id": "r4",
+          "column_id": "c2",
+          "text": "0.060 [f]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "0.30 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "0.060 [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "0.30 [e]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c1",
+          "row_id": "r5",
+          "column_id": "c1",
+          "text": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "0.9 [f]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "0.33 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "1.0 [g]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "0.3 [h]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c1",
+          "row_id": "r6",
+          "column_id": "c1",
+          "text": "EHR unconjugated ( 1 / h / kg BW − 0.25 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c2",
+          "row_id": "r6",
+          "column_id": "c2",
+          "text": "0.20 [f]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "0.35 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "0.20 [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c5",
+          "row_id": "r6",
+          "column_id": "c5",
+          "text": "0.35 [e]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c1",
+          "row_id": "r7",
+          "column_id": "c1",
+          "text": "EHR as glucuronide ( 1 / h / kg BW − 0.25 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c2",
+          "row_id": "r7",
+          "column_id": "c2",
+          "text": "0.20 [f]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "2.0 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "0.20 [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "2.0 [e]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r8_c1",
+          "row_id": "r8",
+          "column_id": "c1",
+          "text": "Glucuronides & Sulfates",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c1",
+          "row_id": "r9",
+          "column_id": "c1",
+          "text": "Uptake from enterocytes into the liver ( 1 / h / kg BW − 0.25 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r9_c6",
+          "row_id": "r9",
+          "column_id": "c6",
+          "text": "50.0 [f] , [i]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c1",
+          "row_id": "r10",
+          "column_id": "c1",
+          "text": "Volume of distribution (fraction of body weight)",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r10_c6",
+          "row_id": "r10",
+          "column_id": "c6",
+          "text": "0.0435 [j]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c1",
+          "row_id": "r11",
+          "column_id": "c1",
+          "text": "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c2",
+          "row_id": "r11",
+          "column_id": "c2",
+          "text": "0.35 [f]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c3",
+          "row_id": "r11",
+          "column_id": "c3",
+          "text": "1.2 [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c4",
+          "row_id": "r11",
+          "column_id": "c4",
+          "text": "0.35 [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r11_c5",
+          "row_id": "r11",
+          "column_id": "c5",
+          "text": "1.2 [e]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c1",
+          "row_id": "r12",
+          "column_id": "c1",
+          "text": "Urinary excretion sulfate ( 1 / h / kg BW 0.75 )",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r12_c6",
+          "row_id": "r12",
+          "column_id": "c6",
+          "text": "0.030 [f] , [i]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [],
+      "populations": [],
+      "footnotes": [
+        "[a] Reference supporting this value: Kortejärvi et al. ( 2007 ).",
+        "[b] Reference supporting this value: Gertz et al ( 2011 ).",
+        "[c] Visually fitted for BPS: The parameter was adjusted to decrease the distance between measured and modeled concentrations.",
+        "[d] No data was available to calibrate the BPF model, and we used the BPA model calibration due to similarities in molecular weight and chemical structure.",
+        "[e] No data was available to calibrate the BPAF model, and we used the BPS model calibration due to similarities in molecular weight and chemical structure.",
+        "[f] Reference supporting this value: Yang et al. ( 2015 ). Their parametrization still led to good correspondence between measurements and model.",
+        "[g] We used an EHR rate of 0% for BPF as result of an educated guess due to BPF having a lower molecular weight than BPA.",
+        "[h] We used an EHR rate of 70% for BPAF as result of an educated guess due to BPAF having a higher molecular weight than BPS.",
+        "[i] The BPA parametrization was used for all analogs.",
+        "[j] Set equal to the plasma volume of 0.0435 L / kg for adult humans because the metabolites were assumed to be distributed with the systemic circulation. Reference supporting this value: ICRP ( 2002 ).",
+        "[*] Note: BW, body weight; BP, bisphenol; BPA, bisphenol A; BPAF, bisphenol AF; BPF, bisphenol F; BPS, bisphenol S; EHR, enterohepatic recirculation."
+      ],
+      "source_page": null,
+      "source_image_path": null
+    }
+  ],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [
+    {
+      "block_name": "Table 8: Further physiological parameters",
+      "implied_species": null,
+      "implied_unit_original": null,
+      "parameter_class": null,
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "gastric_emptying_rate",
+          "parameter_name": "Gastric emptying",
+          "parameter_name_original": "Gastric emptying",
+          "parameter_name_standardized": "gastric_emptying_rate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_GE",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Stomach",
+            "organ": "Stomach",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "3.50 [a]",
+            "value": 3.5,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "a",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r1",
+            "column_id": "c5",
+            "cell_id": "cell_r1_c5",
+            "row_path": [
+              "Further physiological parameters",
+              "Gastric emptying ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "All BPs"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "3.50 [a]",
+            "reference": "Kortejärvi et al. (2007)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "organ_volume",
+          "parameter_name": "Volume of distribution in small intestine",
+          "parameter_name_original": "Volume of distribution in small intestine",
+          "parameter_name_standardized": "volume_small_intestine",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "V_SI",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Small intestine",
+            "organ": "Small intestine",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "122 [b]",
+            "value": 122.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "mL",
+            "unit_original": "mL",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "b",
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r2",
+            "column_id": "c5",
+            "cell_id": "cell_r2_c5",
+            "row_path": [
+              "Further physiological parameters",
+              "Volume of distribution in small intestine (mL)"
+            ],
+            "column_path": [
+              "All BPs"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "122 [b]",
+            "reference": "Gertz et al. (2011)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "absorption_rate_constant",
+          "parameter_name": "Oral uptake from small intestine to liver",
+          "parameter_name_original": "Oral uptake from small intestine to liver",
+          "parameter_name_standardized": "oral_uptake_SI_to_liver",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_SI_L",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Small intestine to liver",
+            "organ": "Small intestine to liver",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.10 [a]",
+            "value": 2.1,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "a",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r3",
+            "column_id": "c1",
+            "cell_id": "cell_r3_c1",
+            "row_path": [
+              "Further physiological parameters",
+              "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.10 [a]",
+            "reference": "Kortejärvi et al. (2007)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "absorption_rate_constant",
+          "parameter_name": "Oral uptake from small intestine to liver",
+          "parameter_name_original": "Oral uptake from small intestine to liver",
+          "parameter_name_standardized": "oral_uptake_SI_to_liver",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_SI_L",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Small intestine to liver",
+            "organ": "Small intestine to liver",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "5.00 [c]",
+            "value": 5.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r3",
+            "column_id": "c2",
+            "cell_id": "cell_r3_c2",
+            "row_path": [
+              "Further physiological parameters",
+              "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "5.00 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "absorption_rate_constant",
+          "parameter_name": "Oral uptake from small intestine to liver",
+          "parameter_name_original": "Oral uptake from small intestine to liver",
+          "parameter_name_standardized": "oral_uptake_SI_to_liver",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_SI_L",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Small intestine to liver",
+            "organ": "Small intestine to liver",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.10 [d]",
+            "value": 2.1,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "d",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r3",
+            "column_id": "c3",
+            "cell_id": "cell_r3_c3",
+            "row_path": [
+              "Further physiological parameters",
+              "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.10 [d]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "absorption_rate_constant",
+          "parameter_name": "Oral uptake from small intestine to liver",
+          "parameter_name_original": "Oral uptake from small intestine to liver",
+          "parameter_name_standardized": "oral_uptake_SI_to_liver",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_SI_L",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Small intestine to liver",
+            "organ": "Small intestine to liver",
+            "route": "Oral",
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "5.00 [e]",
+            "value": 5.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "e",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r3",
+            "column_id": "c4",
+            "cell_id": "cell_r3_c4",
+            "row_path": [
+              "Further physiological parameters",
+              "Oral uptake from small intestine to liver ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "5.00 [e]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion",
+          "parameter_name_original": "Urinary excretion",
+          "parameter_name_standardized": "urinary_excretion_rate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.060 [f]",
+            "value": 0.06,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r4",
+            "column_id": "c1",
+            "cell_id": "cell_r4_c1",
+            "row_path": [
+              "Further physiological parameters",
+              "Urinary excretion ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.060 [f]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion",
+          "parameter_name_original": "Urinary excretion",
+          "parameter_name_standardized": "urinary_excretion_rate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.30 [c]",
+            "value": 0.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r4",
+            "column_id": "c2",
+            "cell_id": "cell_r4_c2",
+            "row_path": [
+              "Further physiological parameters",
+              "Urinary excretion ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.30 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion",
+          "parameter_name_original": "Urinary excretion",
+          "parameter_name_standardized": "urinary_excretion_rate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.060 [d]",
+            "value": 0.06,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "d",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r4",
+            "column_id": "c3",
+            "cell_id": "cell_r4_c3",
+            "row_path": [
+              "Further physiological parameters",
+              "Urinary excretion ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.060 [d]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion",
+          "parameter_name_original": "Urinary excretion",
+          "parameter_name_standardized": "urinary_excretion_rate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.30 [e]",
+            "value": 0.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "e",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r4",
+            "column_id": "c4",
+            "cell_id": "cell_r4_c4",
+            "row_path": [
+              "Further physiological parameters",
+              "Urinary excretion ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.30 [e]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "fraction_unbound",
+          "parameter_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_original": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_standardized": "fraction_glucuronide_liver_to_serum",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "f_gluc_serum",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.9 [f]",
+            "value": 0.9,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "fraction",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f",
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r5",
+            "column_id": "c1",
+            "cell_id": "cell_r5_c1",
+            "row_path": [
+              "Further physiological parameters",
+              "Fraction of glucuronide in liver taken up directly into serum (no EHR)"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.9 [f]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "fraction_unbound",
+          "parameter_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_original": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_standardized": "fraction_glucuronide_liver_to_serum",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "f_gluc_serum",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.33 [c]",
+            "value": 0.33,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "fraction",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r5",
+            "column_id": "c2",
+            "cell_id": "cell_r5_c2",
+            "row_path": [
+              "Further physiological parameters",
+              "Fraction of glucuronide in liver taken up directly into serum (no EHR)"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.33 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "fraction_unbound",
+          "parameter_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_original": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_standardized": "fraction_glucuronide_liver_to_serum",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "f_gluc_serum",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "1.0 [g]",
+            "value": 1.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "fraction",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "g",
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r5",
+            "column_id": "c3",
+            "cell_id": "cell_r5_c3",
+            "row_path": [
+              "Further physiological parameters",
+              "Fraction of glucuronide in liver taken up directly into serum (no EHR)"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "1.0 [g]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "fraction_unbound",
+          "parameter_name": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_original": "Fraction of glucuronide in liver taken up directly into serum (no EHR)",
+          "parameter_name_standardized": "fraction_glucuronide_liver_to_serum",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "f_gluc_serum",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.3 [h]",
+            "value": 0.3,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction",
+            "unit_original": "fraction",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "h",
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r5",
+            "column_id": "c4",
+            "cell_id": "cell_r5_c4",
+            "row_path": [
+              "Further physiological parameters",
+              "Fraction of glucuronide in liver taken up directly into serum (no EHR)"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.3 [h]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR unconjugated",
+          "parameter_name_original": "EHR unconjugated",
+          "parameter_name_standardized": "ehr_rate_unconjugated",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_unc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.20 [f]",
+            "value": 0.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r6",
+            "column_id": "c1",
+            "cell_id": "cell_r6_c1",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR unconjugated ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.20 [f]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR unconjugated",
+          "parameter_name_original": "EHR unconjugated",
+          "parameter_name_standardized": "ehr_rate_unconjugated",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_unc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.35 [c]",
+            "value": 0.35,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r6",
+            "column_id": "c2",
+            "cell_id": "cell_r6_c2",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR unconjugated ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.35 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR unconjugated",
+          "parameter_name_original": "EHR unconjugated",
+          "parameter_name_standardized": "ehr_rate_unconjugated",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_unc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.20 [d]",
+            "value": 0.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "d",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r6",
+            "column_id": "c3",
+            "cell_id": "cell_r6_c3",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR unconjugated ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.20 [d]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR unconjugated",
+          "parameter_name_original": "EHR unconjugated",
+          "parameter_name_standardized": "ehr_rate_unconjugated",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_unc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.35 [e]",
+            "value": 0.35,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "e",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r6",
+            "column_id": "c4",
+            "cell_id": "cell_r6_c4",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR unconjugated ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.35 [e]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR as glucuronide",
+          "parameter_name_original": "EHR as glucuronide",
+          "parameter_name_standardized": "ehr_rate_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.20 [f]",
+            "value": 0.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r7",
+            "column_id": "c1",
+            "cell_id": "cell_r7_c1",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR as glucuronide ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.20 [f]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR as glucuronide",
+          "parameter_name_original": "EHR as glucuronide",
+          "parameter_name_standardized": "ehr_rate_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.0 [c]",
+            "value": 2.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r7",
+            "column_id": "c2",
+            "cell_id": "cell_r7_c2",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR as glucuronide ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.0 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR as glucuronide",
+          "parameter_name_original": "EHR as glucuronide",
+          "parameter_name_standardized": "ehr_rate_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.20 [d]",
+            "value": 0.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "d",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r7",
+            "column_id": "c3",
+            "cell_id": "cell_r7_c3",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR as glucuronide ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.20 [d]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "EHR as glucuronide",
+          "parameter_name_original": "EHR as glucuronide",
+          "parameter_name_standardized": "ehr_rate_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_EHR_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterohepatic recirculation",
+            "organ": "Enterohepatic recirculation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.0 [e]",
+            "value": 2.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "e",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r7",
+            "column_id": "c4",
+            "cell_id": "cell_r7_c4",
+            "row_path": [
+              "Further physiological parameters",
+              "EHR as glucuronide ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.0 [e]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "transfer_rate",
+          "parameter_name": "Uptake from enterocytes into the liver",
+          "parameter_name_original": "Uptake from enterocytes into the liver",
+          "parameter_name_standardized": "uptake_enterocytes_to_liver",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_ent_l",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Enterocytes to liver",
+            "organ": "Enterocytes to liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "50.0 [f] , [i]",
+            "value": 50.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^-0.25",
+            "unit_original": "1/h/kg BW^-0.25",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f, i",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r9",
+            "column_id": "c5",
+            "cell_id": "cell_r9_c5",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Uptake from enterocytes into the liver ( 1 / h / kg BW − 0.25 )"
+            ],
+            "column_path": [
+              "All BPs"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "50.0 [f] , [i]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "physiological",
+          "parameter_subclass": "distribution_volume",
+          "parameter_name": "Volume of distribution",
+          "parameter_name_original": "Volume of distribution",
+          "parameter_name_standardized": "volume_distribution_fraction_bw",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "Vd_frac",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Systemic circulation",
+            "organ": "Systemic circulation",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.0435 [j]",
+            "value": 0.0435,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "fraction of body weight",
+            "unit_original": "fraction of body weight",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "j",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r10",
+            "column_id": "c5",
+            "cell_id": "cell_r10_c5",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Volume of distribution (fraction of body weight)"
+            ],
+            "column_path": [
+              "All BPs"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.0435 [j]",
+            "reference": "ICRP (2002)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion glucuronide",
+          "parameter_name_original": "Urinary excretion glucuronide",
+          "parameter_name_standardized": "urinary_excretion_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.35 [f]",
+            "value": 0.35,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r11",
+            "column_id": "c1",
+            "cell_id": "cell_r11_c1",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.35 [f]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion glucuronide",
+          "parameter_name_original": "Urinary excretion glucuronide",
+          "parameter_name_standardized": "urinary_excretion_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "1.2 [c]",
+            "value": 1.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "c",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r11",
+            "column_id": "c2",
+            "cell_id": "cell_r11_c2",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPS"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "1.2 [c]",
+            "reference": null,
+            "status": "fitted",
+            "parameter_status": "Fitted",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion glucuronide",
+          "parameter_name_original": "Urinary excretion glucuronide",
+          "parameter_name_standardized": "urinary_excretion_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.35 [d]",
+            "value": 0.35,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "d",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r11",
+            "column_id": "c3",
+            "cell_id": "cell_r11_c3",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.35 [d]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion glucuronide",
+          "parameter_name_original": "Urinary excretion glucuronide",
+          "parameter_name_standardized": "urinary_excretion_glucuronide",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine_gluc",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "1.2 [e]",
+            "value": 1.2,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "e",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r11",
+            "column_id": "c4",
+            "cell_id": "cell_r11_c4",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Urinary excretion glucuronide ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "1.2 [e]",
+            "reference": null,
+            "status": "assumed_default",
+            "parameter_status": "Assumed default",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "renal_clearance",
+          "parameter_name": "Urinary excretion sulfate",
+          "parameter_name_original": "Urinary excretion sulfate",
+          "parameter_name_standardized": "urinary_excretion_sulfate",
+          "symbol": null,
+          "symbol_original": null,
+          "symbol_standardized": "k_urine_sulf",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": null,
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Kidney",
+            "organ": "Kidney",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.030 [f] , [i]",
+            "value": 0.03,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "1/h/kg BW^0.75",
+            "unit_original": "1/h/kg BW^0.75",
+            "unit_standardized": null,
+            "unit_inherited": false,
+            "value_qualifier": null,
+            "footnote_marker": "f, i",
+            "normalization_basis": "body_weight"
+          },
+          "provenance": {
+            "source_table": "Table 8",
+            "row_id": "r12",
+            "column_id": "c5",
+            "cell_id": "cell_r12_c5",
+            "row_path": [
+              "Glucuronides & Sulfates",
+              "Urinary excretion sulfate ( 1 / h / kg BW 0.75 )"
+            ],
+            "column_path": [
+              "All BPs"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.030 [f] , [i]",
+            "reference": "Yang et al. (2015)",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

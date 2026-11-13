@@ -1,0 +1,827 @@
+{
+  "template_name": "Tan et al. PBPK Reporting Template (Markdown Baseline)",
+  "template_version": "Refined-Tan-PBPK-Research-v1",
+  "assessment_date": null,
+  "reviewer": null,
+  "pipeline_version": null,
+  "model_identification": {
+    "model_name": "1-s2_0-S0378427423002060-main",
+    "authors": "<!-- PAGE 1 -->",
+    "doi_pmid": "https://doi.org/10.1016/j.toxlet.2023.06.006",
+    "journal": "journal homepage: www.journals.elsevier.com/toxicology-letters"
+  },
+  "assessment_scope": "Deterministic scan of Markdown text; generic Introduction/Background excluded.",
+  "items": [
+    {
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Methods"
+      ],
+      "routing_rule": "Do not infer identifiers or compounds from general Introduction background.",
+      "response": "partially",
+      "details": "Model title and context identified from Markdown header: 1-s2_0-S0378427423002060-main",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Title",
+          "source_location": "Markdown header",
+          "source_quote": "1-s2_0-S0378427423002060-main"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.2",
+      "section": "1. Model identification",
+      "question": "Extract authors, publication year, journal, and DOI/PMID.",
+      "allowed_source_sections": [
+        "Title page",
+        "Header",
+        "Bibliographic metadata"
+      ],
+      "routing_rule": "Use bibliographic metadata only.",
+      "response": "partially",
+      "details": "Bibliographic information identified: https://doi.org/10.1016/j.toxlet.2023.06.006",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": 1,
+          "source_section": "Metadata",
+          "source_location": "Header metadata",
+          "source_quote": "https://doi.org/10.1016/j.toxlet.2023.06.006"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_1.3",
+      "section": "1. Reviewer context",
+      "question": "Record assessment date, reviewer, and pipeline version.",
+      "allowed_source_sections": [
+        "Reviewer metadata"
+      ],
+      "routing_rule": "This is pipeline metadata, not paper evidence.",
+      "response": "yes",
+      "details": "Assessment metadata is assigned deterministically by APEX.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The response has no auditable model-specific evidence reference."
+    },
+    {
+      "item_id": "TAN_2.1.1",
+      "section": "2.1 Executive summary",
+      "question": "What is the specific scientific or regulatory rationale for conducting this PBPK analysis?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use Abstract, the final Introduction objective paragraph, and Discussion/Conclusion summary only; block general Introduction background.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.1.2",
+      "section": "2.1 Executive summary",
+      "question": "Provide a high-level overview of modeled chemicals, species, life stages/populations, exposure routes, and primary applications.",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only purpose-summary sections; do not reconstruct scope from generic background.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.1.3",
+      "section": "2.1 Executive summary",
+      "question": "What primary quantitative and scientific conclusions are supported by the PBPK simulations?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion"
+      ],
+      "routing_rule": "Use only Abstract and Discussion/Conclusion model results; do not infer conclusions from model inputs.",
+      "response": "i_cannot_answer",
+      "details": "Quantitative conclusions require structured LLM evaluation of Results/Discussion.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.3.1",
+      "section": "2.3 Model purpose",
+      "question": "What exact scientific, dosimetry, or regulatory questions does the model address, and what internal dose metrics are predicted?",
+      "allowed_source_sections": [
+        "Title",
+        "Abstract",
+        "Introduction: final paragraph",
+        "Discussion",
+        "Conclusion",
+        "Methods: model purpose"
+      ],
+      "routing_rule": "Prefer explicit problem formulation/purpose statements; exclude generic exposure/toxicity history.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.2.1",
+      "section": "2.2 & 2.4.2 Chemical properties and active moiety",
+      "question": "Which physicochemical and PK/TK properties are explicitly used in Methods to build or parameterize the model? Identify the modeled moiety and exposure routes.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Strictly exclude general toxicity/epidemiology background not used to parameterize, calibrate, or evaluate the model.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.1",
+      "section": "2.4.1 Modeling strategy",
+      "question": "What is the end-to-end workflow from data preparation to model development, calibration/fitting, verification/evaluation, and application, and how does it support the purpose?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use Materials/Methods/Tables/Figures; exclude generic Introduction.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2A",
+      "section": "2.4.2 Data summary: parameterization studies",
+      "question": "Summarize specific in vitro, in silico, mass-balance, tissue-distribution, metabolism, transporter, and protein-binding studies used to inform structure or derive parameters.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Require study conditions and citations when reported; do not treat background citations as model data.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2B",
+      "section": "2.4.2 Calibration datasets",
+      "question": "List all datasets used to calibrate, optimize, or fit unknown parameters, including citation, species/population, matrix, sample size, dosing/exposure, and time points.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Only label a dataset calibration when the paper explicitly assigns that role.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.2C",
+      "section": "2.4.2 Evaluation datasets",
+      "question": "List independent datasets held out from calibration and used to evaluate predictive capability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Tables",
+        "Figures",
+        "Supplementary Information",
+        "Supplementary Code",
+        "Results"
+      ],
+      "routing_rule": "Only label a dataset independent when the paper explicitly distinguishes it from calibration.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.1",
+      "section": "2.4.3A Structure and lineage",
+      "question": "Does the model replicate, refine/modify a published model, or introduce a new structure? Describe and justify customized modifications and predecessor citations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Exclude Introduction; use Methods, schematic, Discussion limitations, and supplementary code.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.2",
+      "section": "2.4.3A Structure and platform",
+      "question": "For each species/life-stage submodel, list anatomical compartments, total count, platform, and inter-organ/inter-life-stage connectivity.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use diagrams and model-structure Methods; do not infer disconnected links.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.3",
+      "section": "2.4.3B ADME: absorption",
+      "question": "How does the model represent uptake across oral/GI, drinking water, breast milk, inhalation, dermal, IV, and presystemic routes?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, mathematical implementation, governing parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "ADME absorption mechanisms identified in Markdown methods/results.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Mentions of absorption in model text"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.4",
+      "section": "2.4.3B ADME: binding and blood partitioning",
+      "question": "How are protein binding, free fraction, hematocrit, and blood-to-plasma partitioning represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "ADME binding/distribution mechanisms identified in Markdown methods/results.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Mentions of binding/distribution in model text"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.5",
+      "section": "2.4.3B ADME: tissue partitioning",
+      "question": "Which tissues are perfusion- versus diffusion-limited, how are partition coefficients determined, and how are dynamic physiological changes represented?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "ADME tissue partitioning mechanisms identified in Markdown methods/results.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Mentions of tissue partitioning in model text"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.6",
+      "section": "2.4.3B ADME: metabolism",
+      "question": "Is the compound metabolized or inert? If metabolized, identify organs, enzymes, rate laws, parent transformation, and metabolite formation.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "ADME metabolism mechanisms identified in Markdown methods/results.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Mentions of metabolism in model text"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.7",
+      "section": "2.4.3B ADME: excretion and recirculation",
+      "question": "How are urinary, biliary/fecal, exhaled, long-half-life, renal-reabsorption, and enterohepatic mechanisms represented, including life-stage differences?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract mechanism, implementation, parameters/compartments, and exact source location.",
+      "response": "partially",
+      "details": "ADME excretion mechanisms identified in Markdown methods/results.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Mentions of excretion in model text"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.3.8",
+      "section": "2.4.3B ADME: barrier and life-stage transfer",
+      "question": "For gestational/lactational/barrier models, extract placental, amniotic, milk, and suckling-transfer mechanisms and equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Use model structure, schematic, and Methods only; mark not_applicable only when explicitly established.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.9",
+      "section": "2.4.3C Assumptions: perfusion/diffusion/lumping",
+      "question": "What assumptions concern well-stirred behavior, organ lumping, or omitted compartments, and what are the justification and structural/equation impacts?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only; do not supply textbook assumptions.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.10",
+      "section": "2.4.3C Assumptions: binding/free fraction",
+      "question": "What assumptions concern protein/RBC binding and constancy of fu/Free across concentration, species, or life stage?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.11",
+      "section": "2.4.3C Assumptions: borrowing",
+      "question": "Which parameters are borrowed across surrogate species or analogue chemicals, and why?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Do not infer borrowing from similar values; require explicit evidence.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.12",
+      "section": "2.4.3C Assumptions: clearance/resorption/ontogeny",
+      "question": "What assumptions concern zero metabolism, active renal reabsorption, or immature/omitted transporter activity in fetuses/infants?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.3.13",
+      "section": "2.4.3C Assumptions: dosing/steady state",
+      "question": "What assumptions concern pre-pregnancy run-in, route surrogates, intake adjustments, or milk production/suckling initialization?",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods: model structure/physiology/parameters",
+        "Model schematic figures",
+        "Discussion: limitations/assumptions",
+        "Supplementary Code"
+      ],
+      "routing_rule": "Extract explicit assumptions only with justification and model impact.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.4",
+      "section": "2.4.4 Model equations",
+      "question": "Provide all extracted differential mass-balance, saturable transport/metabolism, dynamic growth, and allometric scaling equations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input equation extraction; never generate missing equations.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.5A",
+      "section": "2.4.5A Parameter tabulation and scaling",
+      "question": "Extract all physiological and chemical-specific input parameters from tables, footnotes, and Methods, including dynamic ranges, units, scaling, compound, species, and life stage.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Exclude sensitivity-output and reverse-dosimetry result tables from input parameters.",
+      "response": "partially",
+      "details": "Parameter table(s) detected in Markdown text.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Tables",
+          "source_location": "Table block",
+          "source_quote": "Markdown parameter table present"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5B",
+      "section": "2.4.5B Parameter sources and competing values",
+      "question": "For each parameter, identify source category, original primary citation/location, competing values, chosen value, and rationale.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Prefer original primary citations over secondary citations; do not invent citations.",
+      "response": "partially",
+      "details": "Parameter table(s) detected in Markdown text.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Tables",
+          "source_location": "Table block",
+          "source_quote": "Markdown parameter table present"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.4.5C",
+      "section": "2.4.5C Parameter distributions and uncertainty",
+      "question": "Extract probability distributions and bounds, or explain deterministic time-varying range/alternative-bound parameterization.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Table footnotes",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not confuse confidence intervals with dynamic physiological ranges.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.6A",
+      "section": "2.4.6A Exposure and dosing",
+      "question": "Extract all simulated exposure/dosing scenarios, routes, timing, duration, formulation, feeding/fasting, doses/concentrations, and intake rates.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Input parameter tables",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use model simulation conditions only; do not infer doses from general exposure history.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.6B",
+      "section": "2.4.6B Samples, subjects, trials, and probabilistic setup",
+      "question": "Extract sample matrices/times, subject and virtual-population characteristics, number of trials/subjects, and Monte Carlo/MCMC iterations.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Results",
+        "Supporting Information"
+      ],
+      "routing_rule": "Use explicit simulation/evaluation conditions only.",
+      "response": "i_cannot_answer",
+      "details": "No model-specific evidence was captured from the Markdown text.",
+      "structured_details": {},
+      "evidence": [],
+      "confidence": "low",
+      "confidence_basis": "The required model-specific evidence was not available."
+    },
+    {
+      "item_id": "TAN_2.4.7",
+      "section": "2.4.7 Software and numerical solvers",
+      "question": "Extract software/version/product reference, ODE solver, interpolation, optimization/statistical algorithms, and code availability.",
+      "allowed_source_sections": [
+        "Materials",
+        "Methods",
+        "Supporting Information"
+      ],
+      "routing_rule": "Do not infer solver or code availability from software name alone.",
+      "response": "partially",
+      "details": "Software / solver references detected: mcsim, r package, stan",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods text",
+          "source_quote": "Software: mcsim"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1A",
+      "section": "2.5.1A Evaluation: training versus validation",
+      "question": "Compare predictions with observed time-concentration data and distinguish calibration fit from independent predictive performance.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use evaluation Methods, Results, Discussion, and evaluation figures/tables; preserve training/validation roles exactly.",
+      "response": "partially",
+      "details": "Goodness-of-fit metrics or validation terminology detected in Results/Discussion.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Results",
+          "source_location": "Results text",
+          "source_quote": "Evaluation / goodness-of-fit metrics present"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.1B",
+      "section": "2.5.1B Goodness-of-fit and applicability",
+      "question": "Extract statistical tests, fold-error criteria, visual criteria, interpretation, applicability, and limitations.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Do not infer GOF from a graph unless the paper states the criterion.",
+      "response": "partially",
+      "details": "Goodness-of-fit metrics or validation terminology detected in Results/Discussion.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Results",
+          "source_location": "Results text",
+          "source_quote": "Evaluation / goodness-of-fit metrics present"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2A",
+      "section": "2.5.2A Sensitivity protocol",
+      "question": "Extract local/global type, sampling approach, perturbation/time points/dose levels, mathematical method, and threshold criterion.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use sensitivity Methods/Results and sensitivity figures/tables only.",
+      "response": "partially",
+      "details": "Sensitivity analysis terms detected in Markdown text.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods / Results text",
+          "source_quote": "Sensitivity analysis mentioned"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    },
+    {
+      "item_id": "TAN_2.5.2B",
+      "section": "2.5.2B Sensitive parameters and uncertainty impact",
+      "question": "Summarize influential parameters and the overall impact of sensitivity, variability, and uncertainty on outputs and reliability.",
+      "allowed_source_sections": [
+        "Materials and Methods: evaluation/sensitivity",
+        "Results",
+        "Discussion",
+        "Evaluation figures/tables",
+        "Sensitivity figures/tables"
+      ],
+      "routing_rule": "Use explicit reported results; do not infer reliability from parameter magnitude.",
+      "response": "partially",
+      "details": "Sensitivity analysis terms detected in Markdown text.",
+      "structured_details": {},
+      "evidence": [
+        {
+          "source_page": null,
+          "source_section": "Methods",
+          "source_location": "Methods / Results text",
+          "source_quote": "Sensitivity analysis mentioned"
+        }
+      ],
+      "confidence": "high",
+      "confidence_basis": "At least one verbatim model-specific quote has a source location."
+    }
+  ],
+  "verification_summary": {},
+  "overall_fit_for_purpose": "15/36 Tan items supported by Markdown evidence; 21/36 require deeper extraction.",
+  "key_gaps": [
+    "TAN_2.1.1: evidence incomplete in Markdown text",
+    "TAN_2.1.2: evidence incomplete in Markdown text",
+    "TAN_2.1.3: evidence incomplete in Markdown text",
+    "TAN_2.3.1: evidence incomplete in Markdown text",
+    "TAN_2.2.1: evidence incomplete in Markdown text",
+    "TAN_2.4.1: evidence incomplete in Markdown text",
+    "TAN_2.4.2A: evidence incomplete in Markdown text",
+    "TAN_2.4.2B: evidence incomplete in Markdown text",
+    "TAN_2.4.2C: evidence incomplete in Markdown text",
+    "TAN_2.4.3.1: evidence incomplete in Markdown text",
+    "TAN_2.4.3.2: evidence incomplete in Markdown text",
+    "TAN_2.4.3.8: evidence incomplete in Markdown text",
+    "TAN_2.4.3.9: evidence incomplete in Markdown text",
+    "TAN_2.4.3.10: evidence incomplete in Markdown text",
+    "TAN_2.4.3.11: evidence incomplete in Markdown text",
+    "TAN_2.4.3.12: evidence incomplete in Markdown text",
+    "TAN_2.4.3.13: evidence incomplete in Markdown text",
+    "TAN_2.4.4: evidence incomplete in Markdown text",
+    "TAN_2.4.5C: evidence incomplete in Markdown text",
+    "TAN_2.4.6A: evidence incomplete in Markdown text",
+    "TAN_2.4.6B: evidence incomplete in Markdown text"
+  ],
+  "reviewer_notes": [
+    "Deterministic baseline generated from paper Markdown text.",
+    "Confidence levels computed from auditable evidence references."
+  ]
+}

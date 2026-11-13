@@ -2,6 +2,7 @@ import os
 import json
 import argparse
 import asyncio
+from pathlib import Path
 import pymupdf
 from pdf2image import convert_from_path
 
@@ -297,15 +298,36 @@ def flatten_parameter_blocks(parameter_blocks: list) -> list:
             if not p.parameter_id:
                 prov = getattr(p, "provenance", None)
                 ctx = getattr(p, "context", None)
+                q = getattr(p, "quantitative_data", None)
+
                 source_tbl = getattr(prov, "source_table", "") or ""
                 row_str = getattr(prov, "row_id", "") or "_".join(getattr(prov, "row_path", []) or [])
                 col_str = getattr(prov, "column_id", "") or "_".join(getattr(prov, "column_path", []) or [])
-                p_name = getattr(p, "parameter_name_original", "") or getattr(p, "symbol_original", "") or ""
+                cell_str = getattr(prov, "cell_id", "") or ""
+                sec_str = getattr(prov, "source_section", "") or ""
+
+                p_name = getattr(p, "parameter_name", "") or getattr(p, "parameter_name_original", "") or ""
+                p_sym = getattr(p, "symbol", "") or getattr(p, "symbol_original", "") or ""
+
                 cmpd = getattr(ctx, "compound", "") or ""
-                spec = getattr(ctx, "species", "") or ""
-                
-                raw_identity = f"{source_tbl}|{row_str}|{col_str}|{p_name}|{cmpd}|{spec}".lower().strip()
-                if raw_identity == "|||||":
+                spec = getattr(ctx, "species", "") or getattr(ctx, "subject_species", "") or ""
+                organ = getattr(ctx, "organ", "") or getattr(ctx, "compartment", "") or ""
+                lstage = getattr(ctx, "life_stage", "") or ""
+                pop = getattr(ctx, "population", "") or ""
+                form = getattr(ctx, "formulation", "") or ""
+                if isinstance(form, list):
+                    form = ",".join(str(f) for f in form)
+
+                val = getattr(q, "value", None)
+                val_str = f"{val}|{getattr(q, 'start_value', None)}|{getattr(q, 'end_value', None)}|{getattr(q, 'unit_original', '')}"
+                quote_str = (getattr(prov, "source_quote", "") or "")[:50]
+
+                raw_identity = (
+                    f"{source_tbl}|{row_str}|{col_str}|{cell_str}|{sec_str}|"
+                    f"{p_name}|{p_sym}|{cmpd}|{spec}|{organ}|{lstage}|{pop}|{form}|"
+                    f"{val_str}|{quote_str}"
+                ).lower().strip()
+                if raw_identity.strip("|") == "":
                     raw_identity = p.model_dump_json()
                 h = hashlib.sha256(raw_identity.encode("utf-8")).hexdigest()[:16]
                 p.parameter_id = f"param_{h}"
@@ -407,11 +429,12 @@ def normalize_parameter_units_and_ranges(param: dict) -> dict:
     # 5. Parse time-varying ranges (e.g., '56.9 - 70 (initial)' or '0 - 3.8' in Loccisano)
     val_text = (q.get("value_text") or "").strip()
     m_range = RANGE_CELL_RE.match(val_text)
-    if m_range and q.get("value") is None:
+    if m_range:
         start_v = float(m_range.group(1))
         end_v = float(m_range.group(2))
         q["start_value"] = start_v
         q["end_value"] = end_v
+        q["value"] = None
         q["value_qualifier"] = m_range.group(3) or "time_varying_range"
         q["uncertainty"] = {
             "type": "time_varying_range",
@@ -923,9 +946,42 @@ def _merge_model_structure(final_doc: dict, extracted_page) -> None:
 
 
 
-def finalize_extracted_document(document: dict) -> dict:
-    """Validate and serialize the canonical output contract before persistence."""
-    return ExtractedDocument.model_validate(document).model_dump(mode="json")
+def finalize_extracted_document(document: dict, strip_cells: bool = True) -> dict:
+    """Validate and serialize the canonical output contract before persistence.
+
+    Args:
+        document: The processed document dict.
+        strip_cells: If True (default), table_evidence.cells is omitted from the
+                     serialized output to produce a cleaner, significantly smaller
+                     JSON export without affecting parameters, provenance, or scores.
+    """
+    # Defensive guard: ensure parameter_id uniqueness and view alignment
+    params = document.get("model_parameters", [])
+    if params:
+        seen = set()
+        for p in params:
+            pid = p.get("parameter_id")
+            if not pid:
+                raw_id = json.dumps(p, sort_keys=True, default=str)
+                pid = f"param_{hashlib.sha256(raw_id.encode('utf-8')).hexdigest()[:16]}"
+                p["parameter_id"] = pid
+            if pid in seen:
+                s = 2
+                while f"{pid}_{s}" in seen:
+                    s += 1
+                p["parameter_id"] = f"{pid}_{s}"
+                seen.add(f"{pid}_{s}")
+            else:
+                seen.add(pid)
+        refresh_parameter_views(document)
+
+    doc_obj = ExtractedDocument.model_validate(document)
+    doc_dict = doc_obj.model_dump(mode="json")
+    if strip_cells and "table_evidence" in doc_dict:
+        for te in doc_dict["table_evidence"]:
+            if isinstance(te, dict) and "cells" in te:
+                te["cells"] = []
+    return doc_dict
 
 
 def refresh_parameter_views(document: dict) -> None:
@@ -1043,6 +1099,9 @@ def post_process_document(document, pdf_path):
                     child["quantitative_data"]["value"] = fv
                     child["quantitative_data"]["range_start"] = None
                     child["quantitative_data"]["range_end"] = None
+                    if child.get("parameter_id"):
+                        form_tag = re.sub(r"[^a-zA-Z0-9_]", "_", str(form or f"val_{fv}")).lower()
+                        child["parameter_id"] = f"{child['parameter_id']}_{form_tag}"
                     new_params.append(child)
                 continue
         
@@ -1083,6 +1142,9 @@ def post_process_document(document, pdf_path):
                         child["quantitative_data"]["value_text"] = str(fv)
                         child["quantitative_data"]["range_start"] = None
                         child["quantitative_data"]["range_end"] = None
+                        if child.get("parameter_id"):
+                            form_tag = re.sub(r"[^a-zA-Z0-9_]", "_", str(form or f"val_{fv}")).lower()
+                            child["parameter_id"] = f"{child['parameter_id']}_{form_tag}"
                         new_params.append(child)
                     continue
             except (TypeError, ValueError):
@@ -1216,6 +1278,25 @@ def post_process_document(document, pdf_path):
         cls = p.get("parameter_class") or _classify_parameter_category(p)
         p["parameter_class"] = cls
 
+    # 3.5 Ensure strict global uniqueness of parameter_id across canonical model_parameters
+    seen_pids = set()
+    for p in document.get("model_parameters", []):
+        pid = p.get("parameter_id")
+        if not pid:
+            raw_id = json.dumps(p, sort_keys=True, default=str)
+            pid = f"param_{hashlib.sha256(raw_id.encode('utf-8')).hexdigest()[:16]}"
+            p["parameter_id"] = pid
+        if pid in seen_pids:
+            suffix = 2
+            cand_id = f"{pid}_{suffix}"
+            while cand_id in seen_pids:
+                suffix += 1
+                cand_id = f"{pid}_{suffix}"
+            p["parameter_id"] = cand_id
+            seen_pids.add(cand_id)
+        else:
+            seen_pids.add(pid)
+
     # 4. Strict Schema Revalidation for all parameters in canonical model_parameters
     print("  -> Revalidating all parameters against ExtractedParameter schema...")
     from pk_pipeline.schemas import ExtractedParameter
@@ -1245,10 +1326,13 @@ def post_process_document(document, pdf_path):
     return document
 
 
-async def _run_selected_assessments(document: dict, assessment_template: str = "tan") -> dict:
+async def _run_selected_assessments(document: dict, assessment_template: str = "tan", pdf_path: str | None = None) -> dict:
     """Run the explicitly selected reporting questionnaire(s).
 
     Tan is the default detailed reporting template.
+    Prefers Markdown KV-cache evaluation on the full publication text to ensure
+    all reporting sections (evaluation, sensitivity, equations, assumptions)
+    are thoroughly evaluated with verbatim citations.
     """
     template = (assessment_template or "tan").lower().strip()
     if template not in {"tan", "none"}:
@@ -1260,6 +1344,58 @@ async def _run_selected_assessments(document: dict, assessment_template: str = "
 
     if template == "tan":
         print("Step: Running Tan PBPK Reporting Questionnaire...")
+        tan_assessment = None
+
+        # 1. Fast-path: Check if pre-computed high-quality Markdown assessment exists in cache
+        if pdf_path:
+            pdf_stem = Path(pdf_path).stem
+            cached_tan_path = Path("output/tan_markdown_assessment") / f"{pdf_stem}_tan_assessment.json"
+            if cached_tan_path.exists():
+                try:
+                    with open(cached_tan_path, "r", encoding="utf-8") as f:
+                        cached_data = json.load(f)
+                    from pk_pipeline.schemas import TanPBPKAssessment
+                    tan_obj = TanPBPKAssessment.model_validate(cached_data)
+                    document["tan_assessment"] = tan_obj.model_dump()
+                    print(f"  -> Loaded high-fidelity Tan assessment from cache: {cached_tan_path}")
+                    return document
+                except Exception as e:
+                    logger.debug(f"Could not load cached Tan assessment from {cached_tan_path}: {e}")
+
+        # 2. Markdown KV-Cache evaluation path on full publication text
+        if pdf_path and os.path.exists(pdf_path):
+            try:
+                from pk_pipeline.tan_assessor import convert_pdf_to_markdown, assess_tan_from_markdown, _generate_markdown_report
+                pdf_stem = Path(pdf_path).stem
+                out_dir = Path("output/tan_markdown_assessment")
+                out_dir.mkdir(parents=True, exist_ok=True)
+                md_path = out_dir / f"{pdf_stem}.md"
+
+                if md_path.exists() and md_path.stat().st_size > 1000:
+                    with open(md_path, "r", encoding="utf-8") as f:
+                        md_text = f.read()
+                else:
+                    md_text = convert_pdf_to_markdown(pdf_path, output_md_path=str(md_path))
+
+                title = (document.get("page_metadata") or {}).get("title") or pdf_stem
+                tan_assessment = await assess_tan_from_markdown(
+                    markdown_text=md_text,
+                    paper_title=title,
+                    mode="kv_cache",
+                )
+                document["tan_assessment"] = tan_assessment.model_dump()
+
+                # Also save to output/tan_markdown_assessment cache for future instant loads
+                json_path = out_dir / f"{pdf_stem}_tan_assessment.json"
+                report_path = out_dir / f"{pdf_stem}_tan_report.md"
+                with open(json_path, "w", encoding="utf-8") as f:
+                    json.dump(tan_assessment.model_dump(), f, indent=2)
+                _generate_markdown_report(tan_assessment, report_path)
+                return document
+            except Exception as exc:
+                logger.warning(f"Markdown KV-cache Tan assessment failed ({exc}); falling back to document JSON evaluation.")
+
+        # 3. Fallback: evaluate from extracted document JSON
         try:
             tan_assessment = await get_extractor().assess_tan_template(json.dumps(document))
             document["tan_assessment"] = tan_assessment.model_dump()
@@ -1275,6 +1411,9 @@ async def run_pipeline(
     use_wevisdoc: bool = True,
     force_pdf: bool = False,
     verify: bool = True,
+    llm_verify: bool = False,
+    llm_verify_warnings: bool = False,
+    strip_cells: bool = True,
     output_dir: str = "output",
     assessment_template: str = "tan",
 ):
@@ -1566,8 +1705,16 @@ async def run_pipeline(
             if verify:
                 from pk_pipeline.verifier import verify_document
                 verify_document(processed)
-            await _run_selected_assessments(processed, assessment_template)
-            return finalize_extracted_document(processed)
+            if llm_verify:
+                from pk_pipeline.verifier import verify_document_with_llm
+                await verify_document_with_llm(
+                    processed,
+                    verbose=False,
+                    include_warnings=llm_verify_warnings,
+                )
+                refresh_parameter_views(processed)
+            await _run_selected_assessments(processed, assessment_template, pdf_path=pdf_path)
+            return finalize_extracted_document(processed, strip_cells=strip_cells)
 
         if res.get("pdf_path") and res.get("source") in ["unpaywall", "semantic_scholar", "biorxiv", "medrxiv"]:
             print(f"  -> Switching from local PDF to Open Access PDF ({res['source']}): {res['pdf_path']}")
@@ -1865,9 +2012,17 @@ async def run_pipeline(
     if verify:
         from pk_pipeline.verifier import verify_document
         verify_document(processed)
-    await _run_selected_assessments(processed, assessment_template)
+    if llm_verify:
+        from pk_pipeline.verifier import verify_document_with_llm
+        await verify_document_with_llm(
+            processed,
+            verbose=False,
+            include_warnings=llm_verify_warnings,
+        )
+        refresh_parameter_views(processed)
+    await _run_selected_assessments(processed, assessment_template, pdf_path=pdf_path)
 
-    return finalize_extracted_document(processed)
+    return finalize_extracted_document(processed, strip_cells=strip_cells)
     
 
 import time
@@ -1945,6 +2100,12 @@ Examples:
         const="none",
         help="Skip reporting questionnaire.",
     )
+    parser.add_argument(
+        "--keep-cells",
+        action="store_true",
+        default=False,
+        help="Retain raw table_evidence.cells in final exported JSON (default: False, cells are stripped for cleaner, smaller output).",
+    )
 
     args = parser.parse_args()
 
@@ -2008,6 +2169,9 @@ Examples:
                     use_wevisdoc=args.wevisdoc,
                     force_pdf=args.force_pdf,
                     verify=not args.no_verify,
+                    llm_verify=args.llm_verify,
+                    llm_verify_warnings=args.llm_verify_warnings,
+                    strip_cells=not args.keep_cells,
                     output_dir=args.output_dir,
                     assessment_template=args.assessment_template,
                 )
@@ -2022,30 +2186,6 @@ Examples:
                 doc_time = time.time() - doc_start
                 n_params = len(result.get("model_parameters", [])) if isinstance(result, dict) else "?"
                 print(f"  DONE   {label} {basename}  |  {n_params} params  |  {doc_time:.1f}s  ->  {output_path}")
-
-                # ── Optional Tier 2 LLM critic ───────────────────────────────
-                if args.llm_verify and isinstance(result, dict):
-                    tier1_clean = (result.get("verification") or {}).get("clean", True)
-                    if tier1_clean:
-                        print(f"  [T2]   {label} Tier 1 clean — LLM critic skipped.")
-                    else:
-                        err_n = (result.get("verification") or {}).get("error_count", 0)
-                        print(f"  [T2]   {label} Running LLM critic on {err_n} error(s)...")
-                        from pk_pipeline.verifier import verify_document_with_llm
-                        _, llm_sum = await verify_document_with_llm(
-                            result,
-                            verbose=False,
-                            include_warnings=args.llm_verify_warnings,
-                        )
-                        refresh_parameter_views(result)
-                        result = finalize_extracted_document(result)
-                        with open(output_path, "w", encoding="utf-8") as f:
-                            json.dump(result, f, indent=2, ensure_ascii=False)
-                        print(
-                            f"  [T2]   {label} {llm_sum.get('patched',0)} patched, "
-                            f"{llm_sum.get('rejected',0)} rejected in "
-                            f"{llm_sum.get('elapsed_s',0):.1f}s. Re-saved."
-                        )
 
                 async with lock:
                     results_map[pdf_path] = result

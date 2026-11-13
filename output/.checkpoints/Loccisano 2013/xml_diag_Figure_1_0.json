@@ -7,124 +7,248 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans (maternal, left; fetal, right)."
+    "evidence_quote": "Figure 1: PBPK model structure for simulating PFOA and PFOS exposure during pregnancy in humans"
   },
   "model_context": null,
   "biological_basis": null,
   "table_evidence": [],
   "model_structure": {
-    "reported_compartment_count": "not_reported",
-    "listed_compartment_count": 4,
+    "reported_compartment_count": null,
+    "listed_compartment_count": 14,
     "count_consistency": null,
     "compartments": [
       {
         "id": "maternal_plasma",
-        "label_raw": "Maternal plasma",
-        "confidence": 0.9
+        "label_raw": "Maternal Plasma",
+        "confidence": null
+      },
+      {
+        "id": "maternal_liver",
+        "label_raw": "Maternal Liver",
+        "confidence": null
+      },
+      {
+        "id": "maternal_kidney",
+        "label_raw": "Maternal Kidney",
+        "confidence": null
+      },
+      {
+        "id": "maternal_fat",
+        "label_raw": "Maternal Fat",
+        "confidence": null
+      },
+      {
+        "id": "maternal_slowly_perfused",
+        "label_raw": "Maternal Slowly Perfused",
+        "confidence": null
+      },
+      {
+        "id": "maternal_rapidly_perfused",
+        "label_raw": "Maternal Rapidly Perfused",
+        "confidence": null
+      },
+      {
+        "id": "maternal_bladder",
+        "label_raw": "Maternal Bladder",
+        "confidence": null
+      },
+      {
+        "id": "placenta",
+        "label_raw": "Placenta",
+        "confidence": null
       },
       {
         "id": "fetal_plasma",
-        "label_raw": "Fetal plasma",
-        "confidence": 0.9
+        "label_raw": "Fetal Plasma",
+        "confidence": null
       },
       {
-        "id": "maternal_tissues",
-        "label_raw": "Maternal tissues",
-        "confidence": 0.6
+        "id": "fetal_liver",
+        "label_raw": "Fetal Liver",
+        "confidence": null
       },
       {
-        "id": "fetal_tissues",
-        "label_raw": "Fetal tissues",
-        "confidence": 0.6
+        "id": "fetal_kidney",
+        "label_raw": "Fetal Kidney",
+        "confidence": null
+      },
+      {
+        "id": "fetal_fat",
+        "label_raw": "Fetal Fat",
+        "confidence": null
+      },
+      {
+        "id": "fetal_slowly_perfused",
+        "label_raw": "Fetal Slowly Perfused",
+        "confidence": null
+      },
+      {
+        "id": "fetal_rapidly_perfused",
+        "label_raw": "Fetal Rapidly Perfused",
+        "confidence": null
       }
     ],
     "connections": [
       {
         "source": "external",
         "target": "maternal_plasma",
-        "label_raw": "IV dose",
+        "label_raw": "IV",
         "direction": "forward",
-        "edge_type": "input",
+        "edge_type": null,
         "evidence": null,
-        "confidence": 0.9
+        "confidence": null
       },
       {
         "source": "maternal_plasma",
-        "target": "maternal_tissues",
-        "label_raw": "Q",
-        "direction": "forward",
-        "edge_type": "blood_flow",
+        "target": "maternal_liver",
+        "label_raw": "Qliver",
+        "direction": "bidirectional",
+        "edge_type": null,
         "evidence": null,
-        "confidence": 0.7
-      },
-      {
-        "source": "maternal_tissues",
-        "target": "maternal_plasma",
-        "label_raw": "Q",
-        "direction": "forward",
-        "edge_type": "blood_flow",
-        "evidence": null,
-        "confidence": 0.7
-      },
-      {
-        "source": "fetal_plasma",
-        "target": "fetal_tissues",
-        "label_raw": "Q",
-        "direction": "forward",
-        "edge_type": "blood_flow",
-        "evidence": null,
-        "confidence": 0.7
-      },
-      {
-        "source": "fetal_tissues",
-        "target": "fetal_plasma",
-        "label_raw": "Q",
-        "direction": "forward",
-        "edge_type": "blood_flow",
-        "evidence": null,
-        "confidence": 0.7
+        "confidence": null
       },
       {
         "source": "maternal_plasma",
-        "target": "fetal_plasma",
-        "label_raw": "ktrans1",
-        "direction": "forward",
-        "edge_type": "placental_transfer",
+        "target": "maternal_kidney",
+        "label_raw": "Qkidney",
+        "direction": "bidirectional",
+        "edge_type": null,
         "evidence": null,
-        "confidence": 0.8
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_fat",
+        "label_raw": "Qfat",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_slowly_perfused",
+        "label_raw": "Qslow",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_rapidly_perfused",
+        "label_raw": "Qrapid",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_kidney",
+        "target": "external",
+        "label_raw": "CLrenal",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "placenta",
+        "label_raw": "Qplacenta",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "placenta",
+        "target": "fetal_plasma",
+        "label_raw": "ktrans1, ktrans2",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       },
       {
         "source": "fetal_plasma",
-        "target": "maternal_plasma",
-        "label_raw": "ktrans2",
-        "direction": "forward",
-        "edge_type": "placental_transfer",
+        "target": "fetal_liver",
+        "label_raw": "Qliver",
+        "direction": "bidirectional",
+        "edge_type": null,
         "evidence": null,
-        "confidence": 0.8
+        "confidence": null
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "fetal_kidney",
+        "label_raw": "Qkidney",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "fetal_fat",
+        "label_raw": "Qfat",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "fetal_slowly_perfused",
+        "label_raw": "Qslow",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "fetal_plasma",
+        "target": "fetal_rapidly_perfused",
+        "label_raw": "Qrapid",
+        "direction": "bidirectional",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "fetal_kidney",
+        "target": "maternal_bladder",
+        "label_raw": "Qbladder",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_bladder",
+        "target": "external",
+        "label_raw": "CLbladder",
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       }
     ],
     "absorption": {
       "route": "iv",
       "model_type": "generic_input",
-      "site": "maternal_plasma",
-      "evidence_quote": "Because contributions to various exposure sources are unknown, the IV route is used as a generic input to plasma"
+      "site": "plasma",
+      "evidence_quote": "the IV route is used as a generic input to plasma"
     },
     "metabolism": null,
-    "elimination": null,
-    "unresolved": [
-      {
-        "description": "Specific maternal and fetal tissue compartments are not identifiable from the provided text.",
-        "reason": "The text refers generically to tissues and Q blood flows but does not list individual tissue boxes."
-      },
-      {
-        "description": "Elimination routes or excretion arrows are not specified.",
-        "reason": "The provided text describes exposure, blood flows, and placental transfer but not elimination."
-      },
-      {
-        "description": "Whether the placenta is represented as a separate compartment or only as direct maternal-fetal plasma transfer is not fully specified.",
-        "reason": "The text states transfer through the placenta with ktrans1 and ktrans2 but does not explicitly describe a placenta box."
-      }
-    ],
+    "elimination": {
+      "routes": [
+        "renal",
+        "bladder"
+      ],
+      "evidence_quote": "CLrenal, CLbladder"
+    },
+    "unresolved": null,
     "source_location": "Figure 1",
     "equations_provided": "none",
     "allometric_scaling_rules": [],

@@ -245,6 +245,7 @@ def deduplicate_and_format_records(parameters: list[dict], ontology_linker=None)
     instead of serializing a JSON string inside `canonical_name`.
     """
     seen_keys = set()
+    seen_param_ids = set()
     final_records = []
 
     for p in parameters:
@@ -283,6 +284,15 @@ def deduplicate_and_format_records(parameters: list[dict], ontology_linker=None)
         param_id = p.get("parameter_id")
         if not param_id or not str(param_id).startswith("param_"):
             param_id = "param_" + hashlib.md5(str(dedup_key).encode()).hexdigest()[:16]
+
+        if param_id in seen_param_ids:
+            suffix = 2
+            cand_id = f"{param_id}_{suffix}"
+            while cand_id in seen_param_ids:
+                suffix += 1
+                cand_id = f"{param_id}_{suffix}"
+            param_id = cand_id
+        seen_param_ids.add(param_id)
 
         rec = copy.deepcopy(p)
         rec["parameter_id"] = param_id

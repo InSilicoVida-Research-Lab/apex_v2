@@ -1,0 +1,2677 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "pbpk",
+    "evidence_quote": "Table 6: P TS for BPA ( Doerge et al. 2011 ; Zhang and Zhang 2006 ) and BPS, BPF, and BPAF ( Zhang and Zhang 2006 )."
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [
+    {
+      "evidence_status": "success",
+      "needs_review": false,
+      "error": null,
+      "table_id": "Table 6",
+      "title": "Table 6: P TS for BPA ( Doerge et al. 2011 ; Zhang and Zhang 2006 ) and BPS, BPF, and BPAF ( Zhang and Zhang 2006 ).",
+      "columns": [
+        {
+          "column_id": "c1",
+          "path": [
+            "Tissue"
+          ],
+          "index": 0
+        },
+        {
+          "column_id": "c2",
+          "path": [
+            "BPA"
+          ],
+          "index": 1
+        },
+        {
+          "column_id": "c3",
+          "path": [
+            "BPS [a]"
+          ],
+          "index": 2
+        },
+        {
+          "column_id": "c4",
+          "path": [
+            "BPF [b]"
+          ],
+          "index": 3
+        },
+        {
+          "column_id": "c5",
+          "path": [
+            "BPAF"
+          ],
+          "index": 4
+        }
+      ],
+      "rows": [
+        {
+          "row_id": "r1",
+          "path": [
+            "Liver",
+            "0.730",
+            "0.846",
+            "0.872"
+          ],
+          "index": 0
+        },
+        {
+          "row_id": "r2",
+          "path": [
+            "Slowly perfused tissue [c]",
+            "2.70",
+            "0.881",
+            "0.853"
+          ],
+          "index": 1
+        },
+        {
+          "row_id": "r3",
+          "path": [
+            "Brain",
+            "2.80",
+            "0.810",
+            "0.745"
+          ],
+          "index": 2
+        },
+        {
+          "row_id": "r4",
+          "path": [
+            "Richly perfused tissue [d]",
+            "2.80",
+            "0.810",
+            "0.745"
+          ],
+          "index": 3
+        },
+        {
+          "row_id": "r5",
+          "path": [
+            "Fat",
+            "5.00",
+            "0.435",
+            "0.884"
+          ],
+          "index": 4
+        },
+        {
+          "row_id": "r6",
+          "path": [
+            "Skin",
+            "2.15",
+            "0.915",
+            "1.09"
+          ],
+          "index": 5
+        },
+        {
+          "row_id": "r7",
+          "path": [
+            "Gonads",
+            "2.60",
+            "0.843",
+            "0.778"
+          ],
+          "index": 6
+        }
+      ],
+      "cells": [
+        {
+          "cell_id": "cell_r1_c1",
+          "row_id": "r1",
+          "column_id": "c1",
+          "text": "Liver",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c2",
+          "row_id": "r1",
+          "column_id": "c2",
+          "text": "0.730",
+          "numeric_value": 0.73,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c3",
+          "row_id": "r1",
+          "column_id": "c3",
+          "text": "0.846",
+          "numeric_value": 0.846,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c4",
+          "row_id": "r1",
+          "column_id": "c4",
+          "text": "0.872",
+          "numeric_value": 0.872,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r1_c5",
+          "row_id": "r1",
+          "column_id": "c5",
+          "text": "2.44",
+          "numeric_value": 2.44,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c1",
+          "row_id": "r2",
+          "column_id": "c1",
+          "text": "Slowly perfused tissue [c]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c2",
+          "row_id": "r2",
+          "column_id": "c2",
+          "text": "2.70",
+          "numeric_value": 2.7,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c3",
+          "row_id": "r2",
+          "column_id": "c3",
+          "text": "0.881",
+          "numeric_value": 0.881,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c4",
+          "row_id": "r2",
+          "column_id": "c4",
+          "text": "0.853",
+          "numeric_value": 0.853,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r2_c5",
+          "row_id": "r2",
+          "column_id": "c5",
+          "text": "2.11",
+          "numeric_value": 2.11,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c1",
+          "row_id": "r3",
+          "column_id": "c1",
+          "text": "Brain",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c2",
+          "row_id": "r3",
+          "column_id": "c2",
+          "text": "2.80",
+          "numeric_value": 2.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c3",
+          "row_id": "r3",
+          "column_id": "c3",
+          "text": "0.810",
+          "numeric_value": 0.81,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c4",
+          "row_id": "r3",
+          "column_id": "c4",
+          "text": "0.745",
+          "numeric_value": 0.745,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r3_c5",
+          "row_id": "r3",
+          "column_id": "c5",
+          "text": "2.04",
+          "numeric_value": 2.04,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c1",
+          "row_id": "r4",
+          "column_id": "c1",
+          "text": "Richly perfused tissue [d]",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c2",
+          "row_id": "r4",
+          "column_id": "c2",
+          "text": "2.80",
+          "numeric_value": 2.8,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c3",
+          "row_id": "r4",
+          "column_id": "c3",
+          "text": "0.810",
+          "numeric_value": 0.81,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c4",
+          "row_id": "r4",
+          "column_id": "c4",
+          "text": "0.745",
+          "numeric_value": 0.745,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r4_c5",
+          "row_id": "r4",
+          "column_id": "c5",
+          "text": "2.04",
+          "numeric_value": 2.04,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c1",
+          "row_id": "r5",
+          "column_id": "c1",
+          "text": "Fat",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c2",
+          "row_id": "r5",
+          "column_id": "c2",
+          "text": "5.00",
+          "numeric_value": 5.0,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c3",
+          "row_id": "r5",
+          "column_id": "c3",
+          "text": "0.435",
+          "numeric_value": 0.435,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c4",
+          "row_id": "r5",
+          "column_id": "c4",
+          "text": "0.884",
+          "numeric_value": 0.884,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r5_c5",
+          "row_id": "r5",
+          "column_id": "c5",
+          "text": "5.73",
+          "numeric_value": 5.73,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c1",
+          "row_id": "r6",
+          "column_id": "c1",
+          "text": "Skin",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c2",
+          "row_id": "r6",
+          "column_id": "c2",
+          "text": "2.15",
+          "numeric_value": 2.15,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c3",
+          "row_id": "r6",
+          "column_id": "c3",
+          "text": "0.915",
+          "numeric_value": 0.915,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c4",
+          "row_id": "r6",
+          "column_id": "c4",
+          "text": "1.09",
+          "numeric_value": 1.09,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r6_c5",
+          "row_id": "r6",
+          "column_id": "c5",
+          "text": "3.26",
+          "numeric_value": 3.26,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c1",
+          "row_id": "r7",
+          "column_id": "c1",
+          "text": "Gonads",
+          "numeric_value": null,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c2",
+          "row_id": "r7",
+          "column_id": "c2",
+          "text": "2.60",
+          "numeric_value": 2.6,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c3",
+          "row_id": "r7",
+          "column_id": "c3",
+          "text": "0.843",
+          "numeric_value": 0.843,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c4",
+          "row_id": "r7",
+          "column_id": "c4",
+          "text": "0.778",
+          "numeric_value": 0.778,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        },
+        {
+          "cell_id": "cell_r7_c5",
+          "row_id": "r7",
+          "column_id": "c5",
+          "text": "1.86",
+          "numeric_value": 1.86,
+          "unit": null,
+          "qualifier": null,
+          "uncertainty_text": null
+        }
+      ],
+      "subject_compounds": [],
+      "footnote_compounds": [],
+      "referenced_compounds": [],
+      "species": [],
+      "populations": [],
+      "footnotes": [
+        "[a] Calculated as 14% deprotonated.",
+        "[b] Calculated as 40% deprotonated.",
+        "[c] Perfusion lower than 0.1 mL / min / g tissue: muscle and skeleton ( Edginton et al. 2006 ; ICRP 2002 ).",
+        "[d] Perfusion higher than 0.1 mL / min / g tissue: heart, kidneys, small and large intestine, pancreas, spleen, and stomach ( Edginton et al. 2006 ; ICRP 2002 ).",
+        "[*] Note: Please note that the citation Zhang and Zhang ( 2006 ) refers to their second QSAR (equation 6). For BPA, no in vivo P TS was available for the skin compartment. Therefore this P TS was calculated according to Zhang and Zhang ( 2006 ). BPA, bisphenol A; BPAF, bisphenol AF; BPF, bisphenol F; BPS, bisphenol S; P TS , tissue/serum partition coefficients; QSAR, quantitative structure-activity relationship."
+      ],
+      "source_page": null,
+      "source_image_path": null
+    }
+  ],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [
+    {
+      "block_name": "Tissue/Serum Partition Coefficients (PTS)",
+      "implied_species": null,
+      "implied_unit_original": null,
+      "parameter_class": "biochemical",
+      "parameters": [
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_standardized": "partition_coefficient_liver",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_liver",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.730",
+            "value": 0.73,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r1",
+            "column_id": "c2",
+            "cell_id": "cell_r1_c2",
+            "row_path": [
+              "Liver"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.730",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_standardized": "partition_coefficient_liver",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_liver",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.846",
+            "value": 0.846,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r1",
+            "column_id": "c3",
+            "cell_id": "cell_r1_c3",
+            "row_path": [
+              "Liver"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.846",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_standardized": "partition_coefficient_liver",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_liver",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.872",
+            "value": 0.872,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r1",
+            "column_id": "c4",
+            "cell_id": "cell_r1_c4",
+            "row_path": [
+              "Liver"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.872",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Liver",
+          "parameter_name_standardized": "partition_coefficient_liver",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_liver",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Liver",
+            "organ": "Liver",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.44",
+            "value": 2.44,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r1",
+            "column_id": "c5",
+            "cell_id": "cell_r1_c5",
+            "row_path": [
+              "Liver"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.44",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_slowly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_slowly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Slowly perfused tissue",
+            "organ": "Slowly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.70",
+            "value": 2.7,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r2",
+            "column_id": "c2",
+            "cell_id": "cell_r2_c2",
+            "row_path": [
+              "Slowly perfused tissue [c]"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.70",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_slowly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_slowly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Slowly perfused tissue",
+            "organ": "Slowly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.881",
+            "value": 0.881,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r2",
+            "column_id": "c3",
+            "cell_id": "cell_r2_c3",
+            "row_path": [
+              "Slowly perfused tissue [c]"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.881",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_slowly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_slowly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Slowly perfused tissue",
+            "organ": "Slowly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.853",
+            "value": 0.853,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r2",
+            "column_id": "c4",
+            "cell_id": "cell_r2_c4",
+            "row_path": [
+              "Slowly perfused tissue [c]"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.853",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Slowly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_slowly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_slowly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Slowly perfused tissue",
+            "organ": "Slowly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.11",
+            "value": 2.11,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r2",
+            "column_id": "c5",
+            "cell_id": "cell_r2_c5",
+            "row_path": [
+              "Slowly perfused tissue [c]"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.11",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_standardized": "partition_coefficient_brain",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_brain",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Brain",
+            "organ": "Brain",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.80",
+            "value": 2.8,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r3",
+            "column_id": "c2",
+            "cell_id": "cell_r3_c2",
+            "row_path": [
+              "Brain"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.80",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_standardized": "partition_coefficient_brain",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_brain",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Brain",
+            "organ": "Brain",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.810",
+            "value": 0.81,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r3",
+            "column_id": "c3",
+            "cell_id": "cell_r3_c3",
+            "row_path": [
+              "Brain"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.810",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_standardized": "partition_coefficient_brain",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_brain",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Brain",
+            "organ": "Brain",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.745",
+            "value": 0.745,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r3",
+            "column_id": "c4",
+            "cell_id": "cell_r3_c4",
+            "row_path": [
+              "Brain"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.745",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Brain",
+          "parameter_name_standardized": "partition_coefficient_brain",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_brain",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Brain",
+            "organ": "Brain",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.04",
+            "value": 2.04,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r3",
+            "column_id": "c5",
+            "cell_id": "cell_r3_c5",
+            "row_path": [
+              "Brain"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.04",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_richly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_richly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Richly perfused tissue",
+            "organ": "Richly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.80",
+            "value": 2.8,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r4",
+            "column_id": "c2",
+            "cell_id": "cell_r4_c2",
+            "row_path": [
+              "Richly perfused tissue [d]"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.80",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_richly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_richly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Richly perfused tissue",
+            "organ": "Richly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.810",
+            "value": 0.81,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r4",
+            "column_id": "c3",
+            "cell_id": "cell_r4_c3",
+            "row_path": [
+              "Richly perfused tissue [d]"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.810",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_richly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_richly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Richly perfused tissue",
+            "organ": "Richly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.745",
+            "value": 0.745,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r4",
+            "column_id": "c4",
+            "cell_id": "cell_r4_c4",
+            "row_path": [
+              "Richly perfused tissue [d]"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.745",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Richly perfused tissue",
+          "parameter_name_standardized": "partition_coefficient_richly_perfused",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_richly_perfused",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Richly perfused tissue",
+            "organ": "Richly perfused tissue",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.04",
+            "value": 2.04,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r4",
+            "column_id": "c5",
+            "cell_id": "cell_r4_c5",
+            "row_path": [
+              "Richly perfused tissue [d]"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.04",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_standardized": "partition_coefficient_fat",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_fat",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Fat",
+            "organ": "Fat",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "5.00",
+            "value": 5.0,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r5",
+            "column_id": "c2",
+            "cell_id": "cell_r5_c2",
+            "row_path": [
+              "Fat"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "5.00",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_standardized": "partition_coefficient_fat",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_fat",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Fat",
+            "organ": "Fat",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.435",
+            "value": 0.435,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r5",
+            "column_id": "c3",
+            "cell_id": "cell_r5_c3",
+            "row_path": [
+              "Fat"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.435",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_standardized": "partition_coefficient_fat",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_fat",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Fat",
+            "organ": "Fat",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.884",
+            "value": 0.884,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r5",
+            "column_id": "c4",
+            "cell_id": "cell_r5_c4",
+            "row_path": [
+              "Fat"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.884",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Fat",
+          "parameter_name_standardized": "partition_coefficient_fat",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_fat",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Fat",
+            "organ": "Fat",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "5.73",
+            "value": 5.73,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r5",
+            "column_id": "c5",
+            "cell_id": "cell_r5_c5",
+            "row_path": [
+              "Fat"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "5.73",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_standardized": "partition_coefficient_skin",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_skin",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Skin",
+            "organ": "Skin",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.15",
+            "value": 2.15,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r6",
+            "column_id": "c2",
+            "cell_id": "cell_r6_c2",
+            "row_path": [
+              "Skin"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.15",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_standardized": "partition_coefficient_skin",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_skin",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Skin",
+            "organ": "Skin",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.915",
+            "value": 0.915,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r6",
+            "column_id": "c3",
+            "cell_id": "cell_r6_c3",
+            "row_path": [
+              "Skin"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.915",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_standardized": "partition_coefficient_skin",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_skin",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Skin",
+            "organ": "Skin",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "1.09",
+            "value": 1.09,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r6",
+            "column_id": "c4",
+            "cell_id": "cell_r6_c4",
+            "row_path": [
+              "Skin"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "1.09",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Skin",
+          "parameter_name_standardized": "partition_coefficient_skin",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_skin",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Skin",
+            "organ": "Skin",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "3.26",
+            "value": 3.26,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r6",
+            "column_id": "c5",
+            "cell_id": "cell_r6_c5",
+            "row_path": [
+              "Skin"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "3.26",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_standardized": "partition_coefficient_gonads",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_gonads",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPA",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Gonads",
+            "organ": "Gonads",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "2.60",
+            "value": 2.6,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r7",
+            "column_id": "c2",
+            "cell_id": "cell_r7_c2",
+            "row_path": [
+              "Gonads"
+            ],
+            "column_path": [
+              "BPA"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "2.60",
+            "reference": "Doerge et al. 2011; Zhang and Zhang 2006",
+            "status": "literature",
+            "parameter_status": "Literature",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_standardized": "partition_coefficient_gonads",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_gonads",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPS",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Gonads",
+            "organ": "Gonads",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.843",
+            "value": 0.843,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r7",
+            "column_id": "c3",
+            "cell_id": "cell_r7_c3",
+            "row_path": [
+              "Gonads"
+            ],
+            "column_path": [
+              "BPS [a]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.843",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_standardized": "partition_coefficient_gonads",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_gonads",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Gonads",
+            "organ": "Gonads",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "0.778",
+            "value": 0.778,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r7",
+            "column_id": "c4",
+            "cell_id": "cell_r7_c4",
+            "row_path": [
+              "Gonads"
+            ],
+            "column_path": [
+              "BPF [b]"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "0.778",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        },
+        {
+          "parameter_id": null,
+          "parameter_class": "biochemical",
+          "parameter_subclass": "partition_coefficient",
+          "parameter_name": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_original": "Tissue/Serum Partition Coefficient - Gonads",
+          "parameter_name_standardized": "partition_coefficient_gonads",
+          "symbol": "PTS",
+          "symbol_original": "PTS",
+          "symbol_standardized": "Kp_gonads",
+          "pbpko_id": null,
+          "pbpko_iri": null,
+          "ontology_match_type": null,
+          "context": {
+            "compound": "BPAF",
+            "species": null,
+            "subject_species": null,
+            "life_stage": null,
+            "formulation": null,
+            "compartment": "Gonads",
+            "organ": "Gonads",
+            "route": null,
+            "population": null
+          },
+          "quantitative_data": {
+            "value_text": "1.86",
+            "value": 1.86,
+            "start_value": null,
+            "end_value": null,
+            "ci_low": null,
+            "ci_high": null,
+            "variance": null,
+            "variance_type": null,
+            "uncertainty": null,
+            "unit": "dimensionless",
+            "unit_original": "dimensionless",
+            "unit_standardized": null,
+            "unit_inherited": true,
+            "value_qualifier": null,
+            "footnote_marker": null,
+            "normalization_basis": null
+          },
+          "provenance": {
+            "source_table": "Table 6",
+            "row_id": "r7",
+            "column_id": "c5",
+            "cell_id": "cell_r7_c5",
+            "row_path": [
+              "Gonads"
+            ],
+            "column_path": [
+              "BPAF"
+            ],
+            "source_page": null,
+            "source_section": null,
+            "source_location": null,
+            "source_quote": "1.86",
+            "reference": "Zhang and Zhang 2006",
+            "status": "predicted_qsar",
+            "parameter_status": "Predicted qsar",
+            "status_raw": null,
+            "derivation": null,
+            "evidence_directness": null
+          },
+          "confidence": {
+            "value_confidence": null,
+            "unit_confidence": null,
+            "species_confidence": null,
+            "formulation_confidence": null,
+            "parameter_class_confidence": null,
+            "provenance_confidence": null
+          },
+          "needs_review": false,
+          "verification_score": null,
+          "verification_checks": {},
+          "verification_failures": []
+        }
+      ]
+    }
+  ],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

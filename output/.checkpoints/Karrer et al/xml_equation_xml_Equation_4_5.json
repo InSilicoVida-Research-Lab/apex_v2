@@ -1,0 +1,54 @@
+{
+  "page_metadata": {
+    "title": null,
+    "authors": null,
+    "journal": null,
+    "year": null
+  },
+  "model_classification": {
+    "model_type": "not_applicable",
+    "evidence_quote": null
+  },
+  "model_context": null,
+  "biological_basis": null,
+  "table_evidence": [],
+  "model_structure": null,
+  "metabolic_pathways": [],
+  "parameter_blocks": [],
+  "observed_data": [],
+  "simulated_data": [],
+  "formulation_characterization": [],
+  "qualitative_findings": [],
+  "parameter_mentions_without_values": [
+    {
+      "parameter_name": "vmax",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Equation 4",
+      "requires_supplement": null,
+      "context_quote": "v = vmax[S] / (Km + [S](1 + [S]/Ksi))"
+    },
+    {
+      "parameter_name": "Km",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Equation 4",
+      "requires_supplement": null,
+      "context_quote": "v = vmax[S] / (Km + [S](1 + [S]/Ksi))"
+    },
+    {
+      "parameter_name": "Ksi",
+      "symbol": null,
+      "availability": "mentioned_but_not_numerically_reported",
+      "source": "Equation 4",
+      "requires_supplement": null,
+      "context_quote": "v = vmax[S] / (Km + [S](1 + [S]/Ksi))"
+    }
+  ],
+  "sensitivity_analysis": [],
+  "extended_sensitivity": null,
+  "dosing": null,
+  "software": null,
+  "reproducibility": null,
+  "mode_of_action": null
+}

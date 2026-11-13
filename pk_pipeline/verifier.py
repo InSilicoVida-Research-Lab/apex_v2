@@ -201,11 +201,37 @@ def find_matched_cell(param: dict, te: dict) -> Optional[dict]:
         c_val = c.get("numeric_value")
         c_text = str(c.get("text") or "").strip()
         val_match = False
-        if val is not None and c_val is not None:
-            if abs(c_val - val) <= abs(val) * 0.03 + 1e-6:
+
+        # Attempt numeric comparison first
+        parsed_val = val
+        if parsed_val is None and val_text:
+            try:
+                cleaned = re.sub(r"[^0-9.\-eE+]", "", str(val_text).replace("−", "-").split()[0])
+                if cleaned and cleaned != "-":
+                    parsed_val = float(cleaned)
+            except (ValueError, TypeError):
+                pass
+
+        parsed_c_val = c_val
+        if parsed_c_val is None and c_text:
+            try:
+                cleaned = re.sub(r"[^0-9.\-eE+]", "", str(c_text).replace("−", "-").split()[0])
+                if cleaned and cleaned != "-":
+                    parsed_c_val = float(cleaned)
+            except (ValueError, TypeError):
+                pass
+
+        if parsed_val is not None and parsed_c_val is not None:
+            tol = max(abs(parsed_val), abs(parsed_c_val)) * 0.03 + 1e-9
+            if abs(parsed_c_val - parsed_val) <= tol:
                 val_match = True
-        elif val_text and (val_text in c_text or c_text in val_text):
-            val_match = True
+        elif val_text and c_text:
+            v_low = val_text.lower()
+            c_low = c_text.lower()
+            if v_low == c_low:
+                val_match = True
+            elif len(v_low) >= 3 and len(c_low) >= 3 and (v_low in c_low or c_low in v_low):
+                val_match = True
 
         if val_match:
             candidates.append(c)
@@ -300,9 +326,12 @@ class Tier1Verifier:
             p_class = (p_dict.get("parameter_class") or "").lower()
             p_subclass = (p_dict.get("parameter_subclass") or "").lower()
             p_name = (p_dict.get("parameter_name_standardized") or p_dict.get("parameter_name_original") or "").lower()
-            source_table = ((p_dict.get("provenance") or {}).get("source_table") or "").lower()
+            prov = p_dict.get("provenance") or {}
+            col_path = " ".join(str(x).lower().strip() for x in (prov.get("column_path") or []) if str(x).strip())
+            col_id = str(prov.get("column_id") or "").lower().strip()
+            column_ctx = col_path or col_id
             
-            return (compound, species, life_stage, population, formulations, p_class, p_subclass, organ, p_name, source_table)
+            return (compound, species, life_stage, population, formulations, p_class, p_subclass, organ, p_name, column_ctx)
 
         seen_keys = {}
 
@@ -642,7 +671,26 @@ class Tier1Verifier:
             comp_key = get_composite_key(p)
             if comp_key in seen_keys:
                 j, val_prev = seen_keys[comp_key]
-                if value is not None and val_prev is not None and abs(value - val_prev) < 1e-9:
+                is_dup = False
+                if value is not None and val_prev is not None:
+                    if abs(value - val_prev) < 1e-9:
+                        is_dup = True
+                elif value is None and val_prev is None:
+                    prev_p = params[j]
+                    prev_q = prev_p.get("quantitative_data", {}) or {}
+                    prev_text = str(prev_q.get("value_text") or "").strip()
+                    curr_text = str(qdata.get("value_text") or "").strip()
+                    if (
+                        prev_text == curr_text
+                        or (
+                            prev_q.get("start_value") is not None
+                            and prev_q.get("start_value") == qdata.get("start_value")
+                            and prev_q.get("end_value") == qdata.get("end_value")
+                        )
+                    ):
+                        is_dup = True
+
+                if is_dup:
                     flags.append(ParameterFlag(
                         param_index=i, param_name=name,
                         severity="warning", rule="DUPLICATE_ENTRY",

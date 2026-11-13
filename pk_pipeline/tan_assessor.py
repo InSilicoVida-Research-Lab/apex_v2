@@ -194,13 +194,15 @@ def _deterministic_confidence(
 
 
 def _has_auditable_evidence(evidence: List[EvidenceReference]) -> bool:
-    """Require a quote, concrete source location, or page—not a semantic tag."""
-    return any(
-        item.source_quote
-        or item.source_location
-        or item.source_page is not None
-        for item in evidence
-    )
+    """Require a concrete non-empty quote, location, or positive page number."""
+    for item in evidence:
+        if item.source_quote and str(item.source_quote).strip() and str(item.source_quote).strip().lower() not in {"n/a", "none"}:
+            return True
+        if item.source_location and str(item.source_location).strip() and str(item.source_location).strip().lower() not in {"n/a", "none"}:
+            return True
+        if item.source_page is not None and item.source_page > 0:
+            return True
+    return False
 
 
 def _context_evidence(document: dict[str, Any]) -> List[EvidenceReference]:
@@ -581,28 +583,93 @@ def normalize_tan_assessment(
     raw: Union[dict[str, Any], TanPBPKAssessment],
     document: Optional[Union[dict[str, Any], ExtractedDocument]] = None,
 ) -> TanPBPKAssessment:
-    """Validate an LLM response and enforce complete, evidence-grounded items."""
-    if isinstance(raw, TanPBPKAssessment):
-        assessment = raw
-    else:
-        # Gracefully repair LLM field aliases before Pydantic validation
-        if isinstance(raw, dict) and isinstance(raw.get("items"), list):
-            for item_dict in raw["items"]:
-                if isinstance(item_dict, dict):
-                    if not item_dict.get("details") and item_dict.get("rationale"):
-                        item_dict["details"] = str(item_dict.pop("rationale"))
-                    elif not item_dict.get("details"):
-                        item_dict["details"] = "Evaluated from paper Markdown."
-                    # Ensure required fields exist using TAN_QUESTIONNAIRE_ITEMS lookup
-                    iid = item_dict.get("item_id")
-                    if iid:
-                        defn = next((d for d in TAN_QUESTIONNAIRE_ITEMS if d["item_id"] == iid), None)
-                        if defn:
-                            item_dict.setdefault("section", defn["section"])
-                            item_dict.setdefault("question", defn["question"])
-        assessment = TanPBPKAssessment.model_validate(raw)
+    """Validate an LLM response and enforce complete, evidence-grounded items.
 
-    raw_by_id = {item.item_id: item for item in assessment.items}
+    Validates item-by-item so that malformed edge cases in a single item do not
+    discard the remaining valid answers.
+    """
+    raw_by_id: dict[str, TanQuestionnaireItem] = {}
+
+    if isinstance(raw, TanPBPKAssessment):
+        raw_by_id = {item.item_id: item for item in raw.items}
+    elif isinstance(raw, dict):
+        raw_items = raw.get("items")
+        if isinstance(raw_items, list):
+            for item_dict in raw_items:
+                if not isinstance(item_dict, dict):
+                    continue
+
+                iid = item_dict.get("item_id")
+                if not iid or not isinstance(iid, str):
+                    continue
+
+                defn = next((d for d in TAN_QUESTIONNAIRE_ITEMS if d["item_id"] == iid), None)
+                if not defn:
+                    continue  # Ignore unknown item IDs gracefully
+
+                # Repair field aliases
+                if not item_dict.get("details") and item_dict.get("rationale"):
+                    item_dict["details"] = str(item_dict.pop("rationale"))
+                elif not item_dict.get("details"):
+                    item_dict["details"] = "Evaluated from paper Markdown."
+
+                item_dict.setdefault("section", defn["section"])
+                item_dict.setdefault("question", defn["question"])
+                item_dict.setdefault("allowed_source_sections", defn.get("allowed_source_sections", []))
+                item_dict.setdefault("routing_rule", defn.get("routing_rule"))
+
+                # Normalize response enum gracefully
+                resp_raw = str(item_dict.get("response") or "").lower().strip()
+                resp_map = {
+                    "yes": ResponseOption.YES,
+                    "partially": ResponseOption.PARTIALLY,
+                    "no": ResponseOption.NO,
+                    "not_applicable": ResponseOption.NOT_APPLICABLE,
+                    "not applicable": ResponseOption.NOT_APPLICABLE,
+                    "n/a": ResponseOption.NOT_APPLICABLE,
+                    "i_cannot_answer": ResponseOption.I_CANNOT_ANSWER,
+                    "cannot_answer": ResponseOption.I_CANNOT_ANSWER,
+                    "i cannot answer": ResponseOption.I_CANNOT_ANSWER,
+                }
+                item_dict["response"] = resp_map.get(resp_raw, ResponseOption.I_CANNOT_ANSWER)
+
+                # Sanitize evidence list
+                raw_ev = item_dict.get("evidence")
+                clean_ev = []
+                if isinstance(raw_ev, list):
+                    for ev in raw_ev:
+                        if isinstance(ev, EvidenceReference):
+                            clean_ev.append(ev)
+                        elif isinstance(ev, dict):
+                            # Coerce page numbers: string digits ("3", "3.0") -> int, reject <= 0
+                            sp = ev.get("source_page")
+                            if sp is not None:
+                                try:
+                                    sp_int = int(float(str(sp).strip()))
+                                    ev["source_page"] = sp_int if sp_int > 0 else None
+                                except (ValueError, TypeError):
+                                    ev["source_page"] = None
+                            # Sanitize quotes: strip and ignore "N/A"
+                            if ev.get("source_quote") is not None:
+                                sq = str(ev["source_quote"]).strip()
+                                ev["source_quote"] = sq if sq and sq.lower() not in {"n/a", "none"} else None
+                            # Sanitize locations: strip and ignore "N/A"
+                            if ev.get("source_location") is not None:
+                                sl = str(ev["source_location"]).strip()
+                                ev["source_location"] = sl if sl and sl.lower() not in {"n/a", "none"} else None
+                            try:
+                                clean_ev.append(EvidenceReference.model_validate(ev))
+                            except Exception:
+                                pass
+                        elif isinstance(ev, str) and ev.strip():
+                            clean_ev.append(EvidenceReference(source_quote=ev.strip(), source_location="text"))
+                item_dict["evidence"] = clean_ev
+
+                try:
+                    valid_item = TanQuestionnaireItem.model_validate(item_dict)
+                    raw_by_id[iid] = valid_item
+                except Exception as exc:
+                    logger.warning("Item %s failed individual validation (%s); defaulting.", iid, exc)
     normalized: List[TanQuestionnaireItem] = []
     for definition in TAN_QUESTIONNAIRE_ITEMS:
         source = raw_by_id.get(definition["item_id"])
@@ -658,29 +725,61 @@ def normalize_tan_assessment(
         )
 
     cannot_count = sum(item.response == ResponseOption.I_CANNOT_ANSWER for item in normalized)
-    gaps = list(dict.fromkeys(list(assessment.key_gaps) + [
+
+    if isinstance(raw, TanPBPKAssessment):
+        template_name = raw.template_name
+        template_version = raw.template_version
+        assessment_date = raw.assessment_date
+        reviewer = raw.reviewer
+        pipeline_version = raw.pipeline_version
+        model_identification = raw.model_identification
+        verification_summary = raw.verification_summary
+        raw_key_gaps = list(raw.key_gaps)
+        raw_reviewer_notes = list(raw.reviewer_notes)
+    elif isinstance(raw, dict):
+        template_name = raw.get("template_name") or "Refined TAN et al. PBPK Model Evaluation & Extraction Questionnaire"
+        template_version = raw.get("template_version") or "Refined-Tan-PBPK-Research-v1"
+        assessment_date = raw.get("assessment_date")
+        reviewer = raw.get("reviewer") or "APEX-LLM"
+        pipeline_version = raw.get("pipeline_version") or "Refined-Tan-PBPK-v1"
+        model_identification = raw.get("model_identification") or {}
+        verification_summary = raw.get("verification_summary") or {}
+        raw_key_gaps = list(raw.get("key_gaps") or [])
+        raw_reviewer_notes = list(raw.get("reviewer_notes") or [])
+    else:
+        template_name = "Refined TAN et al. PBPK Model Evaluation & Extraction Questionnaire"
+        template_version = "Refined-Tan-PBPK-Research-v1"
+        assessment_date = None
+        reviewer = "APEX-LLM"
+        pipeline_version = "Refined-Tan-PBPK-v1"
+        model_identification = {}
+        verification_summary = {}
+        raw_key_gaps = []
+        raw_reviewer_notes = []
+
+    gaps = list(dict.fromkeys(raw_key_gaps + [
         f"{item.item_id}: model-specific evidence not sufficient for a supported rating"
         for item in normalized
         if item.response == ResponseOption.I_CANNOT_ANSWER
     ]))
     return TanPBPKAssessment(
-        template_name=assessment.template_name,
-        template_version=assessment.template_version,
-        assessment_date=assessment.assessment_date,
-        reviewer=assessment.reviewer,
-        pipeline_version=assessment.pipeline_version,
-        model_identification=assessment.model_identification,
+        template_name=template_name,
+        template_version=template_version,
+        assessment_date=assessment_date,
+        reviewer=reviewer,
+        pipeline_version=pipeline_version,
+        model_identification=model_identification,
         assessment_scope=(
             "Model-specific evidence only; generic Introduction/Background statements are excluded unless explicitly tied to the model."
         ),
         items=normalized,
-        verification_summary=assessment.verification_summary,
+        verification_summary=verification_summary,
         overall_fit_for_purpose=(
             f"{len(normalized) - cannot_count}/{len(normalized)} Tan items have an evidence-backed rating; "
             f"{cannot_count}/{len(normalized)} remain i_cannot_answer."
         ),
         key_gaps=gaps,
-        reviewer_notes=list(dict.fromkeys(assessment.reviewer_notes + [
+        reviewer_notes=list(dict.fromkeys(raw_reviewer_notes + [
             "Confidence was recalculated by APEX from evidence completeness; the LLM confidence value was not trusted.",
         ])),
     )
@@ -1227,6 +1326,143 @@ Choose `"response"` strictly from `["yes", "partially", "no", "not_applicable", 
         f"{routed_md}\n"
     )
     return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n"
+
+
+def strip_tan_bibliography(markdown_text: str) -> str:
+    """Remove References / Bibliography section while keeping all prior paper content
+    and any subsequent Tables, Figures, or Appendices intact.
+    """
+    ref_pattern = r"\n(?:#+\s*)?(?:\*\*\s*)?(?:references|literature cited|bibliography)(?:\s*\*\*)?\s*\n"
+    m_ref = re.search(ref_pattern, markdown_text, flags=re.IGNORECASE)
+    if not m_ref:
+        return markdown_text.strip()
+
+    pre_ref = markdown_text[:m_ref.start()].rstrip()
+    after_ref_text = markdown_text[m_ref.end():]
+
+    # Look for subsequent content that is NOT part of the bibliography
+    # (e.g. Tables, Figures, Appendices, Supporting Info often placed at the end of author manuscripts)
+    post_pattern = r"\n(?:#+\s*)?(?:\*\*\s*)?(?:table\s+\d+|tables?\b|appendix|supplementary|supporting information|figures?\s+and\s+tables?)\b"
+    m_post = re.search(post_pattern, after_ref_text, flags=re.IGNORECASE)
+
+    if m_post:
+        post_content = after_ref_text[m_post.start():].strip()
+        return f"{pre_ref}\n\n[... References Section Omitted For Length ...]\n\n{post_content}"
+    else:
+        return pre_ref
+
+
+def build_tan_kv_cache_prompt(
+    clean_paper_md: str,
+    items: Optional[List[dict[str, Any]]] = None,
+    paper_title: Optional[str] = None,
+    include_no_think: bool = False,
+    pre_close_think: bool = True,
+) -> str:
+    """Build an immutable-prefix, KV-cache-optimized prompt for the Tan questionnaire.
+
+    The system prompt, paper title, and entire cleaned paper text are placed FIRST
+    as a byte-for-byte identical prefix across all batches. The batch questionnaire
+    items and required structured keys are appended at the very end as a dynamic suffix.
+    """
+    selected_items = items or TAN_QUESTIONNAIRE_ITEMS
+    questions_block = "\n".join(
+        f"- [{item['item_id']}] (Section: \"{item['section']}\")\n"
+        f"  Question: \"{item['question']}\"\n"
+        f"  Allowed Sections: {', '.join(item['allowed_source_sections'])}\n"
+        f"  Routing Rule: {item['routing_rule']}\n"
+        f"  Required `structured_details` keys: {json.dumps(item.get('structured_fields', []))}"
+        for item in selected_items
+    )
+
+    no_think_directive = "/no_think\n" if include_no_think else ""
+
+    system_prompt = f"""{no_think_directive}You are an expert regulatory PBPK/TK model evaluator (US EPA / FDA / OECD GD 331 standard) executing the Tan et al. PBPK Model Reporting Questionnaire on a scientific paper converted to Markdown.
+
+==================================================
+1. STRICT OUTPUT & TOKEN BUDGET RULES
+==================================================
+- Output ONLY a single valid JSON object. Do NOT emit `<think>` blocks, markdown code fences, or conversational preamble.
+- Return all {len(selected_items)} requested items inside the `"items"` array in the exact order listed.
+- Use the EXACT field names defined below (`item_id`, `section`, `question`, `response`, `details`, `structured_details`, `evidence`). NEVER use `"rationale"` in place of `"details"`.
+- Keep `"details"` concise and information-dense (1–2 sentences, <= 35 words) summarizing the exact factual answer.
+- Populate `"structured_details"` as a JSON dictionary mapping each item's `Required structured_details keys` to the concrete values extracted from the paper (use `null` or `[]` if not reported).
+
+==================================================
+2. RESPONSE DECISION RUBRIC (`response` enum)
+==================================================
+Choose `"response"` strictly from `["yes", "partially", "no", "not_applicable", "i_cannot_answer"]`:
+- `"yes"`: All core aspects of the question are explicitly reported in the allowed sections of the paper, backed by a verbatim quote.
+- `"partially"`: Some aspects are explicitly reported (e.g., software name is stated, but ODE solver algorithm or version is omitted; or model compartments are listed, but mathematical equations are only partially shown), backed by a verbatim quote.
+- `"no"`: The paper explicitly states that an expected step/analysis was NOT performed (e.g., "no sensitivity analysis was conducted").
+- `"not_applicable"`: The paper explicitly establishes that the mechanism does not apply (e.g., gestational/lactational barrier transfer `TAN_2.4.3.8` in an adult-only non-pregnant model, or metabolism `TAN_2.4.3.6` when the compound is explicitly stated to be metabolically inert/unmetabolized).
+- `"i_cannot_answer"`: The required information is absent from the allowed sections or cannot be verified with a concrete quote/location.
+- SPECIAL RULE FOR `TAN_1.3`: Always set `"response": "yes"`, `"details": "Assessment metadata recorded by APEX pipeline."`, and `"structured_details": {{"assessment_date": "2026-11-09", "reviewer": "APEX Automated Tan Assessor", "pipeline_version": "Refined-Tan-PBPK-v1"}}`.
+
+==================================================
+3. SECTION ROUTING & ANTI-HALLUCINATION RULES
+==================================================
+- BLOCK INTRODUCTION BACKGROUND: Never use generic Introduction/Background literature (toxicity history, epidemiology, manufacturing) as evidence. Only the final study-objective paragraph of the Introduction may be used for Purpose items (`TAN_2.1.1`, `TAN_2.1.2`, `TAN_2.3.1`).
+- VERBATIM EVIDENCE MANDATE: Every item rated `"yes"`, `"partially"`, `"no"`, or `"not_applicable"` (except `TAN_1.3`) MUST include at least 1 entry in `"evidence"` with:
+  * `"source_page"`: Integer page number from the `<!-- PAGE X -->` or `### [Page X]` marker (or `null` if unknown).
+  * `"source_section"`: Section heading name (e.g., `"Abstract"`, `"Materials and Methods"`, `"Table 1"`, `"Results"`).
+  * `"source_location"`: Specific location (e.g., `"Page 3, Model Structure"`, `"Page 5, Table 1"`, `"Page 8, Sensitivity Analysis"`).
+  * `"source_quote"`: Exact verbatim substring copied from the Markdown text (<= 30 words). Never paraphrase inside `source_quote`.
+- Do NOT invent equations, parameter values, solver names, or goodness-of-fit criteria from general PBPK knowledge.
+
+==================================================
+4. REQUIRED JSON STRUCTURE EXAMPLE
+==================================================
+{{
+  "model_identification": {{
+    "model_name": "3-compartment TK model for PFOA, PFOS, and PFHxS",
+    "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+    "authors": ["Author A", "Author B"],
+    "publication_year": 2025,
+    "journal": "Toxicological Sciences",
+    "doi_pmid": "10.1093/toxsci/kfaf087"
+  }},
+  "items": [
+    {{
+      "item_id": "TAN_1.1",
+      "section": "1. Model identification",
+      "question": "Name the PBPK model and target compound(s), including parent, active metabolites, and CAS/identifiers when stated.",
+      "response": "yes",
+      "details": "The study adapts a 3-compartment toxicokinetic model for PFOA, PFOS, and PFHxS in nonhuman primates and humans; no active metabolites are modeled.",
+      "structured_details": {{
+        "model_name": "3-compartment TK model",
+        "target_compounds": ["PFOA", "PFOS", "PFHxS"],
+        "parent_or_metabolites": "Parent compounds only",
+        "identifiers": null
+      }},
+      "evidence": [
+        {{
+          "source_page": 1,
+          "source_section": "Abstract",
+          "source_location": "Page 1, Abstract",
+          "source_quote": "Here, we evaluate the use of a 3-compartment TK model for PFOA, PFOS, and PFHxS..."
+        }}
+      ]
+    }}
+  ],
+  "overall_fit_for_purpose": "Brief 1-sentence summary of reporting completeness.",
+  "key_gaps": [],
+  "reviewer_notes": []
+}}"""
+
+    header = f"PAPER TITLE: {paper_title}\n\n" if paper_title else ""
+    user_prompt = (
+        f"{header}==================================================\n"
+        f"SCIENTIFIC PAPER TEXT (MARKDOWN WITH PAGE MARKERS):\n"
+        f"==================================================\n"
+        f"{clean_paper_md}\n\n"
+        f"==================================================\n"
+        f"EVALUATE THE FOLLOWING {len(selected_items)} TAN PBPK QUESTIONNAIRE ITEMS FOR THE PAPER ABOVE:\n"
+        f"==================================================\n"
+        f"{questions_block}\n"
+    )
+    think_closer = "<think>\n</think>\n" if pre_close_think else ""
+    return f"<|im_start|>system\n{system_prompt}<|im_end|>\n<|im_start|>user\n{user_prompt}<|im_end|>\n<|im_start|>assistant\n{think_closer}"
 
 
 def evaluate_tan_from_markdown(

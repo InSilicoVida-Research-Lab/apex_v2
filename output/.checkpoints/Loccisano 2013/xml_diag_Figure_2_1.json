@@ -7,97 +7,201 @@
   },
   "model_classification": {
     "model_type": "pbpk",
-    "evidence_quote": "Figure 2: PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans (maternal, left; infant, right)."
+    "evidence_quote": "Figure 2: PBPK model structure for simulating PFOA/PFOS exposure during lactation in humans"
   },
   "model_context": null,
   "biological_basis": null,
   "table_evidence": [],
   "model_structure": {
-    "reported_compartment_count": "not_reported",
-    "listed_compartment_count": 4,
+    "reported_compartment_count": null,
+    "listed_compartment_count": 10,
     "count_consistency": null,
     "compartments": [
       {
+        "id": "maternal_iv",
+        "label_raw": "IV",
+        "confidence": null
+      },
+      {
+        "id": "maternal_oral",
+        "label_raw": "Oral",
+        "confidence": null
+      },
+      {
+        "id": "maternal_gut",
+        "label_raw": "Gut",
+        "confidence": null
+      },
+      {
+        "id": "maternal_liver",
+        "label_raw": "Liver",
+        "confidence": null
+      },
+      {
         "id": "maternal_plasma",
-        "label_raw": "Maternal plasma",
-        "confidence": 0.9
+        "label_raw": "Plasma",
+        "confidence": null
+      },
+      {
+        "id": "maternal_mammary",
+        "label_raw": "Mammary",
+        "confidence": null
       },
       {
         "id": "maternal_milk",
-        "label_raw": "Maternal milk",
-        "confidence": 0.9
+        "label_raw": "Milk",
+        "confidence": null
       },
       {
-        "id": "maternal_tissues",
-        "label_raw": "Maternal tissues",
-        "confidence": 0.7
+        "id": "maternal_urine",
+        "label_raw": "Urine",
+        "confidence": null
+      },
+      {
+        "id": "maternal_feces",
+        "label_raw": "Feces",
+        "confidence": null
       },
       {
         "id": "infant",
         "label_raw": "Infant",
-        "confidence": 0.9
+        "confidence": null
       }
     ],
     "connections": [
       {
-        "source": "external",
+        "source": "maternal_iv",
         "target": "maternal_plasma",
-        "label_raw": "direct intake",
+        "label_raw": null,
         "direction": "forward",
-        "edge_type": "exposure",
-        "evidence": "Maternal exposure is by direct intake.",
-        "confidence": 0.9
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_oral",
+        "target": "maternal_gut",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_gut",
+        "target": "maternal_plasma",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_gut",
+        "target": "maternal_feces",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_liver",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_liver",
+        "target": "maternal_plasma",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_mammary",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_mammary",
+        "target": "maternal_plasma",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       },
       {
         "source": "maternal_plasma",
         "target": "maternal_milk",
-        "label_raw": "flow-limited transfer",
+        "label_raw": null,
         "direction": "forward",
-        "edge_type": "transfer",
-        "evidence": "Transfer from the plasma to the milk compartment was assumed to be flow-limited.",
-        "confidence": 0.9
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_milk",
+        "target": "maternal_plasma",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
+      },
+      {
+        "source": "maternal_plasma",
+        "target": "maternal_urine",
+        "label_raw": null,
+        "direction": "forward",
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       },
       {
         "source": "maternal_milk",
         "target": "infant",
-        "label_raw": "milk",
+        "label_raw": null,
         "direction": "forward",
-        "edge_type": "exposure",
-        "evidence": "the infant exposure is through milk.",
-        "confidence": 0.9
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       },
       {
-        "source": "maternal_plasma",
-        "target": "maternal_tissues",
-        "label_raw": "uptake into tissues",
+        "source": "infant",
+        "target": "external",
+        "label_raw": null,
         "direction": "forward",
-        "edge_type": "distribution",
-        "evidence": "Only the free fraction of chemical in plasma was available for uptake into tissues or milk.",
-        "confidence": 0.7
+        "edge_type": null,
+        "evidence": null,
+        "confidence": null
       }
     ],
     "absorption": {
-      "route": null,
+      "route": "oral",
       "model_type": null,
-      "site": null,
-      "evidence_quote": "Maternal exposure is by direct intake; the infant exposure is through milk."
+      "site": "gut",
+      "evidence_quote": "Maternal exposure is by direct intake"
     },
     "metabolism": null,
-    "elimination": null,
-    "unresolved": [
-      {
-        "description": "Maternal tissue compartments are not explicitly named in the provided text.",
-        "reason": "The text mentions uptake into tissues but does not list individual tissue compartments, so a generic maternal_tissues compartment is used."
-      },
-      {
-        "description": "Mammary tissue compartment is not included.",
-        "reason": "No data were available for PFOA or PFOS partitioning into mammary tissue; chemical in plasma was assumed to be in direct contact with the milk compartment."
-      },
-      {
-        "description": "Infant elimination route is not shown or described.",
-        "reason": "The provided text states the infant was treated as a single compartment but does not specify elimination pathways."
-      }
-    ],
+    "elimination": {
+      "routes": [
+        "urine",
+        "feces"
+      ],
+      "evidence_quote": null
+    },
+    "unresolved": null,
     "source_location": "Figure 2",
     "equations_provided": "none",
     "allometric_scaling_rules": [],
